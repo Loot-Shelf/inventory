@@ -98,14 +98,18 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
 .error-msg{text-align:center;padding:60px 20px;color:#f87171;font-size:14px}
 /* ── Store Banner ── */
-.store-banner{background:linear-gradient(135deg,#8b5cf608,#ec489908);border-bottom:1px solid #8b5cf620;padding:14px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.banner-icon{font-size:22px;flex-shrink:0}
-.banner-text{flex:1;min-width:200px}
-.banner-text strong{font-size:13px;font-weight:800;color:var(--text);display:block;margin-bottom:2px}
-.banner-text span{font-size:12px;color:var(--muted);line-height:1.5}
-.banner-steps{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
-.banner-step{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
-.banner-step span{color:var(--text)}
+.store-banner{background:linear-gradient(135deg,#8b5cf614,#ec489910);border-bottom:1px solid #8b5cf630;padding:28px 28px 24px}
+.banner-inner{max-width:1100px;margin:0 auto}
+.banner-notice{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;background:#ffffff06;border:1px solid #8b5cf625;border-radius:12px;padding:16px 20px}
+.banner-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+.banner-text strong{font-size:16px;font-weight:800;color:var(--text);display:block;margin-bottom:5px}
+.banner-text span{font-size:13px;color:#b0b8d0;line-height:1.6}
+.how-it-works-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.banner-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.banner-step{background:#ffffff08;border:1px solid #8b5cf625;border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.step-num{background:var(--grad);color:#fff;font-size:11px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body strong{font-size:13px;font-weight:800;color:var(--text);display:block;margin-bottom:2px}
+.step-body span{font-size:11px;color:var(--muted);line-height:1.4}
 /* ── View modal request btn ── */
 .view-request-btn{width:100%;margin-top:12px;padding:12px;background:var(--grad);border:none;border-radius:8px;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:opacity 0.15s}
 .view-request-btn:hover{opacity:0.85}
@@ -129,15 +133,29 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 <!-- Store Banner -->
 <div class="store-banner">
-  <div class="banner-icon">ℹ️</div>
-  <div class="banner-text">
-    <strong>This is a request-only inventory — no direct purchases.</strong>
-    <span>Browse our available items, add what you want to your Request List, and submit your info. We'll reach out to arrange payment and pickup.</span>
-  </div>
-  <div class="banner-steps">
-    <div class="banner-step"><span>1.</span> Browse</div>
-    <div class="banner-step"><span>2.</span> Request Items</div>
-    <div class="banner-step"><span>3.</span> We Contact You</div>
+  <div class="banner-inner">
+    <div class="banner-notice">
+      <div class="banner-icon">ℹ️</div>
+      <div class="banner-text">
+        <strong>This is a request-only inventory — items cannot be purchased directly on this site.</strong>
+        <span>Browse our available listings and add the items you're interested in to your Request List. Once you submit your contact info, we'll personally reach out to confirm availability, arrange payment, and coordinate pickup or delivery.</span>
+      </div>
+    </div>
+    <div class="how-it-works-label">How It Works</div>
+    <div class="banner-steps">
+      <div class="banner-step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Browse the Inventory</strong><span>Explore our full list of available items by category or search.</span></div>
+      </div>
+      <div class="banner-step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>Add to Request List</strong><span>Select the items you want and add them to your Request List.</span></div>
+      </div>
+      <div class="banner-step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>We'll Contact You</strong><span>Submit your info and we'll reach out to finalize the details.</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -295,7 +313,7 @@ function createCard(i){
         <span class="cond ${condClass[i.cond]||''}">${condLabel[i.cond]||i.cond}</span>
       </div>
     </div>
-    <button class="add-to-cart-btn" onclick="addToCart(${i.id})">+ Request Item</button>
+    <button class="add-to-cart-btn" onclick="addToCart(${i.id})" style="${cart.some(x=>x.id===i.id)?'color:#34d399;cursor:default':''}">${cart.some(x=>x.id===i.id)?'✓ Already Requested':'+ Request Item'}</button>
   </div>`;
 }
 
@@ -306,10 +324,25 @@ function toggleCart(){
 
 function addToCart(id){
   const item = items_cache.find(x => x.id === id);
-  if(item) {
-    cart.push(item);
-    updateCartUI();
+  if(!item) return;
+  // Prevent duplicate — each item can only be requested once
+  if(cart.some(x => x.id === id)){
+    // Flash the card button to let the customer know it's already added
+    const btns = document.querySelectorAll('.add-to-cart-btn');
+    btns.forEach(btn => {
+      if(btn.getAttribute('onclick') === `addToCart(${id})`){
+        const orig = btn.textContent;
+        btn.textContent = '✓ Already Added';
+        btn.style.color = '#34d399';
+        setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 1500);
+      }
+    });
+    return;
   }
+  cart.push(item);
+  updateCartUI();
+  // Update the card button to show it's been added
+  render();
 }
 
 function removeFromCart(index){
@@ -419,6 +452,17 @@ function openView(id){
   document.getElementById('v-detail').textContent = i.detail||'';
   document.getElementById('v-desc').textContent = i.desc || 'No description provided.';
   updateSlider();
+  // Reflect already-added state on the modal button
+  const btn = document.getElementById('v-request-btn');
+  if(cart.some(x => x.id === id)){
+    btn.textContent = '✓ Already in Request List';
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'default';
+  } else {
+    btn.textContent = '+ Add to Request List';
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  }
   document.getElementById('view-modal').classList.add('open');
 }
 
