@@ -282,7 +282,6 @@ function addToCart(id){
   if(item) {
     cart.push(item);
     updateCartUI();
-    if(!document.getElementById('cart-sidebar').classList.contains('open')) toggleCart();
   }
 }
 
@@ -330,6 +329,9 @@ async function submitRequest(){
     updateCartUI();
     btn.disabled = false;
     btn.textContent = 'Submit Request';
+    // Close the cart sidebar first, then show the success modal
+    document.getElementById('cart-sidebar').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
     document.getElementById('success-modal').classList.add('open');
   }, 1500);
 }
