@@ -9,5 +9,18 @@
     "cond": "new",
     "img": [],
     "createdAt": 1778002464364
+  },
+  {
+    "id": 2,
+    "name": "PoP! (588) Avengers Assemble: Black Widow",
+    "cat": "Collectibles",
+    "detail": "(Amazon Exclusive) (Deluxe)",
+    "desc": "Overall good condition, signs of some use.",
+    "price": 15,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/BlackWidow1.JPG"
+    ],
+    "createdAt": 1778003755206
   }
 ]
