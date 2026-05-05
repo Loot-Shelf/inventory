@@ -25,7 +25,21 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .search-wrap{position:relative;flex:1;min-width:160px}
 .search-wrap input{width:100%;background:#ffffff08;border:1px solid var(--border);border-radius:9px;padding:8px 12px;font-size:13px;color:var(--text);outline:none}
 .pill{background:transparent;border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.15s}
-.pill.active{background:var(--grad);border-color:transparent;color:#fff}
+.pill.active{border-color:transparent;color:#fff}
+/* Per-category pill colors when active */
+.pill-all.active{background:var(--grad)}
+.pill-board.active{background:#a78bfa22;border-color:#a78bfa55;color:#a78bfa}
+.pill-books.active{background:#a78bfa22;border-color:#a78bfa55;color:#a78bfa}
+.pill-cards.active{background:#fbbf2422;border-color:#fbbf2455;color:#fbbf24}
+.pill-collect.active{background:#34d39922;border-color:#34d39955;color:#34d399}
+.pill-movies.active{background:#f472b622;border-color:#f472b655;color:#f472b6}
+.pill-video.active{background:#f472b622;border-color:#f472b655;color:#f472b6}
+.pill-misc.active{background:#94a3b822;border-color:#94a3b855;color:#94a3b8}
+/* Hover tints */
+.pill-board:hover{color:#a78bfa}.pill-books:hover{color:#a78bfa}
+.pill-cards:hover{color:#fbbf24}.pill-collect:hover{color:#34d399}
+.pill-movies:hover{color:#f472b6}.pill-video:hover{color:#f472b6}
+.pill-misc:hover{color:#94a3b8}.pill-all:hover{color:var(--text)}
 
 main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:20px}
@@ -104,7 +118,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .banner-icon{font-size:26px;flex-shrink:0;margin-top:2px}
 .banner-text strong{font-size:16px;font-weight:800;color:var(--text);display:block;margin-bottom:5px}
 .banner-text span{font-size:13px;color:#b0b8d0;line-height:1.6}
-.how-it-works-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.how-it-works-label{font-size:15px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;text-align:center}
 .banner-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .banner-step{background:#ffffff08;border:1px solid #8b5cf625;border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
 .step-num{background:var(--grad);color:#fff;font-size:11px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
@@ -161,14 +175,14 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 <div class="toolbar">
   <div class="search-wrap"><input id="search" placeholder="Search inventory..." oninput="render()"></div>
-  <button class="pill active" onclick="setFilter('All',this)">All</button>
-  <button class="pill" onclick="setFilter('Board Games',this)">Board Games</button>
-  <button class="pill" onclick="setFilter('Books',this)">Books</button>
-  <button class="pill" onclick="setFilter('Cards',this)">Cards</button>
-  <button class="pill" onclick="setFilter('Collectibles',this)">Collectibles</button>
-  <button class="pill" onclick="setFilter('Movies',this)">Movies</button>
-  <button class="pill" onclick="setFilter('Video Games',this)">Video Games</button>
-  <button class="pill" onclick="setFilter('Misc',this)">Misc</button>
+  <button class="pill pill-all active" onclick="setFilter('All',this)">All</button>
+  <button class="pill pill-board" onclick="setFilter('Board Games',this)">Board Games</button>
+  <button class="pill pill-books" onclick="setFilter('Books',this)">Books</button>
+  <button class="pill pill-cards" onclick="setFilter('Cards',this)">Cards</button>
+  <button class="pill pill-collect" onclick="setFilter('Collectibles',this)">Collectibles</button>
+  <button class="pill pill-movies" onclick="setFilter('Movies',this)">Movies</button>
+  <button class="pill pill-video" onclick="setFilter('Video Games',this)">Video Games</button>
+  <button class="pill pill-misc" onclick="setFilter('Misc',this)">Misc</button>
 </div>
 
 <main id="main-content"><div class="loading">Loading inventory...</div></main>
