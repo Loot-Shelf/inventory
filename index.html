@@ -97,6 +97,18 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 .loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
 .error-msg{text-align:center;padding:60px 20px;color:#f87171;font-size:14px}
+/* ── Store Banner ── */
+.store-banner{background:linear-gradient(135deg,#8b5cf608,#ec489908);border-bottom:1px solid #8b5cf620;padding:14px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.banner-icon{font-size:22px;flex-shrink:0}
+.banner-text{flex:1;min-width:200px}
+.banner-text strong{font-size:13px;font-weight:800;color:var(--text);display:block;margin-bottom:2px}
+.banner-text span{font-size:12px;color:var(--muted);line-height:1.5}
+.banner-steps{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.banner-step{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.banner-step span{color:var(--text)}
+/* ── View modal request btn ── */
+.view-request-btn{width:100%;margin-top:12px;padding:12px;background:var(--grad);border:none;border-radius:8px;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:opacity 0.15s}
+.view-request-btn:hover{opacity:0.85}
 .success-modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:900;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
 .success-modal-wrap.open{display:flex}
 .success-modal{background:var(--surface);border:1px solid #10b98140;border-radius:20px;width:420px;max-width:100%;padding:36px;text-align:center}
@@ -111,9 +123,23 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 <header>
   <div class="logo">Loot-Shelf</div>
   <button class="cart-toggle" onclick="toggleCart()">
-    🛒 Cart <span class="cart-count" id="cart-count">0</span>
+    🛒 Request List <span class="cart-count" id="cart-count">0</span>
   </button>
 </header>
+
+<!-- Store Banner -->
+<div class="store-banner">
+  <div class="banner-icon">ℹ️</div>
+  <div class="banner-text">
+    <strong>This is a request-only inventory — no direct purchases.</strong>
+    <span>Browse our available items, add what you want to your Request List, and submit your info. We'll reach out to arrange payment and pickup.</span>
+  </div>
+  <div class="banner-steps">
+    <div class="banner-step"><span>1.</span> Browse</div>
+    <div class="banner-step"><span>2.</span> Request Items</div>
+    <div class="banner-step"><span>3.</span> We Contact You</div>
+  </div>
+</div>
 
 <div class="toolbar">
   <div class="search-wrap"><input id="search" placeholder="Search inventory..." oninput="render()"></div>
@@ -133,7 +159,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
 <div class="cart-sidebar" id="cart-sidebar">
   <div class="cart-header">
-    <h3>Your Cart</h3>
+    <h3>Your Request List</h3>
     <button onclick="toggleCart()" style="background:none;border:none;color:var(--text);cursor:pointer;font-size:20px">✕</button>
   </div>
   <div class="cart-items" id="cart-items">
@@ -175,7 +201,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       <h2 id="v-name" style="margin-top:5px"></h2>
       <div id="v-detail" style="font-size:12px;color:var(--muted)"></div>
       <div id="v-desc" class="view-desc"></div>
-      <button onclick="closeView()" style="width:100%;margin-top:20px;padding:12px;background:var(--grad);border:none;border-radius:8px;color:#fff;font-weight:800;cursor:pointer">Close</button>
+      <button id="v-request-btn" class="view-request-btn" onclick="addToCartFromView()">+ Add to Request List</button>
+      <button onclick="closeView()" style="width:100%;margin-top:10px;padding:12px;background:#ffffff08;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer">Close</button>
     </div>
   </div>
 </div>
@@ -268,7 +295,7 @@ function createCard(i){
         <span class="cond ${condClass[i.cond]||''}">${condLabel[i.cond]||i.cond}</span>
       </div>
     </div>
-    <button class="add-to-cart-btn" onclick="addToCart(${i.id})">Add to Cart</button>
+    <button class="add-to-cart-btn" onclick="addToCart(${i.id})">+ Request Item</button>
   </div>`;
 }
 
@@ -378,9 +405,12 @@ function updateCartUI(){
   cartShoppingList = textList.join(', ') + ' | TOTAL: $' + total.toFixed(2);
 }
 
+let currentViewId = null;
+
 function openView(id){
   const i = items_cache.find(x=>x.id===id);
   if(!i) return;
+  currentViewId = id;
   currentImgs = getImgs(i);
   currentIdx = 0;
   document.getElementById('v-name').textContent = i.name;
@@ -390,6 +420,19 @@ function openView(id){
   document.getElementById('v-desc').textContent = i.desc || 'No description provided.';
   updateSlider();
   document.getElementById('view-modal').classList.add('open');
+}
+
+function addToCartFromView(){
+  if(currentViewId === null) return;
+  addToCart(currentViewId);
+  // Flash the button to confirm
+  const btn = document.getElementById('v-request-btn');
+  btn.textContent = '✓ Added to Request List';
+  btn.style.opacity = '0.7';
+  setTimeout(() => {
+    btn.textContent = '+ Add to Request List';
+    btn.style.opacity = '1';
+  }, 1500);
 }
 
 function updateSlider(){
