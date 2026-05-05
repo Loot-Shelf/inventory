@@ -7,8 +7,13 @@
     "desc": "Brand new sealed.  Some minor wear on box from storage.",
     "price": 15,
     "cond": "new",
-    "img": [],
-    "createdAt": 1778002464364
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/mm1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/mm2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/mm3.jpg"
+    ],
+    "createdAt": 1778002464364,
+    "salePrice": 0
   },
   {
     "id": 2,
