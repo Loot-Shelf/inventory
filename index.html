@@ -135,17 +135,16 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
   <div class="cart-footer">
     <div class="total-row"><span>Total</span><span id="cart-total">$0.00</span></div>
     
-    <!-- Updated Request Form -->
-    <form id="request-form" action="https://formspree.io/f/mgodyada" method="POST" class="request-form">
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="email" name="email" placeholder="Email Address" required>
-        <input type="tel" name="phone" placeholder="Phone Number (Optional)">
-        
-        <!-- Hidden input for the list -->
-        <input type="hidden" name="shopping_list" id="hidden-list">
-        
-        <button type="submit" id="checkout-btn" class="checkout-btn" disabled>Submit Request</button>
-    </form>
+    <!-- Request Form -->
+    <div class="request-form" id="request-form">
+      <input type="text" id="f-name" placeholder="Full Name" required>
+      <input type="email" id="f-email" placeholder="Email Address" required>
+      <input type="tel" id="f-phone" placeholder="Phone Number (Optional)">
+      <button id="checkout-btn" class="checkout-btn" disabled onclick="submitRequest()">Submit Request</button>
+      <div id="form-success" style="display:none;text-align:center;padding:12px;background:#10b98120;border:1px solid #10b98140;border-radius:8px;color:#34d399;font-weight:800;font-size:13px">
+        ✓ Request sent! We'll be in touch soon.
+      </div>
+    </div>
   </div>
 </div>
 
@@ -277,27 +276,70 @@ function removeFromCart(index){
   updateCartUI();
 }
 
+// ── Google Forms config ─────────────────────────────────
+const GF_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfVTW4T1lVABt6lWWVwApIoKkzGlPjibSPeX5UmdMMg15B09Q/formResponse';
+const GF_NAME  = 'entry.424528149';
+const GF_EMAIL = 'entry.1642561276';
+const GF_PHONE = 'entry.235095397';
+const GF_LIST  = 'entry.1814066873';
+let cartShoppingList = '';
+
+async function submitRequest(){
+  const name  = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  if(!name)  { alert('Please enter your full name.'); return; }
+  if(!email) { alert('Please enter your email address.'); return; }
+  if(cart.length === 0) { alert('Your cart is empty.'); return; }
+
+  const btn = document.getElementById('checkout-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const body = new FormData();
+  body.append(GF_NAME,  name);
+  body.append(GF_EMAIL, email);
+  body.append(GF_PHONE, phone || 'Not provided');
+  body.append(GF_LIST,  cartShoppingList);
+
+  try {
+    // Google Forms blocks CORS — no-cors still delivers the submission
+    await fetch(GF_ACTION, { method: 'POST', mode: 'no-cors', body });
+  } catch(e) { /* expected */ }
+
+  document.getElementById('form-success').style.display = 'block';
+  btn.style.display = 'none';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-phone').value = '';
+  cart = [];
+  updateCartUI();
+}
+
 function updateCartUI(){
   const list = document.getElementById('cart-items');
   const count = document.getElementById('cart-count');
   const totalEl = document.getElementById('cart-total');
-  const hiddenList = document.getElementById('hidden-list');
   const btn = document.getElementById('checkout-btn');
-  
+
   count.textContent = cart.length;
-  
+
   if(cart.length === 0){
     list.innerHTML = '<div style="text-align:center;color:var(--muted);margin-top:40px">Your cart is empty</div>';
     totalEl.textContent = '$0.00';
-    hiddenList.value = "";
+    cartShoppingList = '';
     btn.disabled = true;
+    // Reset form success state when cart is cleared manually
+    const success = document.getElementById('form-success');
+    if(success){ success.style.display = 'none'; }
+    if(btn){ btn.style.display = ''; }
     return;
   }
-  
+
   btn.disabled = false;
   let total = 0;
   let textList = [];
-  
+
   list.innerHTML = cart.map((item, idx) => {
     const price = item.salePrice && parseFloat(item.salePrice) > 0 ? parseFloat(item.salePrice) : parseFloat(item.price || 0);
     total += price;
@@ -314,9 +356,9 @@ function updateCartUI(){
       </div>
     `;
   }).join('');
-  
+
   totalEl.textContent = `$${total.toFixed(2)}`;
-  hiddenList.value = textList.join(', ') + " | TOTAL: " + totalEl.textContent;
+  cartShoppingList = textList.join(', ') + ' | TOTAL: $' + total.toFixed(2);
 }
 
 function openView(id){
