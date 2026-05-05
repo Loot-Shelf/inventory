@@ -277,7 +277,7 @@ function removeFromCart(index){
 }
 
 // ── Apps Script config ──────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz431guZSDYY99UrfSkfkS6cbCQ1NNBD_FmJgG_5myRrjB41gSUtp9CsDmEZfXhFxc5XA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyK27pFuS3gQJAcrwE-7roZLih9j5YkmRf5OAS-k3uKP2OZcKXRUBqW_gX8lxBRAbpajQ/exec';
 let cartShoppingList = '';
 
 async function submitRequest(){
@@ -292,21 +292,19 @@ async function submitRequest(){
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
-  const params = new URLSearchParams();
-  params.append('name',  name);
-  params.append('email', email);
-  params.append('phone', phone || 'Not provided');
-  params.append('list',  cartShoppingList);
+  const params = new URLSearchParams({
+    name:  name,
+    email: email,
+    phone: phone || 'Not provided',
+    list:  cartShoppingList
+  });
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString()
+    await fetch(APPS_SCRIPT_URL + '?' + params.toString(), {
+      method: 'GET',
+      mode: 'no-cors'
     });
 
-    // no-cors means we can't read the response, but if we get here it sent
     document.getElementById('form-success').style.display = 'block';
     btn.style.display = 'none';
     document.getElementById('f-name').value = '';
