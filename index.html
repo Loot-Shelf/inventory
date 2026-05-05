@@ -97,6 +97,13 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 .loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
 .error-msg{text-align:center;padding:60px 20px;color:#f87171;font-size:14px}
+.success-modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:900;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
+.success-modal-wrap.open{display:flex}
+.success-modal{background:var(--surface);border:1px solid #10b98140;border-radius:20px;width:420px;max-width:100%;padding:36px;text-align:center}
+.success-icon{font-size:48px;margin-bottom:16px}
+.success-modal h2{font-family:'Righteous',cursive;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.success-modal p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.success-close-btn{background:var(--grad);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -141,10 +148,18 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       <input type="email" id="f-email" placeholder="Email Address" required>
       <input type="tel" id="f-phone" placeholder="Phone Number (Optional)">
       <button id="checkout-btn" class="checkout-btn" disabled onclick="submitRequest()">Submit Request</button>
-      <div id="form-success" style="display:none;text-align:center;padding:12px;background:#10b98120;border:1px solid #10b98140;border-radius:8px;color:#34d399;font-weight:800;font-size:13px">
-        ✓ Request sent! We'll be in touch soon.
-      </div>
+
     </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="success-modal-wrap" id="success-modal">
+  <div class="success-modal">
+    <div class="success-icon">🎉</div>
+    <h2>Request Sent!</h2>
+    <p>Thank you for your request, we will get back to you as soon as possible with the contact information you provided. Have a great day!</p>
+    <button class="success-close-btn" onclick="closeSuccessModal()">Sounds good!</button>
   </div>
 </div>
 
@@ -308,13 +323,14 @@ async function submitRequest(){
 
   // Wait 1.5s then show success regardless — submission is already sent
   setTimeout(() => {
-    document.getElementById('form-success').style.display = 'block';
-    btn.style.display = 'none';
     document.getElementById('f-name').value = '';
     document.getElementById('f-email').value = '';
     document.getElementById('f-phone').value = '';
     cart = [];
     updateCartUI();
+    btn.disabled = false;
+    btn.textContent = 'Submit Request';
+    document.getElementById('success-modal').classList.add('open');
   }, 1500);
 }
 
@@ -331,10 +347,7 @@ function updateCartUI(){
     totalEl.textContent = '$0.00';
     cartShoppingList = '';
     btn.disabled = true;
-    // Reset form success state when cart is cleared manually
-    const success = document.getElementById('form-success');
-    if(success){ success.style.display = 'none'; }
-    if(btn){ btn.style.display = ''; }
+
     return;
   }
 
@@ -390,6 +403,7 @@ function moveSlide(dir){
 }
 
 function closeView(){document.getElementById('view-modal').classList.remove('open');}
+function closeSuccessModal(){document.getElementById('success-modal').classList.remove('open');}
 
 window.addEventListener('DOMContentLoaded', async ()=>{
   await loadItems();
