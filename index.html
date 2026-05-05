@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loot-Shelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--surface:#161922;--card:#1c2030;--border:#ffffff12;
+  --text:#f0f2f8;--muted:#7a8099;--grad:linear-gradient(135deg,#8b5cf6,#ec4899);
+}
+body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-height:100vh}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:'Righteous',cursive;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.search-wrap{position:relative;flex:1;min-width:160px}
+.search-wrap input{width:100%;background:#ffffff08;border:1px solid var(--border);border-radius:9px;padding:8px 12px;font-size:13px;color:var(--text);outline:none}
+.pill{background:transparent;border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.pill.active{background:var(--grad);border-color:transparent;color:#fff}
+
+main{padding:22px 28px;max-width:1100px;margin:0 auto}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:20px}
+.section-header h3{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.section-header .line{flex:1;height:1px;background:var(--border)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color 0.2s}
+.card:hover{border-color:#ffffff28}
+.card-img{width:100%;height:148px;object-fit:contain;background:#00000055;display:block}
+.img-ph{width:100%;height:148px;background:#ffffff05;display:flex;align-items:center;justify-content:center;color:#ffffff18;font-size:10px;font-weight:800}
+
+.card-body{padding:13px}
+.cat-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.cat-board{color:#a78bfa}.cat-video{color:#f472b6}.cat-collect{color:#34d399}.cat-cards{color:#fbbf24}.cat-misc{color:#94a3b8}
+
+.card-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px}
+.card-detail{font-size:11px;color:var(--muted);margin-bottom:8px}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:1px solid var(--border)}
+.price{font-size:16px;font-weight:800}
+.cond{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;text-transform:uppercase}
+
+.cond-new{background:#10b98120;color:#34d399}
+.cond-vgood{background:#06b6d420;color:#22d3ee}
+.cond-good{background:#3b82f620;color:#60a5fa}
+.cond-average{background:#f59e0b20;color:#fbbf24}
+.cond-poor{background:#f9731620;color:#fb923c}
+.cond-damaged{background:#ef444420;color:#f87171}
+.cond-missing{background:#991b1b20;color:#fca5a5;border:1px solid #ef444444}
+
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:400;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.modal-wrap.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:500px;max-width:100%;overflow:hidden}
+.slider-container{position:relative;width:100%;height:300px;background:#000;display:flex;align-items:center;justify-content:center}
+.slider-img{max-width:100%;max-height:100%;object-fit:contain}
+.slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px;display:none}
+.prev-btn{left:10px}.next-btn{right:10px}
+.modal-inner{padding:24px}
+.view-desc{font-size:13px;line-height:1.6;color:var(--text);margin-top:15px;background:#ffffff05;padding:12px;border-radius:8px;white-space:pre-wrap}
+
+.loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+.error-msg{text-align:center;padding:60px 20px;color:#f87171;font-size:14px}
+</style>
+</head>
+<body>
+
+<header><div class="logo">Loot-Shelf</div></header>
+
+<div class="toolbar">
+  <div class="search-wrap"><input id="search" placeholder="Search inventory..." oninput="render()"></div>
+  <button class="pill active" onclick="setFilter('All',this)">All</button>
+  <button class="pill" onclick="setFilter('Board Games',this)">Board Games</button>
+  <button class="pill" onclick="setFilter('Books',this)">Books</button>
+  <button class="pill" onclick="setFilter('Cards',this)">Cards</button>
+  <button class="pill" onclick="setFilter('Collectibles',this)">Collectibles</button>
+  <button class="pill" onclick="setFilter('Movies',this)">Movies</button>
+  <button class="pill" onclick="setFilter('Video Games',this)">Video Games</button>
+  <button class="pill" onclick="setFilter('Misc',this)">Misc</button>
+</div>
+
+<main id="main-content"><div class="loading">Loading inventory...</div></main>
+
+<div class="modal-wrap" id="view-modal" onclick="closeView()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="slider-container">
+      <button class="slide-btn prev-btn" onclick="moveSlide(-1)">‹</button>
+      <img id="v-img" class="slider-img">
+      <button class="slide-btn next-btn" onclick="moveSlide(1)">›</button>
+    </div>
+    <div class="modal-inner">
+      <span id="v-cat" class="cat-label"></span>
+      <h2 id="v-name" style="margin-top:5px"></h2>
+      <div id="v-detail" style="font-size:12px;color:var(--muted)"></div>
+      <div id="v-desc" class="view-desc"></div>
+      <button onclick="closeView()" style="width:100%;margin-top:20px;padding:12px;background:var(--grad);border:none;border-radius:8px;color:#fff;font-weight:800;cursor:pointer">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GITHUB_USER = 'Loot-Shelf';
+const GITHUB_REPO = 'inventory';
+const INVENTORY_FILE = 'inventory.json';
+const RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${INVENTORY_FILE}`;
+
+const catColor={'Board Games':'cat-board','Video Games':'cat-video','Books':'cat-board','Collectibles':'cat-collect','Cards':'cat-cards','Movies':'cat-video','Misc':'cat-misc'};
+const condLabel={new:'New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
+const condClass={new:'cond-new',vgood:'cond-vgood',good:'cond-good',average:'cond-average',poor:'cond-poor',damaged:'cond-damaged',missing:'cond-missing'};
+
+let activeFilter='All', currentImgs=[], currentIdx=0, items_cache=[];
+
+async function loadItems(){
+  try {
+    const res = await fetch(RAW_URL + '?t=' + Date.now());
+    if(!res.ok) throw new Error('Failed to fetch inventory');
+    items_cache = await res.json();
+    return items_cache;
+  } catch(e) {
+    document.getElementById('main-content').innerHTML = `<div class="error-msg">Could not load inventory. Please try again later.</div>`;
+    return [];
+  }
+}
+
+function setFilter(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render(){
+  const items = items_cache;
+  const q = document.getElementById('search').value.toLowerCase();
+  const now = new Date().getTime();
+  const vis = items.filter(i=>(activeFilter==='All'||i.cat===activeFilter)&&i.name.toLowerCase().includes(q));
+
+  const newItems = vis.filter(i => i.createdAt && (now - i.createdAt < 604800000));
+  const otherItems = vis.filter(i => !i.createdAt || (now - i.createdAt >= 604800000));
+
+  let html = '';
+  if(newItems.length > 0){
+    html += `<div class="section-header"><h3>Recent Arrivals</h3><div class="line"></div></div>
+             <div class="grid">${newItems.map(createCard).join('')}</div>`;
+  }
+  if(otherItems.length > 0){
+    html += `<div class="section-header"><h3>Inventory</h3><div class="line"></div></div>
+             <div class="grid">${otherItems.map(createCard).join('')}</div>`;
+  }
+  if(vis.length === 0){
+    html = `<div class="loading">No items found.</div>`;
+  }
+  document.getElementById('main-content').innerHTML = html;
+}
+
+function getImgs(i){
+  if(Array.isArray(i.img)) return i.img.filter(Boolean);
+  if(i.img) return [i.img];
+  return [];
+}
+
+function createCard(i){
+  const imgs = getImgs(i);
+  const first = imgs[0] || '';
+  return `<div class="card" onclick="openView(${i.id})">
+    ${first ? `<img src="${first}" class="card-img" onerror="this.style.display='none'">` : `<div class="img-ph">NO PHOTO</div>`}
+    <div class="card-body">
+      <span class="cat-label ${catColor[i.cat]||''}">${i.cat}</span>
+      <div class="card-name">${i.name}</div>
+      <div class="card-detail">${i.detail||''}</div>
+      <div class="card-footer"><span class="price">$${parseFloat(i.price||0).toFixed(2)}</span><span class="cond ${condClass[i.cond]||''}">${condLabel[i.cond]||i.cond}</span></div>
+    </div>
+  </div>`;
+}
+
+function openView(id){
+  const i = items_cache.find(x=>x.id===id);
+  if(!i) return;
+  currentImgs = getImgs(i);
+  currentIdx = 0;
+  document.getElementById('v-name').textContent = i.name;
+  document.getElementById('v-cat').textContent = i.cat;
+  document.getElementById('v-cat').className = `cat-label ${catColor[i.cat]||''}`;
+  document.getElementById('v-detail').textContent = i.detail||'';
+  document.getElementById('v-desc').textContent = i.desc || 'No description provided.';
+  updateSlider();
+  document.getElementById('view-modal').classList.add('open');
+}
+
+function updateSlider(){
+  const img = document.getElementById('v-img');
+  const multi = currentImgs.length > 1;
+  img.src = currentImgs[currentIdx] || '';
+  document.querySelectorAll('.slide-btn').forEach(b=>b.style.display = multi ? 'block' : 'none');
+}
+
+function moveSlide(dir){
+  currentIdx = (currentIdx + dir + currentImgs.length) % currentImgs.length;
+  updateSlider();
+}
+
+function closeView(){document.getElementById('view-modal').classList.remove('open');}
+
+window.addEventListener('DOMContentLoaded', async ()=>{
+  await loadItems();
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loot-Shelf Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--surface:#161922;--card:#1c2030;--border:#ffffff12;
+  --border-hover:#ffffff28;--text:#f0f2f8;--muted:#7a8099;
+  --green:#10b981;--amber:#f59e0b;--red:#ef4444;
+  --grad:linear-gradient(135deg,#8b5cf6,#ec4899);
+  color-scheme:dark;
+}
+body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-height:100vh}
+
+/* ── Setup Screen ── */
+#setup-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;align-items:center;justify-content:center;padding:24px}
+#setup-screen.open{display:flex}
+.setup-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;width:460px;max-width:100%}
+.setup-logo{font-family:'Righteous',cursive;font-size:26px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.setup-box h2{font-size:18px;margin-bottom:8px}
+.setup-box p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.setup-box .field{margin-bottom:14px}
+.setup-box label{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.setup-box input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);outline:none}
+.setup-note{background:#f59e0b12;border:1px solid #f59e0b30;border-radius:8px;padding:12px;font-size:12px;color:#fbbf24;line-height:1.6;margin-bottom:20px}
+.setup-btn{width:100%;background:var(--grad);color:#fff;border:none;border-radius:8px;padding:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif}
+
+/* ── Header ── */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.logo-wrap{display:flex;align-items:center;gap:12px}
+.logo{font-family:'Righteous',cursive;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.admin-badge{background:#f59e0b20;border:1px solid #f59e0b44;color:#fbbf24;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stat-chip{background:#ffffff08;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px}
+.stat-chip span{color:var(--text)}
+.add-btn{background:var(--grad);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:opacity 0.15s}
+.add-btn:hover{opacity:0.85}
+.storefront-link{background:#ffffff0a;border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;text-decoration:none;transition:all 0.15s}
+.storefront-link:hover{border-color:var(--border-hover);color:var(--text)}
+.reset-token-btn{background:none;border:1px solid #f59e0b30;color:#f59e0b88;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;font-family:'Nunito',sans-serif}
+.reset-token-btn:hover{border-color:#f59e0b66;color:#fbbf24}
+
+/* ── Toolbar ── */
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:160px}
+.search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
+.search-wrap input{width:100%;background:#ffffff08;border:1px solid var(--border);border-radius:9px;padding:8px 12px 8px 34px;font-size:13px;font-family:'Nunito',sans-serif;color:var(--text);outline:none}
+.pill{background:transparent;border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;white-space:nowrap}
+.pill:hover{border-color:var(--border-hover);color:var(--text)}
+.pill.active{background:var(--grad);border-color:transparent;color:#fff}
+
+/* ── Grid ── */
+main{padding:22px 28px;max-width:1100px;margin:0 auto}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:20px}
+.section-header h3{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.section-header .line{flex:1;height:1px;background:var(--border)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;align-items:start}
+
+/* ── Cards ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color 0.2s;position:relative;cursor:default}
+.card:hover{border-color:var(--border-hover)}
+.card-accent{height:3px}
+.ac-board{background:linear-gradient(90deg,#8b5cf6,#06b6d4)}
+.ac-video{background:linear-gradient(90deg,#ec4899,#f59e0b)}
+.ac-collect{background:linear-gradient(90deg,#10b981,#06b6d4)}
+.ac-cards{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.ac-misc{background:linear-gradient(90deg,#94a3b8,#475569)}
+.card-img{width:100%;height:148px;object-fit:contain;background:#00000055;display:block;cursor:pointer}
+.img-ph{width:100%;height:148px;background:#ffffff05;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#ffffff18;font-size:10px;font-weight:700;text-transform:uppercase;cursor:pointer}
+.card-body{padding:13px;cursor:pointer}
+.cat-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px}
+.cat-board{color:#a78bfa}.cat-video{color:#f472b6}.cat-collect{color:#34d399}.cat-cards{color:#fbbf24}.cat-misc{color:#94a3b8}
+.new-badge{background:var(--grad);color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;text-transform:uppercase;margin-left:4px}
+.card-name{font-size:14px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:2px}
+.card-detail{font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:1px solid var(--border)}
+.price{font-size:16px;font-weight:800;color:var(--text)}
+.cond{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;text-transform:uppercase}
+.cond-new{background:#10b98120;color:#34d399}
+.cond-vgood{background:#06b6d420;color:#22d3ee}
+.cond-good{background:#3b82f620;color:#60a5fa}
+.cond-average{background:#f59e0b20;color:#fbbf24}
+.cond-poor{background:#f9731620;color:#fb923c}
+.cond-damaged{background:#ef444420;color:#f87171}
+.cond-missing{background:#991b1b20;color:#fca5a5;border:1px solid #ef444444}
+.card-actions{display:flex;gap:6px;margin-top:9px;padding:0 13px 13px}
+.act-btn{flex:1;border:1px solid var(--border);background:none;border-radius:7px;padding:6px 0;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.12s}
+.act-btn:hover{background:#ffffff08;color:var(--text)}
+
+/* ── Modals ── */
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:400;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
+.modal-wrap.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:0;width:460px;max-width:100%;margin:auto}
+.modal-inner{padding:24px}
+.modal h2{font-family:'Righteous',cursive;font-size:17px;color:var(--text);margin-bottom:20px}
+
+/* ── Image URL input ── */
+.img-url-row{display:flex;gap:6px;margin-bottom:6px}
+.img-url-row input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'Nunito',sans-serif;font-size:12px;color:var(--text);outline:none}
+.img-url-row button{background:#ffffff0a;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:16px;transition:all 0.12s}
+.img-url-row button:hover{background:#ffffff15;color:var(--text)}
+.img-preview-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.img-thumb-wrap{position:relative;width:60px;height:60px}
+.img-thumb{width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
+.img-thumb-del{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.add-url-btn{background:#ffffff08;border:1px dashed var(--border);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;width:100%;font-family:'Nunito',sans-serif;transition:all 0.12s;margin-top:4px}
+.add-url-btn:hover{background:#ffffff12;color:var(--text)}
+
+/* ── Slider (view modal) ── */
+.slider-container{position:relative;width:100%;height:300px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.view-img{max-width:100%;max-height:100%;object-fit:contain}
+.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px;display:none;align-items:center;justify-content:center}
+.slider-btn:hover{background:rgba(0,0,0,0.8)}
+.prev-btn{left:10px}.next-btn{right:10px}
+.img-dots{position:absolute;bottom:10px;display:flex;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3)}
+.dot.active{background:#fff}
+.view-modal{width:500px}
+.view-desc{font-size:13px;line-height:1.6;color:var(--text);margin-top:15px;background:#ffffff05;padding:12px;border-radius:8px;border:1px solid var(--border);white-space:pre-wrap}
+
+/* ── Form fields ── */
+.field{margin-bottom:13px}
+.field label{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);outline:none}
+.field select option{background:var(--surface);color:var(--text)}
+.field textarea{height:62px;resize:none}
+.modal-actions{display:flex;gap:8px;margin-top:18px}
+.btn-primary{flex:1;background:var(--grad);color:#fff;border:none;padding:11px;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;font-family:'Nunito',sans-serif}
+.btn-secondary{background:none;border:1px solid var(--border);color:var(--muted);padding:11px 18px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif}
+
+/* ── Confirm ── */
+.confirm-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:center;justify-content:center}
+.confirm-wrap.open{display:flex}
+.confirm-box{background:var(--surface);border:1px solid #ef444430;border-radius:14px;padding:24px;width:320px;text-align:center}
+.confirm-box h3{margin-bottom:6px}
+.confirm-box p{font-size:12px;color:var(--muted);margin-bottom:20px}
+.confirm-actions{display:flex;gap:8px;justify-content:center}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1c2030;border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;z-index:600;transition:transform 0.3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:#10b98140;color:#34d399}
+.toast.error{border-color:#ef444440;color:#f87171}
+
+.loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+.saving-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.saving-overlay.open{display:flex}
+.saving-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 32px;text-align:center;font-weight:700;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- Setup Screen -->
+<div id="setup-screen">
+  <div class="setup-box">
+    <div class="setup-logo">Loot-Shelf</div>
+    <h2>Admin Setup</h2>
+    <p>Enter your GitHub Personal Access Token to connect this admin panel to your inventory. This is stored only on this device and never shared.</p>
+    <div class="setup-note">
+      ⚠️ Keep this page local — do not commit it to GitHub or share it. Your token gives write access to your repo.
+    </div>
+    <div class="field">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="setup-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    </div>
+    <button class="setup-btn" onclick="saveToken()">Connect & Continue</button>
+  </div>
+</div>
+
+<!-- Saving Overlay -->
+<div class="saving-overlay" id="saving-overlay">
+  <div class="saving-box">Saving to GitHub...</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="logo-wrap"><div class="logo">Loot-Shelf</div><div class="admin-badge">Admin</div></div>
+  <div class="header-right">
+    <div class="stat-chip">Items: <span id="total-count">—</span></div>
+    <a href="index.html" class="storefront-link" target="_blank">View Storefront ↗</a>
+    <button class="reset-token-btn" onclick="resetToken()">Reset Token</button>
+    <button class="add-btn" onclick="openModal()">+ Add Item</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search" placeholder="Search inventory..." oninput="render()">
+  </div>
+  <button class="pill active" onclick="setFilter('All',this)">All</button>
+  <button class="pill" onclick="setFilter('Board Games',this)">Board Games</button>
+  <button class="pill" onclick="setFilter('Books',this)">Books</button>
+  <button class="pill" onclick="setFilter('Cards',this)">Cards</button>
+  <button class="pill" onclick="setFilter('Collectibles',this)">Collectibles</button>
+  <button class="pill" onclick="setFilter('Movies',this)">Movies</button>
+  <button class="pill" onclick="setFilter('Video Games',this)">Video Games</button>
+  <button class="pill" onclick="setFilter('Misc',this)">Misc</button>
+</div>
+
+<main id="main-content"><div class="loading">Loading inventory...</div></main>
+
+<!-- Add / Edit Modal -->
+<div class="modal-wrap" id="modal">
+  <div class="modal">
+    <div class="modal-inner">
+      <h2 id="modal-title">Add listing</h2>
+      <div class="field"><label>Item Name</label><input id="f-name" placeholder="e.g. Catan"></div>
+      <div class="field"><label>Category</label>
+        <select id="f-cat">
+          <option value="Board Games">Board Games</option>
+          <option value="Books">Books</option>
+          <option value="Cards">Cards</option>
+          <option value="Collectibles">Collectibles</option>
+          <option value="Movies">Movies</option>
+          <option value="Video Games">Video Games</option>
+          <option value="Misc">Misc</option>
+        </select>
+      </div>
+      <div class="field"><label>Details</label><input id="f-detail" placeholder="e.g. 2-4 Players | 60-120 min"></div>
+      <div class="field"><label>Description</label><textarea id="f-desc" placeholder="Optional — any extra notes about the item"></textarea></div>
+      <div class="field"><label>Price ($)</label><input id="f-price" type="number" step="0.01" min="0" placeholder="0.00"></div>
+      <div class="field"><label>Condition</label>
+        <select id="f-cond">
+          <option value="new">New</option>
+          <option value="vgood">Used - Very Good</option>
+          <option value="good">Used - Good</option>
+          <option value="average">Used - Average</option>
+          <option value="poor">Used - Poor</option>
+          <option value="damaged">Damaged</option>
+          <option value="missing">Missing Pieces</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Photo URLs</label>
+        <div id="img-url-inputs"></div>
+        <button class="add-url-btn" onclick="addUrlInput()">+ Add another photo URL</button>
+        <div id="img-preview-strip" class="img-preview-strip" style="margin-top:8px"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveItem()">Save listing</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal-wrap" id="view-modal" onclick="closeView()">
+  <div class="modal view-modal" onclick="event.stopPropagation()">
+    <div class="slider-container">
+      <button class="slider-btn prev-btn" onclick="slideAdmin(-1)">‹</button>
+      <img id="v-img-main" class="view-img">
+      <button class="slider-btn next-btn" onclick="slideAdmin(1)">›</button>
+      <div id="v-dots" class="img-dots"></div>
+    </div>
+    <div class="modal-inner">
+      <span id="v-cat" class="cat-label"></span>
+      <h2 id="v-name" style="margin-bottom:5px"></h2>
+      <div id="v-detail" style="font-size:12px;color:var(--muted);font-weight:700"></div>
+      <div id="v-desc" class="view-desc"></div>
+      <div class="modal-actions"><button class="btn-primary" onclick="closeView()">Done</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete -->
+<div class="confirm-wrap" id="confirm">
+  <div class="confirm-box">
+    <h3>Remove item?</h3>
+    <p>This will permanently delete the listing from your inventory.</p>
+    <div class="confirm-actions">
+      <button class="btn-secondary" onclick="closeConfirm()">Keep it</button>
+      <button class="btn-primary" style="background:var(--red);flex:none;padding:11px 20px" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────
+const GITHUB_USER = 'Loot-Shelf';
+const GITHUB_REPO = 'inventory';
+const GITHUB_BRANCH = 'main';
+const INVENTORY_FILE = 'inventory.json';
+const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${INVENTORY_FILE}`;
+const RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${INVENTORY_FILE}`;
+const TOKEN_KEY = 'loot-shelf_gh_token';
+
+// ── State ────────────────────────────────────────────────
+const catAccent = {'Board Games':'ac-board','Video Games':'ac-video','Books':'ac-board','Collectibles':'ac-collect','Cards':'ac-cards','Movies':'ac-video','Misc':'ac-misc'};
+const catColor  = {'Board Games':'cat-board','Video Games':'cat-video','Books':'cat-board','Collectibles':'cat-collect','Cards':'cat-cards','Movies':'cat-video','Misc':'cat-misc'};
+const condLabel = {new:'New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
+const condClass = {new:'cond-new',vgood:'cond-vgood',good:'cond-good',average:'cond-average',poor:'cond-poor',damaged:'cond-damaged',missing:'cond-missing'};
+
+let activeFilter='All', editingId=null, deletingId=null, items_cache=[];
+let currentSliderImgs=[], currentSliderIdx=0;
+let pendingUrlInputs=[]; // array of url strings currently in the form
+
+// ── Token Management ─────────────────────────────────────
+function getToken(){ return localStorage.getItem(TOKEN_KEY); }
+
+function saveToken(){
+  const t = document.getElementById('setup-token').value.trim();
+  if(!t){ alert('Please paste your token.'); return; }
+  localStorage.setItem(TOKEN_KEY, t);
+  document.getElementById('setup-screen').classList.remove('open');
+  init();
+}
+
+function resetToken(){
+  if(!confirm('This will remove your saved token and return to the setup screen.')) return;
+  localStorage.removeItem(TOKEN_KEY);
+  document.getElementById('setup-screen').classList.add('open');
+}
+
+function authHeaders(){
+  return {
+    'Authorization': `Bearer ${getToken()}`,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json'
+  };
+}
+
+// ── GitHub API ───────────────────────────────────────────
+let fileSha = null; // needed for updates
+
+async function fetchInventory(){
+  try {
+    // Use API to get sha + content
+    const res = await fetch(API_BASE, { headers: authHeaders() });
+    if(res.status === 401){ showToast('Token invalid or expired. Reset your token.', 'error'); return []; }
+    if(res.status === 404){
+      // File doesn't exist yet — that's fine, start empty
+      fileSha = null;
+      return [];
+    }
+    if(!res.ok) throw new Error('GitHub API error: ' + res.status);
+    const data = await res.json();
+    fileSha = data.sha;
+    const decoded = JSON.parse(atob(data.content.replace(/\n/g,'')));
+    return decoded;
+  } catch(e) {
+    showToast('Failed to load inventory: ' + e.message, 'error');
+    return [];
+  }
+}
+
+async function pushInventory(items){
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))));
+  const body = {
+    message: `Update inventory (${items.length} items)`,
+    content,
+    branch: GITHUB_BRANCH
+  };
+  if(fileSha) body.sha = fileSha;
+
+  const res = await fetch(API_BASE, {
+    method: 'PUT',
+    headers: authHeaders(),
+    body: JSON.stringify(body)
+  });
+
+  if(res.status === 401){ showToast('Token invalid or expired. Reset your token.', 'error'); return false; }
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    showToast('Save failed: ' + (err.message || res.status), 'error');
+    return false;
+  }
+  const data = await res.json();
+  fileSha = data.content.sha; // update sha for next write
+  return true;
+}
+
+// ── Init ─────────────────────────────────────────────────
+async function init(){
+  document.getElementById('main-content').innerHTML = '<div class="loading">Loading inventory...</div>';
+  items_cache = await fetchInventory();
+  render();
+}
+
+// ── Render ───────────────────────────────────────────────
+function setFilter(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render(){
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  const now=new Date().getTime();
+  const vis=items_cache.filter(i=>{
+    const mc=activeFilter==='All'||i.cat===activeFilter;
+    const mq=!q||i.name.toLowerCase().includes(q);
+    return mc&&mq;
+  });
+  document.getElementById('total-count').textContent=items_cache.length;
+
+  const newItems=vis.filter(i=>i.createdAt&&(now-i.createdAt<604800000));
+  const otherItems=vis.filter(i=>!i.createdAt||(now-i.createdAt>=604800000));
+
+  let html='';
+  if(newItems.length>0){
+    html+=`<div class="section-header"><h3>Weekly Arrivals</h3><div class="line"></div></div>
+           <div class="grid">${newItems.map(i=>createCardHTML(i,true)).join('')}</div>`;
+  }
+  html+=`<div class="section-header"><h3>Inventory (${vis.length})</h3><div class="line"></div></div>
+         <div class="grid">${otherItems.map(i=>createCardHTML(i,false)).join('')}</div>`;
+  if(vis.length===0) html='<div class="loading">No items found.</div>';
+  document.getElementById('main-content').innerHTML=html;
+}
+
+function getImgs(i){
+  if(Array.isArray(i.img)) return i.img.filter(Boolean);
+  if(i.img) return [i.img];
+  return [];
+}
+
+function createCardHTML(i,isNew){
+  const imgs=getImgs(i);
+  const first=imgs[0]||'';
+  return `<div class="card">
+    <div class="card-accent ${catAccent[i.cat]||''}"></div>
+    <div onclick="openView(${i.id})">
+      ${first?`<img src="${first}" class="card-img" onerror="this.style.display='none'">`:`<div class="img-ph">No Image</div>`}
+      <div class="card-body">
+        <span class="cat-label ${catColor[i.cat]||''}">${i.cat}</span>${isNew?'<span class="new-badge">New</span>':''}
+        <div class="card-name">${i.name}</div>
+        <div class="card-detail">${i.detail||''}</div>
+        <div class="card-footer"><span class="price">$${parseFloat(i.price||0).toFixed(2)}</span><span class="cond ${condClass[i.cond]||''}">${condLabel[i.cond]||i.cond}</span></div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="act-btn" onclick="openEdit(${i.id})">Edit</button>
+      <button class="act-btn" onclick="openConfirm(${i.id})" style="color:var(--red)">Delete</button>
+    </div>
+  </div>`;
+}
+
+// ── Image URL Inputs ─────────────────────────────────────
+function buildUrlInputs(urls){
+  pendingUrlInputs = urls.length ? [...urls] : [''];
+  renderUrlInputs();
+}
+
+function renderUrlInputs(){
+  const container = document.getElementById('img-url-inputs');
+  container.innerHTML = pendingUrlInputs.map((url,i)=>`
+    <div class="img-url-row">
+      <input type="url" placeholder="https://i.imgur.com/example.jpg" value="${url||''}"
+        oninput="pendingUrlInputs[${i}]=this.value; updatePreview()">
+      <button onclick="removeUrlInput(${i})" title="Remove">✕</button>
+    </div>
+  `).join('');
+  updatePreview();
+}
+
+function addUrlInput(){
+  pendingUrlInputs.push('');
+  renderUrlInputs();
+}
+
+function removeUrlInput(i){
+  pendingUrlInputs.splice(i,1);
+  if(pendingUrlInputs.length===0) pendingUrlInputs=[''];
+  renderUrlInputs();
+}
+
+function updatePreview(){
+  const strip = document.getElementById('img-preview-strip');
+  const valid = pendingUrlInputs.filter(u=>u&&u.startsWith('http'));
+  strip.innerHTML = valid.map((url,i)=>`
+    <div class="img-thumb-wrap">
+      <img src="${url}" class="img-thumb" onerror="this.style.opacity='0.2'" title="${url}">
+    </div>
+  `).join('');
+}
+
+// ── Add / Edit Modal ─────────────────────────────────────
+function openModal(){
+  editingId=null;
+  document.getElementById('modal-title').textContent='Add listing';
+  ['f-name','f-detail','f-desc','f-price'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cat').value='Board Games';
+  document.getElementById('f-cond').value='good';
+  buildUrlInputs(['']);
+  document.getElementById('modal').classList.add('open');
+}
+
+function openEdit(id){
+  const i=items_cache.find(x=>x.id===id);
+  if(!i) return;
+  editingId=id;
+  document.getElementById('modal-title').textContent='Edit listing';
+  document.getElementById('f-name').value=i.name;
+  document.getElementById('f-cat').value=i.cat;
+  document.getElementById('f-detail').value=i.detail||'';
+  document.getElementById('f-desc').value=i.desc||'';
+  document.getElementById('f-price').value=i.price||0;
+  document.getElementById('f-cond').value=i.cond;
+  buildUrlInputs(getImgs(i));
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+async function saveItem(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){ alert('Please enter an item name.'); return; }
+
+  const urls=pendingUrlInputs.filter(u=>u&&u.startsWith('http'));
+  const now=new Date().getTime();
+  const data={
+    name,
+    cat:document.getElementById('f-cat').value,
+    detail:document.getElementById('f-detail').value,
+    desc:document.getElementById('f-desc').value,
+    price:parseFloat(document.getElementById('f-price').value)||0,
+    cond:document.getElementById('f-cond').value,
+    img:urls
+  };
+
+  const items=[...items_cache];
+  if(editingId){
+    const idx=items.findIndex(x=>x.id===editingId);
+    items[idx]={...items[idx],...data, createdAt:items[idx].createdAt||now};
+  } else {
+    const maxId=items.reduce((m,i)=>Math.max(m,i.id),0);
+    items.push({id:maxId+1,...data,createdAt:now});
+  }
+
+  showSaving(true);
+  const ok=await pushInventory(items);
+  showSaving(false);
+  if(ok){
+    items_cache=items;
+    closeModal();
+    render();
+    showToast(editingId?'Listing updated!':'Listing added!','success');
+  }
+}
+
+// ── View Modal ───────────────────────────────────────────
+function openView(id){
+  const i=items_cache.find(x=>x.id===id);
+  if(!i) return;
+  currentSliderImgs=getImgs(i);
+  currentSliderIdx=0;
+  updateAdminSlider();
+  document.getElementById('v-cat').textContent=i.cat;
+  document.getElementById('v-cat').className=`cat-label ${catColor[i.cat]||''}`;
+  document.getElementById('v-name').textContent=i.name;
+  document.getElementById('v-detail').textContent=i.detail||'';
+  document.getElementById('v-desc').textContent=i.desc||'No description.';
+  document.getElementById('view-modal').classList.add('open');
+}
+
+function updateAdminSlider(){
+  const imgEl=document.getElementById('v-img-main');
+  const prev=document.querySelector('.prev-btn'),next=document.querySelector('.next-btn'),dots=document.getElementById('v-dots');
+  if(currentSliderImgs.length===0){imgEl.src='';[prev,next].forEach(b=>b.style.display='none');dots.innerHTML='';return;}
+  imgEl.src=currentSliderImgs[currentSliderIdx];
+  const multi=currentSliderImgs.length>1;
+  prev.style.display=multi?'flex':'none';next.style.display=multi?'flex':'none';
+  dots.innerHTML=currentSliderImgs.map((_,idx)=>`<div class="dot ${idx===currentSliderIdx?'active':''}"></div>`).join('');
+}
+
+function slideAdmin(dir){
+  currentSliderIdx=(currentSliderIdx+dir+currentSliderImgs.length)%currentSliderImgs.length;
+  updateAdminSlider();
+}
+
+function closeView(){ document.getElementById('view-modal').classList.remove('open'); }
+
+// ── Delete ───────────────────────────────────────────────
+function openConfirm(id){ deletingId=id; document.getElementById('confirm').classList.add('open'); }
+function closeConfirm(){ document.getElementById('confirm').classList.remove('open'); }
+
+async function confirmDelete(){
+  const items=items_cache.filter(i=>i.id!==deletingId);
+  showSaving(true);
+  const ok=await pushInventory(items);
+  showSaving(false);
+  if(ok){
+    items_cache=items;
+    closeConfirm();
+    render();
+    showToast('Item deleted.','success');
+  }
+}
+
+// ── UI Helpers ───────────────────────────────────────────
+function showSaving(on){
+  document.getElementById('saving-overlay').classList.toggle('open',on);
+}
+
+let toastTimer;
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=`toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ── Boot ─────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!getToken()){
+    document.getElementById('setup-screen').classList.add('open');
+  } else {
+    init();
+  }
+});
+</script>
+</body>
+</html>
