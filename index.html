@@ -276,12 +276,8 @@ function removeFromCart(index){
   updateCartUI();
 }
 
-// ── Google Forms config ─────────────────────────────────
-const GF_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfVTW4T1lVABt6lWWVwApIoKkzGlPjibSPeX5UmdMMg15B09Q/formResponse';
-const GF_NAME  = 'entry.424528149';
-const GF_EMAIL = 'entry.1642561276';
-const GF_PHONE = 'entry.235095397';
-const GF_LIST  = 'entry.1814066873';
+// ── Apps Script config ──────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz431guZSDYY99UrfSkfkS6cbCQ1NNBD_FmJgG_5myRrjB41gSUtp9CsDmEZfXhFxc5XA/exec';
 let cartShoppingList = '';
 
 async function submitRequest(){
@@ -296,24 +292,33 @@ async function submitRequest(){
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
-  const body = new FormData();
-  body.append(GF_NAME,  name);
-  body.append(GF_EMAIL, email);
-  body.append(GF_PHONE, phone || 'Not provided');
-  body.append(GF_LIST,  cartShoppingList);
+  const params = new URLSearchParams();
+  params.append('name',  name);
+  params.append('email', email);
+  params.append('phone', phone || 'Not provided');
+  params.append('list',  cartShoppingList);
 
   try {
-    // Google Forms blocks CORS — no-cors still delivers the submission
-    await fetch(GF_ACTION, { method: 'POST', mode: 'no-cors', body });
-  } catch(e) { /* expected */ }
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    });
 
-  document.getElementById('form-success').style.display = 'block';
-  btn.style.display = 'none';
-  document.getElementById('f-name').value = '';
-  document.getElementById('f-email').value = '';
-  document.getElementById('f-phone').value = '';
-  cart = [];
-  updateCartUI();
+    // no-cors means we can't read the response, but if we get here it sent
+    document.getElementById('form-success').style.display = 'block';
+    btn.style.display = 'none';
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-email').value = '';
+    document.getElementById('f-phone').value = '';
+    cart = [];
+    updateCartUI();
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Submit Request';
+    alert('Something went wrong. Please try again.');
+  }
 }
 
 function updateCartUI(){
