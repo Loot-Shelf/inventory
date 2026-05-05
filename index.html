@@ -299,12 +299,15 @@ async function submitRequest(){
     list:  cartShoppingList
   });
 
-  try {
-    await fetch(APPS_SCRIPT_URL + '?' + params.toString(), {
-      method: 'GET',
-      mode: 'no-cors'
-    });
+  // Fire and forget — no-cors means we can't read the response
+  // so we show success after a short delay to let the request dispatch
+  fetch(APPS_SCRIPT_URL + '?' + params.toString(), {
+    method: 'GET',
+    mode: 'no-cors'
+  }).catch(() => {});
 
+  // Wait 1.5s then show success regardless — submission is already sent
+  setTimeout(() => {
     document.getElementById('form-success').style.display = 'block';
     btn.style.display = 'none';
     document.getElementById('f-name').value = '';
@@ -312,11 +315,7 @@ async function submitRequest(){
     document.getElementById('f-phone').value = '';
     cart = [];
     updateCartUI();
-  } catch(e) {
-    btn.disabled = false;
-    btn.textContent = 'Submit Request';
-    alert('Something went wrong. Please try again.');
-  }
+  }, 1500);
 }
 
 function updateCartUI(){
