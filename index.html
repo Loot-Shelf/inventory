@@ -24,22 +24,25 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:sticky;top:60px;z-index:100}
 .search-wrap{position:relative;flex:1;min-width:160px}
 .search-wrap input{width:100%;background:#ffffff08;border:1px solid var(--border);border-radius:9px;padding:8px 12px;font-size:13px;color:var(--text);outline:none}
-.pill{background:transparent;border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.15s}
-.pill.active{border-color:transparent;color:#fff}
-/* Per-category pill colors when active */
-.pill-all.active{background:var(--grad)}
-.pill-board.active{background:#a78bfa22;border-color:#a78bfa55;color:#a78bfa}
-.pill-books.active{background:#a78bfa22;border-color:#a78bfa55;color:#a78bfa}
-.pill-cards.active{background:#fbbf2422;border-color:#fbbf2455;color:#fbbf24}
-.pill-collect.active{background:#34d39922;border-color:#34d39955;color:#34d399}
-.pill-movies.active{background:#f472b622;border-color:#f472b655;color:#f472b6}
-.pill-video.active{background:#f472b622;border-color:#f472b655;color:#f472b6}
-.pill-misc.active{background:#94a3b822;border-color:#94a3b855;color:#94a3b8}
+.pill{background:transparent;border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+/* Active states — unique color per category */
+.pill-all.active    {background:linear-gradient(135deg,#8b5cf6,#ec4899);border-color:transparent;color:#fff}
+.pill-board.active  {background:#a78bfa22;border-color:#a78bfa66;color:#a78bfa}
+.pill-books.active  {background:#38bdf822;border-color:#38bdf866;color:#38bdf8}
+.pill-cards.active  {background:#fbbf2422;border-color:#fbbf2466;color:#fbbf24}
+.pill-collect.active{background:#34d39922;border-color:#34d39966;color:#34d399}
+.pill-movies.active {background:#f8717122;border-color:#f8717166;color:#f87171}
+.pill-video.active  {background:#fb923c22;border-color:#fb923c66;color:#fb923c}
+.pill-misc.active   {background:#94a3b822;border-color:#94a3b866;color:#94a3b8}
 /* Hover tints */
-.pill-board:hover{color:#a78bfa}.pill-books:hover{color:#a78bfa}
-.pill-cards:hover{color:#fbbf24}.pill-collect:hover{color:#34d399}
-.pill-movies:hover{color:#f472b6}.pill-video:hover{color:#f472b6}
-.pill-misc:hover{color:#94a3b8}.pill-all:hover{color:var(--text)}
+.pill-all:hover    {color:var(--text)}
+.pill-board:hover  {color:#a78bfa}
+.pill-books:hover  {color:#38bdf8}
+.pill-cards:hover  {color:#fbbf24}
+.pill-collect:hover{color:#34d399}
+.pill-movies:hover {color:#f87171}
+.pill-video:hover  {color:#fb923c}
+.pill-misc:hover   {color:#94a3b8}
 
 main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:20px}
@@ -55,7 +58,14 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 .card-body{padding:13px;cursor:pointer;flex:1}
 .cat-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.cat-board{color:#a78bfa}.cat-video{color:#f472b6}.cat-collect{color:#34d399}.cat-cards{color:#fbbf24}.cat-misc{color:#94a3b8}
+/* Unique color per category */
+.cat-board{color:#a78bfa}   /* purple  - Board Games  */
+.cat-books{color:#38bdf8}   /* sky blue - Books       */
+.cat-cards{color:#fbbf24}   /* amber   - Cards        */
+.cat-collect{color:#34d399} /* emerald - Collectibles */
+.cat-movies{color:#f87171}  /* coral   - Movies       */
+.cat-video{color:#fb923c}   /* orange  - Video Games  */
+.cat-misc{color:#94a3b8}    /* slate   - Misc         */
 
 .card-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px}
 .card-detail{font-size:11px;color:var(--muted);margin-bottom:8px}
@@ -134,6 +144,83 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .success-modal h2{font-family:'Righteous',cursive;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
 .success-modal p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
 .success-close-btn{background:var(--grad);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer}
+
+/* ════════════════════════════════
+   MOBILE RESPONSIVE
+   ════════════════════════════════ */
+@media(max-width:640px){
+
+  /* Header */
+  header{padding:0 16px;height:52px}
+  .logo{font-size:19px}
+  .cart-toggle{padding:6px 12px;font-size:12px;gap:6px}
+  .cart-count{font-size:9px;padding:1px 5px}
+
+  /* Store Banner */
+  .store-banner{padding:16px 16px 18px}
+  .banner-notice{flex-direction:column;gap:10px;padding:14px}
+  .banner-icon{font-size:22px;margin-top:0}
+  .banner-text strong{font-size:14px}
+  .banner-text span{font-size:12px}
+  .how-it-works-label{font-size:13px;margin-top:4px}
+  .banner-steps{grid-template-columns:1fr;gap:8px}
+  .step-body strong{font-size:12px}
+  .step-body span{font-size:11px}
+
+  /* Toolbar — horizontal scroll for pills */
+  .toolbar{padding:8px 12px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;scrollbar-width:none}
+  .toolbar::-webkit-scrollbar{display:none}
+  .search-wrap{min-width:130px;flex:0 0 130px}
+  .search-wrap input{padding:7px 10px;font-size:12px}
+  .pill{padding:5px 12px;font-size:11px;flex-shrink:0}
+
+  /* Grid — 2 columns on mobile */
+  main{padding:14px 12px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .section-header{margin-top:14px;margin-bottom:10px}
+  .section-header h3{font-size:11px}
+
+  /* Cards */
+  .card-img,.img-ph{height:120px}
+  .card-body{padding:10px}
+  .card-name{font-size:13px}
+  .card-detail{font-size:10px;margin-bottom:6px}
+  .price{font-size:14px}
+  .cond{font-size:8px;padding:2px 5px}
+  .add-to-cart-btn{padding:9px;font-size:11px}
+
+  /* Cart sidebar — full width on mobile */
+  .cart-sidebar{width:100%;right:-100%}
+  .cart-sidebar.open{right:0}
+  .cart-header{padding:18px 16px}
+  .cart-items{padding:14px}
+  .cart-footer{padding:16px}
+  .request-form input{padding:11px;font-size:13px}
+  .checkout-btn{padding:13px;font-size:14px}
+  .total-row{font-size:14px}
+
+  /* Item detail modal */
+  .modal-wrap{padding:0;align-items:flex-end}
+  .modal{border-radius:20px 20px 0 0;width:100%;max-height:92vh;overflow-y:auto}
+  .slider-container{height:240px}
+  .modal-inner{padding:18px}
+  .view-desc{font-size:12px}
+  .view-request-btn{padding:13px;font-size:13px}
+
+  /* Success modal */
+  .success-modal{padding:28px 20px}
+  .success-icon{font-size:40px}
+  .success-modal h2{font-size:19px}
+  .success-modal p{font-size:13px}
+}
+
+/* Tablet tweaks */
+@media(min-width:641px) and (max-width:900px){
+  main{padding:18px 20px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+  .store-banner{padding:20px}
+  .banner-steps{grid-template-columns:1fr 1fr 1fr;gap:8px}
+}
 </style>
 </head>
 <body>
@@ -245,7 +332,7 @@ const GITHUB_REPO = 'inventory';
 const INVENTORY_FILE = 'inventory.json';
 const RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${INVENTORY_FILE}`;
 
-const catColor={'Board Games':'cat-board','Video Games':'cat-video','Books':'cat-board','Collectibles':'cat-collect','Cards':'cat-cards','Movies':'cat-video','Misc':'cat-misc'};
+const catColor={'Board Games':'cat-board','Video Games':'cat-video','Books':'cat-books','Collectibles':'cat-collect','Cards':'cat-cards','Movies':'cat-movies','Misc':'cat-misc'};
 const condLabel={new:'New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
 const condClass={new:'cond-new',vgood:'cond-vgood',good:'cond-good',average:'cond-average',poor:'cond-poor',damaged:'cond-damaged',missing:'cond-missing'};
 
