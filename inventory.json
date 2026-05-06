@@ -28,20 +28,5 @@
     ],
     "createdAt": 1778003755206,
     "salePrice": 12
-  },
-  {
-    "id": 4,
-    "name": "Monopoly Mickey",
-    "cat": "Board Games",
-    "detail": "2-6 Player | 8+ | 60 Min",
-    "desc": "fsdfdsf",
-    "price": 7,
-    "salePrice": 0,
-    "cond": "good",
-    "img": [],
-    "tags": [
-      "Brand New"
-    ],
-    "createdAt": 1778097578955
   }
 ]
