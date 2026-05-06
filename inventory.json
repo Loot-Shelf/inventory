@@ -30,27 +30,6 @@
     "salePrice": 12
   },
   {
-    "id": 3,
-    "name": "dsfsdf",
-    "cat": "Board Games",
-    "detail": "sdfdsf",
-    "desc": "sdfdsf",
-    "price": 12,
-    "salePrice": 0,
-    "cond": "vgood",
-    "img": [],
-    "tags": [
-      "Brand New",
-      "2 Players",
-      "Competitive",
-      "Dice Game",
-      "Fantasy",
-      "Superhero",
-      "Limited Edition"
-    ],
-    "createdAt": 1778097351274
-  },
-  {
     "id": 4,
     "name": "Monopoly Mickey",
     "cat": "Board Games",
