@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loot-Shelf</title>
+<title>SideQuest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
 <style>
@@ -78,9 +78,14 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .pill-misc:hover   {color:#94a3b8}
 
 main{padding:22px 28px;max-width:1100px;margin:0 auto}
-.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:20px}
-.section-header h3{font-size:13px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px}
+.section-block{border-radius:16px;padding:20px;margin-top:24px}
+.section-block-arrivals{background:linear-gradient(135deg,#8b5cf608,#06b6d408);border:1px solid #8b5cf625}
+.section-block-flash{background:linear-gradient(135deg,#ef444408,#f59e0b08);border:1px solid #ef444425}
+.section-block-inventory{background:#ffffff04;border:1px solid #ffffff10}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.section-header h3{font-size:14px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px}
 .section-header .line{flex:1;height:1px;background:var(--border)}
+.section-header .section-icon{font-size:16px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color 0.2s;display:flex;flex-direction:column}
@@ -100,15 +105,15 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .cat-video{color:#fb923c}   /* orange   - Video Games  */
 .cat-misc{color:#94a3b8}    /* slate    - Misc          */
 
-.card-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px}
-.card-detail{font-size:13px;color:#b8c0d4;margin-bottom:8px}
+.card-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px}
+.card-detail{font-size:14px;color:#b8c0d4;margin-bottom:8px}
 .card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:1px solid var(--border)}
-.price{font-size:18px;font-weight:800}
+.price{font-size:20px;font-weight:800}
 .price.on-sale{color:var(--red)}
 .old-price{font-size:13px;text-decoration:line-through;color:#8a95b0;margin-right:4px}
-.cond{font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase}
+.cond{font-size:12px;font-weight:700;padding:4px 9px;border-radius:5px;text-transform:uppercase}
 
-.add-to-cart-btn{width:100%;padding:12px;background:#ffffff08;border:none;border-top:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:background 0.15s}
+.add-to-cart-btn{width:100%;padding:13px;background:#ffffff08;border:none;border-top:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:background 0.15s}
 .add-to-cart-btn:hover{background:var(--grad);color:#fff}
 
 /* ── Cart Sidebar ── */
@@ -121,8 +126,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .cart-item{display:flex;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
 .cart-item-img{width:60px;height:60px;border-radius:8px;background:#000;object-fit:cover}
 .cart-item-info{flex:1}
-.cart-item-name{font-size:15px;font-weight:800;margin-bottom:4px}
-.cart-item-price{font-size:14px;color:#b8c0d4}
+.cart-item-name{font-size:16px;font-weight:800;margin-bottom:4px}
+.cart-item-price{font-size:15px;color:#b8c0d4}
 .remove-item{background:none;border:none;color:var(--red);font-size:11px;font-weight:800;cursor:pointer;margin-top:4px}
 
 /* ── Request Form ── */
@@ -156,8 +161,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .error-msg{text-align:center;padding:60px 20px;color:#f87171;font-size:14px}
 /* ── Sort Bar ── */
 .sort-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.sort-label{font-size:11px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px;margin-right:2px;white-space:nowrap}
-.sort-btn{background:transparent;border:1px solid #ffffff28;border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700;color:#b8c0d4;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;white-space:nowrap}
+.sort-label{font-size:12px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px;margin-right:2px;white-space:nowrap}
+.sort-btn{background:transparent;border:1px solid #ffffff28;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:#b8c0d4;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;white-space:nowrap}
 .sort-btn:hover{color:var(--text);border-color:#ffffff44;background:#ffffff0a}
 .sort-btn.active{background:#ffffff18;border-color:#ffffff44;color:#fff}
 /* ── Store Banner ── */
@@ -166,11 +171,11 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 /* Welcome strip — full width, centered, generous padding */
 .banner-welcome{text-align:center;padding:48px 28px 40px;border-bottom:1px solid #8b5cf618}
-.banner-welcome h1{font-family:'Righteous',cursive;font-size:44px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;line-height:1.1}
-.banner-welcome p{font-size:15px;color:#c4cde0;letter-spacing:0.5px;margin-bottom:18px}
+.banner-welcome h1{font-family:'Righteous',cursive;font-size:48px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;line-height:1.1}
+.banner-welcome p{font-size:16px;color:#c4cde0;letter-spacing:0.5px;margin-bottom:18px}
 .banner-disclaimer-inline{display:inline-flex;align-items:center;gap:8px;background:#f59e0b0d;border:1px solid #f59e0b30;border-radius:30px;padding:8px 18px}
 .disclaimer-icon{font-size:15px;flex-shrink:0}
-.disclaimer-text{font-size:13px;color:#fbbf24;font-weight:700}
+.disclaimer-text{font-size:14px;color:#fbbf24;font-weight:700}
 
 /* How It Works strip — its own row with subtle background */
 .how-it-works-section{padding:32px 28px;background:#ffffff03;border-bottom:1px solid #8b5cf618}
@@ -179,8 +184,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .banner-step{background:#ffffff06;border:1px solid #ffffff10;border-radius:14px;padding:18px 16px;display:flex;align-items:flex-start;gap:14px;transition:border-color 0.2s}
 .banner-step:hover{border-color:#8b5cf630}
 .step-num{background:var(--grad);color:#fff;font-size:12px;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step-body strong{font-size:14px;font-weight:800;color:var(--text);display:block;margin-bottom:5px}
-.step-body span{font-size:12px;color:#b8c0d4;line-height:1.6}
+.step-body strong{font-size:15px;font-weight:800;color:var(--text);display:block;margin-bottom:5px}
+.step-body span{font-size:13px;color:#b8c0d4;line-height:1.6}
 /* ── View modal request btn ── */
 .view-request-btn{width:100%;margin-top:12px;padding:12px;background:var(--grad);border:none;border-radius:8px;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:opacity 0.15s}
 .view-request-btn:hover{opacity:0.85}
@@ -191,6 +196,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .success-modal h2{font-family:'Righteous',cursive;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
 .success-modal p{font-size:14px;color:#b8c0d4;line-height:1.7;margin-bottom:24px}
 .success-close-btn{background:var(--grad);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer}
+
+.banner-subtitle-mobile{display:none} /* hidden on desktop */
 
 /* ════════════════════════════════
    MOBILE RESPONSIVE
@@ -204,17 +211,20 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
   .cart-count{font-size:9px;padding:1px 5px}
 
   /* Store Banner */
-  .banner-welcome{padding:32px 16px 28px}
-  .banner-welcome h1{font-size:28px;margin-bottom:8px}
-  .banner-welcome p{font-size:13px;margin-bottom:14px}
-  .banner-disclaimer-inline{padding:7px 14px;border-radius:20px}
+  .banner-welcome{padding:28px 16px 24px}
+  .banner-welcome h1{font-size:26px;margin-bottom:10px}
+  /* Stack subtitle items vertically on mobile so nothing wraps awkwardly */
+  .banner-welcome p{display:none} /* hide the long inline subtitle */
+  .banner-subtitle-mobile{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px}
+  .banner-subtitle-mobile span{font-size:13px;color:#c4cde0;line-height:1.4}
+  .banner-disclaimer-inline{padding:8px 16px;border-radius:20px;width:100%;justify-content:center;box-sizing:border-box}
   .disclaimer-text{font-size:12px}
-  .how-it-works-section{padding:24px 16px}
-  .how-it-works-label{font-size:10px;margin-bottom:16px}
+  .how-it-works-section{padding:22px 16px}
+  .how-it-works-label{font-size:10px;margin-bottom:14px}
   .banner-steps{grid-template-columns:1fr;gap:8px}
   .banner-step{padding:14px}
-  .step-body strong{font-size:13px}
-  .step-body span{font-size:12px}
+  .step-body strong{font-size:14px}
+  .step-body span{font-size:13px}
 
   /* Toolbar — search full width on top, pills wrap below */
   .toolbar{padding:10px 12px;gap:8px;top:54px}
@@ -224,10 +234,12 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
   .pill{padding:6px 13px;font-size:12px;flex-shrink:0}
 
   /* Grid — 2 columns on mobile */
-  main{padding:14px 12px}
+  main{padding:12px 10px}
   .grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .section-header{margin-top:14px;margin-bottom:10px}
-  .section-header h3{font-size:11px}
+  .section-block{border-radius:12px;padding:14px;margin-top:14px}
+  .section-header{margin-bottom:12px}
+  .section-header h3{font-size:12px}
+  .section-icon{font-size:14px}
 
   /* Cards */
   .card-img,.img-ph{height:130px}
@@ -284,7 +296,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 <header>
   <!-- Updated Header Logo Section -->
   <div class="logo">
-    <span>Loot-Shelf</span>
+    <span>SideQuest</span>
+    <span>Collection</span>
   </div>
   <button class="cart-toggle" onclick="toggleCart()">
     🛒 Request List <span class="cart-count" id="cart-count">0</span>
@@ -297,11 +310,18 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
     <!-- Welcome -->
     <div class="banner-welcome">
-      <h1>Welcome To Loot-Shelf</h1>
+      <h1>Welcome To SideQuest Collection</h1>
+      <!-- Desktop subtitle — single line -->
       <p>New &amp; Used Items &nbsp;·&nbsp; Located in Utah County &nbsp;·&nbsp; Local Pickups</p>
+      <!-- Mobile subtitle — stacked cleanly -->
+      <div class="banner-subtitle-mobile" style="display:none">
+        <span>New &amp; Used Items</span>
+        <span>Located in Utah County</span>
+        <span>Local Pickups</span>
+      </div>
       <div class="banner-disclaimer-inline">
         <span class="disclaimer-icon">⚠️</span>
-        <span class="disclaimer-text">Request-only inventory — no direct purchases. Local pickup only.</span>
+        <span class="disclaimer-text">Request-only — no direct purchases. Local pickup only.</span>
       </div>
     </div>
 
@@ -476,19 +496,25 @@ function render(){
 
   let html = '';
   if(newItems.length > 0){
-    html += `<div class="section-header"><h3>Recent Arrivals</h3><div class="line"></div></div>
-             ${sortBar()}
-             <div class="grid">${sortItems(newItems).map(createCard).join('')}</div>`;
+    html += `<div class="section-block section-block-arrivals">
+               <div class="section-header"><span class="section-icon">✨</span><h3>Recent Arrivals</h3><div class="line"></div></div>
+               ${sortBar()}
+               <div class="grid">${sortItems(newItems).map(createCard).join('')}</div>
+             </div>`;
   }
   if(flashSaleItems.length > 0){
-    html += `<div class="section-header"><h3>Flash Sale</h3><div class="line"></div></div>
-             ${sortBar()}
-             <div class="grid">${sortItems(flashSaleItems).map(createCard).join('')}</div>`;
+    html += `<div class="section-block section-block-flash">
+               <div class="section-header"><span class="section-icon">⚡</span><h3>Flash Sale</h3><div class="line"></div></div>
+               ${sortBar()}
+               <div class="grid">${sortItems(flashSaleItems).map(createCard).join('')}</div>
+             </div>`;
   }
   if(otherItems.length > 0){
-    html += `<div class="section-header"><h3>Inventory</h3><div class="line"></div></div>
-             ${sortBar()}
-             <div class="grid">${sortItems(otherItems).map(createCard).join('')}</div>`;
+    html += `<div class="section-block section-block-inventory">
+               <div class="section-header"><span class="section-icon">🗂️</span><h3>Inventory</h3><div class="line"></div></div>
+               ${sortBar()}
+               <div class="grid">${sortItems(otherItems).map(createCard).join('')}</div>
+             </div>`;
   }
   if(vis.length === 0) html = `<div class="loading">No items found.</div>`;
   document.getElementById('main-content').innerHTML = html;
