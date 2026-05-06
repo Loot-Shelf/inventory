@@ -79,9 +79,9 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 
 main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .section-block{border-radius:16px;padding:20px;margin-top:24px}
-.section-block-arrivals{background:linear-gradient(135deg,#8b5cf608,#06b6d408);border:1px solid #8b5cf625}
-.section-block-flash{background:linear-gradient(135deg,#ef444408,#f59e0b08);border:1px solid #ef444425}
-.section-block-inventory{background:#ffffff04;border:1px solid #ffffff10}
+.section-block-arrivals{background:linear-gradient(135deg,#8b5cf610,#06b6d410);border:2px solid #8b5cf655}
+.section-block-flash{background:linear-gradient(135deg,#ef444410,#f59e0b10);border:2px solid #ef444450}
+.section-block-inventory{background:#ffffff05;border:2px solid #ffffff20}
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .section-header h3{font-size:14px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px}
 .section-header .line{flex:1;height:1px;background:var(--border)}
@@ -212,11 +212,10 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
   /* Store Banner */
   .banner-welcome{padding:28px 16px 24px}
-  .banner-welcome h1{font-size:26px;margin-bottom:10px}
-  /* Stack subtitle items vertically on mobile so nothing wraps awkwardly */
-  .banner-welcome p{display:none} /* hide the long inline subtitle */
-  .banner-subtitle-mobile{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px}
-  .banner-subtitle-mobile span{font-size:13px;color:#c4cde0;line-height:1.4}
+  .banner-welcome h1{font-size:26px;margin-bottom:8px}
+  /* Shrink subtitle so dots+text fit on one line on mobile */
+  .banner-welcome p{font-size:11px;letter-spacing:0;margin-bottom:14px}
+  .banner-subtitle-mobile{display:none} /* not needed */
   .banner-disclaimer-inline{padding:8px 16px;border-radius:20px;width:100%;justify-content:center;box-sizing:border-box}
   .disclaimer-text{font-size:12px}
   .how-it-works-section{padding:22px 16px}
