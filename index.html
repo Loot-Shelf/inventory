@@ -3,19 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loot-Shelf</title>
+<title>SideQuest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0d0f14;--surface:#161922;--card:#1c2030;--border:#ffffff12;
-  --text:#f0f2f8;--muted:#7a8099;--grad:linear-gradient(135deg,#8b5cf6,#ec4899);
+  --text:#f0f2f8;--muted:#a0aabf;--grad:linear-gradient(135deg,#8b5cf6,#ec4899);
   --red:#ef4444;--green:#10b981;
 }
 body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-height:100vh}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:66px;position:sticky;top:0;z-index:200}
-.logo{font-family:'Righteous',cursive;font-size:26px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Updated Logo Styles */
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This centers the words relative to each other */
+  text-align: center;  /* Ensures the text itself is centered */
+  font-family: 'Righteous', cursive;
+  font-size: 26px; 
+  line-height: 0.85;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo span {
+  display: block;
+}
+
+/* Collection Styling */
+.logo span:nth-child(2) {
+  font-size: 18px; 
+  margin-top: 2px;
+}
+
+/* This targets the second word (Collection) specifically */
+.logo span:nth-child(2) {
+  font-size: 18px; /* Adjust this number to make it smaller or larger */
+  margin-top: 2px;  /* Adds a tiny bit of breathing room between the words */
+}
+.logo span { display: block; }
 
 .cart-toggle{background:#ffffff0a;border:1px solid var(--border);color:var(--text);padding:9px 18px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px}
 .cart-toggle:hover{background:#ffffff15}
@@ -25,8 +56,8 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .toolbar-top{display:flex;width:100%}
 .toolbar-pills{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
 .search-wrap{position:relative;flex:1}
-.search-wrap input{width:100%;background:#ffffff08;border:1px solid var(--border);border-radius:9px;padding:10px 14px;font-size:14px;color:var(--text);outline:none}
-.pill{background:transparent;border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.search-wrap input{width:100%;background:#ffffff0d;border:1px solid #ffffff28;border-radius:9px;padding:10px 14px;font-size:14px;color:var(--text);outline:none}
+.pill{background:transparent;border:1px solid #ffffff28;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:700;color:#b8c0d4;cursor:pointer;transition:all 0.15s;white-space:nowrap}
 /* Active states — unique color per category */
 .pill-all.active    {background:linear-gradient(135deg,#8b5cf6,#ec4899);border-color:transparent;color:#fff}
 .pill-board.active  {background:#a78bfa22;border-color:#a78bfa66;color:#a78bfa}
@@ -48,7 +79,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 
 main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:20px}
-.section-header h3{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.section-header h3{font-size:13px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px}
 .section-header .line{flex:1;height:1px;background:var(--border)}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
@@ -62,19 +93,19 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .cat-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
 /* Unique color per category */
 .cat-board{color:#a78bfa}   /* purple  - Board Games  */
-.cat-books{color:#38bdf8}   /* sky blue - Books       */
-.cat-cards{color:#fbbf24}   /* amber   - Cards        */
+.cat-books{color:#38bdf8}   /* sky blue - Books        */
+.cat-cards{color:#fbbf24}   /* amber    - Cards         */
 .cat-collect{color:#34d399} /* emerald - Collectibles */
-.cat-movies{color:#f87171}  /* coral   - Movies       */
-.cat-video{color:#fb923c}   /* orange  - Video Games  */
-.cat-misc{color:#94a3b8}    /* slate   - Misc         */
+.cat-movies{color:#f87171}  /* coral    - Movies        */
+.cat-video{color:#fb923c}   /* orange   - Video Games  */
+.cat-misc{color:#94a3b8}    /* slate    - Misc          */
 
 .card-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px}
-.card-detail{font-size:13px;color:var(--muted);margin-bottom:8px}
+.card-detail{font-size:13px;color:#b8c0d4;margin-bottom:8px}
 .card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:1px solid var(--border)}
 .price{font-size:18px;font-weight:800}
 .price.on-sale{color:var(--red)}
-.old-price{font-size:13px;text-decoration:line-through;color:var(--muted);margin-right:4px}
+.old-price{font-size:13px;text-decoration:line-through;color:#8a95b0;margin-right:4px}
 .cond{font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase}
 
 .add-to-cart-btn{width:100%;padding:12px;background:#ffffff08;border:none;border-top:1px solid var(--border);color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:background 0.15s}
@@ -91,7 +122,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .cart-item-img{width:60px;height:60px;border-radius:8px;background:#000;object-fit:cover}
 .cart-item-info{flex:1}
 .cart-item-name{font-size:15px;font-weight:800;margin-bottom:4px}
-.cart-item-price{font-size:14px;color:var(--muted)}
+.cart-item-price{font-size:14px;color:#b8c0d4}
 .remove-item{background:none;border:none;color:var(--red);font-size:11px;font-weight:800;cursor:pointer;margin-top:4px}
 
 /* ── Request Form ── */
@@ -123,21 +154,33 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
 .loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
 .error-msg{text-align:center;padding:60px 20px;color:#f87171;font-size:14px}
+/* ── Sort Bar ── */
+.sort-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.sort-label{font-size:11px;font-weight:800;color:#c4cde0;text-transform:uppercase;letter-spacing:1px;margin-right:2px;white-space:nowrap}
+.sort-btn{background:transparent;border:1px solid #ffffff28;border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700;color:#b8c0d4;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;white-space:nowrap}
+.sort-btn:hover{color:var(--text);border-color:#ffffff44;background:#ffffff0a}
+.sort-btn.active{background:#ffffff18;border-color:#ffffff44;color:#fff}
 /* ── Store Banner ── */
-.store-banner{background:linear-gradient(160deg,#0f1120,#1a1035,#0d0f14);border-bottom:1px solid #8b5cf630;padding:36px 28px 28px}
+.store-banner{background:linear-gradient(160deg,#0f1120,#1a1035,#0d0f14);border-bottom:1px solid #8b5cf630}
 .banner-inner{max-width:1100px;margin:0 auto}
-.banner-welcome{text-align:center;margin-bottom:28px}
-.banner-welcome h1{font-family:'Righteous',cursive;font-size:42px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
-.banner-welcome p{font-size:15px;color:var(--muted);letter-spacing:0.5px}
-.how-it-works-label{font-size:17px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;text-align:center}
-.banner-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.banner-step{background:#ffffff08;border:1px solid #8b5cf625;border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
-.step-num{background:var(--grad);color:#fff;font-size:11px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step-body strong{font-size:15px;font-weight:800;color:var(--text);display:block;margin-bottom:4px}
-.step-body span{font-size:13px;color:var(--muted);line-height:1.5}
-.banner-disclaimer{display:flex;align-items:center;justify-content:center;gap:10px;background:#f59e0b0d;border:1px solid #f59e0b25;border-radius:10px;padding:12px 16px;margin-top:4px;text-align:center}
-.disclaimer-icon{font-size:18px;flex-shrink:0}
-.disclaimer-text{font-size:14px;color:#fbbf24;font-weight:700;line-height:1.5}
+
+/* Welcome strip — full width, centered, generous padding */
+.banner-welcome{text-align:center;padding:48px 28px 40px;border-bottom:1px solid #8b5cf618}
+.banner-welcome h1{font-family:'Righteous',cursive;font-size:44px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;line-height:1.1}
+.banner-welcome p{font-size:15px;color:#c4cde0;letter-spacing:0.5px;margin-bottom:18px}
+.banner-disclaimer-inline{display:inline-flex;align-items:center;gap:8px;background:#f59e0b0d;border:1px solid #f59e0b30;border-radius:30px;padding:8px 18px}
+.disclaimer-icon{font-size:15px;flex-shrink:0}
+.disclaimer-text{font-size:13px;color:#fbbf24;font-weight:700}
+
+/* How It Works strip — its own row with subtle background */
+.how-it-works-section{padding:32px 28px;background:#ffffff03;border-bottom:1px solid #8b5cf618}
+.how-it-works-label{font-size:11px;font-weight:800;color:#8b5cf6;text-transform:uppercase;letter-spacing:3px;margin-bottom:20px;text-align:center}
+.banner-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.banner-step{background:#ffffff06;border:1px solid #ffffff10;border-radius:14px;padding:18px 16px;display:flex;align-items:flex-start;gap:14px;transition:border-color 0.2s}
+.banner-step:hover{border-color:#8b5cf630}
+.step-num{background:var(--grad);color:#fff;font-size:12px;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body strong{font-size:14px;font-weight:800;color:var(--text);display:block;margin-bottom:5px}
+.step-body span{font-size:12px;color:#b8c0d4;line-height:1.6}
 /* ── View modal request btn ── */
 .view-request-btn{width:100%;margin-top:12px;padding:12px;background:var(--grad);border:none;border-radius:8px;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:opacity 0.15s}
 .view-request-btn:hover{opacity:0.85}
@@ -146,7 +189,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .success-modal{background:var(--surface);border:1px solid #10b98140;border-radius:20px;width:420px;max-width:100%;padding:36px;text-align:center}
 .success-icon{font-size:48px;margin-bottom:16px}
 .success-modal h2{font-family:'Righteous',cursive;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
-.success-modal p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.success-modal p{font-size:14px;color:#b8c0d4;line-height:1.7;margin-bottom:24px}
 .success-close-btn{background:var(--grad);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer}
 
 /* ════════════════════════════════
@@ -156,21 +199,22 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
   /* Header */
   header{padding:0 16px;height:54px}
-  .logo{font-size:19px}
+  .logo{font-size:17px}
   .cart-toggle{padding:6px 12px;font-size:12px;gap:6px}
   .cart-count{font-size:9px;padding:1px 5px}
 
   /* Store Banner */
-  .store-banner{padding:24px 16px 20px}
-  .banner-welcome h1{font-size:30px;margin-bottom:4px}
-  .banner-welcome p{font-size:14px}
-  .banner-welcome{margin-bottom:20px}
-  .how-it-works-label{font-size:14px;margin-bottom:12px}
-  .banner-steps{grid-template-columns:1fr;gap:8px;margin-bottom:14px}
-  .step-body strong{font-size:14px}
+  .banner-welcome{padding:32px 16px 28px}
+  .banner-welcome h1{font-size:28px;margin-bottom:8px}
+  .banner-welcome p{font-size:13px;margin-bottom:14px}
+  .banner-disclaimer-inline{padding:7px 14px;border-radius:20px}
+  .disclaimer-text{font-size:12px}
+  .how-it-works-section{padding:24px 16px}
+  .how-it-works-label{font-size:10px;margin-bottom:16px}
+  .banner-steps{grid-template-columns:1fr;gap:8px}
+  .banner-step{padding:14px}
+  .step-body strong{font-size:13px}
   .step-body span{font-size:12px}
-  .banner-disclaimer{padding:12px 14px}
-  .disclaimer-text{font-size:13px}
 
   /* Toolbar — search full width on top, pills wrap below */
   .toolbar{padding:10px 12px;gap:8px;top:54px}
@@ -219,11 +263,18 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
   .success-modal p{font-size:13px}
 }
 
+/* Sort bar mobile */
+@media(max-width:640px){
+  .sort-bar{gap:5px;margin-bottom:8px}
+  .sort-label{font-size:10px}
+  .sort-btn{padding:4px 10px;font-size:10px}
+}
 /* Tablet tweaks */
 @media(min-width:641px) and (max-width:900px){
   main{padding:18px 20px}
   .grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-  .store-banner{padding:20px}
+  .banner-welcome{padding:36px 20px 30px}
+  .how-it-works-section{padding:24px 20px}
   .banner-steps{grid-template-columns:1fr 1fr 1fr;gap:8px}
 }
 </style>
@@ -231,7 +282,11 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 <body>
 
 <header>
-  <div class="logo">Loot-Shelf</div>
+  <!-- Updated Header Logo Section -->
+  <div class="logo">
+    <span>SideQuest</span>
+    <span>Collection</span>
+  </div>
   <button class="cart-toggle" onclick="toggleCart()">
     🛒 Request List <span class="cart-count" id="cart-count">0</span>
   </button>
@@ -243,32 +298,31 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 
     <!-- Welcome -->
     <div class="banner-welcome">
-      <h1>Welcome To Loot-Shelf</h1>
-      <p>Located in Utah County</p>
-      <p>Local Pickups</p>
+      <h1>Welcome To SideQuest Collection</h1>
+      <p>New &amp; Used Items &nbsp;·&nbsp; Located in Utah County &nbsp;·&nbsp; Local Pickups</p>
+      <div class="banner-disclaimer-inline">
+        <span class="disclaimer-icon">⚠️</span>
+        <span class="disclaimer-text">Request-only inventory — no direct purchases. Local pickup only.</span>
+      </div>
     </div>
 
     <!-- How It Works -->
-    <div class="how-it-works-label">How It Works</div>
-    <div class="banner-steps">
-      <div class="banner-step">
-        <div class="step-num">1</div>
-        <div class="step-body"><strong>Browse the Inventory</strong><span>Explore our full list of available items by category or search.</span></div>
+    <div class="how-it-works-section">
+      <div class="how-it-works-label">How It Works</div>
+      <div class="banner-steps">
+        <div class="banner-step">
+          <div class="step-num">1</div>
+          <div class="step-body"><strong>Browse the Inventory</strong><span>Explore our full list of available items by category or search.</span></div>
+        </div>
+        <div class="banner-step">
+          <div class="step-num">2</div>
+          <div class="step-body"><strong>Add to Request List</strong><span>Select the items you want and add them to your Request List.</span></div>
+        </div>
+        <div class="banner-step">
+          <div class="step-num">3</div>
+          <div class="step-body"><strong>We'll Contact You</strong><span>Submit your info and we'll reach out to arrange payment and pickup.</span></div>
+        </div>
       </div>
-      <div class="banner-step">
-        <div class="step-num">2</div>
-        <div class="step-body"><strong>Add to Request List</strong><span>Select the items you want and add them to your Request List.</span></div>
-      </div>
-      <div class="banner-step">
-        <div class="step-num">3</div>
-        <div class="step-body"><strong>We'll Contact You</strong><span>Submit your info and we'll reach out to finalize the details for payment and pickup.</span></div>
-      </div>
-    </div>
-
-    <!-- Disclaimer -->
-    <div class="banner-disclaimer">
-      <div class="disclaimer-icon">⚠️</div>
-      <div class="disclaimer-text">This is a request-only inventory. Items cannot be purchased directly on this site. Items are only available for local pickup only currently.</div>
     </div>
 
   </div>
@@ -354,7 +408,7 @@ const catColor={'Board Games':'cat-board','Video Games':'cat-video','Books':'cat
 const condLabel={new:'New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
 const condClass={new:'cond-new',vgood:'cond-vgood',good:'cond-good',average:'cond-average',poor:'cond-poor',damaged:'cond-damaged',missing:'cond-missing'};
 
-let activeFilter='All', currentImgs=[], currentIdx=0, items_cache=[], cart=[];
+let activeFilter='All', activeSort='default', currentImgs=[], currentIdx=0, items_cache=[], cart=[];
 
 async function loadItems(){
   try {
@@ -375,17 +429,48 @@ function setFilter(f,btn){
   render();
 }
 
+function getEffectivePrice(i){
+  return i.salePrice && parseFloat(i.salePrice) > 0 ? parseFloat(i.salePrice) : parseFloat(i.price||0);
+}
+
+function sortItems(arr){
+  const s = [...arr];
+  if(activeSort === 'price-asc')  return s.sort((a,b) => getEffectivePrice(a) - getEffectivePrice(b));
+  if(activeSort === 'price-desc') return s.sort((a,b) => getEffectivePrice(b) - getEffectivePrice(a));
+  if(activeSort === 'new-first')  return s.sort((a,b) => (a.cond==='new' ? -1 : 1) - (b.cond==='new' ? -1 : 1));
+  if(activeSort === 'used-first') return s.sort((a,b) => (a.cond!=='new' ? -1 : 1) - (b.cond!=='new' ? -1 : 1));
+  return s;
+}
+
+function setSort(val, btn){
+  // Toggle off if already active
+  activeSort = activeSort === val ? 'default' : val;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  if(activeSort !== 'default') btn.classList.add('active');
+  render();
+}
+
+function sortBar(){
+  return `<div class="sort-bar">
+    <span class="sort-label">Sort:</span>
+    <button class="sort-btn ${activeSort==='price-asc'  ?'active':''}" onclick="setSort('price-asc',this)">Price ↑</button>
+    <button class="sort-btn ${activeSort==='price-desc' ?'active':''}" onclick="setSort('price-desc',this)">Price ↓</button>
+    <button class="sort-btn ${activeSort==='new-first'  ?'active':''}" onclick="setSort('new-first',this)">Brand New First</button>
+    <button class="sort-btn ${activeSort==='used-first' ?'active':''}" onclick="setSort('used-first',this)">Used First</button>
+  </div>`;
+}
+
 function render(){
   const items = items_cache;
   const q = document.getElementById('search').value.toLowerCase();
   const now = new Date().getTime();
-  
+
   const vis = items.filter(i=>(activeFilter==='All'||i.cat===activeFilter)&&i.name.toLowerCase().includes(q));
 
-  const newItems = vis.filter(i => i.createdAt && (now - i.createdAt < 604800000));
-  const flashSaleItems = vis.filter(i => i.salePrice && parseFloat(i.salePrice) > 0);
-  const otherItems = vis.filter(i => {
-    const isNew = i.createdAt && (now - i.createdAt < 604800000);
+  const newItems      = vis.filter(i => i.createdAt && (now - i.createdAt < 604800000));
+  const flashSaleItems= vis.filter(i => i.salePrice && parseFloat(i.salePrice) > 0);
+  const otherItems    = vis.filter(i => {
+    const isNew  = i.createdAt && (now - i.createdAt < 604800000);
     const isSale = i.salePrice && parseFloat(i.salePrice) > 0;
     return !isNew && !isSale;
   });
@@ -393,15 +478,18 @@ function render(){
   let html = '';
   if(newItems.length > 0){
     html += `<div class="section-header"><h3>Recent Arrivals</h3><div class="line"></div></div>
-             <div class="grid">${newItems.map(createCard).join('')}</div>`;
+             ${sortBar()}
+             <div class="grid">${sortItems(newItems).map(createCard).join('')}</div>`;
   }
   if(flashSaleItems.length > 0){
     html += `<div class="section-header"><h3>Flash Sale</h3><div class="line"></div></div>
-             <div class="grid">${flashSaleItems.map(createCard).join('')}</div>`;
+             ${sortBar()}
+             <div class="grid">${sortItems(flashSaleItems).map(createCard).join('')}</div>`;
   }
   if(otherItems.length > 0){
     html += `<div class="section-header"><h3>Inventory</h3><div class="line"></div></div>
-             <div class="grid">${otherItems.map(createCard).join('')}</div>`;
+             ${sortBar()}
+             <div class="grid">${sortItems(otherItems).map(createCard).join('')}</div>`;
   }
   if(vis.length === 0) html = `<div class="loading">No items found.</div>`;
   document.getElementById('main-content').innerHTML = html;
