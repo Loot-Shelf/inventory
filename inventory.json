@@ -80,6 +80,9 @@
     "pending": false,
     "playersMin": 1,
     "playersMax": 2,
-    "playStyle": []
+    "playStyle": [
+      "Competitive",
+      "Solo"
+    ]
   }
 ]
