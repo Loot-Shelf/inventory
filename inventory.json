@@ -675,5 +675,27 @@
       "Competitive"
     ],
     "createdAt": 1778190591993
+  },
+  {
+    "id": 32,
+    "name": "Pixel Tactics 3",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some wear but the components are unplayed and sealed.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Pixeltactics/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Pixeltactics/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Pixeltactics/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778190812066
   }
 ]
