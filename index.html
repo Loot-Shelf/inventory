@@ -165,6 +165,29 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .sort-btn{background:transparent;border:1px solid #ffffff28;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:#b8c0d4;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;white-space:nowrap}
 .sort-btn:hover{color:var(--text);border-color:#ffffff44;background:#ffffff0a}
 .sort-btn.active{background:#ffffff18;border-color:#ffffff44;color:#fff}
+/* ── Game Filter Bar ── */
+.game-filter-bar{display:none;background:#8b5cf608;border:1px solid #8b5cf622;border-radius:12px;padding:12px 16px;margin-bottom:14px;gap:14px;flex-wrap:wrap;align-items:center}
+.game-filter-bar.visible{display:flex}
+.gf-label{font-size:11px;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
+.gf-player-wrap{display:flex;align-items:center;gap:8px}
+.gf-player-input{background:var(--card);border:1px solid #8b5cf640;border-radius:8px;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);width:56px;text-align:center;outline:none}
+.gf-player-input:focus{border-color:#8b5cf6}
+.gf-ps-chip{background:transparent;border:1px solid #ffffff22;border-radius:20px;padding:5px 13px;font-size:12px;font-weight:700;color:#b8c0d4;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;white-space:nowrap}
+.gf-ps-chip:hover{border-color:#8b5cf660;color:#a78bfa}
+.gf-ps-chip.active{background:#8b5cf622;border-color:#8b5cf666;color:#a78bfa}
+.gf-clear{background:none;border:none;color:#7a8099;font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;padding:0;text-decoration:underline}
+.gf-clear:hover{color:#b8c0d4}
+/* ── Game info on cards ── */
+.card-game-info{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.card-game-chip{background:#8b5cf614;border:1px solid #8b5cf628;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;color:#a78bfa}
+/* ── Pending overlay ── */
+.card-pending-wrap{position:relative}
+.card-pending-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;border-radius:14px;gap:4px;pointer-events:none}
+.card-pending-badge{background:#f59e0bdd;color:#000;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
+.card-pending-sub{font-size:10px;font-weight:700;color:#ffffffaa}
+/* ── Pending in view modal ── */
+.pending-modal-notice{background:#f59e0b12;border:1px solid #f59e0b30;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:13px;font-weight:700;color:#fbbf24;display:none}
+.v-game-info{font-size:13px;font-weight:700;color:#a78bfa;margin-top:6px;display:none}
 /* ── Store Banner ── */
 .store-banner{background:linear-gradient(160deg,#0f1120,#1a1035,#0d0f14);border-bottom:1px solid #8b5cf630}
 .banner-inner{max-width:1100px;margin:0 auto}
@@ -299,6 +322,10 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
   .sort-bar{gap:5px;margin-bottom:8px}
   .sort-label{font-size:10px}
   .sort-btn{padding:4px 10px;font-size:10px}
+  .game-filter-bar{gap:8px;padding:10px 12px}
+  .gf-label{font-size:10px}
+  .gf-ps-chip{padding:4px 10px;font-size:11px}
+  .card-game-chip{font-size:9px;padding:2px 6px}
 }
 /* Tablet tweaks */
 @media(min-width:641px) and (max-width:900px){
@@ -380,6 +407,19 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
     <button class="pill pill-video" onclick="setFilter('Video Games',this)">Video Games</button>
     <button class="pill pill-misc" onclick="setFilter('Misc',this)">Misc</button>
   </div>
+  <!-- Game filter bar — shows only when Board Games or Video Games is active -->
+  <div class="game-filter-bar" id="game-filter-bar">
+    <span class="gf-label">👥 Players</span>
+    <div class="gf-player-wrap">
+      <input class="gf-player-input" id="gf-players" type="number" min="1" max="20" placeholder="Any" oninput="render()">
+    </div>
+    <span class="gf-label" style="margin-left:4px">Play Style</span>
+    <button class="gf-ps-chip" data-ps="Co-op"       onclick="toggleGFPS(this)">🤝 Co-op</button>
+    <button class="gf-ps-chip" data-ps="Competitive" onclick="toggleGFPS(this)">⚔️ Competitive</button>
+    <button class="gf-ps-chip" data-ps="Solo"        onclick="toggleGFPS(this)">🧩 Solo</button>
+    <button class="gf-ps-chip" data-ps="Team"        onclick="toggleGFPS(this)">👥 Team</button>
+    <button class="gf-clear" onclick="clearGameFilters()">Clear</button>
+  </div>
 </div>
 
 <main id="main-content"><div class="loading">Loading inventory...</div></main>
@@ -429,6 +469,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       <span id="v-cat" class="cat-label"></span>
       <h2 id="v-name" style="margin-top:5px"></h2>
       <div id="v-detail" style="font-size:12px;color:var(--muted)"></div>
+      <div class="v-game-info" id="v-game-info"></div>
+      <div class="pending-modal-notice" id="v-pending-notice">⏳ This item is currently pending — it may already be reserved. You can still submit a request and we'll let you know.</div>
       <div id="v-desc" class="view-desc"></div>
       <button id="v-request-btn" class="view-request-btn" onclick="addToCartFromView()">+ Add to Request List</button>
       <button onclick="closeView()" style="width:100%;margin-top:10px;padding:12px;background:#ffffff08;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer">Close</button>
@@ -446,7 +488,7 @@ const catColor={'Board Games':'cat-board','Video Games':'cat-video','Books':'cat
 const condLabel={new:'New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
 const condClass={new:'cond-new',vgood:'cond-vgood',good:'cond-good',average:'cond-average',poor:'cond-poor',damaged:'cond-damaged',missing:'cond-missing'};
 
-let activeFilter='All', activeSort='default', currentImgs=[], currentIdx=0, items_cache=[], cart=[];
+let activeFilter='All', activeSort='default', activePS=new Set(), currentImgs=[], currentIdx=0, items_cache=[], cart=[];
 
 async function loadItems(){
   try {
@@ -460,11 +502,30 @@ async function loadItems(){
   }
 }
 
+const GAME_CATS=['Board Games','Video Games'];
+
 function setFilter(f,btn){
   activeFilter=f;
   document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  const isGame=GAME_CATS.includes(f);
+  document.getElementById('game-filter-bar').classList.toggle('visible', isGame);
+  if(!isGame){ clearGameFilters(false); }
   render();
+}
+
+function toggleGFPS(btn){
+  const ps=btn.dataset.ps;
+  if(activePS.has(ps)){ activePS.delete(ps); btn.classList.remove('active'); }
+  else { activePS.add(ps); btn.classList.add('active'); }
+  render();
+}
+
+function clearGameFilters(doRender=true){
+  activePS.clear();
+  document.querySelectorAll('.gf-ps-chip').forEach(b=>b.classList.remove('active'));
+  const pi=document.getElementById('gf-players'); if(pi) pi.value='';
+  if(doRender) render();
 }
 
 function getEffectivePrice(i){
@@ -503,10 +564,21 @@ function render(){
   const q = document.getElementById('search').value.toLowerCase();
   const now = new Date().getTime();
 
+  const playerNeeded = parseInt(document.getElementById('gf-players')?.value)||0;
+
   const vis = items.filter(i=>{
     const matchCat = activeFilter==='All' || i.cat===activeFilter;
     const searchable = [i.name, i.detail, i.desc, i.cat].filter(Boolean).join(' ').toLowerCase();
-    return matchCat && (!q || searchable.includes(q));
+    const matchQ = !q || searchable.includes(q);
+    // Player count filter — item must accommodate the requested number
+    const matchPlayers = !playerNeeded || (
+      i.playersMin != null && i.playersMax != null
+        ? playerNeeded >= i.playersMin && playerNeeded <= i.playersMax
+        : true // item has no player data — don't exclude it
+    );
+    // Play style filter — item must include ALL selected styles
+    const matchPS = activePS.size===0 || (i.playStyle && [...activePS].every(ps=>i.playStyle.includes(ps)));
+    return matchCat && matchQ && matchPlayers && matchPS;
   });
 
   const newItems      = vis.filter(i => i.createdAt && (now - i.createdAt < 604800000));
@@ -557,10 +629,20 @@ function createCard(i){
     <div class="card-img-wrap" onclick="openView(${i.id})">
       ${first ? `<img src="${first}" class="card-img" onerror="this.style.display='none'">` : `<div class="img-ph">NO PHOTO</div>`}
     </div>
+    ${i.pending?`<div class="card-pending-overlay"><div class="card-pending-badge">⏳ Pending</div><div class="card-pending-sub">Currently Unavailable</div></div>`:''}
     <div class="card-body" onclick="openView(${i.id})">
       <span class="cat-label ${catColor[i.cat]||''}">${i.cat}</span>
       <div class="card-name">${i.name}</div>
       <div class="card-detail">${i.detail||''}</div>
+      ${(()=>{
+        let chips='';
+        if(i.playersMin!=null&&i.playersMax!=null){
+          const mn=i.playersMin,mx=i.playersMax;
+          chips+=`<span class="card-game-chip">👥 ${mn===mx?mn:mn+'-'+mx} Players</span>`;
+        }
+        if(i.playStyle&&i.playStyle.length) i.playStyle.forEach(ps=>{ chips+=`<span class="card-game-chip">${ps==='Co-op'?'🤝':ps==='Competitive'?'⚔️':ps==='Solo'?'🧩':'👥'} ${ps}</span>`; });
+        return chips?`<div class="card-game-info">${chips}</div>`:'';
+      })()}
       <div class="card-footer">
         <div class="price-wrap">
           ${hasSale ? `<span class="old-price">$${parseFloat(i.price||0).toFixed(2)}</span><span class="price on-sale">$${parseFloat(i.salePrice).toFixed(2)}</span>` : `<span class="price">$${parseFloat(i.price||0).toFixed(2)}</span>`}
@@ -705,6 +787,18 @@ function openView(id){
   document.getElementById('v-cat').textContent = i.cat;
   document.getElementById('v-cat').className = `cat-label ${catColor[i.cat]||''}`;
   document.getElementById('v-detail').textContent = i.detail||'';
+  // Game info
+  const vgi = document.getElementById('v-game-info');
+  let gameInfo='';
+  if(i.playersMin!=null&&i.playersMax!=null){
+    const mn=i.playersMin,mx=i.playersMax;
+    gameInfo+=`👥 ${mn===mx?mn:mn+'-'+mx} Players`;
+  }
+  if(i.playStyle&&i.playStyle.length) gameInfo+=(gameInfo?' · ':'')+i.playStyle.join(' / ');
+  vgi.textContent=gameInfo; vgi.style.display=gameInfo?'block':'none';
+  // Pending notice
+  const vpn=document.getElementById('v-pending-notice');
+  vpn.style.display=i.pending?'block':'none';
   document.getElementById('v-desc').textContent = i.desc || 'No description provided.';
   updateSlider();
   // Reflect already-added state on the modal button

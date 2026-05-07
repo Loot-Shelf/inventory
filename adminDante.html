@@ -153,6 +153,23 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .saving-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .saving-overlay.open{display:flex}
 .saving-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 32px;text-align:center;font-weight:700;color:var(--muted);font-size:13px}
+/* ── Player / Play Style fields ── */
+.game-fields{display:none;background:#8b5cf608;border:1px solid #8b5cf620;border-radius:10px;padding:14px;margin-bottom:13px}
+.game-fields.visible{display:block}
+.player-range{display:flex;align-items:center;gap:10px}
+.player-range input{width:70px;text-align:center}
+.player-range span{font-size:12px;color:var(--muted);font-weight:700;flex-shrink:0}
+.playstyle-chips{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
+.ps-chip{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.12s;user-select:none}
+.ps-chip.active{background:#8b5cf620;border-color:#8b5cf660;color:#a78bfa}
+/* ── Pending status ── */
+.pending-toggle{display:flex;align-items:center;gap:10px;background:#f59e0b0d;border:1px solid #f59e0b25;border-radius:10px;padding:12px 14px;margin-bottom:13px;cursor:pointer;user-select:none}
+.pending-toggle input[type=checkbox]{width:18px;height:18px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0}
+.pending-toggle-label{font-size:13px;font-weight:700;color:#fbbf24}
+.pending-toggle-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.card-pending-badge{position:absolute;top:8px;right:8px;background:#f59e0bdd;color:#000;font-size:9px;font-weight:800;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:0.5px;z-index:10}
+.card.is-pending{opacity:0.7}
+.card.is-pending .card-img{filter:grayscale(40%)}
 </style>
 </head>
 <body>
@@ -216,7 +233,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       <h2 id="modal-title">Add listing</h2>
       <div class="field"><label>Item Name</label><input id="f-name" placeholder="e.g. Catan"></div>
       <div class="field"><label>Category</label>
-        <select id="f-cat">
+        <select id="f-cat" onchange="updateGameFields()">
           <option value="Board Games">Board Games</option>
           <option value="Books">Books</option>
           <option value="Cards">Cards</option>
@@ -228,6 +245,28 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       </div>
       <div class="field"><label>Details</label><input id="f-detail" placeholder="e.g. 2-4 Players | 60-120 min"></div>
       <div class="field"><label>Description</label><textarea id="f-desc" placeholder="Optional — any extra notes about the item"></textarea></div>
+
+      <!-- Game-specific fields — shown only for Board Games / Video Games -->
+      <div class="game-fields" id="game-fields">
+        <div class="field" style="margin-bottom:10px">
+          <label>Number of Players</label>
+          <div class="player-range">
+            <input id="f-players-min" type="number" min="1" max="20" placeholder="Min" class="field input">
+            <span>to</span>
+            <input id="f-players-max" type="number" min="1" max="20" placeholder="Max" class="field input">
+            <span style="font-size:11px;color:var(--muted)">(same number = solo or fixed)</span>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>Play Style</label>
+          <div class="playstyle-chips">
+            <span class="ps-chip" data-ps="Co-op" onclick="togglePS(this)">🤝 Co-op</span>
+            <span class="ps-chip" data-ps="Competitive" onclick="togglePS(this)">⚔️ Competitive</span>
+            <span class="ps-chip" data-ps="Solo" onclick="togglePS(this)">🧩 Solo</span>
+            <span class="ps-chip" data-ps="Team" onclick="togglePS(this)">👥 Team vs Team</span>
+          </div>
+        </div>
+      </div>
       <div style="display:flex;gap:12px">
         <div class="field" style="flex:1"><label>Price ($)</label><input id="f-price" type="number" step="0.01" min="0" placeholder="0.00"></div>
         <div class="field" style="flex:1"><label>Flash Sale Price ($)</label><input id="f-sale" type="number" step="0.01" min="0" placeholder="Optional"></div>
@@ -249,6 +288,15 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
         <button class="add-url-btn" onclick="addUrlInput()">+ Add another photo URL</button>
         <div id="img-preview-strip" class="img-preview-strip" style="margin-top:8px"></div>
       </div>
+      <!-- Pending toggle -->
+      <label class="pending-toggle">
+        <input type="checkbox" id="f-pending">
+        <div>
+          <div class="pending-toggle-label">⏳ Mark as Pending</div>
+          <div class="pending-toggle-sub">Item is available but currently being processed — customers will see it as unavailable.</div>
+        </div>
+      </label>
+
       <div class="modal-actions">
         <button class="btn-secondary" onclick="closeModal()">Cancel</button>
         <button class="btn-primary" onclick="saveItem()">Save listing</button>
@@ -270,6 +318,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       <span id="v-cat" class="cat-label"></span>
       <h2 id="v-name" style="margin-bottom:5px"></h2>
       <div id="v-detail" style="font-size:12px;color:var(--muted);font-weight:700"></div>
+      <div id="v-game-info" style="font-size:12px;color:#a78bfa;font-weight:700;margin-top:5px;display:none"></div>
       <div id="v-desc" class="view-desc"></div>
       <div class="modal-actions"><button class="btn-primary" onclick="closeView()">Done</button></div>
     </div>
@@ -431,7 +480,8 @@ function createCardHTML(i,isNew){
   const first=imgs[0]||'';
   const hasSale = i.salePrice && parseFloat(i.salePrice) > 0;
   
-  return `<div class="card">
+  return `<div class="card ${i.pending?'is-pending':''}">
+    ${i.pending?'<div class="card-pending-badge">⏳ Pending</div>':''}
     <div class="card-accent ${catAccent[i.cat]||''}"></div>
     <div onclick="openView(${i.id})">
       ${first?`<img src="${first}" class="card-img" onerror="this.style.display='none'">`:`<div class="img-ph">No Image</div>`}
@@ -494,13 +544,27 @@ function updatePreview(){
 }
 
 // ── Add / Edit Modal ─────────────────────────────────────
+const GAME_CATS = ['Board Games','Video Games'];
+
+function togglePS(el){ el.classList.toggle('active'); }
+function getPS(){ return [...document.querySelectorAll('.ps-chip.active')].map(e=>e.dataset.ps); }
+function setPS(arr){ document.querySelectorAll('.ps-chip').forEach(e=>e.classList.toggle('active', arr&&arr.includes(e.dataset.ps))); }
+
+function updateGameFields(){
+  const cat = document.getElementById('f-cat').value;
+  document.getElementById('game-fields').classList.toggle('visible', GAME_CATS.includes(cat));
+}
+
 function openModal(){
   editingId=null;
   document.getElementById('modal-title').textContent='Add listing';
-  ['f-name','f-detail','f-desc','f-price', 'f-sale'].forEach(id=>document.getElementById(id).value='');
+  ['f-name','f-detail','f-desc','f-price','f-sale','f-players-min','f-players-max'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-cat').value='Board Games';
   document.getElementById('f-cond').value='good';
+  document.getElementById('f-pending').checked=false;
+  setPS([]);
   buildUrlInputs(['']);
+  updateGameFields();
   document.getElementById('modal').classList.add('open');
 }
 
@@ -516,7 +580,12 @@ function openEdit(id){
   document.getElementById('f-price').value=i.price||0;
   document.getElementById('f-sale').value=i.salePrice||'';
   document.getElementById('f-cond').value=i.cond;
+  document.getElementById('f-players-min').value=i.playersMin||'';
+  document.getElementById('f-players-max').value=i.playersMax||'';
+  document.getElementById('f-pending').checked=i.pending||false;
+  setPS(i.playStyle||[]);
   buildUrlInputs(getImgs(i));
+  updateGameFields();
   document.getElementById('modal').classList.add('open');
 }
 
@@ -528,15 +597,21 @@ async function saveItem(){
 
   const urls=pendingUrlInputs.filter(u=>u&&u.startsWith('http'));
   const now=new Date().getTime();
+  const cat=document.getElementById('f-cat').value;
+  const isGame=GAME_CATS.includes(cat);
   const data={
     name,
-    cat:document.getElementById('f-cat').value,
+    cat,
     detail:document.getElementById('f-detail').value,
     desc:document.getElementById('f-desc').value,
     price:parseFloat(document.getElementById('f-price').value)||0,
     salePrice:parseFloat(document.getElementById('f-sale').value)||0,
     cond:document.getElementById('f-cond').value,
-    img:urls
+    img:urls,
+    pending:document.getElementById('f-pending').checked,
+    playersMin:isGame&&document.getElementById('f-players-min').value ? parseInt(document.getElementById('f-players-min').value) : null,
+    playersMax:isGame&&document.getElementById('f-players-max').value ? parseInt(document.getElementById('f-players-max').value) : null,
+    playStyle:isGame ? getPS() : []
   };
 
   const items=[...items_cache];
@@ -568,8 +643,17 @@ function openView(id){
   updateAdminSlider();
   document.getElementById('v-cat').textContent=i.cat;
   document.getElementById('v-cat').className=`cat-label ${catColor[i.cat]||''}`;
-  document.getElementById('v-name').textContent=i.name;
+  document.getElementById('v-name').textContent=i.name+(i.pending?' ⏳':'');
   document.getElementById('v-detail').textContent=i.detail||'';
+  // Build game info line
+  let gameInfo='';
+  if(i.playersMin||i.playersMax){
+    const mn=i.playersMin||'?', mx=i.playersMax||'?';
+    gameInfo+=`👥 ${mn===mx?mn:mn+'-'+mx} Players`;
+  }
+  if(i.playStyle&&i.playStyle.length) gameInfo+=(gameInfo?' · ':'')+i.playStyle.join(' / ');
+  const gi=document.getElementById('v-game-info');
+  if(gi){ gi.textContent=gameInfo; gi.style.display=gameInfo?'block':'none'; }
   document.getElementById('v-desc').textContent=i.desc||'No description.';
   document.getElementById('view-modal').classList.add('open');
 }
