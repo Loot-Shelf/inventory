@@ -719,6 +719,8 @@ function openView(id){
     btn.style.cursor = 'pointer';
   }
   document.getElementById('view-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.body.style.touchAction = 'none';
 }
 
 function addToCartFromView(){
@@ -748,7 +750,11 @@ function moveSlide(dir){
   updateSlider();
 }
 
-function closeView(){document.getElementById('view-modal').classList.remove('open');}
+function closeView(){
+  document.getElementById('view-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  document.body.style.touchAction = '';
+}
 function closeSuccessModal(){document.getElementById('success-modal').classList.remove('open');}
 
 window.addEventListener('DOMContentLoaded', async ()=>{
