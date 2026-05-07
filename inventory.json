@@ -764,5 +764,27 @@
       "Competitive"
     ],
     "createdAt": 1778191270046
+  },
+  {
+    "id": 36,
+    "name": "Hogwarts Ludo - Harry Potter",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Hogwartsludo/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Hogwartsludo/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Hogwartsludo/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778191403243
   }
 ]
