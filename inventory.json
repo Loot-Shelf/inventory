@@ -499,5 +499,27 @@
       "Competitive"
     ],
     "createdAt": 1778189456788
+  },
+  {
+    "id": 24,
+    "name": "Poo Pocalypse + Expansion",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Expansion is sealed and the base game is in overall good condition with minor box wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Poopocalypse/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Poopocalypse/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Poopocalypse/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778189660961
   }
 ]
