@@ -77,7 +77,7 @@
       "https://Loot-Shelf.github.io/inventory/images/MK3.jpg"
     ],
     "createdAt": 1778123183219,
-    "pending": true,
+    "pending": false,
     "playersMin": null,
     "playersMax": null,
     "playStyle": []
