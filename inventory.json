@@ -300,5 +300,28 @@
       "Competitive"
     ],
     "createdAt": 1778187002221
+  },
+  {
+    "id": 15,
+    "name": "Nightmare Before Christmas Trivial Pursuit",
+    "cat": "Board Games",
+    "detail": "Collector's Edition",
+    "desc": "Overall in very good condition.  Collector's Edition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/NBCTrivial/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/NBCTrivial/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/NBCTrivial/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 100,
+    "playStyle": [
+      "Competitive",
+      "Team"
+    ],
+    "createdAt": 1778187223022
   }
 ]
