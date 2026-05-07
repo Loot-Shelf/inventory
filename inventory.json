@@ -47,14 +47,18 @@
   },
   {
     "id": 4,
-    "name": "Mortal Kombat: Deadly Alliance Xbox",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "",
-    "price": 0,
+    "name": "Mortal Kombat: Deadly Alliance",
+    "cat": "Video Games",
+    "detail": "Rated: M | Not Tested",
+    "desc": "Xbox",
+    "price": 8,
     "salePrice": 0,
-    "cond": "good",
-    "img": [],
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/MK1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/MK2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/MK3.jpg"
+    ],
     "createdAt": 1778123183219
   }
 ]
