@@ -44,5 +44,17 @@
       "https://Loot-Shelf.github.io/inventory/images/MC3.jpg"
     ],
     "createdAt": 1778123114321
+  },
+  {
+    "id": 4,
+    "name": "Mortal Kombat: Deadly Alliance Xbox",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "",
+    "price": 0,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [],
+    "createdAt": 1778123183219
   }
 ]
