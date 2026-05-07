@@ -587,5 +587,27 @@
       "Competitive"
     ],
     "createdAt": 1778190086957
+  },
+  {
+    "id": 28,
+    "name": "Gathering of the Wicked",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some damage on it.  Cards are in very good condition.",
+    "price": 0,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Gatheringofthewicked/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Gatheringofthewicked/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Gatheringofthewicked/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 6,
+    "playersMax": 12,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778190210512
   }
 ]
