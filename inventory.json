@@ -433,5 +433,27 @@
       "Team"
     ],
     "createdAt": 1778188351788
+  },
+  {
+    "id": 21,
+    "name": "Splatter Shoot",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Game components are unplayed, box has some wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Splatter/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Splatter/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Splatter/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778188787380
   }
 ]
