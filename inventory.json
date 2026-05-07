@@ -697,5 +697,28 @@
       "Competitive"
     ],
     "createdAt": 1778190812066
+  },
+  {
+    "id": 33,
+    "name": "Legends of the Hidden Temple",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some wear but the components are in very good condition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Legendsofthehiddentemple/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Legendsofthehiddentemple/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Legendsofthehiddentemple/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 4,
+    "playersMax": 12,
+    "playStyle": [
+      "Competitive",
+      "Team"
+    ],
+    "createdAt": 1778191007071
   }
 ]
