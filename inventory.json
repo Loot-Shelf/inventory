@@ -323,5 +323,26 @@
       "Team"
     ],
     "createdAt": 1778187223022
+  },
+  {
+    "id": 16,
+    "name": "Shadowrun Sixth World Beginner Box",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall in very good condition with the box having a little signs of wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Shadowrun/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Shadowrun/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778187546004
   }
 ]
