@@ -477,5 +477,27 @@
       "Competitive"
     ],
     "createdAt": 1778189259089
+  },
+  {
+    "id": 23,
+    "name": "Dungeon Royale!",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "The box has damaged on it, but the components are in really good condition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Dungeonroyale/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Dungeonroyale/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Dungeonroyale/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778189456788
   }
 ]
