@@ -13,7 +13,13 @@
       "https://Loot-Shelf.github.io/inventory/images/mm3.jpg"
     ],
     "createdAt": 1778002464364,
-    "salePrice": 0
+    "salePrice": 0,
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ]
   },
   {
     "id": 2,
