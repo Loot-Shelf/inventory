@@ -257,5 +257,27 @@
       "Competitive"
     ],
     "createdAt": 1778186511776
+  },
+  {
+    "id": 13,
+    "name": "Rick And Morty Total Rickall Card Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall, very good condition complete with instructions.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/RickMortyRickall/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/RickMortyRickall/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/RickMortyRickall/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778186753437
   }
 ]
