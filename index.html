@@ -483,7 +483,11 @@ function render(){
   const q = document.getElementById('search').value.toLowerCase();
   const now = new Date().getTime();
 
-  const vis = items.filter(i=>(activeFilter==='All'||i.cat===activeFilter)&&i.name.toLowerCase().includes(q));
+  const vis = items.filter(i=>{
+    const matchCat = activeFilter==='All' || i.cat===activeFilter;
+    const searchable = [i.name, i.detail, i.desc, i.cat].filter(Boolean).join(' ').toLowerCase();
+    return matchCat && (!q || searchable.includes(q));
+  });
 
   const newItems      = vis.filter(i => i.createdAt && (now - i.createdAt < 604800000));
   const flashSaleItems= vis.filter(i => i.salePrice && parseFloat(i.salePrice) > 0);
