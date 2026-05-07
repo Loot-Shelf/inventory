@@ -83,5 +83,27 @@
     "playStyle": [
       "Competitive"
     ]
+  },
+  {
+    "id": 5,
+    "name": "Guts The Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some general wear on it.  Game components are in good condition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Guts The Game/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Guts The Game/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Guts The Game/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778184953179
   }
 ]
