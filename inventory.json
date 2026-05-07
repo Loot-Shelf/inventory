@@ -875,5 +875,27 @@
       "Competitive"
     ],
     "createdAt": 1778191858551
+  },
+  {
+    "id": 41,
+    "name": "Bears VS Babies",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Bearsvsbabies/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Bearsvsbabies/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Bearsvsbabies/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778191950124
   }
 ]
