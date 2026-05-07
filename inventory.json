@@ -81,8 +81,7 @@
     "playersMin": 1,
     "playersMax": 2,
     "playStyle": [
-      "Competitive",
-      "Solo"
+      "Competitive"
     ]
   }
 ]
