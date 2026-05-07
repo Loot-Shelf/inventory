@@ -124,7 +124,6 @@
     "playersMin": 2,
     "playersMax": 10,
     "playStyle": [
-      "Co-op",
       "Competitive",
       "Team"
     ],
