@@ -543,5 +543,27 @@
       "Competitive"
     ],
     "createdAt": 1778189802385
+  },
+  {
+    "id": 26,
+    "name": "Spyfall",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some wear but the cards are in good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Spyfall/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Spyfall/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Spyfall/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778189926737
   }
 ]
