@@ -53,7 +53,7 @@
       "https://Loot-Shelf.github.io/inventory/images/MC3.jpg"
     ],
     "createdAt": 1778123114321,
-    "pending": true,
+    "pending": false,
     "playersMin": 1,
     "playersMax": 4,
     "playStyle": [
