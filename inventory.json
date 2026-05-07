@@ -17,14 +17,17 @@
   },
   {
     "id": 2,
-    "name": "PoP! (588) Avengers Assemble: Black Widow",
+    "name": "Funko Pop! (588) Avengers Assemble: Black Widow",
     "cat": "Collectibles",
     "detail": "(Amazon Exclusive) (Deluxe)",
-    "desc": "Overall good condition, signs of some use.",
+    "desc": "This is a bobble head, not just a figure.  Overall good condition, signs of some use on Black Widow's chin (see pictures). ",
     "price": 10,
     "cond": "good",
     "img": [
-      "https://Loot-Shelf.github.io/inventory/images/BlackWidow1.JPG"
+      "https://Loot-Shelf.github.io/inventory/images/bw1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/bw2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/bw3.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/bw4.jpg"
     ],
     "createdAt": 1778003755206,
     "salePrice": 0
