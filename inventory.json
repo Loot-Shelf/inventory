@@ -28,5 +28,21 @@
     ],
     "createdAt": 1778003755206,
     "salePrice": 0
+  },
+  {
+    "id": 3,
+    "name": "Halo: The Master Chief Collection XBOX One",
+    "cat": "Video Games",
+    "detail": "Rated: M | Xbox One | Not Tested",
+    "desc": "Comes with case, disc, and inserts.  Disc looks to be in like new condition with no wear.  Game has NOT BEEN TESTED.",
+    "price": 12,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/MC1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/MC2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/MC3.jpg"
+    ],
+    "createdAt": 1778123114321
   }
 ]
