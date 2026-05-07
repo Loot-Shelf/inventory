@@ -105,5 +105,29 @@
       "Competitive"
     ],
     "createdAt": 1778184953179
+  },
+  {
+    "id": 6,
+    "name": "Taboo Midnight",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Lightly used components, but the box shows signs of wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Taboo Midnight/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Taboo Midnight/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Taboo Midnight/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 10,
+    "playStyle": [
+      "Co-op",
+      "Competitive",
+      "Team"
+    ],
+    "createdAt": 1778185345596
   }
 ]
