@@ -653,5 +653,27 @@
       "Competitive"
     ],
     "createdAt": 1778190495013
+  },
+  {
+    "id": 31,
+    "name": "Low Down",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall Good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Lowdown/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Lowdown/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Lowdown/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778190591993
   }
 ]
