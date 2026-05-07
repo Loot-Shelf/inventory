@@ -46,7 +46,11 @@
       "https://Loot-Shelf.github.io/inventory/images/MC2.jpg",
       "https://Loot-Shelf.github.io/inventory/images/MC3.jpg"
     ],
-    "createdAt": 1778123114321
+    "createdAt": 1778123114321,
+    "pending": true,
+    "playersMin": null,
+    "playersMax": null,
+    "playStyle": []
   },
   {
     "id": 4,
