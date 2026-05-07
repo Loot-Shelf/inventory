@@ -48,9 +48,13 @@
     ],
     "createdAt": 1778123114321,
     "pending": true,
-    "playersMin": null,
-    "playersMax": null,
-    "playStyle": []
+    "playersMin": 1,
+    "playersMax": 4,
+    "playStyle": [
+      "Co-op",
+      "Competitive",
+      "Team"
+    ]
   },
   {
     "id": 4,
