@@ -565,5 +565,27 @@
       "Competitive"
     ],
     "createdAt": 1778189926737
+  },
+  {
+    "id": 27,
+    "name": "Evil Baby Orphanage",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with some box wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Evilbaby/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Evilbaby/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Evilbaby/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778190086957
   }
 ]
