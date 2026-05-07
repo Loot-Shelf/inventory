@@ -279,5 +279,26 @@
       "Co-op"
     ],
     "createdAt": 1778186753437
+  },
+  {
+    "id": 14,
+    "name": "The Joker: A Diabolical Party Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Sealed with clear stickers on sides.  Box has some general wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Joker/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Joker/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778187002221
   }
 ]
