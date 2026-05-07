@@ -897,5 +897,27 @@
       "Competitive"
     ],
     "createdAt": 1778191950124
+  },
+  {
+    "id": 42,
+    "name": "Firefly Tall Card",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Fireflytallcard/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Fireflytallcard/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Fireflytallcard/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778192042264
   }
 ]
