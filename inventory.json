@@ -387,5 +387,27 @@
       "Competitive"
     ],
     "createdAt": 1778187962043
+  },
+  {
+    "id": 19,
+    "name": "Hasty Baker",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition complete with instructions.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Hastybaker/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Hastybaker/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Hastybaker/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778188170372
   }
 ]
