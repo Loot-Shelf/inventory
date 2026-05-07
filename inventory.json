@@ -720,5 +720,27 @@
       "Team"
     ],
     "createdAt": 1778191007071
+  },
+  {
+    "id": 34,
+    "name": "Fluxx Jumanji",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall in good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Fluxxjumanji/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Fluxxjumanji/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Fluxxjumanji/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778191112364
   }
 ]
