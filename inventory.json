@@ -192,5 +192,27 @@
       "Competitive"
     ],
     "createdAt": 1778185921081
+  },
+  {
+    "id": 10,
+    "name": "The Walking Dead Trivial Pursuit",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Condition: Overall, very good condition.\nPlayers: 2+\nAge: 18+",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Walking Dead Trivial Pursuit/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Walking Dead Trivial Pursuit/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 12,
+    "playStyle": [
+      "Competitive",
+      "Team"
+    ],
+    "createdAt": 1778186175945
   }
 ]
