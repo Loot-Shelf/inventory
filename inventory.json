@@ -853,5 +853,27 @@
       "Competitive"
     ],
     "createdAt": 1778191762875
+  },
+  {
+    "id": 40,
+    "name": "Goat Lords",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Goatlords/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Goatlords/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Goatlords/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778191858551
   }
 ]
