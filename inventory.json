@@ -78,8 +78,8 @@
     ],
     "createdAt": 1778123183219,
     "pending": false,
-    "playersMin": null,
-    "playersMax": null,
+    "playersMin": 1,
+    "playersMax": 2,
     "playStyle": []
   }
 ]
