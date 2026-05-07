@@ -344,5 +344,27 @@
       "Co-op"
     ],
     "createdAt": 1778187546004
+  },
+  {
+    "id": 17,
+    "name": "The Stars Are Right",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has wear but components are in good condition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Starsareright/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Starsareright/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Starsareright/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778187753661
   }
 ]
