@@ -521,5 +521,27 @@
       "Competitive"
     ],
     "createdAt": 1778189660961
+  },
+  {
+    "id": 25,
+    "name": "Mork & Mindy",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some shelf wear.  Game components are unplayed.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Morkmindy/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Morkmindy/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Morkmindy/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778189802385
   }
 ]
