@@ -366,5 +366,26 @@
       "Competitive"
     ],
     "createdAt": 1778187753661
+  },
+  {
+    "id": 18,
+    "name": "Friends Ultimate Quiz",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with minor box wear.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Friendsquiz/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Friendsquiz/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 100,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778187962043
   }
 ]
