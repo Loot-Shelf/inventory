@@ -809,5 +809,27 @@
       "Team"
     ],
     "createdAt": 1778191534061
+  },
+  {
+    "id": 38,
+    "name": "Quick Stix",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Quickstix/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Quickstix/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Quickstix/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778191637009
   }
 ]
