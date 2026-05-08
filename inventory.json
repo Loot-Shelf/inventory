@@ -1006,5 +1006,27 @@
       "Competitive"
     ],
     "createdAt": 1778264246173
+  },
+  {
+    "id": 47,
+    "name": "Kryptos",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some wear but the game components are in very good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Kryptos/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Kryptos/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Kryptos/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778264432969
   }
 ]
