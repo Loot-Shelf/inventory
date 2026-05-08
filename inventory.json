@@ -1707,5 +1707,27 @@
       "Competitive"
     ],
     "createdAt": 1778270194090
+  },
+  {
+    "id": 79,
+    "name": "Sorry! Disney Villains",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with a little box wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sorrydisneyvillains/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sorrydisneyvillains/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sorrydisneyvillains/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778270362727
   }
 ]
