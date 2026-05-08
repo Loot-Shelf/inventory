@@ -1401,5 +1401,26 @@
       "Competitive"
     ],
     "createdAt": 1778267140626
+  },
+  {
+    "id": 65,
+    "name": "Exploding Kitten Party Pack",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/explodingkittenspartypack/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/explodingkittenspartypack/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 10,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778267273423
   }
 ]
