@@ -1576,5 +1576,27 @@
       "Competitive"
     ],
     "createdAt": 1778269191163
+  },
+  {
+    "id": 73,
+    "name": "Carcassonne",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is some general box wear and minor game component wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/carcassonne/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/carcassonne/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/carcassonne/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778269372927
   }
 ]
