@@ -1663,5 +1663,27 @@
       "Competitive"
     ],
     "createdAt": 1778269902561
+  },
+  {
+    "id": 77,
+    "name": "Zeus On The Loose",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall in average condition with the box wear and a little card wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/zeusontheloose/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/zeusontheloose/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/zeusontheloose/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778270050601
   }
 ]
