@@ -1181,5 +1181,27 @@
       "Competitive"
     ],
     "createdAt": 1778265510866
+  },
+  {
+    "id": 55,
+    "name": "Horrible Therapist",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/horribletherapist/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/horribletherapist/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/horribletherapist/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778265647705
   }
 ]
