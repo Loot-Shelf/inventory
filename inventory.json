@@ -1598,5 +1598,26 @@
       "Competitive"
     ],
     "createdAt": 1778269372927
+  },
+  {
+    "id": 74,
+    "name": "One Night Ultimate Werewolf",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/onenightultimatewerewolf/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/onenightultimatewerewolf/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 10,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778269525192
   }
 ]
