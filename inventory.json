@@ -1050,5 +1050,27 @@
       "Competitive"
     ],
     "createdAt": 1778264634702
+  },
+  {
+    "id": 49,
+    "name": "Wrong Party",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Wrongparty/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Wrongparty/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Wrongparty/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778264777727
   }
 ]
