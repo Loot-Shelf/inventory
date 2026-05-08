@@ -1422,5 +1422,26 @@
       "Competitive"
     ],
     "createdAt": 1778267273423
+  },
+  {
+    "id": 66,
+    "name": "The Plan",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/theplan/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/theplan/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778267398264
   }
 ]
