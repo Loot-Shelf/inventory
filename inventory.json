@@ -1336,5 +1336,26 @@
       "Team"
     ],
     "createdAt": 1778266692718
+  },
+  {
+    "id": 62,
+    "name": "Monopoly Hallmark Channel",
+    "cat": "Board Games",
+    "detail": "Countdown To Christmas Edition",
+    "desc": "Brand new sealed.  Small tear is plastic on back.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/monopolyhallmark/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/monopolyhallmark/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778266834563
   }
 ]
