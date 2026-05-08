@@ -940,5 +940,27 @@
       "Competitive"
     ],
     "createdAt": 1778263081079
+  },
+  {
+    "id": 44,
+    "name": "Reign of Dragoness",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.  Complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Reignofdragoness/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Reignofdragoness/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Reignofdragoness/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778263944189
   }
 ]
