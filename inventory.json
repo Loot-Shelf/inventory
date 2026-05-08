@@ -1379,5 +1379,27 @@
       "Competitive"
     ],
     "createdAt": 1778266969241
+  },
+  {
+    "id": 64,
+    "name": "Buggaloop",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has significant wear and the \"bug\" needs new batteries.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/buggaloop/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/buggaloop/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/buggaloop/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778267140626
   }
 ]
