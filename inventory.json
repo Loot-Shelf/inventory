@@ -1971,5 +1971,27 @@
       "Competitive"
     ],
     "createdAt": 1778272742554
+  },
+  {
+    "id": 91,
+    "name": "Wonka: The Golden Ticket Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with a some wear on box.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/goldenticket/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/goldenticket/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/goldenticket/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778272912635
   }
 ]
