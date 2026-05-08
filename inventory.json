@@ -984,5 +984,27 @@
       "Competitive"
     ],
     "createdAt": 1778264112800
+  },
+  {
+    "id": 46,
+    "name": "You've Got Crabs",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Youvegotcrabs/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Youvegotcrabs/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Youvegotcrabs/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 4,
+    "playersMax": 10,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778264246173
   }
 ]
