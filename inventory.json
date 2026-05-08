@@ -1313,5 +1313,28 @@
       "Competitive"
     ],
     "createdAt": 1778266509904
+  },
+  {
+    "id": 61,
+    "name": "The Simpsons: Battle of the Sexes",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with minor signs of use or wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/simpsonsbattleofthesexes/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/simpsonsbattleofthesexes/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/simpsonsbattleofthesexes/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive",
+      "Team"
+    ],
+    "createdAt": 1778266692718
   }
 ]
