@@ -1839,5 +1839,27 @@
       "Co-op"
     ],
     "createdAt": 1778271091925
+  },
+  {
+    "id": 85,
+    "name": "Uno Dice",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "The box is in rough shape with some tears, but the components are in good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "poor",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/unodice/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/unodice/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/unodice/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778271233157
   }
 ]
