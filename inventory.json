@@ -1773,5 +1773,27 @@
       "Competitive"
     ],
     "createdAt": 1778270673394
+  },
+  {
+    "id": 82,
+    "name": "Bang!",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall in good condition.  In both Italian and English on cards.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/bang/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/bang/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/bang/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 4,
+    "playersMax": 7,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778270831347
   }
 ]
