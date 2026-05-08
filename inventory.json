@@ -2015,5 +2015,27 @@
       "Competitive"
     ],
     "createdAt": 1778273036716
+  },
+  {
+    "id": 93,
+    "name": "The Manhattan Project Chain Reaction",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition but with some box wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/manhattanproject2/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/manhattanproject2/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/manhattanproject2/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778273155388
   }
 ]
