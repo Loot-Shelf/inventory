@@ -1094,5 +1094,27 @@
       "Competitive"
     ],
     "createdAt": 1778264916142
+  },
+  {
+    "id": 51,
+    "name": "Geek Out! Disney",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/geekoutdisney/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/geekoutdisney/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/geekoutdisney/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 99,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778265058772
   }
 ]
