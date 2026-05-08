@@ -1464,5 +1464,27 @@
       "Competitive"
     ],
     "createdAt": 1778267614069
+  },
+  {
+    "id": 68,
+    "name": "Alice Is Missing",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/aliceismissing/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/aliceismissing/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/aliceismissing/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 5,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778267819933
   }
 ]
