@@ -1795,5 +1795,27 @@
       "Competitive"
     ],
     "createdAt": 1778270831347
+  },
+  {
+    "id": 83,
+    "name": "Antiquity Quest",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.  A great game from Grandpa Beck.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/antiquityquest/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/antiquityquest/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/antiquityquest/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778270946196
   }
 ]
