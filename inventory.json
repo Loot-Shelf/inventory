@@ -1619,5 +1619,27 @@
       "Competitive"
     ],
     "createdAt": 1778269525192
+  },
+  {
+    "id": 75,
+    "name": "Cover Your Kingdom",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall in very good condition",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/coveryourkingdom/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/coveryourkingdom/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/coveryourkingdom/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778269751635
   }
 ]
