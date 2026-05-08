@@ -1116,5 +1116,26 @@
       "Competitive"
     ],
     "createdAt": 1778265058772
+  },
+  {
+    "id": 52,
+    "name": "Godzilla Tokyo Clash",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new unopened with circle seals on box edges.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/godzilla/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/godzilla/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778265181586
   }
 ]
