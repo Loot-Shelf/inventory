@@ -962,5 +962,27 @@
       "Competitive"
     ],
     "createdAt": 1778263944189
+  },
+  {
+    "id": 45,
+    "name": "Exploding Kittens NSFW (Not Safe For Work)",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/Explodingkittensnsfw/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Explodingkittensnsfw/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/Explodingkittensnsfw/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778264112800
   }
 ]
