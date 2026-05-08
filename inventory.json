@@ -1751,5 +1751,27 @@
       "Competitive"
     ],
     "createdAt": 1778270521258
+  },
+  {
+    "id": 81,
+    "name": "Bang! 3rd Edition",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "3rd edition with only cards, no game tokens.  Overall good condition.  It has Italian and English written on the cards.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/bang3rd/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/bang3rd/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/bang3rd/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 4,
+    "playersMax": 7,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778270673394
   }
 ]
