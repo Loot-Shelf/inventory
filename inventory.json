@@ -1357,5 +1357,27 @@
       "Competitive"
     ],
     "createdAt": 1778266834563
+  },
+  {
+    "id": 63,
+    "name": "Monopoly Friends",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with minor box wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/monopolyfriends/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/monopolyfriends/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/monopolyfriends/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778266969241
   }
 ]
