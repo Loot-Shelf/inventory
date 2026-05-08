@@ -1729,5 +1729,27 @@
       "Competitive"
     ],
     "createdAt": 1778270362727
+  },
+  {
+    "id": 80,
+    "name": "Exploding Kittens Recipes For Disaster",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/explodingkittensrecipes/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/explodingkittensrecipes/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/explodingkittensrecipes/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778270521258
   }
 ]
