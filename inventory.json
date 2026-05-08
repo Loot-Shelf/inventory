@@ -1247,5 +1247,27 @@
       "Competitive"
     ],
     "createdAt": 1778266004600
+  },
+  {
+    "id": 58,
+    "name": "Miskatonic School For Girls",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with a little box wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/miskatonic/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/miskatonic/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/miskatonic/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778266146245
   }
 ]
