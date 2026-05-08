@@ -1291,5 +1291,27 @@
       "Competitive"
     ],
     "createdAt": 1778266345930
+  },
+  {
+    "id": 60,
+    "name": "Operation Shrek",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Some signs of box wear, but in overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/operationshrek/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/operationshrek/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/operationshrek/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 99,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778266509904
   }
 ]
