@@ -1510,5 +1510,27 @@
       "Team"
     ],
     "createdAt": 1778268232846
+  },
+  {
+    "id": 70,
+    "name": "FrogRiders",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/frogriders/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/frogriders/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/frogriders/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778268668876
   }
 ]
