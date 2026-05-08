@@ -1225,5 +1225,27 @@
       "Competitive"
     ],
     "createdAt": 1778265755956
+  },
+  {
+    "id": 57,
+    "name": "Those Pesky Garden Gnomes",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/thosepeskygardengnomes/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/thosepeskygardengnomes/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/thosepeskygardengnomes/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778266004600
   }
 ]
