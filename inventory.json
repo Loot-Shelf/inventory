@@ -1641,5 +1641,27 @@
       "Competitive"
     ],
     "createdAt": 1778269751635
+  },
+  {
+    "id": 76,
+    "name": "Dominant Species The Card Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall game components are in very good condition but box has some general wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/dominantspecies/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/dominantspecies/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/dominantspecies/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778269902561
   }
 ]
