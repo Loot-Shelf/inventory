@@ -1137,5 +1137,27 @@
       "Competitive"
     ],
     "createdAt": 1778265181586
+  },
+  {
+    "id": 53,
+    "name": "Guardian's Call",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/guardianscall/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/guardianscall/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/guardianscall/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778265355344
   }
 ]
