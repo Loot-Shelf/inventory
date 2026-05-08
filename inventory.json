@@ -1269,5 +1269,27 @@
       "Competitive"
     ],
     "createdAt": 1778266146245
+  },
+  {
+    "id": 59,
+    "name": "Vampire Hunter",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition, with some box wear, but complete with instructions and light up tower.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/vampirehunter/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/vampirehunter/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/vampirehunter/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778266345930
   }
 ]
