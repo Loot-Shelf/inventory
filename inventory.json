@@ -2824,5 +2824,27 @@
       "Competitive"
     ],
     "createdAt": 1778353590043
+  },
+  {
+    "id": 130,
+    "name": "Cross Clues",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition with minor box wear, complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/crossclues/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/crossclues/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/crossclues/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778353711517
   }
 ]
