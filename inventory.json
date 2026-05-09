@@ -2165,5 +2165,26 @@
       "Competitive"
     ],
     "createdAt": 1778291246863
+  },
+  {
+    "id": 100,
+    "name": "Titan Dice",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/titandice/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/titandice/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291455823
   }
 ]
