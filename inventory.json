@@ -2494,5 +2494,27 @@
       "Competitive"
     ],
     "createdAt": 1778293572031
+  },
+  {
+    "id": 115,
+    "name": "Forbidden Sky",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/forbiddensky/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/forbiddensky/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/forbiddensky/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778293729400
   }
 ]
