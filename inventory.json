@@ -2759,5 +2759,27 @@
       "Competitive"
     ],
     "createdAt": 1778353109087
+  },
+  {
+    "id": 127,
+    "name": "Illusion",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Minor wear, in good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/illusion/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/illusion/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/illusion/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778353309707
   }
 ]
