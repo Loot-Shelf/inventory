@@ -2736,5 +2736,28 @@
       "Co-op"
     ],
     "createdAt": 1778351546282
+  },
+  {
+    "id": 126,
+    "name": "Last Friday: Revised Edition",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is box damage on 2 of the corners, they are split.  Game components are in good condition.",
+    "price": 25,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/lastfriday/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/lastfriday/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/lastfriday/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Co-op",
+      "Competitive"
+    ],
+    "createdAt": 1778353109087
   }
 ]
