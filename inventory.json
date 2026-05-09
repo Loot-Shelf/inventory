@@ -2138,7 +2138,7 @@
     ],
     "pending": false,
     "playersMin": 2,
-    "playersMax": 4,
+    "playersMax": 5,
     "playStyle": [
       "Competitive"
     ],
