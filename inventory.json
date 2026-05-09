@@ -2956,5 +2956,27 @@
       "Co-op"
     ],
     "createdAt": 1778355127260
+  },
+  {
+    "id": 136,
+    "name": "Ticket To Ride Asia + Legendary Asia Expansion",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Requires some base game components.  Game components are brand new, box is opened.",
+    "price": 25,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/tickettorideasia/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/tickettorideasia/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/tickettorideasia/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778355335215
   }
 ]
