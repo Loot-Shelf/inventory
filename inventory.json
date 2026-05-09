@@ -2670,5 +2670,27 @@
       "Competitive"
     ],
     "createdAt": 1778294703706
+  },
+  {
+    "id": 123,
+    "name": "Cardline Animals",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "It is missing the instructions.  The instructions can be found online.  Game cards are in good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "missing",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778349418968
   }
 ]
