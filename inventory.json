@@ -2186,5 +2186,27 @@
       "Competitive"
     ],
     "createdAt": 1778291455823
+  },
+  {
+    "id": 101,
+    "name": "Walking In Burano",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In very good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/walkinginburano/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/walkinginburano/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/walkinginburano/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291528889
   }
 ]
