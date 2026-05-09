@@ -2978,5 +2978,26 @@
       "Competitive"
     ],
     "createdAt": 1778355335215
+  },
+  {
+    "id": 137,
+    "name": "Sons of Anarchy: Men of Mayhem",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Box has some wear.  Game components are basically brand new.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sonsofanarchy/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sonsofanarchy/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778355761291
   }
 ]
