@@ -135,6 +135,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
 .total-row{display:flex;justify-content:space-between;margin-bottom:20px;font-weight:800}
 .request-form { display: flex; flex-direction: column; gap: 10px; }
 .request-form input { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px; }
+.request-form textarea { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px; resize: vertical; min-height: 90px; line-height: 1.5; }
+.notes-label { font-size: 11px; font-weight: 800; color: #a0aabf; text-transform: uppercase; letter-spacing: 1px; margin-bottom: -4px; }
 .checkout-btn{width:100%;padding:14px;background:var(--grad);border:none;border-radius:10px;color:#fff;font-weight:800;cursor:pointer;margin-top:10px}
 .checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -300,7 +302,7 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
   .cart-header{padding:18px 16px}
   .cart-items{padding:14px}
   .cart-footer{padding:16px}
-  .request-form input{padding:11px;font-size:13px}
+  .request-form input,.request-form textarea{padding:11px;font-size:13px}
   .checkout-btn{padding:13px;font-size:14px}
   .total-row{font-size:14px}
 
@@ -453,6 +455,8 @@ main{padding:22px 28px;max-width:1100px;margin:0 auto}
       <input type="text" id="f-name" placeholder="Full Name" required>
       <input type="email" id="f-email" placeholder="Email Address" required>
       <input type="tel" id="f-phone" placeholder="Phone Number (Optional)">
+      <span class="notes-label">Notes / Questions</span>
+      <textarea id="f-notes" placeholder="Any questions, offers, or concerns? Write them here..."></textarea>
       <button id="checkout-btn" class="checkout-btn" disabled onclick="submitRequest()">Submit Request</button>
 
     </div>
@@ -496,7 +500,7 @@ const INVENTORY_FILE = 'inventory.json';
 const RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${INVENTORY_FILE}`;
 
 const catColor={'Board Games':'cat-board','Video Games':'cat-video','Books':'cat-books','Collectibles':'cat-collect','Cards':'cat-cards','Movies':'cat-movies','Misc':'cat-misc'};
-const condLabel={new:'New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
+const condLabel={new:'Brand New',vgood:'Used - Very Good',good:'Used - Good',average:'Used - Average',poor:'Used - Poor',damaged:'Damaged',missing:'Missing Pieces'};
 const condClass={new:'cond-new',vgood:'cond-vgood',good:'cond-good',average:'cond-average',poor:'cond-poor',damaged:'cond-damaged',missing:'cond-missing'};
 
 let activeFilter='All', activeSort='default', activePS=new Set(), currentImgs=[], currentIdx=0, items_cache=[], cart=[];
@@ -708,6 +712,7 @@ async function submitRequest(){
   const name  = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
   const phone = document.getElementById('f-phone').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
   if(!name)  { alert('Please enter your full name.'); return; }
   if(!email) { alert('Please enter your email address.'); return; }
   if(cart.length === 0) { alert('Your cart is empty.'); return; }
@@ -720,7 +725,8 @@ async function submitRequest(){
     name:  name,
     email: email,
     phone: phone || 'Not provided',
-    list:  cartShoppingList
+    list:  cartShoppingList,
+    notes: notes || 'None'
   });
 
   // Fire and forget — no-cors means we can't read the response
@@ -735,6 +741,7 @@ async function submitRequest(){
     document.getElementById('f-name').value = '';
     document.getElementById('f-email').value = '';
     document.getElementById('f-phone').value = '';
+    document.getElementById('f-notes').value = '';
     cart = [];
     updateCartUI();
     btn.disabled = false;
