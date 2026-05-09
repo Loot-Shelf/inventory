@@ -2340,5 +2340,27 @@
       "Co-op"
     ],
     "createdAt": 1778292380069
+  },
+  {
+    "id": 108,
+    "name": "Among The Stars",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/amongthestars/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/amongthestars/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/amongthestars/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778292515115
   }
 ]
