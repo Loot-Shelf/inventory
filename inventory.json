@@ -2868,5 +2868,27 @@
       "Competitive"
     ],
     "createdAt": 1778353874852
+  },
+  {
+    "id": 132,
+    "name": "Mind Up",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/mindup/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/mindup/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/mindup/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778354421850
   }
 ]
