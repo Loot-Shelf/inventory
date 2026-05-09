@@ -2121,5 +2121,27 @@
       "Competitive"
     ],
     "createdAt": 1778290926545
+  },
+  {
+    "id": 98,
+    "name": "Trekking The World",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/trekkingtheworld/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/trekkingtheworld/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/trekkingtheworld/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291035986
   }
 ]
