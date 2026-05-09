@@ -2450,5 +2450,27 @@
       "Competitive"
     ],
     "createdAt": 1778293284571
+  },
+  {
+    "id": 113,
+    "name": "Villainous Marvel We Are Venom Expansion",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new with circle sticker seals.  Expansion character only, requires base game.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/villainousvenom/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/villainousvenom/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/villainousvenom/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778293421576
   }
 ]
