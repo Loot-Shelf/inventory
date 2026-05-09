@@ -2100,5 +2100,26 @@
       "Competitive"
     ],
     "createdAt": 1778290750697
+  },
+  {
+    "id": 97,
+    "name": "Enigma Beyond Code",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/enigma/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/enigma/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778290926545
   }
 ]
