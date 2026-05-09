@@ -2274,5 +2274,27 @@
       "Competitive"
     ],
     "createdAt": 1778291964100
+  },
+  {
+    "id": 105,
+    "name": "Detective Rummy",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/detectiverummy/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/detectiverummy/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/detectiverummy/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778292102725
   }
 ]
