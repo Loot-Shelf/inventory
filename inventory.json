@@ -2781,5 +2781,27 @@
       "Competitive"
     ],
     "createdAt": 1778353309707
+  },
+  {
+    "id": 128,
+    "name": "Potato Man",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall very good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/potatoman/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/potatoman/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/potatoman/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778353452635
   }
 ]
