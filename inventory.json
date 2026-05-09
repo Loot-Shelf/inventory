@@ -2252,5 +2252,27 @@
       "Competitive"
     ],
     "createdAt": 1778291843056
+  },
+  {
+    "id": 104,
+    "name": "New York Slice",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/newyorkslice/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/newyorkslice/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/newyorkslice/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291964100
   }
 ]
