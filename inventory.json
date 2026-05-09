@@ -2143,5 +2143,27 @@
       "Competitive"
     ],
     "createdAt": 1778291035986
+  },
+  {
+    "id": 99,
+    "name": "Golden Snitch Quidditch Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.  Components are unplayed.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/goldensnitch/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/goldensnitch/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/goldensnitch/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291246863
   }
 ]
