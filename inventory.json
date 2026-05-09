@@ -2538,5 +2538,28 @@
       "Co-op"
     ],
     "createdAt": 1778293835839
+  },
+  {
+    "id": 117,
+    "name": "Telestrations 12 Player Party Pack",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In average condition with general wear and use.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/telestrations12/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/telestrations12/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/telestrations12/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 12,
+    "playStyle": [
+      "Co-op",
+      "Competitive"
+    ],
+    "createdAt": 1778294001668
   }
 ]
