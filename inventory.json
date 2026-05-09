@@ -2318,5 +2318,27 @@
       "Competitive"
     ],
     "createdAt": 1778292212856
+  },
+  {
+    "id": 107,
+    "name": "Sherlock Holmes: Jack The Ripper & West End Adventures",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sherlockripper/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sherlockripper/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sherlockripper/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 8,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778292380069
   }
 ]
