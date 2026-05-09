@@ -2208,5 +2208,27 @@
       "Competitive"
     ],
     "createdAt": 1778291528889
+  },
+  {
+    "id": 102,
+    "name": "Sneaks & Snitches",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sneaks/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sneaks/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/sneaks/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291654614
   }
 ]
