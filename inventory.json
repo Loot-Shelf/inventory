@@ -2714,5 +2714,27 @@
       "Co-op"
     ],
     "createdAt": 1778350435518
+  },
+  {
+    "id": 125,
+    "name": "Pandemic On The Brink Expansion",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "This is an expansion are requires the base game.  Complete and game components are still brand new.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/pandemiconthebrink/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/pandemiconthebrink/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/pandemiconthebrink/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778351546282
   }
 ]
