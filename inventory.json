@@ -2604,5 +2604,27 @@
       "Competitive"
     ],
     "createdAt": 1778294305210
+  },
+  {
+    "id": 120,
+    "name": "The World Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/theworldgame/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/theworldgame/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/theworldgame/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778294413917
   }
 ]
