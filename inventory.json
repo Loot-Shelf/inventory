@@ -2079,5 +2079,26 @@
       "Competitive"
     ],
     "createdAt": 1778290692988
+  },
+  {
+    "id": 96,
+    "name": "Carcassone Traders & Builders Expansion",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "This is an expansion and requires the base game.  Brand new sealed.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/carcassonnetraders/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/carcassonnetraders/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778290750697
   }
 ]
