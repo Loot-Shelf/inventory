@@ -2890,5 +2890,27 @@
       "Competitive"
     ],
     "createdAt": 1778354421850
+  },
+  {
+    "id": 133,
+    "name": "Uno Super Mario",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Game cards are unplayed, tin is in good condition, complete with instructions.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/unosupermario/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/unosupermario/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/unosupermario/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 10,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778354848333
   }
 ]
