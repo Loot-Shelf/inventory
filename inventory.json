@@ -2037,5 +2037,26 @@
       "Competitive"
     ],
     "createdAt": 1778273155388
+  },
+  {
+    "id": 94,
+    "name": "Vintage Card Game 3-Pack (Uno, Ono 99, Skip-Bo)",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/vintagecard/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/vintagecard/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778290467806
   }
 ]
