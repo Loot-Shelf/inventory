@@ -2561,5 +2561,26 @@
       "Competitive"
     ],
     "createdAt": 1778294001668
+  },
+  {
+    "id": 118,
+    "name": "Tash-Kalar: Arena of Legends",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/tashkalar/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/tashkalar/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778294154213
   }
 ]
