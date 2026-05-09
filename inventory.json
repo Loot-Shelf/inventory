@@ -2582,5 +2582,27 @@
       "Competitive"
     ],
     "createdAt": 1778294154213
+  },
+  {
+    "id": 119,
+    "name": "Apples To Apples: Apple Crate Edition",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/applestoapplescrate/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/applestoapplescrate/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/applestoapplescrate/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 4,
+    "playersMax": 10,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778294305210
   }
 ]
