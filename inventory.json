@@ -2803,5 +2803,26 @@
       "Competitive"
     ],
     "createdAt": 1778353452635
+  },
+  {
+    "id": 129,
+    "name": "Cover Your Cookies: Crumbl Edition",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.  Grandpa Beck's Games.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/coveryourcookies/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/coveryourcookies/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778353590043
   }
 ]
