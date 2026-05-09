@@ -2626,5 +2626,27 @@
       "Competitive"
     ],
     "createdAt": 1778294413917
+  },
+  {
+    "id": 121,
+    "name": "Super Simon (1979)",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "The box has some wear / damage.  Untested.  Needs batteries.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/supersimon/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/supersimon/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/supersimon/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 99,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778294572800
   }
 ]
