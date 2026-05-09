@@ -2058,5 +2058,26 @@
       "Competitive"
     ],
     "createdAt": 1778290467806
+  },
+  {
+    "id": 95,
+    "name": "Hanamikoji",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In very good condition, cards are sleeves as well.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/hanamikoji/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/hanamikoji/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778290692988
   }
 ]
