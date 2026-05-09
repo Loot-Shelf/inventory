@@ -2384,5 +2384,27 @@
       "Competitive"
     ],
     "createdAt": 1778292836783
+  },
+  {
+    "id": 110,
+    "name": "Villainous Star Wars Power of the Darkside",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new with circle seals on edges of box",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/villainousstarwars/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/villainousstarwars/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/villainousstarwars/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778292974192
   }
 ]
