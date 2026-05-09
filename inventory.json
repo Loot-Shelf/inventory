@@ -2230,5 +2230,27 @@
       "Competitive"
     ],
     "createdAt": 1778291654614
+  },
+  {
+    "id": 103,
+    "name": "Taboo Disney",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition with little wear.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/taboodisney/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/taboodisney/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/taboodisney/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 99,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778291843056
   }
 ]
