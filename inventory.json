@@ -2846,5 +2846,27 @@
       "Competitive"
     ],
     "createdAt": 1778353711517
+  },
+  {
+    "id": 131,
+    "name": "Ticket To Ride Amsterdam",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Game components are still sealed.  Game box has a little wear on 1 corner.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/tickettorideamsterdam/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/tickettorideamsterdam/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/tickettorideamsterdam/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778353874852
   }
 ]
