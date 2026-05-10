@@ -3041,5 +3041,27 @@
       "Competitive"
     ],
     "createdAt": 1778439362122
+  },
+  {
+    "id": 140,
+    "name": "Adventure Time Card Wars: Finn vs Jake",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "The box is in poor condition.  The game components are in good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/adventuretime/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/adventuretime/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/adventuretime/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778439520967
   }
 ]
