@@ -3064,5 +3064,27 @@
       "Competitive"
     ],
     "createdAt": 1778439520967
+  },
+  {
+    "id": 141,
+    "name": "Happy Salmon",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall very good condition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/happysalmon/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/happysalmon/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/happysalmon/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778439692135
   }
 ]
