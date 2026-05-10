@@ -2681,9 +2681,9 @@
     "salePrice": 0,
     "cond": "missing",
     "img": [
-      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/3.JPG"
+      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/cardlineanimals/3.jpg"
     ],
     "pending": false,
     "playersMin": 2,
