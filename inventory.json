@@ -3130,5 +3130,27 @@
       "Competitive"
     ],
     "createdAt": 1778439876636
+  },
+  {
+    "id": 144,
+    "name": "This Game Goes To Eleven",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In average condition with some general wear on box and game cards / instructions.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/thisgamegoestoeleven/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/thisgamegoestoeleven/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/thisgamegoestoeleven/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778439998957
   }
 ]
