@@ -3152,5 +3152,27 @@
       "Competitive"
     ],
     "createdAt": 1778439998957
+  },
+  {
+    "id": 145,
+    "name": "Pandemic",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/pandemic/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/pandemic/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/pandemic/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778440733636
   }
 ]
