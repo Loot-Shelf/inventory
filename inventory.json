@@ -2999,5 +2999,26 @@
       "Competitive"
     ],
     "createdAt": 1778355761291
+  },
+  {
+    "id": 138,
+    "name": "Hacienda",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.",
+    "price": 60,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/hacienda/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/hacienda/2.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778438753101
   }
 ]
