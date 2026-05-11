@@ -3462,5 +3462,27 @@
       "Competitive"
     ],
     "createdAt": 1778527997092
+  },
+  {
+    "id": 159,
+    "name": "Deck The Halls",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Never played.  In good condition except some of the stickers that go on the wood player pawns are peeling off.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/deckthehalls/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/deckthehalls/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/deckthehalls/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778528209342
   }
 ]
