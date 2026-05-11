@@ -3218,5 +3218,27 @@
       "Competitive"
     ],
     "createdAt": 1778524616987
+  },
+  {
+    "id": 148,
+    "name": "Yahtzee Deluxe Edition",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Has some general wear and damage on box.  Game components are in overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/yahtzeedeluxe/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/yahtzeedeluxe/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/yahtzeedeluxe/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 99,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778524854483
   }
 ]
