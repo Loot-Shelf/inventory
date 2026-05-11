@@ -3174,5 +3174,27 @@
       "Co-op"
     ],
     "createdAt": 1778440733636
+  },
+  {
+    "id": 146,
+    "name": "Risk Plants vs Zombies Collector's Edition",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Some minor wear but overall good condition",
+    "price": 25,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/riskplants/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/riskplants/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/riskplants/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778524487411
   }
 ]
