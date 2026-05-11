@@ -3350,5 +3350,27 @@
       "Competitive"
     ],
     "createdAt": 1778526433238
+  },
+  {
+    "id": 154,
+    "name": "Ticket To Ride The Card Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition, but with a little box wear.",
+    "price": 30,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/tickettoridecardgame/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/tickettoridecardgame/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/tickettoridecardgame/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778526611414
   }
 ]
