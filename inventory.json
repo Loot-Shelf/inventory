@@ -3306,5 +3306,27 @@
       "Competitive"
     ],
     "createdAt": 1778526105835
+  },
+  {
+    "id": 152,
+    "name": "Sheep In Disguise NSFW (Not Safe For Work)",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with minimal wear on box.",
+    "price": 25,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sheepindisguisensfw/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/sheepindisguisensfw/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/sheepindisguisensfw/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778526248334
   }
 ]
