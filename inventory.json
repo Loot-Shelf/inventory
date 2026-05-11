@@ -3440,5 +3440,27 @@
       "Solo"
     ],
     "createdAt": 1778527798753
+  },
+  {
+    "id": 158,
+    "name": "Mystery of the Abbey",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall good condition, with some of the tracker sheets laminated for easy and reusable deduction with dry erase markers.  Does not come with dry erase markers.",
+    "price": 30,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/mysteryoftheabbey/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/mysteryoftheabbey/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/mysteryoftheabbey/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778527997092
   }
 ]
