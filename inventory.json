@@ -3506,5 +3506,27 @@
       "Competitive"
     ],
     "createdAt": 1778536542667
+  },
+  {
+    "id": 161,
+    "name": "Monopoly Socialism",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Has some box wear, but components are in good condition.",
+    "price": 25,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/monopolysocialism/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/monopolysocialism/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/monopolysocialism/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778536671367
   }
 ]
