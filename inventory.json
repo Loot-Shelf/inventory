@@ -3328,5 +3328,27 @@
       "Competitive"
     ],
     "createdAt": 1778526248334
+  },
+  {
+    "id": 153,
+    "name": "Jekyll vs Hyde",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/jekyllvshyde/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/jekyllvshyde/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/jekyllvshyde/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778526433238
   }
 ]
