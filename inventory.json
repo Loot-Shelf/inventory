@@ -3484,5 +3484,27 @@
       "Co-op"
     ],
     "createdAt": 1778528209342
+  },
+  {
+    "id": 160,
+    "name": "Trans America",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is some general wear on the box and cards.  Probably between good and average condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/transamerica/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/transamerica/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/transamerica/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778536542667
   }
 ]
