@@ -3551,5 +3551,27 @@
       "Co-op"
     ],
     "createdAt": 1778536923844
+  },
+  {
+    "id": 163,
+    "name": "Dead Man's Doubloons",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall very good condition and just a touch of box wear.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/deadmansdoubloons/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/deadmansdoubloons/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/deadmansdoubloons/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778537076661
   }
 ]
