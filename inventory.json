@@ -3240,5 +3240,27 @@
       "Competitive"
     ],
     "createdAt": 1778524854483
+  },
+  {
+    "id": 149,
+    "name": "The Game of LIFE: Pirates of the Caribbean Dead Man's Chest",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with some box wear / damage.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/lifepirates/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/lifepirates/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/lifepirates/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778525067836
   }
 ]
