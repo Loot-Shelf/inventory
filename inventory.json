@@ -3284,5 +3284,27 @@
       "Competitive"
     ],
     "createdAt": 1778525465985
+  },
+  {
+    "id": 151,
+    "name": "Sheep In Disguise",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is some wear / damage on the box.  Game cards are in very good condition.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sheepindisguise/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/sheepindisguise/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/sheepindisguise/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778526105835
   }
 ]
