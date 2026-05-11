@@ -3196,5 +3196,27 @@
       "Competitive"
     ],
     "createdAt": 1778524487411
+  },
+  {
+    "id": 147,
+    "name": "Dice Forge",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/diceforge/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/diceforge/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/diceforge/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778524616987
   }
 ]
