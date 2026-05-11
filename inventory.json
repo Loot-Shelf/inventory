@@ -3573,5 +3573,27 @@
       "Competitive"
     ],
     "createdAt": 1778537076661
+  },
+  {
+    "id": 164,
+    "name": "Axis & Allies 1941",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is some general box wear / damage, especially on the back.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "average",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/axisallies1941/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/axisallies1941/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/axisallies1941/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778537293854
   }
 ]
