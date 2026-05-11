@@ -3416,5 +3416,29 @@
       "Co-op"
     ],
     "createdAt": 1778527655476
+  },
+  {
+    "id": 157,
+    "name": "Turing Machine",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.  Played once.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/turingmachine/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/turingmachine/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/turingmachine/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 4,
+    "playStyle": [
+      "Co-op",
+      "Competitive",
+      "Solo"
+    ],
+    "createdAt": 1778527798753
   }
 ]
