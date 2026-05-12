@@ -1795,28 +1795,6 @@
     "createdAt": 1778271233157
   },
   {
-    "id": 86,
-    "name": "Codenames Harry Potter",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "Overall very good condition.",
-    "price": 10,
-    "salePrice": 0,
-    "cond": "vgood",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/codenamesharrypotter/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/codenamesharrypotter/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/codenamesharrypotter/3.JPG"
-    ],
-    "pending": false,
-    "playersMin": 2,
-    "playersMax": 99,
-    "playStyle": [
-      "Competitive"
-    ],
-    "createdAt": 1778271365523
-  },
-  {
     "id": 87,
     "name": "Forbidden Island",
     "cat": "Board Games",
