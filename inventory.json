@@ -1641,28 +1641,6 @@
     "createdAt": 1778270050601
   },
   {
-    "id": 78,
-    "name": "Exploding Kittens Party Pack",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "Overall in good condition.  The noise maker battery is dead so it doesn't make noise when you open box.",
-    "price": 10,
-    "salePrice": 0,
-    "cond": "good",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/explodingkittenspartypackused/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/explodingkittenspartypackused/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/explodingkittenspartypackused/3.JPG"
-    ],
-    "pending": false,
-    "playersMin": 2,
-    "playersMax": 10,
-    "playStyle": [
-      "Competitive"
-    ],
-    "createdAt": 1778270194090
-  },
-  {
     "id": 79,
     "name": "Sorry! Disney Villains",
     "cat": "Board Games",
