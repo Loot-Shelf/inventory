@@ -1532,28 +1532,6 @@
     "createdAt": 1778269101910
   },
   {
-    "id": 72,
-    "name": "The Oregon Trail Game",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "Overall good condition.",
-    "price": 10,
-    "salePrice": 0,
-    "cond": "good",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/oregontrail2/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/oregontrail2/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/oregontrail2/3.JPG"
-    ],
-    "pending": false,
-    "playersMin": 2,
-    "playersMax": 4,
-    "playStyle": [
-      "Competitive"
-    ],
-    "createdAt": 1778269191163
-  },
-  {
     "id": 73,
     "name": "Carcassonne",
     "cat": "Board Games",
