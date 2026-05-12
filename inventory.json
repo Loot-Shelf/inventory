@@ -3231,7 +3231,7 @@
       "https://Loot-Shelf.github.io/inventory/images/cashnguns/2.jpg",
       "https://Loot-Shelf.github.io/inventory/images/cashnguns/3.jpg"
     ],
-    "pending": false,
+    "pending": true,
     "playersMin": 4,
     "playersMax": 8,
     "playStyle": [
