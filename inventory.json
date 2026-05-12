@@ -1488,30 +1488,6 @@
     "createdAt": 1778267819933
   },
   {
-    "id": 69,
-    "name": "Codenames",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "In very good condition with components un-played and un-open.",
-    "price": 10,
-    "salePrice": 0,
-    "cond": "vgood",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/codenames/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/codenames/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/codenames/3.JPG"
-    ],
-    "pending": false,
-    "playersMin": 2,
-    "playersMax": 8,
-    "playStyle": [
-      "Co-op",
-      "Competitive",
-      "Team"
-    ],
-    "createdAt": 1778268232846
-  },
-  {
     "id": 70,
     "name": "FrogRiders",
     "cat": "Board Games",
