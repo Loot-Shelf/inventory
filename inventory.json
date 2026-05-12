@@ -1566,7 +1566,7 @@
       "https://Loot-Shelf.github.io/inventory/images/onenightultimatewerewolf/1.JPG",
       "https://Loot-Shelf.github.io/inventory/images/onenightultimatewerewolf/2.JPG"
     ],
-    "pending": false,
+    "pending": true,
     "playersMin": 3,
     "playersMax": 10,
     "playStyle": [
