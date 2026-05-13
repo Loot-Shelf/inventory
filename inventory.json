@@ -3550,5 +3550,27 @@
       "Competitive"
     ],
     "createdAt": 1778705521166
+  },
+  {
+    "id": 170,
+    "name": "Core Worlds",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall in very good condition.",
+    "price": 30,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/coreworlds/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/coreworlds/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/coreworlds/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778705647714
   }
 ]
