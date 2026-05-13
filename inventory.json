@@ -3572,5 +3572,27 @@
       "Competitive"
     ],
     "createdAt": 1778705647714
+  },
+  {
+    "id": 171,
+    "name": "Super Camelot",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.  Game components are still sealed and the game is unplayed.",
+    "price": 15,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/supercamelot/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/supercamelot/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/supercamelot/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778705803359
   }
 ]
