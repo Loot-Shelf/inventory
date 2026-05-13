@@ -3528,5 +3528,27 @@
       "Competitive"
     ],
     "createdAt": 1778704419292
+  },
+  {
+    "id": 169,
+    "name": "Battletech Beginner Box",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/battletech/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/battletech/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/battletech/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778705521166
   }
 ]
