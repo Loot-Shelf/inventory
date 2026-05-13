@@ -3440,5 +3440,27 @@
       "Competitive"
     ],
     "createdAt": 1778537293854
+  },
+  {
+    "id": 165,
+    "name": "A Little Wordy",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Some use, but in overall good condition.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/alittlewordy/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/alittlewordy/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/alittlewordy/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778702549555
   }
 ]
