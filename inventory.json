@@ -3594,5 +3594,26 @@
       "Competitive"
     ],
     "createdAt": 1778705803359
+  },
+  {
+    "id": 172,
+    "name": "Colt Express",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new sealed.",
+    "price": 30,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/coltexpress/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/coltexpress/2.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778705917438
   }
 ]
