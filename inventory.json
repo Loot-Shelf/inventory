@@ -3615,5 +3615,27 @@
       "Competitive"
     ],
     "createdAt": 1778705917438
+  },
+  {
+    "id": 173,
+    "name": "Suspects",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/suspects/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/suspects/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/suspects/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 6,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1778706312489
   }
 ]
