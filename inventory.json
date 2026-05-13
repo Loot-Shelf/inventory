@@ -3462,5 +3462,27 @@
       "Competitive"
     ],
     "createdAt": 1778702549555
+  },
+  {
+    "id": 166,
+    "name": "Sorry! Classic",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is some box wear but overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/sorryclassic/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/sorryclassic/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/sorryclassic/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778702708304
   }
 ]
