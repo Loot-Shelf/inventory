@@ -3152,28 +3152,6 @@
     "createdAt": 1778525067836
   },
   {
-    "id": 150,
-    "name": "Cash n Guns: Second Edition",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "Overall very good condition.",
-    "price": 20,
-    "salePrice": 0,
-    "cond": "good",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/cashnguns/1.jpg",
-      "https://Loot-Shelf.github.io/inventory/images/cashnguns/2.jpg",
-      "https://Loot-Shelf.github.io/inventory/images/cashnguns/3.jpg"
-    ],
-    "pending": true,
-    "playersMin": 4,
-    "playersMax": 8,
-    "playStyle": [
-      "Competitive"
-    ],
-    "createdAt": 1778525465985
-  },
-  {
     "id": 151,
     "name": "Sheep In Disguise",
     "cat": "Board Games",
