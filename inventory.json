@@ -3506,5 +3506,27 @@
       "Competitive"
     ],
     "createdAt": 1778704077113
+  },
+  {
+    "id": 168,
+    "name": "Ascension Eternal",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "In overall very good condition",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/ascensioneternal/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/ascensioneternal/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/ascensioneternal/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 1,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778704419292
   }
 ]
