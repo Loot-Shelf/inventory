@@ -3637,5 +3637,27 @@
       "Co-op"
     ],
     "createdAt": 1778706312489
+  },
+  {
+    "id": 174,
+    "name": "Thurn und Taxis",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "There is some box wear and damage.  The game components are in good condition.  The game instructions are entirely in German.",
+    "price": 50,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/thurnundtaxis/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/thurnundtaxis/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/thurnundtaxis/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778706970399
   }
 ]
