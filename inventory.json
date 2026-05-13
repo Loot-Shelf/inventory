@@ -3484,5 +3484,27 @@
       "Competitive"
     ],
     "createdAt": 1778702708304
+  },
+  {
+    "id": 167,
+    "name": "Monopoly Super Mario Celebration!",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.  It is missing 1 coin token out of 90.  It should not impact gameplay.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "missing",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/monopolycelebration/1.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/monopolycelebration/2.jpg",
+      "https://Loot-Shelf.github.io/inventory/images/monopolycelebration/3.jpg"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1778704077113
   }
 ]
