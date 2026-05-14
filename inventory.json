@@ -402,7 +402,7 @@
       "https://Loot-Shelf.github.io/inventory/images/Fiction/2.JPG",
       "https://Loot-Shelf.github.io/inventory/images/Fiction/3.JPG"
     ],
-    "pending": false,
+    "pending": true,
     "playersMin": 2,
     "playersMax": 8,
     "playStyle": [
