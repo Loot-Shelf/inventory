@@ -824,7 +824,7 @@
       "https://Loot-Shelf.github.io/inventory/images/Cockroachpoker/2.JPG",
       "https://Loot-Shelf.github.io/inventory/images/Cockroachpoker/3.JPG"
     ],
-    "pending": false,
+    "pending": true,
     "playersMin": 2,
     "playersMax": 6,
     "playStyle": [
