@@ -3375,29 +3375,6 @@
     "createdAt": 1778536671367
   },
   {
-    "id": 162,
-    "name": "Resident Evil 2 The Board Game",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "In overall good condition, with a little box wear and a damaged spot on the back of the box.  Look at picture 4 for damage.",
-    "price": 60,
-    "salePrice": 0,
-    "cond": "good",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/residentevil2/1.jpg",
-      "https://Loot-Shelf.github.io/inventory/images/residentevil2/2.jpg",
-      "https://Loot-Shelf.github.io/inventory/images/residentevil2/3.jpg",
-      "https://Loot-Shelf.github.io/inventory/images/residentevil2/4.jpg"
-    ],
-    "pending": false,
-    "playersMin": 1,
-    "playersMax": 4,
-    "playStyle": [
-      "Co-op"
-    ],
-    "createdAt": 1778536923844
-  },
-  {
     "id": 163,
     "name": "Dead Man's Doubloons",
     "cat": "Board Games",
