@@ -389,30 +389,6 @@
     "createdAt": 1778188170372
   },
   {
-    "id": 20,
-    "name": "Fiction",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "Overall very good condition with very minor wear.",
-    "price": 5,
-    "salePrice": 0,
-    "cond": "vgood",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/Fiction/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/Fiction/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/Fiction/3.JPG"
-    ],
-    "pending": true,
-    "playersMin": 2,
-    "playersMax": 8,
-    "playStyle": [
-      "Co-op",
-      "Competitive",
-      "Team"
-    ],
-    "createdAt": 1778188351788
-  },
-  {
     "id": 21,
     "name": "Splatter Shoot",
     "cat": "Board Games",
