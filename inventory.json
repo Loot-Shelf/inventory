@@ -3720,5 +3720,27 @@
       "Competitive"
     ],
     "createdAt": 1779832042767
+  },
+  {
+    "id": 181,
+    "name": "Monopoly House Divided",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/monopolyhousedivided/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/monopolyhousedivided/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/monopolyhousedivided/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779832172509
   }
 ]
