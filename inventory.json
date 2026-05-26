@@ -3742,5 +3742,27 @@
       "Competitive"
     ],
     "createdAt": 1779832172509
+  },
+  {
+    "id": 182,
+    "name": "The Great Dalmuti",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 20,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/dalmuti/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/dalmuti/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/dalmuti/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 4,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779832392589
   }
 ]
