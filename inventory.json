@@ -3764,5 +3764,27 @@
       "Competitive"
     ],
     "createdAt": 1779832392589
+  },
+  {
+    "id": 183,
+    "name": "Clue The Office",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition with some wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/clueoffice/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/clueoffice/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/clueoffice/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779832509852
   }
 ]
