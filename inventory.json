@@ -3655,5 +3655,27 @@
       "Competitive"
     ],
     "createdAt": 1779831706797
+  },
+  {
+    "id": 178,
+    "name": "Play Nine",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Unplayed, but open.",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/playnine/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/playnine/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/playnine/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 6,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779831818774
   }
 ]
