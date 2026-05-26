@@ -3698,5 +3698,27 @@
       "Competitive"
     ],
     "createdAt": 1779831929625
+  },
+  {
+    "id": 180,
+    "name": "Stratego Assassin's Creed",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall very good condition with a little box wear.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "vgood",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/strategoassassins/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/strategoassassins/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/strategoassassins/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 2,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779832042767
   }
 ]
