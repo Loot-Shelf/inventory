@@ -3590,5 +3590,26 @@
       "Competitive"
     ],
     "createdAt": 1778706970399
+  },
+  {
+    "id": 175,
+    "name": "Monopoly Deal Card Game",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand new",
+    "price": 5,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/monopolydeal/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/monopolydeal/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 5,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779831404708
   }
 ]
