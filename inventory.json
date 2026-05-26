@@ -3611,5 +3611,27 @@
       "Competitive"
     ],
     "createdAt": 1779831404708
+  },
+  {
+    "id": 176,
+    "name": "The Chameleon",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Overall good condition.",
+    "price": 10,
+    "salePrice": 0,
+    "cond": "good",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/chameleon/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/chameleon/2.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/chameleon/3.JPG"
+    ],
+    "pending": false,
+    "playersMin": 3,
+    "playersMax": 8,
+    "playStyle": [
+      "Competitive"
+    ],
+    "createdAt": 1779831586594
   }
 ]
