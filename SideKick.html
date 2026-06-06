@@ -215,6 +215,28 @@
     z-index: 5;
   }
 
+  /* ── EXIT BUTTON ── */
+  .exit-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    padding: 0;
+    width: 36px;
+  }
+  .exit-btn:hover { background: rgba(180,0,0,0.4); color: #fff; border-color: rgba(255,255,255,0.3); }
+
   /* ── SPINNER ── */
   .spinner {
     width: 36px; height: 36px;
@@ -359,7 +381,7 @@
 <div id="screen-create" class="screen">
   <div class="card">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
-      <button class="btn-secondary btn-sm" onclick="showScreen('home')" style="width:auto">← Back</button>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto">← Back</button>
       <span style="font-weight:600;">Create Room</span>
     </div>
     <label>Your Name (Host)</label>
@@ -375,7 +397,7 @@
 <div id="screen-join" class="screen">
   <div class="card">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
-      <button class="btn-secondary btn-sm" onclick="showScreen('home')" style="width:auto">← Back</button>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto">← Back</button>
       <span style="font-weight:600;">Join Room</span>
     </div>
     <label>Room Code</label>
@@ -425,6 +447,7 @@
 <!--  SCREEN: ACTIVE PLAYER                      -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-active" class="screen">
+  <button class="exit-btn" onclick="confirmLeave()" title="Leave Room">✕</button>
   <button class="action-btn btn-left" onclick="passTurn('left')" id="btn-left">
     <div class="btn-arrow">←</div>
     <div class="btn-label">Pass Left</div>
@@ -446,6 +469,7 @@
 <!--  SCREEN: WAITING (inactive player)          -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-waiting" class="screen">
+  <button class="exit-btn" onclick="confirmLeave()" title="Leave Room">✕</button>
   <div style="text-align:center;">
     <div class="waiting-player-num" id="waiting-num">P1</div>
     <div class="waiting-name" id="waiting-name">You</div>
@@ -543,6 +567,22 @@ function requireDb() {
 // ── NAV ──────────────────────────────────────
 window.showCreateRoom = () => showScreen('create');
 window.showJoinRoom   = () => showScreen('join');
+
+window.goHome = function() {
+  // Clear any inputs and errors when going back
+  document.getElementById('host-name').value = '';
+  document.getElementById('join-name').value = '';
+  document.getElementById('join-code').value = '';
+  document.getElementById('create-status').textContent = '';
+  document.getElementById('join-status').textContent = '';
+  showScreen('home');
+};
+
+window.confirmLeave = function() {
+  if (confirm('Leave the room?')) {
+    if (isHost) { closeRoom(); } else { leaveRoom(); }
+  }
+};
 
 // ── CREATE ROOM ──────────────────────────────
 window.createRoom = async function() {
