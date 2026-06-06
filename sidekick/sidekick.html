@@ -1178,7 +1178,6 @@ function listenGameState() {
       const rightIdx2 = activePlayers[(activeActiveIdx - 1 + n) % n];
       const leftIdx  = localPlayers.indexOf(leftIdx2);
       const rightIdx = localPlayers.indexOf(rightIdx2);
-      const rightIdx = (activeIdx - 1 + localPlayers.length) % localPlayers.length;
       document.getElementById('active-player-display').textContent = myName;
       document.getElementById('left-player-name').textContent  = leftIdx2 ? leftIdx2.name : '';
       document.getElementById('right-player-name').textContent = rightIdx2 ? rightIdx2.name : '';
