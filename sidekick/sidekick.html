@@ -24,9 +24,9 @@
     --text: #f0eeff;
     --muted: #7a7a9a;
     --active-left: #1a3a5c;
-    --active-right: #1a3a2a;
+    --active-right: #2e1f00;
     --left-btn: #2563a8;
-    --right-btn: #16a34a;
+    --right-btn: #c05e00;
     --danger: #c0392b;
   }
 
@@ -208,9 +208,9 @@
   .btn-left { background: var(--left-btn); color: #fff; }
   .btn-right { background: var(--right-btn); color: #fff; }
 
-  .btn-arrow { font-size: 4rem; line-height: 1; }
-  .btn-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; }
-  .btn-player-name { font-size: 0.7rem; opacity: 0.65; margin-top: -0.5rem; }
+  .btn-arrow { font-size: 7rem; line-height: 1; }
+  .btn-label { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.9; }
+  .btn-player-name { font-size: 1rem; opacity: 0.8; margin-top: -0.25rem; font-weight: 600; }
 
   .active-center {
     position: absolute;
@@ -222,17 +222,17 @@
     z-index: 10;
   }
   .active-center-name {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 0 24px rgba(0,0,0,0.9);
   }
   .active-center-label {
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: rgba(255,255,255,0.5);
-    margin-top: 0.2rem;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.3rem;
   }
   @keyframes flashIn {
     0%   { opacity: 0; transform: scale(0.96); }
@@ -661,6 +661,11 @@
           <button class="ctrl-btn" id="orient-landscape" onclick="setOrientation('landscape')" title="Landscape">🔲</button>
           <button class="ctrl-btn active-ctrl" id="orient-auto" onclick="setOrientation('auto')" title="Auto">🔄</button>
         </div>
+        <div class="ctrl-sep"></div>
+        <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
+          <span class="ctrl-label" style="width:auto;">Room</span>
+          <span id="active-room-code-display" style="font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;color:var(--accent-light);letter-spacing:0.2em;">----</span>
+        </div>
       </div>
     </div>
   </div>
@@ -681,6 +686,29 @@
 <div id="screen-waiting" class="screen">
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
+  <div class="settings-panel">
+    <button class="settings-gear" id="settings-gear-btn-wait" onclick="toggleSettingsWait()" title="Settings">⚙️</button>
+    <div class="settings-drawer" id="settings-drawer-wait">
+      <div class="settings-inner">
+        <div class="ctrl-row">
+          <span class="ctrl-label">Sound</span>
+          <button class="ctrl-btn" id="sound-toggle-wait" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+        </div>
+        <div class="ctrl-sep"></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Screen</span>
+          <button class="ctrl-btn" id="orient-portrait-wait" onclick="setOrientation('portrait')" title="Portrait">📱</button>
+          <button class="ctrl-btn" id="orient-landscape-wait" onclick="setOrientation('landscape')" title="Landscape">🔲</button>
+          <button class="ctrl-btn active-ctrl" id="orient-auto-wait" onclick="setOrientation('auto')" title="Auto">🔄</button>
+        </div>
+        <div class="ctrl-sep"></div>
+        <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
+          <span class="ctrl-label" style="width:auto;">Room</span>
+          <span id="wait-room-code-display" style="font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;color:var(--accent-light);letter-spacing:0.2em;">----</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <div style="text-align:center;">
     <div class="waiting-player-num" id="waiting-num">P1</div>
     <div class="waiting-name" id="waiting-name">You</div>
@@ -858,15 +886,22 @@ window.toggleSettings = function() {
   document.getElementById('settings-drawer').classList.toggle('open', settingsOpen);
 };
 
+let settingsOpenWait = false;
+window.toggleSettingsWait = function() {
+  settingsOpenWait = !settingsOpenWait;
+  document.getElementById('settings-gear-btn-wait').classList.toggle('open', settingsOpenWait);
+  document.getElementById('settings-drawer-wait').classList.toggle('open', settingsOpenWait);
+};
+
 // ── SOUND TOGGLE ──────────────────────────────
 let soundEnabled = true;
 window.toggleSound = function() {
   soundEnabled = !soundEnabled;
-  const btn = document.getElementById('sound-toggle');
-  if (btn) {
-    btn.textContent = soundEnabled ? '🔊' : '🔇';
-    btn.classList.toggle('active-ctrl', soundEnabled);
-  }
+  const icon = soundEnabled ? '🔊' : '🔇';
+  ['sound-toggle', 'sound-toggle-wait'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) { btn.textContent = icon; btn.classList.toggle('active-ctrl', soundEnabled); }
+  });
 };
 
 // ── ORIENTATION CONTROL ──────────────────────
@@ -874,8 +909,10 @@ let currentOrientation = 'auto';
 window.setOrientation = function(mode) {
   currentOrientation = mode;
   ['portrait','landscape','auto'].forEach(m => {
-    const b = document.getElementById('orient-' + m);
-    if (b) b.classList.toggle('active-ctrl', m === mode);
+    ['orient-'+m, 'orient-'+m+'-wait'].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) b.classList.toggle('active-ctrl', m === mode);
+    });
   });
   applyOrientation(mode);
 };
@@ -1069,7 +1106,7 @@ window.joinRoom = async function() {
   const snap = await get(roomRef);
   if (!snap.exists()) { status('join-status','Room not found.','error'); return; }
   const room = snap.val();
-  if (room.status !== 'lobby') { status('join-status','Game already started.','error'); return; }
+  if (room.status !== 'lobby' && room.status !== 'playing') { status('join-status','Room is not available.','error'); return; }
 
   isHost = false;
   myId = uid();
@@ -1078,7 +1115,13 @@ window.joinRoom = async function() {
 
   const players = room.players || {};
   const order = Object.keys(players).length;
-  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now() });
+  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false });
+
+  if (room.status === 'playing') {
+    document.getElementById('wl-code').textContent = code;
+    listenGameState();
+    return;
+  }
 
   document.getElementById('wl-code').textContent = code;
   showScreen('waiting-lobby');
@@ -1181,6 +1224,8 @@ function listenGameState() {
       document.getElementById('active-player-display').textContent = myName;
       document.getElementById('left-player-name').textContent  = leftIdx2 ? leftIdx2.name : '';
       document.getElementById('right-player-name').textContent = rightIdx2 ? rightIdx2.name : '';
+      const arcEl = document.getElementById('active-room-code-display');
+      if (arcEl) arcEl.textContent = roomCode;
       showScreen('active');
       requestWakeLock();
       if (soundEnabled) playTurnSound();
@@ -1196,6 +1241,8 @@ function listenGameState() {
       document.getElementById('waiting-num').textContent = 'P' + (myIdx + 1);
       document.getElementById('waiting-name').textContent = myName;
       document.getElementById('waiting-active-name').textContent = activePlayer.name;
+      const wrcEl = document.getElementById('wait-room-code-display');
+      if (wrcEl) wrcEl.textContent = roomCode;
       showScreen('waiting');
       requestWakeLock();
     }
