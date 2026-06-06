@@ -1,6 +1,6 @@
 {
-  "name": "Game Room",
-  "short_name": "Game Room",
+  "name": "SideKick",
+  "short_name": "SideKick",
   "description": "Pass-the-turn game room for tabletop players",
   "start_url": "./sidekick.html",
   "display": "fullscreen",
