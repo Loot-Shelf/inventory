@@ -1,6 +1,6 @@
 const CACHE = 'gameroom-v1';
 const ASSETS = [
-  './sidekick.html',
+  './game-room.html',
   './manifest.json'
 ];
 

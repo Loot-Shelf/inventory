@@ -165,10 +165,17 @@
     margin-bottom: 0.25rem;
   }
   .active-player-label {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: #2a5a3a;
+    color: #3a7a4a;
+  }
+  .active-indicator {
+    font-size: 0.8rem;
+    color: #4a6a4a;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
   }
 
   /* ── ACTIVE PLAYER SCREEN ── */
@@ -250,57 +257,171 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    width: 36px;
     height: 36px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.35);
+    border-radius: 18px;
+    background: rgba(0,0,0,0.45);
     border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 20;
-    padding: 0;
-    width: 36px;
+    padding: 0 14px;
+    white-space: nowrap;
+    width: auto;
+    text-transform: uppercase;
   }
-  .exit-btn:hover { background: rgba(180,0,0,0.4); color: #fff; border-color: rgba(255,255,255,0.3); }
+  .exit-btn:active { background: rgba(180,0,0,0.5); color: #fff; }
 
 
-  /* ── GAME CONTROL BAR ── */
-  .game-controls {
+  /* ── SETTINGS PANEL ── */
+  .settings-panel {
     position: absolute;
-    bottom: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    top: 14px;
+    left: 14px;
     z-index: 20;
     pointer-events: all;
-    background: rgba(0,0,0,0.35);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 30px;
-    padding: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
   }
+  .settings-gear {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.65);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; width: 40px;
+    transition: background 0.2s, transform 0.3s;
+    flex-shrink: 0;
+  }
+  .settings-gear.open { transform: rotate(60deg); background: rgba(124,92,191,0.5); color:#fff; }
+  .settings-drawer {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease;
+    margin-top: 0;
+  }
+  .settings-drawer.open {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 8px;
+  }
+  .settings-inner {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 160px;
+  }
+  .ctrl-row { display: flex; align-items: center; gap: 7px; }
+  .ctrl-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; width: 44px; flex-shrink: 0; }
   .ctrl-btn {
-    width: 34px; height: 34px;
+    width: 32px; height: 32px;
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.15);
     background: rgba(255,255,255,0.08);
     color: rgba(255,255,255,0.6);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    padding: 0; width: 34px;
+    padding: 0;
     transition: background 0.15s, color 0.15s;
     flex-shrink: 0;
   }
   .ctrl-btn:active { transform: scale(0.93); }
-  .ctrl-btn.active-ctrl { background: rgba(124,92,191,0.5); color: #fff; border-color: rgba(160,126,224,0.5); }
-  .ctrl-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.12); margin: 0 2px; }
-  .ctrl-label { font-size: 0.6rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.1em; }
+  .ctrl-btn.active-ctrl { background: rgba(124,92,191,0.6); color: #fff; border-color: rgba(160,126,224,0.5); }
+  .ctrl-sep { height: 1px; background: rgba(255,255,255,0.08); margin: 2px 0; }
+
+  /* ── FORCE ORIENTATION via CSS (iOS fallback) ── */
+  @media screen {
+    body.force-portrait { transform-origin: top left; }
+    body.force-landscape { transform-origin: top left; }
+  }
+
+
+  /* ── MANAGE PLAYERS PANEL ── */
+  .manage-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .manage-overlay.show { display: flex; }
+  .manage-card {
+    background: #13131a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 380px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .manage-card h3 { font-size: 1rem; color: #f0eeff; margin-bottom: 1rem; }
+  .manage-player-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #1e1e2e;
+    border: 1px solid #2a2a3a;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.5rem;
+    transition: opacity 0.2s;
+  }
+  .manage-player-item.knocked-out {
+    opacity: 0.45;
+    border-color: #3a1a1a;
+    background: #1a1015;
+  }
+  .manage-player-item.knocked-out .manage-name {
+    text-decoration: line-through;
+    color: #6a4a4a;
+  }
+  .manage-num { width: 24px; height: 24px; border-radius: 50%; background: #7c5cbf; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; }
+  .manage-num.out { background: #3a1a1a; color: #6a4a4a; }
+  .manage-name { flex: 1; font-size: 0.9rem; }
+  .manage-actions { display: flex; gap: 4px; }
+  .manage-btn { width: 26px; height: 26px; border-radius: 6px; background: #2a2a3a; border: none; color: #f0eeff; font-size: 0.7rem; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .manage-btn.ko-btn { background: #3a1515; color: #f87171; }
+  .manage-btn.active-btn { background: #153a15; color: #4ade80; }
+  .host-manage-btn {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    height: 36px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.55);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0 14px;
+    cursor: pointer;
+    z-index: 20;
+    white-space: nowrap;
+    width: auto;
+    text-transform: uppercase;
+    display: none;
+  }
+  .host-manage-btn.visible { display: flex; align-items: center; }
 
   /* ── SPINNER ── */
   .spinner {
@@ -517,21 +638,31 @@
 <!--  SCREEN: ACTIVE PLAYER                      -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-active" class="screen">
-  <button class="exit-btn" onclick="confirmLeave()" title="Leave Room">✕</button>
+  <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
+  <button class="host-manage-btn" id="host-manage-btn" onclick="openManagePanel()">👥 Players</button>
   <button class="action-btn btn-left" onclick="passTurn('left')" id="btn-left">
     <div class="btn-arrow">←</div>
     <div class="btn-label">Pass Left</div>
     <div class="btn-player-name" id="left-player-name"></div>
   </button>
   <div class="active-divider"></div>
-  <div class="game-controls">
-    <span class="ctrl-label">Sound</span>
-    <button class="ctrl-btn active-ctrl" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">🔊</button>
-    <div class="ctrl-sep"></div>
-    <span class="ctrl-label">Screen</span>
-    <button class="ctrl-btn" id="orient-portrait" onclick="setOrientation('portrait')" title="Portrait">⬜</button>
-    <button class="ctrl-btn" id="orient-landscape" onclick="setOrientation('landscape')" title="Landscape">🔲</button>
-    <button class="ctrl-btn active-ctrl" id="orient-auto" onclick="setOrientation('auto')" title="Auto Rotate">🔄</button>
+  <div class="settings-panel">
+    <button class="settings-gear" id="settings-gear-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+    <div class="settings-drawer" id="settings-drawer">
+      <div class="settings-inner">
+        <div class="ctrl-row">
+          <span class="ctrl-label">Sound</span>
+          <button class="ctrl-btn active-ctrl" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+        </div>
+        <div class="ctrl-sep"></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Screen</span>
+          <button class="ctrl-btn" id="orient-portrait" onclick="setOrientation('portrait')" title="Portrait">📱</button>
+          <button class="ctrl-btn" id="orient-landscape" onclick="setOrientation('landscape')" title="Landscape">🔲</button>
+          <button class="ctrl-btn active-ctrl" id="orient-auto" onclick="setOrientation('auto')" title="Auto">🔄</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="active-center">
     <div class="active-center-name" id="active-player-display"></div>
@@ -548,7 +679,8 @@
 <!--  SCREEN: WAITING (inactive player)          -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-waiting" class="screen">
-  <button class="exit-btn" onclick="confirmLeave()" title="Leave Room">✕</button>
+  <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
+  <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
   <div style="text-align:center;">
     <div class="waiting-player-num" id="waiting-num">P1</div>
     <div class="waiting-name" id="waiting-name">You</div>
@@ -682,6 +814,7 @@ window.goHome = function() {
 
 window.confirmLeave = function() {
   if (confirm('Leave the room?')) {
+    resetOrientation();
     if (isHost) { closeRoom(); } else { leaveRoom(); }
   }
 };
@@ -697,15 +830,14 @@ window.toggleQR = function() {
   container.style.display = qrVisible ? 'flex' : 'none';
   hint.style.display = qrVisible ? 'block' : 'none';
   btn.textContent = qrVisible ? '✕ Hide QR Code' : '📷 Show QR Code';
-  if (qrVisible && !qrGenerated) {
-    generateQR();
-  }
+  if (qrVisible) generateQR(); // always regenerate with current roomCode
 };
 
 function generateQR() {
   const box = document.getElementById('qr-code');
   box.innerHTML = '';
-  const joinUrl = window.location.href.split('?')[0] + '?join=' + roomCode;
+  const base = window.location.href.split('?')[0].split('#')[0];
+  const joinUrl = base + '?join=' + roomCode;
   new QRCode(box, {
     text: joinUrl,
     width: 180,
@@ -714,10 +846,17 @@ function generateQR() {
     colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.M
   });
-  qrGenerated = true;
 }
 
 
+
+// ── SETTINGS PANEL TOGGLE ──────────────────────
+let settingsOpen = false;
+window.toggleSettings = function() {
+  settingsOpen = !settingsOpen;
+  document.getElementById('settings-gear-btn').classList.toggle('open', settingsOpen);
+  document.getElementById('settings-drawer').classList.toggle('open', settingsOpen);
+};
 
 // ── SOUND TOGGLE ──────────────────────────────
 let soundEnabled = true;
@@ -738,16 +877,34 @@ window.setOrientation = function(mode) {
     const b = document.getElementById('orient-' + m);
     if (b) b.classList.toggle('active-ctrl', m === mode);
   });
+  applyOrientation(mode);
+};
+
+function applyOrientation(mode) {
+  // Remove old meta viewport orientation hints
+  document.body.classList.remove('force-portrait','force-landscape');
   try {
     if (mode === 'portrait') {
-      screen.orientation.lock('portrait').catch(()=>{});
+      screen.orientation.lock('portrait-primary').catch(()=>{});
+      document.body.classList.add('force-portrait');
     } else if (mode === 'landscape') {
-      screen.orientation.lock('landscape').catch(()=>{});
+      screen.orientation.lock('landscape-primary').catch(()=>{});
+      document.body.classList.add('force-landscape');
     } else {
-      screen.orientation.unlock();
+      if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
     }
-  } catch(e) {}
-};
+  } catch(e) {
+    // Fallback for iOS which doesn't support orientation.lock in browser
+    if (mode === 'portrait') document.body.classList.add('force-portrait');
+    else if (mode === 'landscape') document.body.classList.add('force-landscape');
+  }
+}
+
+function resetOrientation() {
+  currentOrientation = 'auto';
+  document.body.classList.remove('force-portrait','force-landscape');
+  try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch(e) {}
+}
 
 // ── WAKE LOCK (keep screen on during game) ──────────────
 let wakeLock = null;
@@ -809,6 +966,67 @@ function playTurnSound() {
     });
   } catch(e) {}
 }
+
+
+// ── HOST MANAGE PLAYERS PANEL ──────────────────
+window.openManagePanel = async function() {
+  if (!db || !roomCode) return;
+  const snap = await get(ref(db, `rooms/${roomCode}/players`));
+  if (!snap.exists()) return;
+  const players = buildOrderedPlayers(snap.val());
+  renderManageList(players, snap.val());
+  document.getElementById('manage-overlay').classList.add('show');
+};
+
+window.closeManagePanel = function() {
+  document.getElementById('manage-overlay').classList.remove('show');
+};
+
+function renderManageList(players, rawPlayers) {
+  const el = document.getElementById('manage-player-list');
+  el.innerHTML = '';
+  players.forEach((p, i) => {
+    const isOut = rawPlayers[p.id] && rawPlayers[p.id].knockedOut === true;
+    const div = document.createElement('div');
+    div.className = 'manage-player-item' + (isOut ? ' knocked-out' : '');
+    div.innerHTML = `
+      <div class="manage-num ${isOut ? 'out' : ''}">${i+1}</div>
+      <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
+      <div class="manage-actions">
+        <button class="manage-btn" onclick="moveManagePlayer('${p.id}', -1)" ${i===0?'disabled':''} title="Move up">▲</button>
+        <button class="manage-btn" onclick="moveManagePlayer('${p.id}', 1)" ${i===players.length-1?'disabled':''} title="Move down">▼</button>
+        <button class="manage-btn ${isOut ? 'active-btn' : 'ko-btn'}" onclick="toggleKnockOut('${p.id}', ${isOut})" title="${isOut ? 'Bring back' : 'Skip turn'}">
+          ${isOut ? '✓' : '✕'}
+        </button>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+window.toggleKnockOut = async function(playerId, currentlyOut) {
+  if (!db || !roomCode) return;
+  await update(ref(db, `rooms/${roomCode}/players/${playerId}`), { knockedOut: !currentlyOut });
+  // Refresh the panel
+  const snap = await get(ref(db, `rooms/${roomCode}/players`));
+  if (snap.exists()) renderManageList(buildOrderedPlayers(snap.val()), snap.val());
+};
+
+window.moveManagePlayer = async function(playerId, dir) {
+  if (!db || !roomCode) return;
+  const snap = await get(ref(db, `rooms/${roomCode}/players`));
+  if (!snap.exists()) return;
+  const players = buildOrderedPlayers(snap.val());
+  const idx = players.findIndex(p => p.id === playerId);
+  const swapIdx = idx + dir;
+  if (swapIdx < 0 || swapIdx >= players.length) return;
+  const updates = {};
+  updates[`rooms/${roomCode}/players/${players[idx].id}/order`] = swapIdx;
+  updates[`rooms/${roomCode}/players/${players[swapIdx].id}/order`] = idx;
+  await update(ref(db), updates);
+  // Refresh
+  const snap2 = await get(ref(db, `rooms/${roomCode}/players`));
+  if (snap2.exists()) renderManageList(buildOrderedPlayers(snap2.val()), snap2.val());
+};
 
 // ── CREATE ROOM ──────────────────────────────
 window.createRoom = async function() {
@@ -945,13 +1163,25 @@ function listenGameState() {
 
     const isMe = activePlayer.id === myId;
 
+    // Show/hide host manage button
+    const hmb = document.getElementById('host-manage-btn');
+    const hmbw = document.getElementById('host-manage-btn-wait');
+    if (hmb) hmb.classList.toggle('visible', isHost);
+    if (hmbw) hmbw.classList.toggle('visible', isHost);
+
     if (isMe) {
       // Show active screen
-      const leftIdx  = (activeIdx + 1) % localPlayers.length;
+      const activePlayers = localPlayers.filter(p => !p.knockedOut);
+      const activeActiveIdx = activePlayers.findIndex(p => p.id === activePlayer.id);
+      const n = activePlayers.length;
+      const leftIdx2 = activePlayers[(activeActiveIdx + 1) % n];
+      const rightIdx2 = activePlayers[(activeActiveIdx - 1 + n) % n];
+      const leftIdx  = localPlayers.indexOf(leftIdx2);
+      const rightIdx = localPlayers.indexOf(rightIdx2);
       const rightIdx = (activeIdx - 1 + localPlayers.length) % localPlayers.length;
       document.getElementById('active-player-display').textContent = myName;
-      document.getElementById('left-player-name').textContent  = localPlayers[leftIdx].name;
-      document.getElementById('right-player-name').textContent = localPlayers[rightIdx].name;
+      document.getElementById('left-player-name').textContent  = leftIdx2 ? leftIdx2.name : '';
+      document.getElementById('right-player-name').textContent = rightIdx2 ? rightIdx2.name : '';
       showScreen('active');
       requestWakeLock();
       if (soundEnabled) playTurnSound();
@@ -980,19 +1210,26 @@ window.passTurn = async function(direction) {
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   const room = snap.val();
-  localPlayers = buildOrderedPlayers(room.players || {});
+  // Use full list for index tracking, but skip knocked-out players
+  const allPlayers = buildOrderedPlayers(room.players || {});
+  const activePlayers = allPlayers.filter(p => !p.knockedOut);
+  if (activePlayers.length === 0) return;
   const current = room.activePlayerIndex || 0;
-  const n = localPlayers.length;
-  const next = direction === 'left'
-    ? (current + 1) % n
-    : (current - 1 + n) % n;
-  await update(ref(db, `rooms/${roomCode}`), { activePlayerIndex: next });
+  const currentActive = activePlayers.findIndex(p => p.order === allPlayers[current]?.order);
+  const n = activePlayers.length;
+  const nextActiveIdx = direction === 'left'
+    ? (currentActive + 1) % n
+    : (currentActive - 1 + n) % n;
+  const nextPlayer = activePlayers[nextActiveIdx];
+  const nextIdx = allPlayers.findIndex(p => p.id === nextPlayer.id);
+  await update(ref(db, `rooms/${roomCode}`), { activePlayerIndex: nextIdx });
 };
 
 // ── LEAVE / CLOSE ──────────────────────────────
 window.leaveRoom = async function() {
   if (!db || !roomCode || !myId) { showScreen('home'); return; }
   releaseWakeLock();
+  resetOrientation();
   cleanupListeners();
   await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
   roomCode = null; myId = null;
@@ -1002,6 +1239,7 @@ window.leaveRoom = async function() {
 window.closeRoom = async function() {
   if (!db || !roomCode) return;
   releaseWakeLock();
+  resetOrientation();
   cleanupListeners();
   await remove(ref(db, `rooms/${roomCode}`));
   roomCode = null; myId = null;
@@ -1011,8 +1249,12 @@ window.closeRoom = async function() {
 // ── HELPERS ──────────────────────────────────────
 function buildOrderedPlayers(players) {
   return Object.entries(players)
-    .map(([id, p]) => ({ id, name: p.name, order: p.order ?? 999, joinedAt: p.joinedAt ?? 0 }))
+    .map(([id, p]) => ({ id, name: p.name, order: p.order ?? 999, joinedAt: p.joinedAt ?? 0, knockedOut: p.knockedOut ?? false }))
     .sort((a, b) => a.order - b.order || a.joinedAt - b.joinedAt);
+}
+
+function buildActivePlayers(players) {
+  return buildOrderedPlayers(players).filter(p => !p.knockedOut);
 }
 
 function renderLobbyList(players) {
@@ -1100,6 +1342,20 @@ window.dismissInstall = function() {
 };
 </script>
 
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  HOST MANAGE PLAYERS PANEL                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="manage-overlay" id="manage-overlay">
+  <div class="manage-card">
+    <h3>👥 Manage Players</h3>
+    <div id="manage-player-list"></div>
+    <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+      <button class="btn-secondary btn-sm" onclick="closeManagePanel()" style="flex:1;">Done</button>
+    </div>
+  </div>
+</div>
 
 <!-- PWA INSTALL BANNER -->
 <div id="install-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#1a1a2e; border-top:1px solid #2a2a3a; padding:0.85rem 1.25rem; align-items:center; justify-content:space-between; gap:1rem; z-index:500;">
