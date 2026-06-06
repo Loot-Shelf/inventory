@@ -2,7 +2,7 @@
   "name": "Game Room",
   "short_name": "Game Room",
   "description": "Pass-the-turn game room for tabletop players",
-  "start_url": "/sidekick.html",
+  "start_url": "./sidekick.html",
   "display": "fullscreen",
   "orientation": "any",
   "background_color": "#0a0a0f",
