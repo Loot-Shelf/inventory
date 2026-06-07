@@ -3526,28 +3526,6 @@
     "createdAt": 1779831586594
   },
   {
-    "id": 177,
-    "name": "Monopoly Las Vegas",
-    "cat": "Board Games",
-    "detail": "",
-    "desc": "Overall good condition with some box wear",
-    "price": 15,
-    "salePrice": 0,
-    "cond": "good",
-    "img": [
-      "https://Loot-Shelf.github.io/inventory/images/monopolylasvegas/1.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/monopolylasvegas/2.JPG",
-      "https://Loot-Shelf.github.io/inventory/images/monopolylasvegas/3.JPG"
-    ],
-    "pending": false,
-    "playersMin": 2,
-    "playersMax": 6,
-    "playStyle": [
-      "Competitive"
-    ],
-    "createdAt": 1779831706797
-  },
-  {
     "id": 178,
     "name": "Play Nine",
     "cat": "Board Games",
