@@ -314,24 +314,26 @@
   .color-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
+    gap: 0.6rem;
     margin-bottom: 1.25rem;
     width: 100%;
   }
   .color-swatch {
     display: block;
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     border: 3px solid transparent;
     cursor: pointer;
     transition: transform 0.15s, border-color 0.15s;
-    min-width: 0;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
   }
-  .color-swatch:hover { transform: scale(1.12); }
+  .color-swatch:hover { transform: scale(1.1); }
   .color-swatch.selected {
     border-color: #fff;
-    transform: scale(1.12);
+    transform: scale(1.1);
     box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
   }
   .color-picker-confirm {
@@ -1275,7 +1277,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <div class="awards-standby" id="awards-standby">
   <div class="awards-standby-icon">🏆</div>
-  <div class="awards-standby-text">Awards Ceremony</div>
+  <div class="awards-standby-text">Achievement Awards</div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -1296,9 +1298,9 @@
 <!-- ═══════════════════════════════════════════ -->
 <div class="awards-gameover" id="awards-gameover">
   <div style="font-size:3rem;">🎉</div>
-  <div class="awards-gameover-title">Game Over!</div>
-  <div class="awards-gameover-sub">Thanks for playing</div>
-  <button class="btn-primary" style="max-width:240px;" onclick="endGameFinal()">Back to Home</button>
+  <div class="awards-gameover-title">Achievement Awards</div>
+  <div class="awards-gameover-sub">That's a wrap — great game!</div>
+  <button class="btn-primary" style="max-width:240px; margin-top:0.5rem;" onclick="endGameFinal()">🏠 Back to Home</button>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -1534,7 +1536,7 @@ window.hostMenuAction = function(action) {
   } else if (action === 'save-game') {
     alert('Save Game — coming soon!');
   } else if (action === 'end-game') {
-    if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Awards Ceremony?' : '?'))) {
+    if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Achievement Awards?' : '?'))) {
       triggerEndGame();
     }
   }
@@ -1839,10 +1841,22 @@ function showGameOver() {
 
 window.endGameFinal = async function() {
   hideAllAwardOverlays();
-  if (isHost && db && roomCode) {
-    await remove(ref(db, `rooms/${roomCode}`));
+  stopFireworks();
+  window.speechSynthesis && window.speechSynthesis.cancel();
+
+  if (db && roomCode) {
+    if (isHost) {
+      // Reset the room back to a fresh lobby so everyone lands on home cleanly
+      await remove(ref(db, `rooms/${roomCode}`));
+    }
   }
-  roomCode = null; myId = null;
+
+  // Clean up local state
+  lastActivePlayerId = null;
+  featureAwardsEnabled = false;
+  featureNudgeEnabled = false;
+  roomCode = null;
+  myId = null;
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
@@ -1992,11 +2006,13 @@ window.openColorPicker = function(context) {
   const grid = document.getElementById('color-grid');
   grid.innerHTML = '';
   PLAYER_COLORS.forEach(c => {
-    const sw = document.createElement('button');
+    const sw = document.createElement('div');
     sw.className = 'color-swatch' + (c.hex === tempSelectedColor ? ' selected' : '');
     sw.style.background = c.hex;
     if (c.hex === '#000000') sw.style.borderColor = 'rgba(255,255,255,0.4)';
     sw.title = c.name;
+    sw.setAttribute('role', 'button');
+    sw.setAttribute('tabindex', '0');
     sw.onclick = () => {
       grid.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
       sw.classList.add('selected');
@@ -2353,7 +2369,14 @@ let lastActivePlayerId = null;
 function listenGameState() {
   const roomRef = ref(db, `rooms/${roomCode}`);
   const unsub = onValue(roomRef, snap => {
-    if (!snap.exists()) { showScreen('home'); return; }
+    if (!snap.exists()) {
+      // Room deleted — show game over screen so players can tap home
+      const go = document.getElementById('awards-gameover');
+      if (!go || go.classList.contains('show')) return;
+      hideAllAwardOverlays();
+      go.classList.add('show');
+      return;
+    }
     const room = snap.val();
     if (room.status !== 'playing' && room.status !== 'ceremony') { showScreen('home'); return; }
 
