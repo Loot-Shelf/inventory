@@ -1483,7 +1483,7 @@ window.closeRoom = async function() {
 // ── HELPERS ──────────────────────────────────────
 function buildOrderedPlayers(players) {
   return Object.entries(players)
-    .map(([id, p]) => ({ id, name: p.name, order: p.order ?? 999, joinedAt: p.joinedAt ?? 0, knockedOut: p.knockedOut ?? false }))
+    .map(([id, p]) => ({ id, name: p.name, order: p.order ?? 999, joinedAt: p.joinedAt ?? 0, knockedOut: p.knockedOut ?? false, color: p.color ?? null }))
     .sort((a, b) => a.order - b.order || a.joinedAt - b.joinedAt);
 }
 
