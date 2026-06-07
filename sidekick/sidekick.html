@@ -540,6 +540,64 @@
   }
   .nudge-active-counter.visible { display: flex; }
 
+  /* ── HOST GAME MENU (bottom-left) ── */
+  .host-game-menu {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    z-index: 20;
+  }
+  .host-game-menu-btn {
+    height: 36px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.55);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .host-game-menu-btn.visible { display: flex; }
+  .host-game-menu-drawer {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 160px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    flex-direction: column;
+  }
+  .host-game-menu-drawer.open { display: flex; }
+  .host-menu-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: background 0.15s;
+    border-bottom: 1px solid var(--border);
+  }
+  .host-menu-item:last-child { border-bottom: none; }
+  .host-menu-item:hover { background: rgba(255,255,255,0.06); }
+  .host-menu-item.danger { color: #f87171; }
+
   .exit-btn {
     position: absolute;
     top: 16px;
@@ -876,10 +934,26 @@
         <span class="feature-name">👉 Nudge</span>
         <button class="feature-info-btn" onclick="showFeatureInfo('nudge')" title="What is this?">?</button>
       </div>
-      <div class="feature-settings" id="nudge-settings">
-        <label>Unlock after</label>
-        <input type="number" id="nudge-delay" value="30" min="5" max="300" step="5">
-        <span class="feature-unit">seconds</span>
+      <div class="feature-settings" id="nudge-settings" style="flex-direction:column; align-items:stretch; gap:0.6rem;">
+        <div style="font-size:0.78rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.07em;">Unlock After</div>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <input type="number" id="nudge-delay" value="30" min="0" max="3600" step="5" style="width:64px; text-align:center; padding:0.3rem 0.4rem; font-size:0.9rem; margin:0;">
+          <span class="feature-unit">sec</span>
+          <span style="color:var(--muted); font-size:0.8rem;">or</span>
+          <input type="number" id="nudge-delay-min" value="" min="0" max="60" step="1" placeholder="—" style="width:54px; text-align:center; padding:0.3rem 0.4rem; font-size:0.9rem; margin:0;" oninput="syncNudgeMinutes(this.value)">
+          <span class="feature-unit">min</span>
+        </div>
+        <div style="font-size:0.78rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.07em; margin-top:0.2rem;">Nudge Mode</div>
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; margin:0; font-size:0.85rem; color:var(--text);">
+            <input type="radio" name="nudge-mode" value="multi" checked style="width:auto; margin:0; accent-color:var(--accent);">
+            Multi Nudge <span style="font-size:0.75rem; color:var(--muted); margin-left:0.25rem;">— tap as many times as you want</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; margin:0; font-size:0.85rem; color:var(--text);">
+            <input type="radio" name="nudge-mode" value="single" style="width:auto; margin:0; accent-color:var(--accent);">
+            Single Nudge <span style="font-size:0.75rem; color:var(--muted); margin-left:0.25rem;">— one nudge per turn per player</span>
+          </label>
+        </div>
       </div>
 
     </div>
@@ -930,6 +1004,13 @@
     </div>
     <div class="player-list" id="lobby-player-list"></div>
     <p id="lobby-status" class="status"></p>
+    <div style="display:flex; align-items:center; gap:0.6rem; margin-top:0.75rem; margin-bottom:0.25rem;">
+      <label class="feature-toggle" style="flex-shrink:0;">
+        <input type="checkbox" id="random-first-player" onchange="onRandomFirstToggle(this.checked)">
+        <span class="toggle-slider"></span>
+      </label>
+      <span style="font-size:0.82rem; color:var(--muted);">🎲 Random first player</span>
+    </div>
     <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="margin-top:0.5rem;">Start Game</button>
     <button class="btn-danger btn-sm" onclick="closeRoom()" style="width:100%;margin-top:0.5rem;">Close Room</button>
   </div>
@@ -961,6 +1042,15 @@
   </div>
   <!-- Floating emoji container -->
   <div class="nudge-float-container" id="nudge-float-container"></div>
+  <!-- Host game menu (bottom-left) -->
+  <div class="host-game-menu" id="host-game-menu-active">
+    <div class="host-game-menu-drawer" id="host-game-drawer-active">
+      <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
+      <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
+      <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
+    </div>
+    <button class="host-game-menu-btn" id="host-game-menu-btn-active" onclick="toggleHostMenu('active')">☰ Host</button>
+  </div>
   <button class="action-btn btn-left" onclick="passTurn('left')" id="btn-left">
     <div class="btn-arrow">←</div>
     <div class="btn-label">Pass Left</div>
@@ -1007,6 +1097,15 @@
 <div id="screen-waiting" class="screen">
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
+  <!-- Host game menu (bottom-left) -->
+  <div class="host-game-menu" id="host-game-menu-wait">
+    <div class="host-game-menu-drawer" id="host-game-drawer-wait">
+      <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
+      <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
+      <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
+    </div>
+    <button class="host-game-menu-btn" id="host-game-menu-btn-wait" onclick="toggleHostMenu('wait')">☰ Host</button>
+  </div>
   <div class="settings-panel">
     <button class="settings-gear" id="settings-gear-btn-wait" onclick="toggleSettingsWait()" title="Settings">⚙️</button>
     <div class="settings-drawer" id="settings-drawer-wait">
@@ -1041,8 +1140,6 @@
     <!-- NUDGE AREA -->
     <div class="nudge-area" id="nudge-area">
       <button class="nudge-btn" id="nudge-btn" onclick="sendNudge()">👉</button>
-      <span class="nudge-count-label">NUDGES SENT</span>
-      <span class="nudge-count-num" id="nudge-count-display">0</span>
       <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
     </div>
   </div>
@@ -1092,9 +1189,10 @@ let myName = '';
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
 let nudgeDelaySeconds = 30;
+let nudgeMode = 'multi';       // 'multi' or 'single'
 let nudgeCountdownTimer = null;
 let nudgeUnlocked = false;
-let myNudgeCount = 0;        // nudges I've sent this turn
+let nudgeUsedThisTurn = false;  // for single nudge mode
 let activeNudgeCount = 0;    // nudges received by active player this turn (shown on active screen)
 
 // ── HELPERS ──────────────────────────────────────
@@ -1256,10 +1354,44 @@ function adjustBrightness(hex, factor) {
   return `rgb(${r},${g},${b})`;
 }
 
-// ── FEATURE TOGGLE UI ──────────────────────────
+// ── HOST GAME MENU ──────────────────────────────
+let hostMenuOpen = { active: false, wait: false };
+window.toggleHostMenu = function(ctx) {
+  // Close the other one first
+  const other = ctx === 'active' ? 'wait' : 'active';
+  hostMenuOpen[other] = false;
+  document.getElementById(`host-game-drawer-${other}`)?.classList.remove('open');
+
+  hostMenuOpen[ctx] = !hostMenuOpen[ctx];
+  document.getElementById(`host-game-drawer-${ctx}`).classList.toggle('open', hostMenuOpen[ctx]);
+};
+
+window.hostMenuAction = function(action) {
+  // Close all drawers
+  ['active','wait'].forEach(ctx => {
+    hostMenuOpen[ctx] = false;
+    document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
+  });
+  if (action === 'end-round') {
+    alert('End Round — coming soon!');
+  } else if (action === 'save-game') {
+    alert('Save Game — coming soon!');
+  } else if (action === 'end-game') {
+    if (confirm('End the game and go to the awards ceremony?')) {
+      alert('Awards ceremony — coming soon!');
+    }
+  }
+};
 window.onNudgeToggle = function(checked) {
   featureNudgeEnabled = checked;
   document.getElementById('nudge-settings').classList.toggle('open', checked);
+};
+
+window.syncNudgeMinutes = function(val) {
+  const mins = parseFloat(val);
+  if (!isNaN(mins) && mins >= 0) {
+    document.getElementById('nudge-delay').value = Math.round(mins * 60);
+  }
 };
 
 // ── FEATURE INFO OVERLAY ──────────────────────
@@ -1290,13 +1422,11 @@ document.getElementById('info-overlay').addEventListener('click', function(e) {
 function startNudgeCountdown(seconds) {
   clearNudgeTimer();
   nudgeUnlocked = false;
-  myNudgeCount = 0;
+  nudgeUsedThisTurn = false;
   const btn = document.getElementById('nudge-btn');
   const lockedLabel = document.getElementById('nudge-locked-label');
   const countdownEl = document.getElementById('nudge-countdown');
-  const countDisplay = document.getElementById('nudge-count-display');
-  if (btn) btn.style.opacity = '0.35';
-  if (countDisplay) countDisplay.textContent = '0';
+  if (btn) { btn.style.opacity = '0.35'; btn.disabled = false; }
   let remaining = seconds;
   if (countdownEl) countdownEl.textContent = remaining;
   if (lockedLabel) lockedLabel.style.display = 'block';
@@ -1319,15 +1449,30 @@ function clearNudgeTimer() {
 window.sendNudge = async function() {
   if (!nudgeUnlocked || !featureNudgeEnabled) return;
   if (!db || !roomCode) return;
-  myNudgeCount++;
-  document.getElementById('nudge-count-display').textContent = myNudgeCount;
-  const snap = await get(ref(db, `rooms/${roomCode}/activePlayerIndex`));
-  const activeIdx = snap.val() ?? 0;
-  const player = localPlayers[activeIdx];
+  if (nudgeMode === 'single' && nudgeUsedThisTurn) return;
+
+  nudgeUsedThisTurn = true;
+  if (nudgeMode === 'single') {
+    const btn = document.getElementById('nudge-btn');
+    if (btn) { btn.style.opacity = '0.35'; btn.disabled = true; }
+  }
+
+  // Get active player and increment their cumulative nudge total
+  const snap = await get(ref(db, `rooms/${roomCode}`));
+  if (!snap.exists()) return;
+  const room = snap.val();
+  const activeIdx = room.activePlayerIndex ?? 0;
+  const players = buildOrderedPlayers(room.players || {});
+  const player = players[activeIdx];
   if (!player) return;
-  const nSnap = await get(ref(db, `rooms/${roomCode}/nudges/${player.id}`));
-  const current = nSnap.exists() ? (nSnap.val() || 0) : 0;
-  await update(ref(db, `rooms/${roomCode}`), { [`nudges/${player.id}`]: current + 1 });
+
+  // Increment turn nudge count (for floating display) AND cumulative total
+  const turnNudges = (room.nudges && room.nudges[player.id]) ? room.nudges[player.id] : 0;
+  const totalNudges = (room.nudgeTotals && room.nudgeTotals[player.id]) ? room.nudgeTotals[player.id] : 0;
+  await update(ref(db, `rooms/${roomCode}`), {
+    [`nudges/${player.id}`]: turnNudges + 1,
+    [`nudgeTotals/${player.id}`]: totalNudges + 1
+  });
 };
 
 function syncNudgeToActiveScreen(room) {
@@ -1379,7 +1524,7 @@ const PLAYER_COLORS = [
   { name: 'Saffron',        hex: '#F4C430' },
   { name: 'Yellow',         hex: '#FFFF00' },
   { name: 'Spring Green',   hex: '#00FF7F' },
-  { name: 'Green',          hex: '#00FF00' },
+  { name: 'Dark Green',     hex: '#1A7A1A' },
   { name: 'Aquamarine',     hex: '#7FFFD4' },
   { name: 'Cyan',           hex: '#00FFFF' },
   { name: 'Sky Blue',       hex: '#87CEEB' },
@@ -1390,6 +1535,8 @@ const PLAYER_COLORS = [
   { name: 'Magenta',        hex: '#FF00FF' },
   { name: 'Rose',           hex: '#FF007F' },
   { name: 'Mint',           hex: '#3EB489' },
+  { name: 'Brown',          hex: '#8B4513' },
+  { name: 'Silver',         hex: '#C0C0C0' },
   { name: 'White',          hex: '#FFFFFF' },
   { name: 'Black',          hex: '#000000' },
 ];
@@ -1562,17 +1709,22 @@ function playTurnSound() {
 
 
 // ── HOST MANAGE PLAYERS PANEL ──────────────────
-window.openManagePanel = async function() {
+let manageUnsub = null;
+window.openManagePanel = function() {
   if (!db || !roomCode) return;
-  const snap = await get(ref(db, `rooms/${roomCode}/players`));
-  if (!snap.exists()) return;
-  const players = buildOrderedPlayers(snap.val());
-  renderManageList(players, snap.val());
   document.getElementById('manage-overlay').classList.add('show');
+  // Subscribe to live updates
+  if (manageUnsub) manageUnsub();
+  const playersRef = ref(db, `rooms/${roomCode}/players`);
+  manageUnsub = onValue(playersRef, snap => {
+    if (!snap.exists()) return;
+    renderManageList(buildOrderedPlayers(snap.val()), snap.val());
+  });
 };
 
 window.closeManagePanel = function() {
   document.getElementById('manage-overlay').classList.remove('show');
+  if (manageUnsub) { manageUnsub(); manageUnsub = null; }
 };
 
 function renderManageList(players, rawPlayers) {
@@ -1599,9 +1751,6 @@ function renderManageList(players, rawPlayers) {
 window.toggleKnockOut = async function(playerId, currentlyOut) {
   if (!db || !roomCode) return;
   await update(ref(db, `rooms/${roomCode}/players/${playerId}`), { knockedOut: !currentlyOut });
-  // Refresh the panel
-  const snap = await get(ref(db, `rooms/${roomCode}/players`));
-  if (snap.exists()) renderManageList(buildOrderedPlayers(snap.val()), snap.val());
 };
 
 window.moveManagePlayer = async function(playerId, dir) {
@@ -1616,9 +1765,6 @@ window.moveManagePlayer = async function(playerId, dir) {
   updates[`rooms/${roomCode}/players/${players[idx].id}/order`] = swapIdx;
   updates[`rooms/${roomCode}/players/${players[swapIdx].id}/order`] = idx;
   await update(ref(db), updates);
-  // Refresh
-  const snap2 = await get(ref(db, `rooms/${roomCode}/players`));
-  if (snap2.exists()) renderManageList(buildOrderedPlayers(snap2.val()), snap2.val());
 };
 
 // ── CREATE ROOM ──────────────────────────────
@@ -1642,7 +1788,8 @@ window.createRoom = async function() {
     activePlayerIndex: 0,
     features: {
       nudge: featureNudgeEnabled,
-      nudgeDelay: featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0
+      nudgeDelay: featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0,
+      nudgeMode: featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi'
     },
     players: {
       [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
@@ -1734,6 +1881,10 @@ function listenWaitingLobby() {
   unsubscribers.push(() => unsub());
 }
 
+// ── RANDOM FIRST PLAYER TOGGLE ──────────────────
+let randomFirstPlayer = false;
+window.onRandomFirstToggle = function(checked) { randomFirstPlayer = checked; };
+
 // ── START GAME ──────────────────────────────
 window.startGame = async function() {
   if (!db || !roomCode) return;
@@ -1743,11 +1894,15 @@ window.startGame = async function() {
   const players = snap.val().players || {};
   localPlayers = buildOrderedPlayers(players);
 
+  const firstIdx = randomFirstPlayer
+    ? Math.floor(Math.random() * localPlayers.length)
+    : 0;
+
   // Save final order
   const updates = {};
   localPlayers.forEach((p, i) => { updates[`rooms/${roomCode}/players/${p.id}/order`] = i; });
   updates[`rooms/${roomCode}/status`] = 'playing';
-  updates[`rooms/${roomCode}/activePlayerIndex`] = 0;
+  updates[`rooms/${roomCode}/activePlayerIndex`] = firstIdx;
   await update(ref(db), updates);
 };
 
@@ -1769,9 +1924,11 @@ function listenGameState() {
     const roomFeatures = room.features || {};
     featureNudgeEnabled = !!roomFeatures.nudge;
     nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
+    nudgeMode = roomFeatures.nudgeMode || 'multi';
 
-    // Detect turn change
+    // Detect turn change (or first turn)
     const turnChanged = lastActivePlayerId !== null && lastActivePlayerId !== activePlayer.id;
+    const firstTurn = lastActivePlayerId === null;
     if (turnChanged) {
       resetNudgesForNewTurn(activePlayer.id);
     }
@@ -1779,11 +1936,15 @@ function listenGameState() {
 
     const isMe = activePlayer.id === myId;
 
-    // Show/hide host manage button
+    // Show/hide host manage button and host game menu
     const hmb = document.getElementById('host-manage-btn');
     const hmbw = document.getElementById('host-manage-btn-wait');
+    const hgma = document.getElementById('host-game-menu-btn-active');
+    const hgmw = document.getElementById('host-game-menu-btn-wait');
     if (hmb) hmb.classList.toggle('visible', isHost);
     if (hmbw) hmbw.classList.toggle('visible', isHost);
+    if (hgma) hgma.classList.toggle('visible', isHost);
+    if (hgmw) hgmw.classList.toggle('visible', isHost);
 
     if (isMe) {
       // Show active screen
@@ -1810,10 +1971,6 @@ function listenGameState() {
       showScreen('active');
       requestWakeLock();
       if (soundEnabled) playTurnSound();
-      const activeEl = document.getElementById('screen-active');
-      activeEl.classList.remove('flash-in');
-      void activeEl.offsetWidth;
-      activeEl.classList.add('flash-in');
     } else {
       // Show waiting screen
       const myPlayer = localPlayers.find(p => p.id === myId);
@@ -1826,7 +1983,7 @@ function listenGameState() {
       // Nudge area
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
-      if (featureNudgeEnabled && turnChanged) startNudgeCountdown(nudgeDelaySeconds);
+      if (featureNudgeEnabled && (turnChanged || firstTurn)) startNudgeCountdown(nudgeDelaySeconds);
       showScreen('waiting');
       requestWakeLock();
     }
