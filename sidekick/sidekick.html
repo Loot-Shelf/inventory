@@ -599,6 +599,7 @@
     display: flex; align-items: center; justify-content: center;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    touch-action: manipulation;
   }
   .nudge-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.15); }
   .nudge-count-label {
@@ -1300,7 +1301,12 @@
   <div style="font-size:3rem;">🎉</div>
   <div class="awards-gameover-title">Achievement Awards</div>
   <div class="awards-gameover-sub">That's a wrap — great game!</div>
-  <button class="btn-primary" style="max-width:240px; margin-top:0.5rem;" onclick="endGameFinal()">🏠 Back to Home</button>
+  <!-- Host sees two options; non-hosts see a wait message -->
+  <div id="awards-host-options" style="display:none; flex-direction:column; gap:0.75rem; width:100%; max-width:280px; margin-top:1rem;">
+    <button class="btn-primary" onclick="playAgain()">🔄 Play Again</button>
+    <button class="btn-danger btn-sm" style="width:100%;" onclick="closeRoomFinal()">🚪 Close Room</button>
+  </div>
+  <div id="awards-wait-msg" style="display:none; color:var(--muted); font-size:0.85rem; margin-top:1rem;">Waiting for host...</div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -1716,26 +1722,31 @@ async function runCeremonyAsHost() {
   const players = buildOrderedPlayers(room.players || {});
   const nudgeTotals = room.nudgeTotals || {};
 
+  // Read features fresh from room — don't rely on local state
+  const roomFeatures = room.features || {};
+  const nudgeOn = !!roomFeatures.nudge;
+
   // Build award list
   const awards = [];
 
   // Award: Most Nudged
-  if (featureNudgeEnabled) {
+  if (nudgeOn) {
     const sorted = players
       .map(p => ({ ...p, total: nudgeTotals[p.id] || 0 }))
       .filter(p => p.total > 0)
       .sort((a, b) => b.total - a.total);
 
     if (sorted.length > 0) {
+      const winner = sorted[0];
       awards.push({
         key: 'most-nudged',
         category: 'Most Nudged Player',
         trophy: '👉',
-        winner: sorted[0],
-        stat: `${sorted[0].total} nudge${sorted[0].total !== 1 ? 's' : ''} received`
+        winner,
+        stat: `${winner.total} nudge${winner.total !== 1 ? 's' : ''} received`
       });
     }
-    // else: nobody was nudged — skip this award
+    // else: nobody was nudged — skip silently
   }
 
   // Present each award
@@ -1799,7 +1810,7 @@ function handleCeremonyState(room) {
 
   if (step === 'standby' || step === 'announcing') {
     hideAllAwardOverlays();
-    document.getElementById('awards-standby').classList.add('show');
+    showStandby();
     return;
   }
 
@@ -1810,8 +1821,7 @@ function handleCeremonyState(room) {
     if (isWinner) {
       showWinnerReveal(award);
     } else {
-      // Non-winners stay on standby
-      document.getElementById('awards-standby').classList.add('show');
+      showStandby();
     }
   }
 }
@@ -1836,27 +1846,75 @@ function showWinnerReveal(award) {
 
 function showGameOver() {
   hideAllAwardOverlays();
+  // Set text dynamically so cached SW doesn't serve stale strings
+  const titleEl = document.getElementById('awards-gameover-title-text');
+  if (titleEl) titleEl.textContent = 'Achievement Awards';
+  // Show correct options based on role
+  const hostOpts = document.getElementById('awards-host-options');
+  const waitMsg  = document.getElementById('awards-wait-msg');
+  if (hostOpts) hostOpts.style.display = isHost ? 'flex' : 'none';
+  if (waitMsg)  waitMsg.style.display  = isHost ? 'none' : 'block';
   document.getElementById('awards-gameover').classList.add('show');
 }
 
-window.endGameFinal = async function() {
+// Also set standby text dynamically at ceremony start to avoid SW cache issues
+function showStandby() {
+  const el = document.getElementById('awards-standby-text');
+  if (el) el.textContent = 'Achievement Awards';
+  document.getElementById('awards-standby').classList.add('show');
+}
+
+// Play Again — resets nudge stats, keeps players & order, goes back to playing
+window.playAgain = async function() {
+  if (!db || !roomCode || !isHost) return;
   hideAllAwardOverlays();
   stopFireworks();
   window.speechSynthesis && window.speechSynthesis.cancel();
 
-  if (db && roomCode) {
-    if (isHost) {
-      // Reset the room back to a fresh lobby so everyone lands on home cleanly
-      await remove(ref(db, `rooms/${roomCode}`));
-    }
-  }
+  // Reset nudge stats, ceremony state, push back to playing
+  const snap = await get(ref(db, `rooms/${roomCode}`));
+  if (!snap.exists()) return;
+  const room = snap.val();
+  const players = buildOrderedPlayers(room.players || {});
 
-  // Clean up local state
+  const updates = {};
+  updates[`rooms/${roomCode}/status`] = 'playing';
+  updates[`rooms/${roomCode}/activePlayerIndex`] = 0;
+  updates[`rooms/${roomCode}/nudges`] = null;
+  updates[`rooms/${roomCode}/nudgeTotals`] = null;
+  updates[`rooms/${roomCode}/ceremonyStep`] = null;
+  updates[`rooms/${roomCode}/ceremonyAward`] = null;
+  await update(ref(db), updates);
+
+  lastActivePlayerId = null;
+};
+
+// Close Room — deletes room, everyone goes to game over then home
+window.closeRoomFinal = async function() {
+  if (!db || !roomCode || !isHost) return;
+  hideAllAwardOverlays();
+  stopFireworks();
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  // Push a 'closed' status so non-hosts know to go home
+  await update(ref(db, `rooms/${roomCode}`), { status: 'closed' });
+  await remove(ref(db, `rooms/${roomCode}`));
   lastActivePlayerId = null;
   featureAwardsEnabled = false;
   featureNudgeEnabled = false;
-  roomCode = null;
-  myId = null;
+  roomCode = null; myId = null;
+  releaseWakeLock();
+  resetOrientation();
+  cleanupListeners();
+  showScreen('home');
+};
+
+// Non-host taps home from gameover screen
+window.endGameFinal = async function() {
+  hideAllAwardOverlays();
+  stopFireworks();
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  lastActivePlayerId = null;
+  roomCode = null; myId = null;
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
@@ -2370,14 +2428,25 @@ function listenGameState() {
   const roomRef = ref(db, `rooms/${roomCode}`);
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) {
-      // Room deleted — show game over screen so players can tap home
+      // Room deleted by host — non-hosts get a home button
       const go = document.getElementById('awards-gameover');
       if (!go || go.classList.contains('show')) return;
       hideAllAwardOverlays();
+      const hostOpts = document.getElementById('awards-host-options');
+      const waitMsg  = document.getElementById('awards-wait-msg');
+      if (hostOpts) hostOpts.style.display = 'none';
+      if (waitMsg) {
+        waitMsg.style.display = 'block';
+        waitMsg.innerHTML = '<button class="btn-secondary btn-sm" style="margin-top:0.5rem;width:auto;padding:0.5rem 1.5rem;" onclick="endGameFinal()">🏠 Back to Home</button>';
+      }
       go.classList.add('show');
       return;
     }
     const room = snap.val();
+    // Room closed by host — send non-hosts home
+    if (room.status === 'closed') { showScreen('home'); return; }
+    // Gameover status — show the game over screen
+    if (room.status === 'gameover') { showGameOver(); return; }
     if (room.status !== 'playing' && room.status !== 'ceremony') { showScreen('home'); return; }
 
     localPlayers = buildOrderedPlayers(room.players || {});

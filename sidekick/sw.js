@@ -1,4 +1,4 @@
-const CACHE = 'gameroom-v1';
+const CACHE = 'sidekick-v4';
 const ASSETS = [
   './sidekick.html',
   './manifest.json'
