@@ -2429,8 +2429,6 @@ function listenGameState() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) {
       // Room deleted by host — non-hosts get a home button
-      const go = document.getElementById('awards-gameover');
-      if (!go || go.classList.contains('show')) return;
       hideAllAwardOverlays();
       const hostOpts = document.getElementById('awards-host-options');
       const waitMsg  = document.getElementById('awards-wait-msg');
@@ -2439,14 +2437,19 @@ function listenGameState() {
         waitMsg.style.display = 'block';
         waitMsg.innerHTML = '<button class="btn-secondary btn-sm" style="margin-top:0.5rem;width:auto;padding:0.5rem 1.5rem;" onclick="endGameFinal()">🏠 Back to Home</button>';
       }
-      go.classList.add('show');
+      document.getElementById('awards-gameover').classList.add('show');
       return;
     }
     const room = snap.val();
-    // Room closed by host — send non-hosts home
-    if (room.status === 'closed') { showScreen('home'); return; }
-    // Gameover status — show the game over screen
+    // Room closed by host — send everyone home immediately
+    if (room.status === 'closed') { hideAllAwardOverlays(); showScreen('home'); return; }
+    // Gameover — show the end screen
     if (room.status === 'gameover') { showGameOver(); return; }
+    // Playing — if we were on any award overlay, clear it and resume game
+    if (room.status === 'playing') {
+      hideAllAwardOverlays();
+      // fall through to normal game rendering below
+    }
     if (room.status !== 'playing' && room.status !== 'ceremony') { showScreen('home'); return; }
 
     localPlayers = buildOrderedPlayers(room.players || {});
