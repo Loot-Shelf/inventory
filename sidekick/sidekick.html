@@ -252,7 +252,87 @@
     z-index: 5;
   }
 
-  /* ── EXIT BUTTON ── */
+  /* ── COLOR PICKER ── */
+  .color-picker-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+  }
+  .color-picker-btn:hover { border-color: var(--accent-light); }
+  .color-preview-swatch {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .color-picker-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 9000;
+    align-items: center;
+    justify-content: center;
+  }
+  .color-picker-overlay.show { display: flex; }
+  .color-picker-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.5rem;
+    width: min(340px, 90vw);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+  .color-picker-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .color-swatch {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .color-swatch:hover { transform: scale(1.12); }
+  .color-swatch.selected {
+    border-color: #fff;
+    transform: scale(1.12);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+  }
+  .color-picker-confirm {
+    width: 100%;
+    padding: 0.7rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .color-picker-confirm:hover { filter: brightness(1.1); }
   .exit-btn {
     position: absolute;
     top: 16px;
@@ -570,6 +650,10 @@
     </div>
     <label>Your Name (Host)</label>
     <input id="host-name" placeholder="Enter your name" maxlength="20">
+    <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
+      <span class="color-preview-swatch" id="host-color-swatch" style="background:#7c3aed;"></span>
+      <span id="host-color-label">Choose Player Color</span>
+    </button>
     <button class="btn-primary" onclick="createRoom()">Create Room</button>
     <p id="create-status" class="status"></p>
   </div>
@@ -588,6 +672,10 @@
     <input id="join-code" placeholder="e.g. XKQM" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center">
     <label>Your Name</label>
     <input id="join-name" placeholder="Enter your name" maxlength="20">
+    <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn">
+      <span class="color-preview-swatch" id="join-color-swatch" style="background:#7c3aed;"></span>
+      <span id="join-color-label">Choose Player Color</span>
+    </button>
     <button class="btn-primary" onclick="joinRoom()">Join Room</button>
     <p id="join-status" class="status"></p>
   </div>
@@ -716,6 +804,17 @@
     <div class="active-indicator">Now playing:</div>
     <div class="active-player-name-display" id="waiting-active-name"></div>
     <div class="active-player-label">Active Player</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  COLOR PICKER OVERLAY                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="color-picker-overlay" id="color-picker-overlay">
+  <div class="color-picker-modal">
+    <div class="color-picker-title">Choose Your Color</div>
+    <div class="color-grid" id="color-grid"></div>
+    <button class="color-picker-confirm" onclick="confirmColor()">Confirm</button>
   </div>
 </div>
 
@@ -878,7 +977,88 @@ function generateQR() {
 
 
 
+// ── COLOR UTILITY ──────────────────────────────
+function adjustBrightness(hex, factor) {
+  // factor: -1 to 1, negative = darker
+  let r = parseInt(hex.slice(1,3),16);
+  let g = parseInt(hex.slice(3,5),16);
+  let b = parseInt(hex.slice(5,7),16);
+  if (factor < 0) {
+    r = Math.round(r * (1 + factor));
+    g = Math.round(g * (1 + factor));
+    b = Math.round(b * (1 + factor));
+  } else {
+    r = Math.round(r + (255 - r) * factor);
+    g = Math.round(g + (255 - g) * factor);
+    b = Math.round(b + (255 - b) * factor);
+  }
+  return `rgb(${r},${g},${b})`;
+}
+
 // ── SETTINGS PANEL TOGGLE ──────────────────────
+const PLAYER_COLORS = [
+  { name: 'Violet',     hex: '#7c3aed' },
+  { name: 'Blue',       hex: '#2563eb' },
+  { name: 'Sky',        hex: '#0ea5e9' },
+  { name: 'Teal',       hex: '#0d9488' },
+  { name: 'Green',      hex: '#16a34a' },
+  { name: 'Lime',       hex: '#65a30d' },
+  { name: 'Yellow',     hex: '#ca8a04' },
+  { name: 'Orange',     hex: '#ea580c' },
+  { name: 'Red',        hex: '#dc2626' },
+  { name: 'Rose',       hex: '#e11d48' },
+  { name: 'Pink',       hex: '#db2777' },
+  { name: 'Fuchsia',    hex: '#a21caf' },
+  { name: 'Indigo',     hex: '#4338ca' },
+  { name: 'Cyan',       hex: '#0891b2' },
+  { name: 'Emerald',    hex: '#059669' },
+  { name: 'Amber',      hex: '#d97706' },
+  { name: 'Coral',      hex: '#f43f5e' },
+  { name: 'Slate',      hex: '#475569' },
+  { name: 'Silver',     hex: '#94a3b8' },
+  { name: 'White',      hex: '#e2e8f0' },
+];
+
+let myColor = '#7c3aed';         // default violet
+let colorPickerContext = 'host'; // which form triggered it
+let tempSelectedColor = '#7c3aed';
+
+window.openColorPicker = function(context) {
+  colorPickerContext = context;
+  tempSelectedColor = myColor;
+  const grid = document.getElementById('color-grid');
+  grid.innerHTML = '';
+  PLAYER_COLORS.forEach(c => {
+    const sw = document.createElement('button');
+    sw.className = 'color-swatch' + (c.hex === tempSelectedColor ? ' selected' : '');
+    sw.style.background = c.hex;
+    sw.title = c.name;
+    sw.onclick = () => {
+      grid.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      sw.classList.add('selected');
+      tempSelectedColor = c.hex;
+    };
+    grid.appendChild(sw);
+  });
+  document.getElementById('color-picker-overlay').classList.add('show');
+};
+
+window.confirmColor = function() {
+  myColor = tempSelectedColor;
+  const colorName = PLAYER_COLORS.find(c => c.hex === myColor)?.name || 'Custom';
+  ['host','join'].forEach(ctx => {
+    const swatch = document.getElementById(ctx + '-color-swatch');
+    const label  = document.getElementById(ctx + '-color-label');
+    if (swatch) swatch.style.background = myColor;
+    if (label)  label.textContent = colorName;
+  });
+  document.getElementById('color-picker-overlay').classList.remove('show');
+};
+
+// Close overlay on background tap
+document.getElementById('color-picker-overlay').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
 let settingsOpen = false;
 window.toggleSettings = function() {
   settingsOpen = !settingsOpen;
@@ -1085,7 +1265,7 @@ window.createRoom = async function() {
     status: 'lobby',
     activePlayerIndex: 0,
     players: {
-      [myId]: { name, order: 0, joinedAt: Date.now() }
+      [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
     }
   });
 
@@ -1115,7 +1295,7 @@ window.joinRoom = async function() {
 
   const players = room.players || {};
   const order = Object.keys(players).length;
-  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false });
+  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor });
 
   if (room.status === 'playing') {
     document.getElementById('wl-code').textContent = code;
@@ -1224,6 +1404,14 @@ function listenGameState() {
       document.getElementById('active-player-display').textContent = myName;
       document.getElementById('left-player-name').textContent  = leftIdx2 ? leftIdx2.name : '';
       document.getElementById('right-player-name').textContent = rightIdx2 ? rightIdx2.name : '';
+      // Apply neighbor colors to buttons
+      const leftColor  = leftIdx2?.color  || '#2563eb';
+      const rightColor = rightIdx2?.color || '#c05e00';
+      document.getElementById('btn-left').style.background  = leftColor;
+      document.getElementById('btn-right').style.background = rightColor;
+      // Darken background panels too
+      document.getElementById('screen-active').style.setProperty('--active-left',  adjustBrightness(leftColor, -0.45));
+      document.getElementById('screen-active').style.setProperty('--active-right', adjustBrightness(rightColor, -0.45));
       const arcEl = document.getElementById('active-room-code-display');
       if (arcEl) arcEl.textContent = roomCode;
       showScreen('active');
