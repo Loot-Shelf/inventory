@@ -241,6 +241,15 @@
   }
   #screen-active.flash-in { animation: flashIn 0.35s ease-out; }
 
+  @keyframes nudgeSquish {
+    0%   { transform: scale(1, 1); }
+    20%  { transform: scale(1.03, 0.97); }
+    45%  { transform: scale(0.97, 1.03); }
+    70%  { transform: scale(1.015, 0.985); }
+    100% { transform: scale(1, 1); }
+  }
+  #screen-active.nudge-squish { animation: nudgeSquish 0.35s ease-out; }
+
   .active-divider {
     position: absolute;
     top: 0; left: 50%;
@@ -290,9 +299,10 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 18px;
-    padding: 1.5rem;
-    width: min(340px, 90vw);
+    padding: 1.25rem;
+    width: min(320px, 92vw);
     box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    box-sizing: border-box;
   }
   .color-picker-title {
     font-size: 1rem;
@@ -304,11 +314,14 @@
   .color-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.75rem;
+    gap: 0.5rem;
     margin-bottom: 1.25rem;
+    width: 100%;
+    overflow: hidden;
   }
   .color-swatch {
     width: 100%;
+    max-width: 44px;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 3px solid transparent;
@@ -944,14 +957,14 @@
           <span class="feature-unit">min</span>
         </div>
         <div style="font-size:0.78rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.07em; margin-top:0.2rem;">Nudge Mode</div>
-        <div style="display:flex; flex-direction:column; gap:0.4rem;">
-          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; margin:0; font-size:0.85rem; color:var(--text);">
-            <input type="radio" name="nudge-mode" value="multi" checked style="width:auto; margin:0; accent-color:var(--accent);">
-            Multi Nudge <span style="font-size:0.75rem; color:var(--muted); margin-left:0.25rem;">— tap as many times as you want</span>
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+          <label style="display:flex; align-items:flex-start; gap:0.5rem; cursor:pointer; margin:0; font-size:0.85rem; color:var(--text); line-height:1.4;">
+            <input type="radio" name="nudge-mode" value="multi" checked style="width:auto; margin:0; margin-top:2px; flex-shrink:0; accent-color:var(--accent);">
+            <span><strong>Multi Nudge</strong><br><span style="font-size:0.75rem; color:var(--muted);">Tap as many times as you want</span></span>
           </label>
-          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; margin:0; font-size:0.85rem; color:var(--text);">
-            <input type="radio" name="nudge-mode" value="single" style="width:auto; margin:0; accent-color:var(--accent);">
-            Single Nudge <span style="font-size:0.75rem; color:var(--muted); margin-left:0.25rem;">— one nudge per turn per player</span>
+          <label style="display:flex; align-items:flex-start; gap:0.5rem; cursor:pointer; margin:0; font-size:0.85rem; color:var(--text); line-height:1.4;">
+            <input type="radio" name="nudge-mode" value="single" style="width:auto; margin:0; margin-top:2px; flex-shrink:0; accent-color:var(--accent);">
+            <span><strong>Single Nudge</strong><br><span style="font-size:0.75rem; color:var(--muted);">One nudge per turn per player</span></span>
           </label>
         </div>
       </div>
@@ -1037,7 +1050,8 @@
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn" onclick="openManagePanel()">👥 Players</button>
   <!-- Nudge counter shown to active player -->
-  <div class="nudge-active-counter" id="nudge-active-counter">
+  <!-- Nudge counter - hidden, tracked for awards only -->
+  <div class="nudge-active-counter" id="nudge-active-counter" style="display:none!important;">
     👉 <span id="nudge-active-count">0</span> nudges
   </div>
   <!-- Floating emoji container -->
@@ -1174,7 +1188,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp }
+import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // ── STATE ──────────────────────────────────────
@@ -1457,7 +1471,7 @@ window.sendNudge = async function() {
     if (btn) { btn.style.opacity = '0.35'; btn.disabled = true; }
   }
 
-  // Get active player and increment their cumulative nudge total
+  // Read who is currently active directly from Firebase to avoid stale localPlayers
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   const room = snap.val();
@@ -1466,32 +1480,40 @@ window.sendNudge = async function() {
   const player = players[activeIdx];
   if (!player) return;
 
-  // Increment turn nudge count (for floating display) AND cumulative total
-  const turnNudges = (room.nudges && room.nudges[player.id]) ? room.nudges[player.id] : 0;
-  const totalNudges = (room.nudgeTotals && room.nudgeTotals[player.id]) ? room.nudgeTotals[player.id] : 0;
-  await update(ref(db, `rooms/${roomCode}`), {
-    [`nudges/${player.id}`]: turnNudges + 1,
-    [`nudgeTotals/${player.id}`]: totalNudges + 1
-  });
+  // Use separate keys per-turn keyed to the player ID to avoid cross-turn bleed
+  const nudgeRef = ref(db, `rooms/${roomCode}/nudges/${player.id}`);
+  const totalRef = ref(db, `rooms/${roomCode}/nudgeTotals/${player.id}`);
+
+  // Atomic increment for turn nudges
+  await runTransaction(nudgeRef, current => (current || 0) + 1);
+  // Atomic increment for total nudges (lifetime)
+  await runTransaction(totalRef, current => (current || 0) + 1);
 };
 
 function syncNudgeToActiveScreen(room) {
-  const counter = document.getElementById('nudge-active-counter');
-  const countEl = document.getElementById('nudge-active-count');
   const floatContainer = document.getElementById('nudge-float-container');
-  if (!counter || !countEl || !floatContainer) return;
+  if (!floatContainer) return;
+
+  // Always use the player whose turn it actually is right now
   const activeIdx = room.activePlayerIndex ?? 0;
   const player = localPlayers[activeIdx];
-  if (!player) return;
+  if (!player || player.id !== myId) return; // Only run on the actual active player's device
+
   const newCount = (room.nudges && room.nudges[player.id]) ? room.nudges[player.id] : 0;
   if (newCount > activeNudgeCount) {
     const diff = newCount - activeNudgeCount;
-    for (let i = 0; i < Math.min(diff, 6); i++) {
-      setTimeout(() => spawnNudgeFloat(floatContainer), i * 120);
-    }
     activeNudgeCount = newCount;
-    countEl.textContent = newCount;
-    counter.classList.toggle('visible', newCount > 0);
+    for (let i = 0; i < Math.min(diff, 6); i++) {
+      setTimeout(() => spawnNudgeFloat(floatContainer), i * 100);
+    }
+    // Squish animation
+    const screen = document.getElementById('screen-active');
+    if (screen) {
+      screen.classList.remove('nudge-squish');
+      void screen.offsetWidth;
+      screen.classList.add('nudge-squish');
+      setTimeout(() => screen.classList.remove('nudge-squish'), 400);
+    }
   }
 }
 
@@ -1504,17 +1526,15 @@ function spawnNudgeFloat(container) {
   setTimeout(() => el.remove(), 1700);
 }
 
-function resetNudgesForNewTurn(newActivePlayerId) {
-  if (isHost && db && roomCode) {
-    update(ref(db, `rooms/${roomCode}`), { [`nudges/${newActivePlayerId}`]: 0 });
-  }
+function resetNudgesForNewTurn() {
+  // Reset local count immediately so syncNudgeToActiveScreen doesn't fire stale diffs
   activeNudgeCount = 0;
-  const counter = document.getElementById('nudge-active-counter');
-  const countEl = document.getElementById('nudge-active-count');
-  if (counter) counter.classList.remove('visible');
-  if (countEl) countEl.textContent = '0';
   const floatContainer = document.getElementById('nudge-float-container');
   if (floatContainer) floatContainer.innerHTML = '';
+  // Host clears the entire nudges map so no stale counts bleed into the new turn
+  if (isHost && db && roomCode) {
+    update(ref(db, `rooms/${roomCode}`), { nudges: null });
+  }
 }
 
 // ── SETTINGS PANEL TOGGLE ──────────────────────
@@ -1930,7 +1950,7 @@ function listenGameState() {
     const turnChanged = lastActivePlayerId !== null && lastActivePlayerId !== activePlayer.id;
     const firstTurn = lastActivePlayerId === null;
     if (turnChanged) {
-      resetNudgesForNewTurn(activePlayer.id);
+      resetNudgesForNewTurn();
     }
     lastActivePlayerId = activePlayer.id;
 
