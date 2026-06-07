@@ -333,6 +333,213 @@
     cursor: pointer;
   }
   .color-picker-confirm:hover { filter: brightness(1.1); }
+
+  /* ── FEATURE TOGGLES (pre-game) ── */
+  .features-section {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .features-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .feature-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .feature-toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .feature-toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 22px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .feature-toggle input:checked + .toggle-slider { background: var(--accent); }
+  .feature-toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+  .feature-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .feature-info-btn {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .feature-info-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .feature-settings {
+    display: none;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .feature-settings.open { display: flex; }
+  .feature-settings label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin: 0;
+    white-space: nowrap;
+  }
+  .feature-settings input[type="number"] {
+    width: 70px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0;
+  }
+  .feature-settings .feature-unit {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ── INFO OVERLAY ── */
+  .info-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 9500;
+    align-items: center;
+    justify-content: center;
+  }
+  .info-overlay.show { display: flex; }
+  .info-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.75rem 1.5rem;
+    width: min(320px, 88vw);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+  .info-modal-icon { font-size: 2.5rem; text-align: center; margin-bottom: 0.75rem; }
+  .info-modal-title { font-size: 1.05rem; font-weight: 800; color: var(--text); margin-bottom: 0.6rem; text-align: center; }
+  .info-modal-body { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; }
+  .info-modal-close {
+    width: 100%;
+    padding: 0.65rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ── NUDGE BUTTON (waiting screen) ── */
+  .nudge-area {
+    margin-top: 2rem;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nudge-area.visible { display: flex; }
+  .nudge-btn {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.07);
+    font-size: 3rem;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .nudge-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.15); }
+  .nudge-count-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .nudge-count-num {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .nudge-locked-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── NUDGE FLOATING EMOJIS (active screen) ── */
+  .nudge-float-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 500;
+    overflow: hidden;
+  }
+  .nudge-float {
+    position: absolute;
+    bottom: 20%;
+    font-size: 2.4rem;
+    animation: floatUp 1.6s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(1);   opacity: 1; }
+    80%  { transform: translateY(-180px) scale(1.2); opacity: 0.8; }
+    100% { transform: translateY(-240px) scale(0.8); opacity: 0; }
+  }
+  .nudge-active-counter {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.75);
+    display: none;
+    align-items: center;
+    gap: 6px;
+    z-index: 501;
+    white-space: nowrap;
+  }
+  .nudge-active-counter.visible { display: flex; }
+
   .exit-btn {
     position: absolute;
     top: 16px;
@@ -656,6 +863,26 @@
     </button>
     <button class="btn-primary" onclick="createRoom()">Create Room</button>
     <p id="create-status" class="status"></p>
+
+    <div class="features-section">
+      <div class="features-title">⚡ Game Features</div>
+
+      <!-- NUDGE -->
+      <div class="feature-row">
+        <label class="feature-toggle">
+          <input type="checkbox" id="feature-nudge-toggle" onchange="onNudgeToggle(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="feature-name">👉 Nudge</span>
+        <button class="feature-info-btn" onclick="showFeatureInfo('nudge')" title="What is this?">?</button>
+      </div>
+      <div class="feature-settings" id="nudge-settings">
+        <label>Unlock after</label>
+        <input type="number" id="nudge-delay" value="30" min="5" max="300" step="5">
+        <span class="feature-unit">seconds</span>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -728,6 +955,12 @@
 <div id="screen-active" class="screen">
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn" onclick="openManagePanel()">👥 Players</button>
+  <!-- Nudge counter shown to active player -->
+  <div class="nudge-active-counter" id="nudge-active-counter">
+    👉 <span id="nudge-active-count">0</span> nudges
+  </div>
+  <!-- Floating emoji container -->
+  <div class="nudge-float-container" id="nudge-float-container"></div>
   <button class="action-btn btn-left" onclick="passTurn('left')" id="btn-left">
     <div class="btn-arrow">←</div>
     <div class="btn-label">Pass Left</div>
@@ -804,6 +1037,26 @@
     <div class="active-indicator">Now playing:</div>
     <div class="active-player-name-display" id="waiting-active-name"></div>
     <div class="active-player-label">Active Player</div>
+
+    <!-- NUDGE AREA -->
+    <div class="nudge-area" id="nudge-area">
+      <button class="nudge-btn" id="nudge-btn" onclick="sendNudge()">👉</button>
+      <span class="nudge-count-label">NUDGES SENT</span>
+      <span class="nudge-count-num" id="nudge-count-display">0</span>
+      <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  FEATURE INFO OVERLAY                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="info-overlay" id="info-overlay">
+  <div class="info-modal">
+    <div class="info-modal-icon" id="info-icon">👉</div>
+    <div class="info-modal-title" id="info-title">Feature</div>
+    <div class="info-modal-body" id="info-body"></div>
+    <button class="info-modal-close" onclick="closeFeatureInfo()">Got it</button>
   </div>
 </div>
 
@@ -835,6 +1088,14 @@ let isHost = false;
 let unsubscribers = [];
 let localPlayers = [];
 let myName = '';
+
+// ── FEATURE STATE ──────────────────────────────
+let featureNudgeEnabled = false;
+let nudgeDelaySeconds = 30;
+let nudgeCountdownTimer = null;
+let nudgeUnlocked = false;
+let myNudgeCount = 0;        // nudges I've sent this turn
+let activeNudgeCount = 0;    // nudges received by active player this turn (shown on active screen)
 
 // ── HELPERS ──────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2,10); }
@@ -993,6 +1254,122 @@ function adjustBrightness(hex, factor) {
     b = Math.round(b + (255 - b) * factor);
   }
   return `rgb(${r},${g},${b})`;
+}
+
+// ── FEATURE TOGGLE UI ──────────────────────────
+window.onNudgeToggle = function(checked) {
+  featureNudgeEnabled = checked;
+  document.getElementById('nudge-settings').classList.toggle('open', checked);
+};
+
+// ── FEATURE INFO OVERLAY ──────────────────────
+const FEATURE_INFO = {
+  nudge: {
+    icon: '👉',
+    title: 'Nudge',
+    body: `When it's not your turn, you can tap the 👉 button to nudge the active player and let them know you're waiting.\n\nThe nudge button unlocks after a set number of seconds (you choose before the game). Once unlocked, tap as many times as you like — every tap adds to the nudge count shown on the active player's screen.\n\nNudge counts reset each time the turn passes. At the end of the game, the player who received the most nudges gets a special award! 🏆`
+  }
+};
+
+window.showFeatureInfo = function(key) {
+  const info = FEATURE_INFO[key];
+  if (!info) return;
+  document.getElementById('info-icon').textContent = info.icon;
+  document.getElementById('info-title').textContent = info.title;
+  document.getElementById('info-body').innerHTML = info.body.replace(/\n/g, '<br>');
+  document.getElementById('info-overlay').classList.add('show');
+};
+window.closeFeatureInfo = function() {
+  document.getElementById('info-overlay').classList.remove('show');
+};
+document.getElementById('info-overlay').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
+
+// ── NUDGE LOGIC ────────────────────────────────
+function startNudgeCountdown(seconds) {
+  clearNudgeTimer();
+  nudgeUnlocked = false;
+  myNudgeCount = 0;
+  const btn = document.getElementById('nudge-btn');
+  const lockedLabel = document.getElementById('nudge-locked-label');
+  const countdownEl = document.getElementById('nudge-countdown');
+  const countDisplay = document.getElementById('nudge-count-display');
+  if (btn) btn.style.opacity = '0.35';
+  if (countDisplay) countDisplay.textContent = '0';
+  let remaining = seconds;
+  if (countdownEl) countdownEl.textContent = remaining;
+  if (lockedLabel) lockedLabel.style.display = 'block';
+  nudgeCountdownTimer = setInterval(() => {
+    remaining--;
+    if (countdownEl) countdownEl.textContent = remaining;
+    if (remaining <= 0) {
+      clearNudgeTimer();
+      nudgeUnlocked = true;
+      if (btn) btn.style.opacity = '1';
+      if (lockedLabel) lockedLabel.style.display = 'none';
+    }
+  }, 1000);
+}
+
+function clearNudgeTimer() {
+  if (nudgeCountdownTimer) { clearInterval(nudgeCountdownTimer); nudgeCountdownTimer = null; }
+}
+
+window.sendNudge = async function() {
+  if (!nudgeUnlocked || !featureNudgeEnabled) return;
+  if (!db || !roomCode) return;
+  myNudgeCount++;
+  document.getElementById('nudge-count-display').textContent = myNudgeCount;
+  const snap = await get(ref(db, `rooms/${roomCode}/activePlayerIndex`));
+  const activeIdx = snap.val() ?? 0;
+  const player = localPlayers[activeIdx];
+  if (!player) return;
+  const nSnap = await get(ref(db, `rooms/${roomCode}/nudges/${player.id}`));
+  const current = nSnap.exists() ? (nSnap.val() || 0) : 0;
+  await update(ref(db, `rooms/${roomCode}`), { [`nudges/${player.id}`]: current + 1 });
+};
+
+function syncNudgeToActiveScreen(room) {
+  const counter = document.getElementById('nudge-active-counter');
+  const countEl = document.getElementById('nudge-active-count');
+  const floatContainer = document.getElementById('nudge-float-container');
+  if (!counter || !countEl || !floatContainer) return;
+  const activeIdx = room.activePlayerIndex ?? 0;
+  const player = localPlayers[activeIdx];
+  if (!player) return;
+  const newCount = (room.nudges && room.nudges[player.id]) ? room.nudges[player.id] : 0;
+  if (newCount > activeNudgeCount) {
+    const diff = newCount - activeNudgeCount;
+    for (let i = 0; i < Math.min(diff, 6); i++) {
+      setTimeout(() => spawnNudgeFloat(floatContainer), i * 120);
+    }
+    activeNudgeCount = newCount;
+    countEl.textContent = newCount;
+    counter.classList.toggle('visible', newCount > 0);
+  }
+}
+
+function spawnNudgeFloat(container) {
+  const el = document.createElement('div');
+  el.className = 'nudge-float';
+  el.textContent = '👉';
+  el.style.left = (10 + Math.random() * 80) + '%';
+  container.appendChild(el);
+  setTimeout(() => el.remove(), 1700);
+}
+
+function resetNudgesForNewTurn(newActivePlayerId) {
+  if (isHost && db && roomCode) {
+    update(ref(db, `rooms/${roomCode}`), { [`nudges/${newActivePlayerId}`]: 0 });
+  }
+  activeNudgeCount = 0;
+  const counter = document.getElementById('nudge-active-counter');
+  const countEl = document.getElementById('nudge-active-count');
+  if (counter) counter.classList.remove('visible');
+  if (countEl) countEl.textContent = '0';
+  const floatContainer = document.getElementById('nudge-float-container');
+  if (floatContainer) floatContainer.innerHTML = '';
 }
 
 // ── SETTINGS PANEL TOGGLE ──────────────────────
@@ -1263,6 +1640,10 @@ window.createRoom = async function() {
     host: myId,
     status: 'lobby',
     activePlayerIndex: 0,
+    features: {
+      nudge: featureNudgeEnabled,
+      nudgeDelay: featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0
+    },
     players: {
       [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
     }
@@ -1371,6 +1752,7 @@ window.startGame = async function() {
 };
 
 // ── GAME STATE LISTENER ──────────────────────────
+let lastActivePlayerId = null;
 function listenGameState() {
   const roomRef = ref(db, `rooms/${roomCode}`);
   const unsub = onValue(roomRef, snap => {
@@ -1382,6 +1764,18 @@ function listenGameState() {
     const activeIdx = room.activePlayerIndex || 0;
     const activePlayer = localPlayers[activeIdx];
     if (!activePlayer) return;
+
+    // Read feature settings from Firebase
+    const roomFeatures = room.features || {};
+    featureNudgeEnabled = !!roomFeatures.nudge;
+    nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
+
+    // Detect turn change
+    const turnChanged = lastActivePlayerId !== null && lastActivePlayerId !== activePlayer.id;
+    if (turnChanged) {
+      resetNudgesForNewTurn(activePlayer.id);
+    }
+    lastActivePlayerId = activePlayer.id;
 
     const isMe = activePlayer.id === myId;
 
@@ -1398,8 +1792,6 @@ function listenGameState() {
       const n = activePlayers.length;
       const leftIdx2 = activePlayers[(activeActiveIdx + 1) % n];
       const rightIdx2 = activePlayers[(activeActiveIdx - 1 + n) % n];
-      const leftIdx  = localPlayers.indexOf(leftIdx2);
-      const rightIdx = localPlayers.indexOf(rightIdx2);
       document.getElementById('active-player-display').textContent = myName;
       document.getElementById('left-player-name').textContent  = leftIdx2 ? leftIdx2.name : '';
       document.getElementById('right-player-name').textContent = rightIdx2 ? rightIdx2.name : '';
@@ -1408,11 +1800,13 @@ function listenGameState() {
       const rightColor = rightIdx2?.color || '#c05e00';
       document.getElementById('btn-left').style.background  = leftColor;
       document.getElementById('btn-right').style.background = rightColor;
-      // Darken background panels too
       document.getElementById('screen-active').style.setProperty('--active-left',  adjustBrightness(leftColor, -0.45));
       document.getElementById('screen-active').style.setProperty('--active-right', adjustBrightness(rightColor, -0.45));
       const arcEl = document.getElementById('active-room-code-display');
       if (arcEl) arcEl.textContent = roomCode;
+      // Nudge: sync floating counter on active player screen
+      if (featureNudgeEnabled) syncNudgeToActiveScreen(room);
+      clearNudgeTimer();
       showScreen('active');
       requestWakeLock();
       if (soundEnabled) playTurnSound();
@@ -1420,7 +1814,6 @@ function listenGameState() {
       activeEl.classList.remove('flash-in');
       void activeEl.offsetWidth;
       activeEl.classList.add('flash-in');
-      // Orientation managed by user controls
     } else {
       // Show waiting screen
       const myPlayer = localPlayers.find(p => p.id === myId);
@@ -1430,6 +1823,10 @@ function listenGameState() {
       document.getElementById('waiting-active-name').textContent = activePlayer.name;
       const wrcEl = document.getElementById('wait-room-code-display');
       if (wrcEl) wrcEl.textContent = roomCode;
+      // Nudge area
+      const nudgeArea = document.getElementById('nudge-area');
+      if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
+      if (featureNudgeEnabled && turnChanged) startNudgeCountdown(nudgeDelaySeconds);
       showScreen('waiting');
       requestWakeLock();
     }
@@ -1464,6 +1861,8 @@ window.leaveRoom = async function() {
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
+  clearNudgeTimer();
+  lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
   roomCode = null; myId = null;
   showScreen('home');
@@ -1474,6 +1873,8 @@ window.closeRoom = async function() {
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
+  clearNudgeTimer();
+  lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}`));
   roomCode = null; myId = null;
   showScreen('home');
