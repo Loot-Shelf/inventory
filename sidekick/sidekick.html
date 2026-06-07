@@ -651,7 +651,7 @@
     <label>Your Name (Host)</label>
     <input id="host-name" placeholder="Enter your name" maxlength="20">
     <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
-      <span class="color-preview-swatch" id="host-color-swatch" style="background:#7c3aed;"></span>
+      <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
       <span id="host-color-label">Choose Player Color</span>
     </button>
     <button class="btn-primary" onclick="createRoom()">Create Room</button>
@@ -673,7 +673,7 @@
     <label>Your Name</label>
     <input id="join-name" placeholder="Enter your name" maxlength="20">
     <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn">
-      <span class="color-preview-swatch" id="join-color-swatch" style="background:#7c3aed;"></span>
+      <span class="color-preview-swatch" id="join-color-swatch" style="background:#FF0000;"></span>
       <span id="join-color-label">Choose Player Color</span>
     </button>
     <button class="btn-primary" onclick="joinRoom()">Join Room</button>
@@ -997,31 +997,29 @@ function adjustBrightness(hex, factor) {
 
 // ── SETTINGS PANEL TOGGLE ──────────────────────
 const PLAYER_COLORS = [
-  { name: 'Violet',     hex: '#7c3aed' },
-  { name: 'Blue',       hex: '#2563eb' },
-  { name: 'Sky',        hex: '#0ea5e9' },
-  { name: 'Teal',       hex: '#0d9488' },
-  { name: 'Green',      hex: '#16a34a' },
-  { name: 'Lime',       hex: '#65a30d' },
-  { name: 'Yellow',     hex: '#ca8a04' },
-  { name: 'Orange',     hex: '#ea580c' },
-  { name: 'Red',        hex: '#dc2626' },
-  { name: 'Rose',       hex: '#e11d48' },
-  { name: 'Pink',       hex: '#db2777' },
-  { name: 'Fuchsia',    hex: '#a21caf' },
-  { name: 'Indigo',     hex: '#4338ca' },
-  { name: 'Cyan',       hex: '#0891b2' },
-  { name: 'Emerald',    hex: '#059669' },
-  { name: 'Amber',      hex: '#d97706' },
-  { name: 'Coral',      hex: '#f43f5e' },
-  { name: 'Slate',      hex: '#475569' },
-  { name: 'Silver',     hex: '#94a3b8' },
-  { name: 'White',      hex: '#e2e8f0' },
+  { name: 'Red',            hex: '#FF0000' },
+  { name: 'Orange',         hex: '#FF7F00' },
+  { name: 'Saffron',        hex: '#F4C430' },
+  { name: 'Yellow',         hex: '#FFFF00' },
+  { name: 'Spring Green',   hex: '#00FF7F' },
+  { name: 'Green',          hex: '#00FF00' },
+  { name: 'Aquamarine',     hex: '#7FFFD4' },
+  { name: 'Cyan',           hex: '#00FFFF' },
+  { name: 'Sky Blue',       hex: '#87CEEB' },
+  { name: 'Azure',          hex: '#007FFF' },
+  { name: 'Blue',           hex: '#0000FF' },
+  { name: 'Electric Violet',hex: '#8F00FF' },
+  { name: 'Mauve',          hex: '#E0B0FF' },
+  { name: 'Magenta',        hex: '#FF00FF' },
+  { name: 'Rose',           hex: '#FF007F' },
+  { name: 'Mint',           hex: '#3EB489' },
+  { name: 'White',          hex: '#FFFFFF' },
+  { name: 'Black',          hex: '#000000' },
 ];
 
-let myColor = '#7c3aed';         // default violet
+let myColor = '#FF0000';         // default red
 let colorPickerContext = 'host'; // which form triggered it
-let tempSelectedColor = '#7c3aed';
+let tempSelectedColor = '#FF0000';
 
 window.openColorPicker = function(context) {
   colorPickerContext = context;
@@ -1032,6 +1030,7 @@ window.openColorPicker = function(context) {
     const sw = document.createElement('button');
     sw.className = 'color-swatch' + (c.hex === tempSelectedColor ? ' selected' : '');
     sw.style.background = c.hex;
+    if (c.hex === '#000000') sw.style.borderColor = 'rgba(255,255,255,0.4)';
     sw.title = c.name;
     sw.onclick = () => {
       grid.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
