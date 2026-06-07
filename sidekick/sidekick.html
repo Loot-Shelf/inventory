@@ -317,16 +317,16 @@
     gap: 0.5rem;
     margin-bottom: 1.25rem;
     width: 100%;
-    overflow: hidden;
   }
   .color-swatch {
+    display: block;
     width: 100%;
-    max-width: 44px;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 3px solid transparent;
     cursor: pointer;
     transition: transform 0.15s, border-color 0.15s;
+    min-width: 0;
   }
   .color-swatch:hover { transform: scale(1.12); }
   .color-swatch.selected {
@@ -346,6 +346,107 @@
     cursor: pointer;
   }
   .color-picker-confirm:hover { filter: brightness(1.1); }
+
+  /* ── ACHIEVEMENT AWARDS ── */
+  .awards-standby {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 8000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .awards-standby.show { display: flex; }
+  .awards-standby-icon {
+    font-size: 3.5rem;
+    animation: pulse-icon 2s ease-in-out infinite;
+  }
+  @keyframes pulse-icon {
+    0%, 100% { opacity: 0.4; transform: scale(0.95); }
+    50%       { opacity: 1;   transform: scale(1.05); }
+  }
+  .awards-standby-text {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .awards-reveal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 8100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 12vh;
+  }
+  .awards-reveal.show { display: flex; }
+  #awards-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .awards-reveal-card {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    animation: revealDrop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes revealDrop {
+    0%   { opacity: 0; transform: translateY(-40px) scale(0.85); }
+    100% { opacity: 1; transform: translateY(0)     scale(1);    }
+  }
+  .awards-category-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.6rem;
+  }
+  .awards-trophy { font-size: 3rem; margin-bottom: 0.5rem; }
+  .awards-winner-name {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 40px currentColor;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+  .awards-winner-stat {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .awards-gameover {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 8200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+    padding: 2rem;
+  }
+  .awards-gameover.show { display: flex; }
+  .awards-gameover-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--accent-light);
+  }
+  .awards-gameover-sub {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
 
   /* ── FEATURE TOGGLES (pre-game) ── */
   .features-section {
@@ -969,6 +1070,16 @@
         </div>
       </div>
 
+      <!-- ACHIEVEMENT AWARDS -->
+      <div class="feature-row" style="margin-top:0.5rem;">
+        <label class="feature-toggle">
+          <input type="checkbox" id="feature-awards-toggle" onchange="onAwardsToggle(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="feature-name">🏆 Achievement Awards</span>
+        <button class="feature-info-btn" onclick="showFeatureInfo('awards')" title="What is this?">?</button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1160,6 +1271,37 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  AWARDS: STANDBY OVERLAY (all players)      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="awards-standby" id="awards-standby">
+  <div class="awards-standby-icon">🏆</div>
+  <div class="awards-standby-text">Awards Ceremony</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  AWARDS: WINNER REVEAL (winner's phone)     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="awards-reveal" id="awards-reveal">
+  <canvas id="awards-canvas"></canvas>
+  <div class="awards-reveal-card">
+    <div class="awards-category-label" id="awards-category-label"></div>
+    <div class="awards-trophy" id="awards-trophy">🏆</div>
+    <div class="awards-winner-name" id="awards-winner-name"></div>
+    <div class="awards-winner-stat" id="awards-winner-stat"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  AWARDS: GAME OVER SCREEN                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="awards-gameover" id="awards-gameover">
+  <div style="font-size:3rem;">🎉</div>
+  <div class="awards-gameover-title">Game Over!</div>
+  <div class="awards-gameover-sub">Thanks for playing</div>
+  <button class="btn-primary" style="max-width:240px;" onclick="endGameFinal()">Back to Home</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FEATURE INFO OVERLAY                       -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="info-overlay" id="info-overlay">
@@ -1202,6 +1344,7 @@ let myName = '';
 
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
+let featureAwardsEnabled = false;
 let nudgeDelaySeconds = 30;
 let nudgeMode = 'multi';       // 'multi' or 'single'
 let nudgeCountdownTimer = null;
@@ -1391,14 +1534,18 @@ window.hostMenuAction = function(action) {
   } else if (action === 'save-game') {
     alert('Save Game — coming soon!');
   } else if (action === 'end-game') {
-    if (confirm('End the game and go to the awards ceremony?')) {
-      alert('Awards ceremony — coming soon!');
+    if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Awards Ceremony?' : '?'))) {
+      triggerEndGame();
     }
   }
 };
 window.onNudgeToggle = function(checked) {
   featureNudgeEnabled = checked;
   document.getElementById('nudge-settings').classList.toggle('open', checked);
+};
+
+window.onAwardsToggle = function(checked) {
+  featureAwardsEnabled = checked;
 };
 
 window.syncNudgeMinutes = function(val) {
@@ -1414,6 +1561,11 @@ const FEATURE_INFO = {
     icon: '👉',
     title: 'Nudge',
     body: `When it's not your turn, you can tap the 👉 button to nudge the active player and let them know you're waiting.\n\nThe nudge button unlocks after a set number of seconds (you choose before the game). Once unlocked, tap as many times as you like — every tap adds to the nudge count shown on the active player's screen.\n\nNudge counts reset each time the turn passes. At the end of the game, the player who received the most nudges gets a special award! 🏆`
+  },
+  awards: {
+    icon: '🏆',
+    title: 'Achievement Awards',
+    body: `After the host ends the game, an awards ceremony plays out on everyone's phones.\n\nA voice announces each award category, then pauses for drama... and reveals the winner. Only the winner's phone lights up with a celebration while everyone else sees a dark standby screen.\n\nAwards are based on stats collected during the game — like who got nudged the most. More awards will be added as new features are introduced!`
   }
 };
 
@@ -1535,6 +1687,275 @@ function resetNudgesForNewTurn() {
   if (isHost && db && roomCode) {
     update(ref(db, `rooms/${roomCode}`), { nudges: null });
   }
+}
+
+// ── AWARDS CEREMONY ────────────────────────────
+
+async function triggerEndGame() {
+  if (!db || !roomCode) return;
+  if (featureAwardsEnabled) {
+    // Push ceremony status to Firebase so all devices react
+    await update(ref(db, `rooms/${roomCode}`), { status: 'ceremony', ceremonyStep: 'standby' });
+    runCeremonyAsHost();
+  } else {
+    // No awards — just end cleanly
+    await update(ref(db, `rooms/${roomCode}`), { status: 'gameover' });
+    showGameOver();
+  }
+}
+
+// Host runs the ceremony timeline and pushes state to Firebase
+async function runCeremonyAsHost() {
+  if (!db || !roomCode) return;
+  const snap = await get(ref(db, `rooms/${roomCode}`));
+  if (!snap.exists()) return;
+  const room = snap.val();
+
+  const players = buildOrderedPlayers(room.players || {});
+  const nudgeTotals = room.nudgeTotals || {};
+
+  // Build award list
+  const awards = [];
+
+  // Award: Most Nudged
+  if (featureNudgeEnabled) {
+    const sorted = players
+      .map(p => ({ ...p, total: nudgeTotals[p.id] || 0 }))
+      .filter(p => p.total > 0)
+      .sort((a, b) => b.total - a.total);
+
+    if (sorted.length > 0) {
+      awards.push({
+        key: 'most-nudged',
+        category: 'Most Nudged Player',
+        trophy: '👉',
+        winner: sorted[0],
+        stat: `${sorted[0].total} nudge${sorted[0].total !== 1 ? 's' : ''} received`
+      });
+    }
+    // else: nobody was nudged — skip this award
+  }
+
+  // Present each award
+  for (const award of awards) {
+    await presentAward(award);
+  }
+
+  // All done — push gameover
+  await update(ref(db, `rooms/${roomCode}`), { status: 'gameover', ceremonyStep: 'gameover' });
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function presentAward(award) {
+  if (!db || !roomCode) return;
+
+  // Push: everyone goes standby, announce category
+  await update(ref(db, `rooms/${roomCode}`), {
+    ceremonyStep: 'announcing',
+    ceremonyAward: {
+      key: award.key,
+      category: award.category,
+      trophy: award.trophy,
+      winnerId: award.winner.id,
+      winnerName: award.winner.name,
+      winnerColor: award.winner.color || '#7c3aed',
+      stat: award.stat
+    }
+  });
+
+  // Host speaks the lead-in
+  speakText(`The achievement award for ${award.category} goes to...`);
+
+  // Wait for speech + 3 second dramatic pause
+  await sleep(4500);
+
+  // Push: reveal winner
+  await update(ref(db, `rooms/${roomCode}`), { ceremonyStep: 'reveal' });
+
+  // Host speaks the name
+  speakText(award.winner.name);
+
+  // Hold reveal for a few seconds
+  await sleep(5000);
+
+  // Back to standby before next award
+  await update(ref(db, `rooms/${roomCode}`), { ceremonyStep: 'standby', ceremonyAward: null });
+  await sleep(1500);
+}
+
+// All devices react to ceremony state from Firebase
+function handleCeremonyState(room) {
+  const step = room.ceremonyStep || 'standby';
+  const award = room.ceremonyAward || null;
+
+  if (step === 'gameover') {
+    hideAllAwardOverlays();
+    showGameOver();
+    return;
+  }
+
+  if (step === 'standby' || step === 'announcing') {
+    hideAllAwardOverlays();
+    document.getElementById('awards-standby').classList.add('show');
+    return;
+  }
+
+  if (step === 'reveal' && award) {
+    const isWinner = award.winnerId === myId;
+    hideAllAwardOverlays();
+
+    if (isWinner) {
+      showWinnerReveal(award);
+    } else {
+      // Non-winners stay on standby
+      document.getElementById('awards-standby').classList.add('show');
+    }
+  }
+}
+
+function hideAllAwardOverlays() {
+  document.getElementById('awards-standby').classList.remove('show');
+  document.getElementById('awards-reveal').classList.remove('show');
+  document.getElementById('awards-gameover').classList.remove('show');
+  stopFireworks();
+}
+
+function showWinnerReveal(award) {
+  const reveal = document.getElementById('awards-reveal');
+  document.getElementById('awards-category-label').textContent = award.category;
+  document.getElementById('awards-trophy').textContent = award.trophy;
+  document.getElementById('awards-winner-name').textContent = award.winnerName;
+  document.getElementById('awards-winner-name').style.color = award.winnerColor;
+  document.getElementById('awards-winner-stat').textContent = award.stat;
+  reveal.classList.add('show');
+  startFireworks(award.winnerColor);
+}
+
+function showGameOver() {
+  hideAllAwardOverlays();
+  document.getElementById('awards-gameover').classList.add('show');
+}
+
+window.endGameFinal = async function() {
+  hideAllAwardOverlays();
+  if (isHost && db && roomCode) {
+    await remove(ref(db, `rooms/${roomCode}`));
+  }
+  roomCode = null; myId = null;
+  releaseWakeLock();
+  resetOrientation();
+  cleanupListeners();
+  showScreen('home');
+};
+
+// ── SPEECH SYNTHESIS ────────────────────────────
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.88;
+  utt.pitch = 1.0;
+  utt.volume = 1.0;
+  // Pick a natural voice if available
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v =>
+    /samantha|google us|zira|david|karen/i.test(v.name)
+  ) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+  if (preferred) utt.voice = preferred;
+  window.speechSynthesis.speak(utt);
+}
+
+// ── FIREWORKS CANVAS ────────────────────────────
+let fireworksRAF = null;
+let fireworksParticles = [];
+
+function startFireworks(playerColor) {
+  const canvas = document.getElementById('awards-canvas');
+  if (!canvas) return;
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  fireworksParticles = [];
+  stopFireworks();
+
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return { r, g, b };
+  }
+
+  const base = hexToRgb(playerColor || '#7c3aed');
+  // Complementary palette — player color + white + gold
+  const palette = [
+    playerColor,
+    '#ffffff',
+    '#FFD700',
+    `rgb(${Math.min(base.r+80,255)},${Math.min(base.g+80,255)},${Math.min(base.b+80,255)})`
+  ];
+
+  function spawnBurst(x, y) {
+    const count = 28 + Math.floor(Math.random() * 18);
+    for (let i = 0; i < count; i++) {
+      const angle  = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+      const speed  = 3 + Math.random() * 6;
+      fireworksParticles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        alpha: 1,
+        size: 3 + Math.random() * 4,
+        color: palette[Math.floor(Math.random() * palette.length)],
+        gravity: 0.12 + Math.random() * 0.08,
+        decay: 0.013 + Math.random() * 0.01
+      });
+    }
+  }
+
+  // Launch bursts at random intervals
+  function launchRandom() {
+    const x = canvas.width  * (0.15 + Math.random() * 0.7);
+    const y = canvas.height * (0.1  + Math.random() * 0.5);
+    spawnBurst(x, y);
+  }
+
+  // Initial volley
+  for (let i = 0; i < 4; i++) setTimeout(launchRandom, i * 280);
+  // Ongoing
+  const launchInterval = setInterval(launchRandom, 600);
+
+  const ctx = canvas.getContext('2d');
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fireworksParticles = fireworksParticles.filter(p => p.alpha > 0.02);
+    for (const p of fireworksParticles) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= 0.98;
+      p.alpha -= p.decay;
+      p.size  *= 0.993;
+    }
+    fireworksRAF = requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Clean up after reveal period
+  setTimeout(() => clearInterval(launchInterval), 5000);
+}
+
+function stopFireworks() {
+  if (fireworksRAF) { cancelAnimationFrame(fireworksRAF); fireworksRAF = null; }
+  fireworksParticles = [];
+  const canvas = document.getElementById('awards-canvas');
+  if (canvas) canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
 }
 
 // ── SETTINGS PANEL TOGGLE ──────────────────────
@@ -1809,7 +2230,8 @@ window.createRoom = async function() {
     features: {
       nudge: featureNudgeEnabled,
       nudgeDelay: featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0,
-      nudgeMode: featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi'
+      nudgeMode: featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi',
+      awards: featureAwardsEnabled
     },
     players: {
       [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
@@ -1933,7 +2355,7 @@ function listenGameState() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
-    if (room.status !== 'playing') { showScreen('home'); return; }
+    if (room.status !== 'playing' && room.status !== 'ceremony') { showScreen('home'); return; }
 
     localPlayers = buildOrderedPlayers(room.players || {});
     const activeIdx = room.activePlayerIndex || 0;
@@ -1945,6 +2367,13 @@ function listenGameState() {
     featureNudgeEnabled = !!roomFeatures.nudge;
     nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
     nudgeMode = roomFeatures.nudgeMode || 'multi';
+    featureAwardsEnabled = !!roomFeatures.awards;
+
+    // Handle ceremony state pushed by host
+    if (room.status === 'ceremony') {
+      handleCeremonyState(room);
+      return;
+    }
 
     // Detect turn change (or first turn)
     const turnChanged = lastActivePlayerId !== null && lastActivePlayerId !== activePlayer.id;
