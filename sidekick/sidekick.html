@@ -349,7 +349,90 @@
   }
   .color-picker-confirm:hover { filter: brightness(1.1); }
 
-  /* ── ACHIEVEMENT AWARDS ── */
+  /* ── TIMERS ── */
+  .timer-bar {
+    position: absolute;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+  }
+  .timer-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .timer-pill {
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.8);
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .timer-pill.countdown-warning {
+    border-color: rgba(255,100,50,0.6);
+    color: #ff6432;
+    animation: timerPulse 0.8s ease-in-out infinite;
+  }
+  @keyframes timerPulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+  }
+  .timer-pill-label {
+    font-size: 0.6rem;
+    opacity: 0.6;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Timer settings in feature panel */
+  .timer-feature-settings {
+    display: none;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .timer-feature-settings.open { display: flex; }
+  .timer-sub-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .timer-sub-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    flex: 1;
+    min-width: 120px;
+  }
+  .timer-check {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .timer-check input { width: auto; margin: 0; accent-color: var(--accent); }
   .awards-standby {
     display: none;
     position: fixed;
@@ -1083,6 +1166,42 @@
         <button class="feature-info-btn" onclick="showFeatureInfo('awards')" title="What is this?">?</button>
       </div>
 
+      <!-- TIMERS -->
+      <div class="feature-row" style="margin-top:0.5rem;">
+        <label class="feature-toggle">
+          <input type="checkbox" id="feature-timers-toggle" onchange="onTimersToggle(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="feature-name">⏱ Timers</span>
+        <button class="feature-info-btn" onclick="showFeatureInfo('timers')" title="What is this?">?</button>
+      </div>
+      <div class="timer-feature-settings" id="timers-settings">
+        <div style="font-size:0.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">Count-Up Timers</div>
+        <div class="timer-sub-row">
+          <label class="timer-check"><input type="checkbox" id="timer-turn-on" checked> Turn timer</label>
+          <label class="timer-check"><input type="checkbox" id="timer-turn-visible" checked> Visible</label>
+        </div>
+        <div class="timer-sub-row">
+          <label class="timer-check"><input type="checkbox" id="timer-round-on"> Round timer</label>
+          <label class="timer-check"><input type="checkbox" id="timer-round-visible" checked> Visible</label>
+        </div>
+        <div class="timer-sub-row">
+          <label class="timer-check"><input type="checkbox" id="timer-game-on"> Game timer</label>
+          <label class="timer-check"><input type="checkbox" id="timer-game-visible" checked> Visible</label>
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.4rem;">Countdown Timer (per turn)</div>
+        <div class="timer-sub-row">
+          <label class="timer-check"><input type="checkbox" id="timer-countdown-on" onchange="onCountdownToggle(this.checked)"> Enable</label>
+          <label class="timer-check"><input type="checkbox" id="timer-countdown-visible" checked> Visible</label>
+        </div>
+        <div id="countdown-inputs" style="display:none;gap:0.5rem;align-items:center;flex-wrap:wrap;" class="timer-sub-row">
+          <input type="number" id="timer-countdown-min" value="0" min="0" max="60" placeholder="0" style="width:52px;text-align:center;padding:0.3rem;font-size:0.85rem;margin:0;">
+          <span style="font-size:0.8rem;color:var(--muted);">min</span>
+          <input type="number" id="timer-countdown-sec" value="30" min="0" max="59" placeholder="30" style="width:52px;text-align:center;padding:0.3rem;font-size:0.85rem;margin:0;">
+          <span style="font-size:0.8rem;color:var(--muted);">sec</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1170,6 +1289,13 @@
   </div>
   <!-- Floating emoji container -->
   <div class="nudge-float-container" id="nudge-float-container"></div>
+  <!-- Timer bar -->
+  <div class="timer-bar" id="timer-bar-active">
+    <div class="timer-row" id="timer-row-turn-active"></div>
+    <div class="timer-row" id="timer-row-round-active"></div>
+    <div class="timer-row" id="timer-row-game-active"></div>
+    <div class="timer-row" id="timer-row-countdown-active"></div>
+  </div>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-active">
     <div class="host-game-menu-drawer" id="host-game-drawer-active">
@@ -1258,6 +1384,13 @@
     </div>
   </div>
   <div style="text-align:center;">
+    <!-- Timer bar (waiting) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:0.75rem;" id="timer-bar-wait">
+      <div class="timer-row" id="timer-row-turn-wait"></div>
+      <div class="timer-row" id="timer-row-round-wait"></div>
+      <div class="timer-row" id="timer-row-game-wait"></div>
+      <div class="timer-row" id="timer-row-countdown-wait"></div>
+    </div>
     <div class="waiting-player-num" id="waiting-num">P1</div>
     <div class="waiting-name" id="waiting-name">You</div>
     <div class="waiting-label">Waiting for your turn…</div>
@@ -1353,6 +1486,27 @@ let myName = '';
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
 let featureAwardsEnabled = false;
+let featureTimersEnabled = false;
+
+// Timer config (read from Firebase)
+let timerCfg = {
+  turn: false, turnVisible: true,
+  round: false, roundVisible: true,
+  game: false, gameVisible: true,
+  countdown: false, countdownVisible: true,
+  countdownSecs: 30
+};
+
+// Timer runtime state (all in seconds)
+let timerTurn = 0;       // current turn elapsed
+let timerRound = 0;      // current round elapsed
+let timerGame = 0;       // entire game elapsed
+let timerCountdown = 0;  // seconds remaining
+let timerInterval = null;
+let timerIsActive = false; // true only when this device is the active player
+
+// Per-player cumulative turn time (local mirror of Firebase nudgeTotals equiv)
+// Stored in Firebase as rooms/{code}/playerTimes/{id} in seconds
 let nudgeDelaySeconds = 30;
 let nudgeMode = 'multi';       // 'multi' or 'single'
 let nudgeCountdownTimer = null;
@@ -1538,7 +1692,11 @@ window.hostMenuAction = function(action) {
     document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
   });
   if (action === 'end-round') {
-    alert('End Round — coming soon!');
+    if (featureTimersEnabled && timerCfg.round) {
+      resetRoundTimer();
+    } else {
+      alert('End Round — coming soon for non-timer mode!');
+    }
   } else if (action === 'save-game') {
     alert('Save Game — coming soon!');
   } else if (action === 'end-game') {
@@ -1570,7 +1728,11 @@ const FEATURE_INFO = {
     title: 'Nudge',
     body: `When it's not your turn, you can tap the 👉 button to nudge the active player and let them know you're waiting.\n\nThe nudge button unlocks after a set number of seconds (you choose before the game). Once unlocked, tap as many times as you like — every tap adds to the nudge count shown on the active player's screen.\n\nNudge counts reset each time the turn passes. At the end of the game, the player who received the most nudges gets a special award! 🏆`
   },
-  awards: {
+  timers: {
+    icon: '⏱',
+    title: 'Timers',
+    body: `Track how long players take during the game.\n\n• Turn Timer — counts up while it's your turn. Resets each turn. Used for Achievement Awards.\n• Round Timer — counts up across the whole round. Reset by the host using End Round.\n• Game Timer — counts up for the entire session.\n• Countdown Timer — counts down per turn from a set time. A buzzer sounds when it hits zero.\n\nEach timer can be shown or hidden from everyone using the Visible toggle.`
+  },
     icon: '🏆',
     title: 'Achievement Awards',
     body: `After the host ends the game, an awards ceremony plays out on everyone's phones.\n\nA voice announces each award category, then pauses for drama... and reveals the winner. Only the winner's phone lights up with a celebration while everyone else sees a dark standby screen.\n\nAwards are based on stats collected during the game — like who got nudged the most. More awards will be added as new features are introduced!`
@@ -1646,8 +1808,11 @@ window.sendNudge = async function() {
 
   // Atomic increment for turn nudges
   await runTransaction(nudgeRef, current => (current || 0) + 1);
-  // Atomic increment for total nudges (lifetime)
+  // Atomic increment for total nudges received (lifetime)
   await runTransaction(totalRef, current => (current || 0) + 1);
+  // Track nudges sent by this player
+  const sentRef = ref(db, `rooms/${roomCode}/nudgeSentTotals/${myId}`);
+  await runTransaction(sentRef, current => (current || 0) + 1);
 };
 
 function syncNudgeToActiveScreen(room) {
@@ -1697,7 +1862,129 @@ function resetNudgesForNewTurn() {
   }
 }
 
-// ── AWARDS CEREMONY ────────────────────────────
+// ── TIMER FEATURE ─────────────────────────────
+
+// Toggle handlers
+window.onTimersToggle = function(checked) {
+  featureTimersEnabled = checked;
+  document.getElementById('timers-settings').classList.toggle('open', checked);
+};
+window.onCountdownToggle = function(checked) {
+  document.getElementById('countdown-inputs').style.display = checked ? 'flex' : 'none';
+};
+
+// Format seconds → MM:SS
+function fmtTime(s) {
+  s = Math.max(0, Math.round(s));
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+// Start the tick interval on the active player's device
+function startTimerTick(isActive) {
+  stopTimerTick();
+  timerIsActive = isActive;
+  if (!featureTimersEnabled) return;
+  timerInterval = setInterval(() => {
+    if (timerCfg.turn)  timerTurn++;
+    if (timerCfg.round) timerRound++;
+    if (timerCfg.game)  timerGame++;
+    if (timerCfg.countdown && timerIsActive) {
+      timerCountdown = Math.max(0, timerCountdown - 1);
+      if (timerCountdown === 0) playBuzzerSound();
+    }
+    renderTimers();
+    // Active player pushes their current turn time to Firebase every 5s
+    if (isActive && timerCfg.turn && timerTurn % 5 === 0 && db && roomCode) {
+      update(ref(db, `rooms/${roomCode}`), { timerRound, timerGame });
+    }
+  }, 1000);
+}
+
+function stopTimerTick() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+// Called when turn changes — save this player's turn time, reset turn clock
+async function commitTurnTime(playerId, elapsed) {
+  if (!db || !roomCode || !featureTimersEnabled || !timerCfg.turn) return;
+  const snap = await get(ref(db, `rooms/${roomCode}/playerTimes/${playerId}`));
+  const prev = snap.exists() ? (snap.val() || 0) : 0;
+  await update(ref(db, `rooms/${roomCode}`), {
+    [`playerTimes/${playerId}`]: prev + elapsed,
+    timerRound,
+    timerGame
+  });
+}
+
+// Called when a new turn starts — reset turn/countdown clocks, load round/game from Firebase
+function initTimersForTurn(room, isActive) {
+  if (!featureTimersEnabled) return;
+  timerTurn = 0;
+  timerCountdown = timerCfg.countdownSecs;
+  timerRound = room.timerRound || 0;
+  timerGame  = room.timerGame  || 0;
+  startTimerTick(isActive);
+  renderTimers();
+}
+
+// Called by host when End Round fires — reset round timer in Firebase
+async function resetRoundTimer() {
+  timerRound = 0;
+  if (db && roomCode) await update(ref(db, `rooms/${roomCode}`), { timerRound: 0 });
+  renderTimers();
+}
+
+// Render all timer pills into both screens
+function renderTimers() {
+  const slots = [
+    { key: 'turn',      label: '🙋',  value: fmtTime(timerTurn),      visible: timerCfg.turnVisible,      enabled: timerCfg.turn      },
+    { key: 'round',     label: '🔁',  value: fmtTime(timerRound),     visible: timerCfg.roundVisible,     enabled: timerCfg.round     },
+    { key: 'game',      label: '🎮',  value: fmtTime(timerGame),      visible: timerCfg.gameVisible,      enabled: timerCfg.game      },
+    { key: 'countdown', label: '⏳',  value: fmtTime(timerCountdown), visible: timerCfg.countdownVisible, enabled: timerCfg.countdown  },
+  ];
+
+  ['active','wait'].forEach(screen => {
+    slots.forEach(slot => {
+      const row = document.getElementById(`timer-row-${slot.key}-${screen}`);
+      if (!row) return;
+      if (!featureTimersEnabled || !slot.enabled || !slot.visible) {
+        row.innerHTML = '';
+        return;
+      }
+      const warning = slot.key === 'countdown' && timerCountdown <= 10 && timerCountdown > 0;
+      row.innerHTML = `<div class="timer-pill${warning ? ' countdown-warning' : ''}">
+        <span class="timer-pill-label">${slot.label}</span>${slot.value}
+      </div>`;
+    });
+  });
+}
+
+// Sync non-active devices' round/game timers from Firebase (they don't tick locally)
+function syncTimersFromRoom(room) {
+  if (!featureTimersEnabled) return;
+  timerRound = room.timerRound || 0;
+  timerGame  = room.timerGame  || 0;
+  renderTimers();
+}
+
+// Buzzer sound for countdown reaching zero
+function playBuzzerSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(180, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.6, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
 
 async function triggerEndGame() {
   if (!db || !roomCode) return;
@@ -1724,20 +2011,21 @@ async function runCeremonyAsHost() {
 
   // Read features fresh from room — don't rely on local state
   const roomFeatures = room.features || {};
-  const nudgeOn = !!roomFeatures.nudge;
+  const nudgeOn  = !!roomFeatures.nudge;
+  const timersOn = !!roomFeatures.timers && !!roomFeatures.timerTurnOn;
 
   // Build award list
   const awards = [];
 
-  // Award: Most Nudged
   if (nudgeOn) {
-    const sorted = players
+    // Award: Most Nudged (most nudges received)
+    const nudgeTotals = room.nudgeTotals || {};
+    const byMostNudged = players
       .map(p => ({ ...p, total: nudgeTotals[p.id] || 0 }))
-      .filter(p => p.total > 0)
       .sort((a, b) => b.total - a.total);
 
-    if (sorted.length > 0) {
-      const winner = sorted[0];
+    if (byMostNudged.length > 0) {
+      const winner = byMostNudged[0];
       awards.push({
         key: 'most-nudged',
         category: 'Most Nudged Player',
@@ -1746,7 +2034,66 @@ async function runCeremonyAsHost() {
         stat: `${winner.total} nudge${winner.total !== 1 ? 's' : ''} received`
       });
     }
-    // else: nobody was nudged — skip silently
+
+    // Award: Least Nudged (fewest received — zero qualifies)
+    const byLeastNudged = [...byMostNudged].reverse();
+    if (byLeastNudged.length > 0) {
+      const winner = byLeastNudged[0];
+      awards.push({
+        key: 'least-nudged',
+        category: 'Least Nudged Player',
+        trophy: '😇',
+        winner,
+        stat: winner.total === 0 ? 'Never nudged!' : `Only ${winner.total} nudge${winner.total !== 1 ? 's' : ''} received`
+      });
+    }
+
+    // Award: Most Nudges Sent (the nudger)
+    const nudgeSent = room.nudgeSentTotals || {};
+    const bySent = players
+      .map(p => ({ ...p, sent: nudgeSent[p.id] || 0 }))
+      .filter(p => p.sent > 0)
+      .sort((a, b) => b.sent - a.sent);
+    if (bySent.length > 0) {
+      const winner = bySent[0];
+      awards.push({
+        key: 'most-sent',
+        category: 'Most Nudges Sent',
+        trophy: '👊',
+        winner,
+        stat: `${winner.sent} nudge${winner.sent !== 1 ? 's' : ''} sent`
+      });
+    }
+  }
+
+  if (timersOn) {
+    const playerTimes = room.playerTimes || {};
+    const byTime = players
+      .map(p => ({ ...p, secs: playerTimes[p.id] || 0 }))
+      .filter(p => p.secs > 0)
+      .sort((a, b) => b.secs - a.secs);
+
+    if (byTime.length > 0) {
+      // Most time taken (slowest)
+      const slowest = byTime[0];
+      awards.push({
+        key: 'most-time',
+        category: 'Most Time Taken',
+        trophy: '🐢',
+        winner: slowest,
+        stat: `${fmtTime(slowest.secs)} total turn time`
+      });
+
+      // Least time taken (fastest)
+      const fastest = byTime[byTime.length - 1];
+      awards.push({
+        key: 'least-time',
+        category: 'Least Time Taken',
+        trophy: '⚡',
+        winner: fastest,
+        stat: `${fmtTime(fastest.secs)} total turn time`
+      });
+    }
   }
 
   // Present each award
@@ -1882,6 +2229,10 @@ window.playAgain = async function() {
   updates[`rooms/${roomCode}/activePlayerIndex`] = 0;
   updates[`rooms/${roomCode}/nudges`] = null;
   updates[`rooms/${roomCode}/nudgeTotals`] = null;
+  updates[`rooms/${roomCode}/nudgeSentTotals`] = null;
+  updates[`rooms/${roomCode}/playerTimes`] = null;
+  updates[`rooms/${roomCode}/timerRound`] = 0;
+  updates[`rooms/${roomCode}/timerGame`] = 0;
   updates[`rooms/${roomCode}/ceremonyStep`] = null;
   updates[`rooms/${roomCode}/ceremonyAward`] = null;
   await update(ref(db), updates);
@@ -2305,7 +2656,18 @@ window.createRoom = async function() {
       nudge: featureNudgeEnabled,
       nudgeDelay: featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0,
       nudgeMode: featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi',
-      awards: featureAwardsEnabled
+      awards: featureAwardsEnabled,
+      timers: featureTimersEnabled,
+      timerTurnOn:          featureTimersEnabled && document.getElementById('timer-turn-on').checked,
+      timerTurnVisible:     document.getElementById('timer-turn-visible').checked,
+      timerRoundOn:         featureTimersEnabled && document.getElementById('timer-round-on').checked,
+      timerRoundVisible:    document.getElementById('timer-round-visible').checked,
+      timerGameOn:          featureTimersEnabled && document.getElementById('timer-game-on').checked,
+      timerGameVisible:     document.getElementById('timer-game-visible').checked,
+      timerCountdownOn:     featureTimersEnabled && document.getElementById('timer-countdown-on').checked,
+      timerCountdownVisible:document.getElementById('timer-countdown-visible').checked,
+      timerCountdownSecs:   (parseInt(document.getElementById('timer-countdown-min').value)||0)*60
+                          + (parseInt(document.getElementById('timer-countdown-sec').value)||30)
     },
     players: {
       [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
@@ -2463,6 +2825,20 @@ function listenGameState() {
     nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
     nudgeMode = roomFeatures.nudgeMode || 'multi';
     featureAwardsEnabled = !!roomFeatures.awards;
+    featureTimersEnabled = !!roomFeatures.timers;
+    if (featureTimersEnabled) {
+      timerCfg = {
+        turn:             !!roomFeatures.timerTurnOn,
+        turnVisible:      roomFeatures.timerTurnVisible !== false,
+        round:            !!roomFeatures.timerRoundOn,
+        roundVisible:     roomFeatures.timerRoundVisible !== false,
+        game:             !!roomFeatures.timerGameOn,
+        gameVisible:      roomFeatures.timerGameVisible !== false,
+        countdown:        !!roomFeatures.timerCountdownOn,
+        countdownVisible: roomFeatures.timerCountdownVisible !== false,
+        countdownSecs:    roomFeatures.timerCountdownSecs || 30
+      };
+    }
 
     // Handle ceremony state pushed by host
     if (room.status === 'ceremony') {
@@ -2511,6 +2887,9 @@ function listenGameState() {
       if (arcEl) arcEl.textContent = roomCode;
       // Nudge: sync floating counter on active player screen
       if (featureNudgeEnabled) syncNudgeToActiveScreen(room);
+      // Timers: init/restart for this turn
+      if (turnChanged || firstTurn) initTimersForTurn(room, true);
+      else syncTimersFromRoom(room);
       clearNudgeTimer();
       showScreen('active');
       requestWakeLock();
@@ -2528,6 +2907,9 @@ function listenGameState() {
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
       if (featureNudgeEnabled && (turnChanged || firstTurn)) startNudgeCountdown(nudgeDelaySeconds);
+      // Timers: sync from Firebase (don't tick locally on waiting screen)
+      if (turnChanged || firstTurn) initTimersForTurn(room, false);
+      else syncTimersFromRoom(room);
       showScreen('waiting');
       requestWakeLock();
     }
@@ -2541,7 +2923,6 @@ window.passTurn = async function(direction) {
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   const room = snap.val();
-  // Use full list for index tracking, but skip knocked-out players
   const allPlayers = buildOrderedPlayers(room.players || {});
   const activePlayers = allPlayers.filter(p => !p.knockedOut);
   if (activePlayers.length === 0) return;
@@ -2553,6 +2934,11 @@ window.passTurn = async function(direction) {
     : (currentActive - 1 + n) % n;
   const nextPlayer = activePlayers[nextActiveIdx];
   const nextIdx = allPlayers.findIndex(p => p.id === nextPlayer.id);
+
+  // Commit this player's turn time before passing
+  await commitTurnTime(myId, timerTurn);
+  stopTimerTick();
+
   await update(ref(db, `rooms/${roomCode}`), { activePlayerIndex: nextIdx });
 };
 
@@ -2563,6 +2949,7 @@ window.leaveRoom = async function() {
   resetOrientation();
   cleanupListeners();
   clearNudgeTimer();
+  stopTimerTick();
   lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
   roomCode = null; myId = null;
