@@ -3655,5 +3655,26 @@
       "Competitive"
     ],
     "createdAt": 1779832509852
+  },
+  {
+    "id": 184,
+    "name": "Pandemic (Brand New Sealed)",
+    "cat": "Board Games",
+    "detail": "",
+    "desc": "Brand New Sealed",
+    "price": 12,
+    "salePrice": 0,
+    "cond": "new",
+    "img": [
+      "https://Loot-Shelf.github.io/inventory/images/pandemicbns/1.JPG",
+      "https://Loot-Shelf.github.io/inventory/images/pandemicbns/2.JPG"
+    ],
+    "pending": false,
+    "playersMin": 2,
+    "playersMax": 4,
+    "playStyle": [
+      "Co-op"
+    ],
+    "createdAt": 1781117837178
   }
 ]
