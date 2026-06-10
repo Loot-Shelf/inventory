@@ -145,64 +145,37 @@
   /* ── WAITING SCREEN (INACTIVE PLAYER) ── */
   #screen-waiting {
     background: #050508;
-    position: relative;
-    overflow: hidden;
   }
-  /* Slow-breathing background orb */
-  #screen-waiting::before {
-    content: '';
-    position: absolute;
-    width: 340px; height: 340px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: waitOrb 5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-  @keyframes waitOrb {
-    0%, 100% { transform: translate(-50%, -50%) scale(1);   opacity: 0.6; }
-    50%       { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-  }
-  #screen-waiting > * { position: relative; z-index: 1; }
-
   .waiting-player-num {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 700;
-    color: #1e1e3a;
+    color: #2a2a4a;
     line-height: 1;
     margin-bottom: 0.25rem;
   }
-  .waiting-name { font-size: 1.1rem; color: #2a2a4a; margin-bottom: 1.5rem; }
-  .waiting-label { font-size: 0.65rem; color: #1e1e30; text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 1.5rem; }
-  .active-indicator {
-    font-size: 0.72rem;
-    color: #3a5a3a;
-    margin-bottom: 0.4rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
+  .waiting-name { font-size: 1.2rem; color: #3a3a5a; margin-bottom: 1.5rem; }
+  .waiting-label { font-size: 0.7rem; color: #2a2a3a; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+  .active-indicator { font-size: 0.75rem; color: #3a4a3a; margin-bottom: 0.4rem; }
   .active-player-name-display {
     font-size: 2.8rem;
     font-weight: 800;
     color: #4ade80;
     letter-spacing: -1px;
-    text-shadow: 0 0 40px rgba(74,222,128,0.4), 0 0 80px rgba(74,222,128,0.15);
+    text-shadow: 0 0 30px rgba(74,222,128,0.3);
     margin-bottom: 0.25rem;
-    animation: activeNameGlow 2.5s ease-in-out infinite;
-  }
-  @keyframes activeNameGlow {
-    0%, 100% { text-shadow: 0 0 30px rgba(74,222,128,0.35), 0 0 60px rgba(74,222,128,0.1); }
-    50%       { text-shadow: 0 0 50px rgba(74,222,128,0.6), 0 0 100px rgba(74,222,128,0.25); }
   }
   .active-player-label {
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: #2d6b3d;
+    letter-spacing: 0.18em;
+    color: #3a7a4a;
+  }
+  .active-indicator {
+    font-size: 0.8rem;
+    color: #4a6a4a;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
   }
 
   /* ── ACTIVE PLAYER SCREEN ── */
@@ -227,34 +200,17 @@
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: filter 0.12s, transform 0.08s;
+    transition: filter 0.1s;
     user-select: none;
-    position: relative;
-    overflow: hidden;
   }
-  /* Subtle inner vignette on each button half */
-  .action-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse 120% 60% at 50% 100%, rgba(0,0,0,0.28) 0%, transparent 70%);
-  }
-  .action-btn:active { filter: brightness(1.25); transform: scale(0.985); }
+  .action-btn:active { filter: brightness(1.2); transform: none; }
 
   .btn-left { background: var(--left-btn); color: #fff; }
   .btn-right { background: var(--right-btn); color: #fff; }
 
-  .btn-arrow {
-    font-size: 6.5rem;
-    line-height: 1;
-    opacity: 0.92;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-    transition: transform 0.12s;
-  }
-  .action-btn:active .btn-arrow { transform: scale(0.88); }
-  .btn-label { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.14em; opacity: 0.75; font-weight: 700; }
-  .btn-player-name { font-size: 0.95rem; opacity: 0.65; margin-top: -0.4rem; font-weight: 600; }
+  .btn-arrow { font-size: 7rem; line-height: 1; }
+  .btn-label { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.9; }
+  .btn-player-name { font-size: 1rem; opacity: 0.8; margin-top: -0.25rem; font-weight: 600; }
 
   .active-center {
     position: absolute;
@@ -268,39 +224,22 @@
   .active-center-name {
     font-size: 1.6rem;
     font-weight: 800;
-    color: rgba(255,255,255,0.97);
-    text-shadow: 0 0 24px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.8);
-    animation: centerNamePulse 3s ease-in-out infinite;
-    letter-spacing: -0.02em;
-  }
-  @keyframes centerNamePulse {
-    0%, 100% { text-shadow: 0 0 20px rgba(0,0,0,0.9), 0 0 0px rgba(255,255,255,0); }
-    50%       { text-shadow: 0 0 20px rgba(0,0,0,0.9), 0 0 18px rgba(255,255,255,0.25); }
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 0 24px rgba(0,0,0,0.9);
   }
   .active-center-label {
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: rgba(255,255,255,0.5);
-    margin-top: 0.4rem;
-    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.3rem;
   }
   @keyframes flashIn {
-    0%   { opacity: 0; transform: scale(0.94); }
-    55%  { opacity: 1; transform: scale(1.015); }
+    0%   { opacity: 0; transform: scale(0.96); }
+    60%  { opacity: 1; transform: scale(1.02); }
     100% { opacity: 1; transform: scale(1); }
   }
-  #screen-active.flash-in { animation: flashIn 0.4s cubic-bezier(0.34,1.3,0.64,1); }
-
-  /* Active screen — richer split with gradient glow edges */
-  #screen-active::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-    background: radial-gradient(ellipse 60% 80% at 50% 50%, transparent 55%, rgba(0,0,0,0.35) 100%);
-  }
+  #screen-active.flash-in { animation: flashIn 0.35s ease-out; }
 
   @keyframes nudgeSquish {
     0%   { transform: scale(1, 1); }
@@ -314,18 +253,12 @@
   .active-divider {
     position: absolute;
     top: 0; left: 50%;
-    width: 2px;
+    width: 3px;
     height: 100%;
-    background: linear-gradient(to bottom,
-      transparent 0%,
-      rgba(255,255,255,0.08) 20%,
-      rgba(255,255,255,0.22) 50%,
-      rgba(255,255,255,0.08) 80%,
-      transparent 100%);
+    background: rgba(0,0,0,0.5);
     transform: translateX(-50%);
     pointer-events: none;
     z-index: 5;
-    filter: blur(0.5px);
   }
 
   /* ── COLOR PICKER ── */
@@ -435,32 +368,28 @@
     align-items: center;
   }
   .timer-pill {
-    background: rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.13);
     border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.75);
+    padding: 3px 12px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.8);
     font-family: 'Courier New', monospace;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 5px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
-    transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
   }
   .timer-pill.countdown-warning {
-    border-color: rgba(255,80,40,0.7);
+    border-color: rgba(255,100,50,0.6);
     color: #ff6432;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 12px rgba(255,80,40,0.25), inset 0 1px 0 rgba(255,255,255,0.06);
-    animation: timerPulse 0.7s ease-in-out infinite;
+    animation: timerPulse 0.8s ease-in-out infinite;
   }
   @keyframes timerPulse {
-    0%,100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.65; transform: scale(1.04); }
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.5; }
   }
   .timer-pill-label {
     font-size: 0.6rem;
@@ -508,29 +437,27 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(124,92,191,0.12) 0%, rgba(0,0,0,0.96) 70%);
+    background: rgba(0,0,0,0.92);
     z-index: 8000;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
   .awards-standby.show { display: flex; }
   .awards-standby-icon {
-    font-size: 4rem;
+    font-size: 3.5rem;
     animation: pulse-icon 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(255,215,0,0.5));
   }
   @keyframes pulse-icon {
-    0%, 100% { opacity: 0.5; transform: scale(0.92); filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); }
-    50%       { opacity: 1;   transform: scale(1.08); filter: drop-shadow(0 0 28px rgba(255,215,0,0.7)); }
+    0%, 100% { opacity: 0.4; transform: scale(0.95); }
+    50%       { opacity: 1;   transform: scale(1.05); }
   }
   .awards-standby-text {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.18em;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    font-weight: 600;
   }
 
   .awards-reveal {
@@ -542,7 +469,6 @@
     align-items: center;
     justify-content: flex-end;
     padding-bottom: 12vh;
-    background: radial-gradient(ellipse 80% 60% at 50% 80%, rgba(0,0,0,0.6) 0%, transparent 100%);
   }
   .awards-reveal.show { display: flex; }
   #awards-canvas {
@@ -554,49 +480,32 @@
     position: relative;
     z-index: 1;
     text-align: center;
-    animation: revealDrop 0.65s cubic-bezier(0.34,1.56,0.64,1) forwards;
-    padding: 0 2rem;
+    animation: revealDrop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
   }
   @keyframes revealDrop {
-    0%   { opacity: 0; transform: translateY(-50px) scale(0.8); filter: blur(4px); }
-    60%  { filter: blur(0px); }
-    100% { opacity: 1; transform: translateY(0)     scale(1);   filter: blur(0px); }
+    0%   { opacity: 0; transform: translateY(-40px) scale(0.85); }
+    100% { opacity: 1; transform: translateY(0)     scale(1);    }
   }
   .awards-category-label {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.6rem;
   }
-  .awards-trophy {
-    font-size: 3.5rem;
-    margin-bottom: 0.5rem;
-    animation: trophyBounce 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
-    display: block;
-  }
-  @keyframes trophyBounce {
-    0%   { transform: scale(0) rotate(-15deg); }
-    100% { transform: scale(1) rotate(0deg); }
-  }
+  .awards-trophy { font-size: 3rem; margin-bottom: 0.5rem; }
   .awards-winner-name {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 900;
     color: #fff;
-    text-shadow: 0 0 60px currentColor, 0 0 120px currentColor;
-    line-height: 1.05;
-    margin-bottom: 0.4rem;
-    animation: nameFlare 0.5s ease-out 0.5s both;
-  }
-  @keyframes nameFlare {
-    0%   { opacity: 0; transform: scale(1.15); }
-    100% { opacity: 1; transform: scale(1); }
+    text-shadow: 0 0 40px currentColor;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
   }
   .awards-winner-stat {
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
   }
 
   .awards-gameover {
@@ -617,7 +526,6 @@
     font-size: 2.2rem;
     font-weight: 900;
     color: var(--accent-light);
-    text-shadow: 0 0 40px rgba(160,126,224,0.4);
   }
   .awards-gameover-sub {
     font-size: 0.9rem;
@@ -804,32 +712,14 @@
   .nudge-float {
     position: absolute;
     bottom: 20%;
-    font-size: 2.2rem;
-    animation: floatUp 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    font-size: 2.4rem;
+    animation: floatUp 1.6s ease-out forwards;
     pointer-events: none;
-    will-change: transform, opacity;
-  }
-  .nudge-float.arc-left {
-    animation: floatUpArcLeft 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-  .nudge-float.arc-right {
-    animation: floatUpArcRight 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
   @keyframes floatUp {
-    0%   { transform: translateY(0)      scale(1.1)   rotate(0deg);   opacity: 1; }
-    30%  { transform: translateY(-70px)  scale(1.25)  rotate(-5deg);  opacity: 1; }
-    70%  { transform: translateY(-160px) scale(1.1)   rotate(8deg);   opacity: 0.8; }
-    100% { transform: translateY(-250px) scale(0.75)  rotate(-3deg);  opacity: 0; }
-  }
-  @keyframes floatUpArcLeft {
-    0%   { transform: translateY(0)      translateX(0)    scale(1.1)  rotate(0deg);  opacity: 1; }
-    40%  { transform: translateY(-90px)  translateX(-30px) scale(1.2) rotate(-15deg); opacity: 1; }
-    100% { transform: translateY(-260px) translateX(-55px) scale(0.7) rotate(-25deg); opacity: 0; }
-  }
-  @keyframes floatUpArcRight {
-    0%   { transform: translateY(0)      translateX(0)    scale(1.1)  rotate(0deg);  opacity: 1; }
-    40%  { transform: translateY(-90px)  translateX(30px) scale(1.2)  rotate(15deg); opacity: 1; }
-    100% { transform: translateY(-260px) translateX(55px) scale(0.7)  rotate(25deg); opacity: 0; }
+    0%   { transform: translateY(0) scale(1);   opacity: 1; }
+    80%  { transform: translateY(-180px) scale(1.2); opacity: 0.8; }
+    100% { transform: translateY(-240px) scale(0.8); opacity: 0; }
   }
   .nudge-active-counter {
     position: absolute;
@@ -1521,8 +1411,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <div class="awards-standby" id="awards-standby">
   <div class="awards-standby-icon">🏆</div>
-  <div class="awards-standby-text" id="awards-standby-text">Achievement Awards</div>
-  <button id="awards-skip-btn" onclick="skipAwards()" style="display:none; margin-top:1.5rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.55); font-size:0.78rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:0.5rem 1.25rem; border-radius:20px; cursor:pointer; width:auto;">⏭ Skip Awards</button>
+  <div class="awards-standby-text">Achievement Awards</div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -1615,7 +1504,6 @@ let timerGame = 0;       // entire game elapsed
 let timerCountdown = 0;  // seconds remaining
 let timerInterval = null;
 let timerIsActive = false; // true only when this device is the active player
-let buzzerFired = 0;       // how many times the countdown buzzer has played (cap at 3)
 
 // Per-player cumulative turn time (local mirror of Firebase nudgeTotals equiv)
 // Stored in Firebase as rooms/{code}/playerTimes/{id} in seconds
@@ -1663,14 +1551,12 @@ window.saveConfig = function() {
   localStorage.setItem('gr_config', JSON.stringify(cfg));
   initFirebase(cfg);
   document.getElementById('setup-overlay').classList.remove('show');
-  status('home-status', 'Firebase connected! ✓', 'success');
 };
 
 function initFirebase(cfg) {
   try {
     const app = initializeApp(cfg, cfg.projectId);
     db = getDatabase(app);
-    status('home-status', 'Firebase ready ✓', 'success');
   } catch(e) {
     status('home-status', 'Firebase error: ' + e.message, 'error');
   }
@@ -1956,15 +1842,11 @@ function syncNudgeToActiveScreen(room) {
 
 function spawnNudgeFloat(container) {
   const el = document.createElement('div');
-  const arcClass = ['', 'arc-left', 'arc-right'][Math.floor(Math.random() * 3)];
-  el.className = 'nudge-float' + (arcClass ? ' ' + arcClass : '');
+  el.className = 'nudge-float';
   el.textContent = '👉';
-  el.style.left = (8 + Math.random() * 78) + '%';
-  const scale = 0.75 + Math.random() * 0.55;
-  el.style.fontSize = (scale * 2.2) + 'rem';
-  el.style.animationDelay = (Math.random() * 0.1) + 's';
+  el.style.left = (10 + Math.random() * 80) + '%';
   container.appendChild(el);
-  setTimeout(() => el.remove(), 2000);
+  setTimeout(() => el.remove(), 1700);
 }
 
 function resetNudgesForNewTurn() {
@@ -2007,12 +1889,8 @@ function startTimerTick(isActive) {
     if (timerCfg.round) timerRound++;
     if (timerCfg.game)  timerGame++;
     if (timerCfg.countdown && timerIsActive) {
-      if (timerCountdown > 0) {
-        timerCountdown = Math.max(0, timerCountdown - 1);
-        if (timerCountdown === 0) { buzzerFired = 0; playBuzzerSound(); buzzerFired++; }
-      } else if (buzzerFired > 0 && buzzerFired < 3) {
-        playBuzzerSound(); buzzerFired++;
-      }
+      timerCountdown = Math.max(0, timerCountdown - 1);
+      if (timerCountdown === 0) playBuzzerSound();
     }
     renderTimers();
     // Active player pushes their current turn time to Firebase every 5s
@@ -2043,7 +1921,6 @@ function initTimersForTurn(room, isActive) {
   if (!featureTimersEnabled) return;
   timerTurn = 0;
   timerCountdown = timerCfg.countdownSecs;
-  buzzerFired = 0;
   timerRound = room.timerRound || 0;
   timerGame  = room.timerGame  || 0;
   startTimerTick(isActive);
@@ -2090,32 +1967,20 @@ function syncTimersFromRoom(room) {
   renderTimers();
 }
 
-// Buzzer sound for countdown reaching zero — called up to 3 times
+// Buzzer sound for countdown reaching zero
 function playBuzzerSound() {
   try {
-    const ctx = getAudioContext();
-    const now = ctx.currentTime;
-    // Sharp descending buzz: feels urgent and distinct each call
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    const dist = ctx.createWaveShaper();
-    // Mild distortion curve for gritty buzzer texture
-    const curve = new Float32Array(256);
-    for (let i = 0; i < 256; i++) {
-      const x = (i * 2) / 256 - 1;
-      curve[i] = (Math.PI + 200) * x / (Math.PI + 200 * Math.abs(x));
-    }
-    dist.curve = curve;
-    osc.connect(dist); dist.connect(gain); gain.connect(ctx.destination);
+    osc.connect(gain); gain.connect(ctx.destination);
     osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(220, now);
-    osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.55, now + 0.02);
-    gain.gain.setValueAtTime(0.55, now + 0.25);
-    gain.gain.linearRampToValueAtTime(0, now + 0.4);
-    osc.start(now);
-    osc.stop(now + 0.45);
+    osc.frequency.setValueAtTime(180, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.6, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
   } catch(e) {}
 }
 
@@ -2341,16 +2206,8 @@ function showGameOver() {
 function showStandby() {
   const el = document.getElementById('awards-standby-text');
   if (el) el.textContent = 'Achievement Awards';
-  const skipBtn = document.getElementById('awards-skip-btn');
-  if (skipBtn) skipBtn.style.display = isHost ? 'block' : 'none';
   document.getElementById('awards-standby').classList.add('show');
 }
-
-// Host can skip remaining awards and jump straight to game-over screen
-window.skipAwards = async function() {
-  if (!db || !roomCode || !isHost) return;
-  await update(ref(db, `rooms/${roomCode}`), { status: 'gameover', ceremonyStep: 'gameover' });
-};
 
 // Play Again — resets nudge stats, keeps players & order, goes back to playing
 window.playAgain = async function() {
@@ -2433,7 +2290,6 @@ function speakText(text) {
 // ── FIREWORKS CANVAS ────────────────────────────
 let fireworksRAF = null;
 let fireworksParticles = [];
-let fireworksLaunchInterval = null;
 
 function startFireworks(playerColor) {
   const canvas = document.getElementById('awards-canvas');
@@ -2451,129 +2307,73 @@ function startFireworks(playerColor) {
   }
 
   const base = hexToRgb(playerColor || '#7c3aed');
-  const lighter = `rgb(${Math.min(base.r+100,255)},${Math.min(base.g+100,255)},${Math.min(base.b+100,255)})`;
-  const palette = [ playerColor, '#ffffff', '#FFD700', '#FF6FFF', lighter ];
+  // Complementary palette — player color + white + gold
+  const palette = [
+    playerColor,
+    '#ffffff',
+    '#FFD700',
+    `rgb(${Math.min(base.r+80,255)},${Math.min(base.g+80,255)},${Math.min(base.b+80,255)})`
+  ];
 
-  // Draw a star shape on canvas
-  function drawStar(ctx, x, y, r, color, alpha, points = 4) {
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    for (let i = 0; i < points * 2; i++) {
-      const angle = (i * Math.PI) / points - Math.PI / 2;
-      const rad = i % 2 === 0 ? r : r * 0.4;
-      if (i === 0) ctx.moveTo(x + rad * Math.cos(angle), y + rad * Math.sin(angle));
-      else ctx.lineTo(x + rad * Math.cos(angle), y + rad * Math.sin(angle));
-    }
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function spawnBurst(x, y, type = 'circle') {
-    const count = type === 'ring' ? 24 : (28 + Math.floor(Math.random() * 22));
+  function spawnBurst(x, y) {
+    const count = 28 + Math.floor(Math.random() * 18);
     for (let i = 0; i < count; i++) {
-      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * (type === 'ring' ? 0 : 0.45);
-      const speed = type === 'ring'
-        ? (5 + Math.random() * 2)
-        : (2.5 + Math.random() * 7.5);
-      const color = palette[Math.floor(Math.random() * palette.length)];
-      const isStar = Math.random() < 0.3;
+      const angle  = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+      const speed  = 3 + Math.random() * 6;
       fireworksParticles.push({
         x, y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         alpha: 1,
-        size: isStar ? (4 + Math.random() * 5) : (2.5 + Math.random() * 4),
-        color,
-        gravity: type === 'ring' ? 0.06 : (0.1 + Math.random() * 0.1),
-        decay: 0.011 + Math.random() * 0.012,
-        isStar,
-        trail: [],
-        rotation: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.25,
-      });
-    }
-    // Spawn a few extra gold sparks at the center
-    for (let i = 0; i < 6; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      fireworksParticles.push({
-        x, y,
-        vx: Math.cos(angle) * (1 + Math.random() * 2),
-        vy: Math.sin(angle) * (1 + Math.random() * 2),
-        alpha: 1,
-        size: 1.5 + Math.random() * 2,
-        color: '#FFD700',
-        gravity: 0.05,
-        decay: 0.022 + Math.random() * 0.015,
-        isStar: false,
-        trail: [],
-        rotation: 0, rotSpeed: 0,
+        size: 3 + Math.random() * 4,
+        color: palette[Math.floor(Math.random() * palette.length)],
+        gravity: 0.12 + Math.random() * 0.08,
+        decay: 0.013 + Math.random() * 0.01
       });
     }
   }
 
+  // Launch bursts at random intervals
   function launchRandom() {
-    const x = canvas.width  * (0.12 + Math.random() * 0.76);
-    const y = canvas.height * (0.08 + Math.random() * 0.48);
-    const type = Math.random() < 0.25 ? 'ring' : 'circle';
-    spawnBurst(x, y, type);
+    const x = canvas.width  * (0.15 + Math.random() * 0.7);
+    const y = canvas.height * (0.1  + Math.random() * 0.5);
+    spawnBurst(x, y);
   }
 
   // Initial volley
-  for (let i = 0; i < 5; i++) setTimeout(launchRandom, i * 240);
-  fireworksLaunchInterval = setInterval(launchRandom, 650);
+  for (let i = 0; i < 4; i++) setTimeout(launchRandom, i * 280);
+  // Ongoing
+  const launchInterval = setInterval(launchRandom, 600);
 
   const ctx = canvas.getContext('2d');
   function draw() {
-    // Semi-transparent clear for trail effect
-    ctx.fillStyle = 'rgba(0,0,0,0.18)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    fireworksParticles = fireworksParticles.filter(p => p.alpha > 0.015);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fireworksParticles = fireworksParticles.filter(p => p.alpha > 0.02);
     for (const p of fireworksParticles) {
-      if (p.isStar) {
-        drawStar(ctx, p.x, p.y, p.size, p.color, p.alpha);
-      } else {
-        // Draw elongated streak in direction of travel
-        const spd = Math.hypot(p.vx, p.vy);
-        const len = Math.min(spd * 2.5, 12);
-        ctx.save();
-        ctx.globalAlpha = p.alpha;
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth = p.size * 0.7;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.x - p.vx / spd * len, p.y - p.vy / spd * len);
-        ctx.stroke();
-        // Dot at head
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 0.55, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
       p.x += p.vx;
       p.y += p.vy;
       p.vy += p.gravity;
-      p.vx *= 0.975;
+      p.vx *= 0.98;
       p.alpha -= p.decay;
-      p.size  *= 0.991;
-      p.rotation += p.rotSpeed;
+      p.size  *= 0.993;
     }
     fireworksRAF = requestAnimationFrame(draw);
   }
   draw();
 
-  // Stop launching after reveal, let existing particles fade
-  setTimeout(() => { if (fireworksLaunchInterval) { clearInterval(fireworksLaunchInterval); fireworksLaunchInterval = null; } }, 5000);
+  // Clean up after reveal period
+  setTimeout(() => clearInterval(launchInterval), 5000);
 }
 
 function stopFireworks() {
   if (fireworksRAF) { cancelAnimationFrame(fireworksRAF); fireworksRAF = null; }
-  if (fireworksLaunchInterval) { clearInterval(fireworksLaunchInterval); fireworksLaunchInterval = null; }
   fireworksParticles = [];
   const canvas = document.getElementById('awards-canvas');
   if (canvas) canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
