@@ -1299,6 +1299,7 @@
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-active">
     <div class="host-game-menu-drawer" id="host-game-drawer-active">
+      <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -1354,6 +1355,7 @@
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
+      <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -1440,6 +1442,84 @@
     <button class="btn-danger btn-sm" style="width:100%;" onclick="closeRoomFinal()">🚪 Close Room</button>
   </div>
   <div id="awards-wait-msg" style="display:none; color:var(--muted); font-size:0.85rem; margin-top:1rem;">Waiting for host...</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  MID-GAME ROOM SETTINGS OVERLAY (host only) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="info-overlay" id="midgame-settings-overlay">
+  <div class="info-modal" style="width:min(360px,92vw);max-height:88vh;overflow-y:auto;padding:1.5rem 1.25rem;">
+    <div style="font-size:1.05rem;font-weight:800;color:var(--text);text-align:center;margin-bottom:1.1rem;">⚙️ Room Settings</div>
+
+    <!-- Nudge -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+      <input type="checkbox" id="mg-nudge-toggle" onchange="onMidGameToggle('nudge',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">👉 Nudge</span>
+    </div>
+    <div id="mg-nudge-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.5rem;">
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;">Unlock After</div>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <input type="number" id="mg-nudge-delay" value="30" min="0" max="3600" step="5" style="width:60px;text-align:center;padding:0.3rem;font-size:0.85rem;margin:0;">
+        <span style="font-size:0.8rem;color:var(--muted);">sec</span>
+        <span style="color:var(--muted);font-size:0.8rem;">or</span>
+        <input type="number" id="mg-nudge-delay-min" value="" min="0" max="60" step="1" placeholder="—" style="width:52px;text-align:center;padding:0.3rem;font-size:0.85rem;margin:0;" oninput="mgSyncNudgeMin(this.value)">
+        <span style="font-size:0.8rem;color:var(--muted);">min</span>
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.2rem;">Nudge Mode</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;">
+        <label style="display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;margin:0;font-size:0.82rem;color:var(--text);line-height:1.4;">
+          <input type="radio" name="mg-nudge-mode" value="multi" checked style="width:auto;margin:0;margin-top:2px;flex-shrink:0;accent-color:var(--accent);">
+          <span><strong>Multi Nudge</strong> — tap as many times as you want</span>
+        </label>
+        <label style="display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;margin:0;font-size:0.82rem;color:var(--text);line-height:1.4;">
+          <input type="radio" name="mg-nudge-mode" value="single" style="width:auto;margin:0;margin-top:2px;flex-shrink:0;accent-color:var(--accent);">
+          <span><strong>Single Nudge</strong> — one nudge per turn per player</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Achievement Awards -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
+      <input type="checkbox" id="mg-awards-toggle" onchange="onMidGameToggle('awards',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">🏆 Achievement Awards</span>
+    </div>
+
+    <!-- Timers -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+      <input type="checkbox" id="mg-timers-toggle" onchange="onMidGameToggle('timers',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">⏱ Timers</span>
+    </div>
+    <div id="mg-timers-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.4rem;">
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">Count-Up Timers</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-turn-on" checked style="width:auto;margin:0;accent-color:var(--accent);"> Turn</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-turn-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-round-on" style="width:auto;margin:0;accent-color:var(--accent);"> Round</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-round-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-game-on" style="width:auto;margin:0;accent-color:var(--accent);"> Game</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-game-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.3rem;">Countdown (per turn)</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-countdown-on" onchange="mgCountdownToggle(this.checked)" style="width:auto;margin:0;accent-color:var(--accent);"> Enable</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-countdown-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div id="mg-countdown-inputs" style="display:none;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-top:0.2rem;">
+        <input type="number" id="mg-timer-countdown-min" value="0" min="0" max="60" placeholder="0" style="width:50px;text-align:center;padding:0.3rem;font-size:0.82rem;margin:0;">
+        <span style="font-size:0.8rem;color:var(--muted);">min</span>
+        <input type="number" id="mg-timer-countdown-sec" value="30" min="0" max="59" placeholder="30" style="width:50px;text-align:center;padding:0.3rem;font-size:0.82rem;margin:0;">
+        <span style="font-size:0.8rem;color:var(--muted);">sec</span>
+      </div>
+    </div>
+
+    <p id="mg-status" style="font-size:0.78rem;color:var(--accent-light);text-align:center;min-height:1.1em;margin:0 0 0.5rem;"></p>
+    <button class="info-modal-close" onclick="saveMidGameSettings()">✓ Apply Changes</button>
+    <button class="btn-secondary btn-sm" onclick="closeMidGameSettings()" style="width:100%;margin-top:0.5rem;">Cancel</button>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -1551,12 +1631,14 @@ window.saveConfig = function() {
   localStorage.setItem('gr_config', JSON.stringify(cfg));
   initFirebase(cfg);
   document.getElementById('setup-overlay').classList.remove('show');
+  status('home-status', 'Firebase connected! ✓', 'success');
 };
 
 function initFirebase(cfg) {
   try {
     const app = initializeApp(cfg, cfg.projectId);
     db = getDatabase(app);
+    status('home-status', 'Firebase ready ✓', 'success');
   } catch(e) {
     status('home-status', 'Firebase error: ' + e.message, 'error');
   }
@@ -1703,6 +1785,124 @@ window.hostMenuAction = function(action) {
     }
   }
 };
+
+// ── MID-GAME SETTINGS ──────────────────────────
+// Track whether countdown was already active before opening settings
+// so we know whether a newly-enabled countdown should take effect next turn only
+let mgCountdownWasActive = false;
+
+window.openMidGameSettings = function() {
+  if (!db || !roomCode) return;
+  // Close host menu drawers
+  ['active','wait'].forEach(ctx => {
+    hostMenuOpen[ctx] = false;
+    document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
+  });
+
+  // Populate checkboxes from current live state
+  document.getElementById('mg-nudge-toggle').checked   = featureNudgeEnabled;
+  document.getElementById('mg-awards-toggle').checked  = featureAwardsEnabled;
+  document.getElementById('mg-timers-toggle').checked  = featureTimersEnabled;
+
+  // Nudge sub-settings
+  document.getElementById('mg-nudge-settings').style.display = featureNudgeEnabled ? 'flex' : 'none';
+  document.getElementById('mg-nudge-delay').value = nudgeDelaySeconds;
+  const modeRadio = document.querySelector(`input[name="mg-nudge-mode"][value="${nudgeMode}"]`);
+  if (modeRadio) modeRadio.checked = true;
+
+  // Timer sub-settings
+  document.getElementById('mg-timers-settings').style.display = featureTimersEnabled ? 'flex' : 'none';
+  if (featureTimersEnabled) {
+    document.getElementById('mg-timer-turn-on').checked        = timerCfg.turn;
+    document.getElementById('mg-timer-turn-visible').checked   = timerCfg.turnVisible;
+    document.getElementById('mg-timer-round-on').checked       = timerCfg.round;
+    document.getElementById('mg-timer-round-visible').checked  = timerCfg.roundVisible;
+    document.getElementById('mg-timer-game-on').checked        = timerCfg.game;
+    document.getElementById('mg-timer-game-visible').checked   = timerCfg.gameVisible;
+    document.getElementById('mg-timer-countdown-on').checked   = timerCfg.countdown;
+    document.getElementById('mg-timer-countdown-visible').checked = timerCfg.countdownVisible;
+    mgCountdownWasActive = timerCfg.countdown;
+    document.getElementById('mg-countdown-inputs').style.display = timerCfg.countdown ? 'flex' : 'none';
+    const totalSecs = timerCfg.countdownSecs || 30;
+    document.getElementById('mg-timer-countdown-min').value = Math.floor(totalSecs / 60);
+    document.getElementById('mg-timer-countdown-sec').value = totalSecs % 60;
+  } else {
+    mgCountdownWasActive = false;
+  }
+
+  document.getElementById('mg-status').textContent = '';
+  document.getElementById('midgame-settings-overlay').classList.add('show');
+};
+
+window.closeMidGameSettings = function() {
+  document.getElementById('midgame-settings-overlay').classList.remove('show');
+};
+
+window.onMidGameToggle = function(key, checked) {
+  if (key === 'nudge') {
+    document.getElementById('mg-nudge-settings').style.display = checked ? 'flex' : 'none';
+  } else if (key === 'timers') {
+    document.getElementById('mg-timers-settings').style.display = checked ? 'flex' : 'none';
+  }
+};
+
+window.mgSyncNudgeMin = function(val) {
+  const mins = parseFloat(val);
+  if (!isNaN(mins) && mins >= 0) {
+    document.getElementById('mg-nudge-delay').value = Math.round(mins * 60);
+  }
+};
+
+window.mgCountdownToggle = function(checked) {
+  document.getElementById('mg-countdown-inputs').style.display = checked ? 'flex' : 'none';
+};
+
+window.saveMidGameSettings = async function() {
+  if (!db || !roomCode) return;
+  const statusEl = document.getElementById('mg-status');
+  statusEl.textContent = 'Saving…';
+
+  const nudgeOn    = document.getElementById('mg-nudge-toggle').checked;
+  const awardsOn   = document.getElementById('mg-awards-toggle').checked;
+  const timersOn   = document.getElementById('mg-timers-toggle').checked;
+  const countdownOn = timersOn && document.getElementById('mg-timer-countdown-on').checked;
+
+  // Countdown guard: if countdown is newly enabled mid-game, defer it to next turn
+  // by resetting the timer value in Firebase so current active player isn't blindsided
+  const countdownNewlyEnabled = countdownOn && !mgCountdownWasActive;
+
+  const newFeatures = {
+    nudge:                nudgeOn,
+    nudgeDelay:           nudgeOn ? (parseInt(document.getElementById('mg-nudge-delay').value) || 30) : 0,
+    nudgeMode:            nudgeOn ? (document.querySelector('input[name="mg-nudge-mode"]:checked')?.value || 'multi') : 'multi',
+    awards:               awardsOn,
+    timers:               timersOn,
+    timerTurnOn:          timersOn && document.getElementById('mg-timer-turn-on').checked,
+    timerTurnVisible:     document.getElementById('mg-timer-turn-visible').checked,
+    timerRoundOn:         timersOn && document.getElementById('mg-timer-round-on').checked,
+    timerRoundVisible:    document.getElementById('mg-timer-round-visible').checked,
+    timerGameOn:          timersOn && document.getElementById('mg-timer-game-on').checked,
+    timerGameVisible:     document.getElementById('mg-timer-game-visible').checked,
+    timerCountdownOn:     countdownOn,
+    timerCountdownVisible:document.getElementById('mg-timer-countdown-visible').checked,
+    timerCountdownSecs:   (parseInt(document.getElementById('mg-timer-countdown-min').value)||0)*60
+                        + (parseInt(document.getElementById('mg-timer-countdown-sec').value)||30)
+  };
+
+  try {
+    const updates = { [`rooms/${roomCode}/features`]: newFeatures };
+    // If countdown newly enabled, also reset the live countdown value so it
+    // starts fresh on the NEXT turn rather than immediately firing on the current player
+    if (countdownNewlyEnabled) {
+      updates[`rooms/${roomCode}/timerCountdown`] = newFeatures.timerCountdownSecs;
+    }
+    await update(ref(db), updates);
+    statusEl.textContent = '✓ Applied!';
+    setTimeout(() => { closeMidGameSettings(); }, 700);
+  } catch(e) {
+    statusEl.textContent = 'Error: ' + e.message;
+  }
+};
 window.onNudgeToggle = function(checked) {
   featureNudgeEnabled = checked;
   document.getElementById('nudge-settings').classList.toggle('open', checked);
@@ -1750,6 +1950,9 @@ window.closeFeatureInfo = function() {
 };
 document.getElementById('info-overlay').addEventListener('click', function(e) {
   if (e.target === this) this.classList.remove('show');
+});
+document.getElementById('midgame-settings-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeMidGameSettings();
 });
 
 // ── NUDGE LOGIC ────────────────────────────────
@@ -2818,6 +3021,10 @@ function listenGameState() {
     if (!activePlayer) return;
 
     // Read feature settings from Firebase
+    const prevNudgeEnabled = featureNudgeEnabled;
+    const prevTimersEnabled = featureTimersEnabled;
+    const prevTimerCfg = { ...timerCfg };
+
     const roomFeatures = room.features || {};
     featureNudgeEnabled = !!roomFeatures.nudge;
     nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
@@ -2836,7 +3043,23 @@ function listenGameState() {
         countdownVisible: roomFeatures.timerCountdownVisible !== false,
         countdownSecs:    roomFeatures.timerCountdownSecs || 30
       };
+    } else {
+      timerCfg = { turn:false, round:false, game:false, countdown:false,
+                   turnVisible:true, roundVisible:true, gameVisible:true, countdownVisible:true, countdownSecs:30 };
     }
+
+    // Detect mid-turn feature changes (features changed but turn didn't)
+    const featuresChangedMidTurn = lastActivePlayerId !== null
+      && lastActivePlayerId === activePlayer.id
+      && (prevNudgeEnabled !== featureNudgeEnabled
+          || prevTimersEnabled !== featureTimersEnabled
+          || prevTimerCfg.turnVisible !== timerCfg.turnVisible
+          || prevTimerCfg.roundVisible !== timerCfg.roundVisible
+          || prevTimerCfg.gameVisible !== timerCfg.gameVisible
+          || prevTimerCfg.countdownVisible !== timerCfg.countdownVisible
+          || prevTimerCfg.turn !== timerCfg.turn
+          || prevTimerCfg.round !== timerCfg.round
+          || prevTimerCfg.game !== timerCfg.game);
 
     // Handle ceremony state pushed by host
     if (room.status === 'ceremony') {
@@ -2885,8 +3108,9 @@ function listenGameState() {
       if (arcEl) arcEl.textContent = roomCode;
       // Nudge: sync floating counter on active player screen
       if (featureNudgeEnabled) syncNudgeToActiveScreen(room);
-      // Timers: init/restart for this turn
+      // Timers: full init on turn change; re-sync if features changed mid-turn
       if (turnChanged || firstTurn) initTimersForTurn(room, true);
+      else if (featuresChangedMidTurn) syncTimersFromRoom(room);
       else syncTimersFromRoom(room);
       clearNudgeTimer();
       showScreen('active');
@@ -2901,12 +3125,17 @@ function listenGameState() {
       document.getElementById('waiting-active-name').textContent = activePlayer.name;
       const wrcEl = document.getElementById('wait-room-code-display');
       if (wrcEl) wrcEl.textContent = roomCode;
-      // Nudge area
+      // Nudge area — show/hide immediately whenever feature state changes
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
-      if (featureNudgeEnabled && (turnChanged || firstTurn)) startNudgeCountdown(nudgeDelaySeconds);
-      // Timers: sync from Firebase (don't tick locally on waiting screen)
+      if (featureNudgeEnabled && (turnChanged || firstTurn)) {
+        startNudgeCountdown(nudgeDelaySeconds);
+      } else if (!featureNudgeEnabled) {
+        clearNudgeTimer();
+      }
+      // Timers: full init on turn change; re-sync visibility mid-turn if features changed
       if (turnChanged || firstTurn) initTimersForTurn(room, false);
+      else if (featuresChangedMidTurn) syncTimersFromRoom(room);
       else syncTimersFromRoom(room);
       showScreen('waiting');
       requestWakeLock();
