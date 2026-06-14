@@ -202,37 +202,95 @@
     cursor: pointer;
     transition: filter 0.1s;
     user-select: none;
+    mix-blend-mode: normal;
   }
   .action-btn:active { filter: brightness(1.2); transform: none; }
 
-  .btn-left { background: var(--left-btn); color: #fff; }
-  .btn-right { background: var(--right-btn); color: #fff; }
+  .btn-left { background: rgba(37,99,168,0.72); color: #fff; }
+  .btn-right { background: rgba(192,94,0,0.72); color: #fff; }
 
   .btn-arrow { font-size: 7rem; line-height: 1; }
   .btn-label { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.9; }
   .btn-player-name { font-size: 1rem; opacity: 0.8; margin-top: -0.25rem; font-weight: 600; }
 
+  /* ── ACTIVE SCREEN CENTER ── */
   .active-center {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
     pointer-events: none;
     z-index: 10;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+  .active-center-its {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 0 24px rgba(0,0,0,0.9);
+    letter-spacing: -0.01em;
   }
   .active-center-name {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: rgba(255,255,255,0.95);
-    text-shadow: 0 0 24px rgba(0,0,0,0.9);
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+    text-shadow: 0 0 12px rgba(0,0,0,0.8);
+    letter-spacing: 0.04em;
   }
-  .active-center-label {
-    font-size: 0.85rem;
+
+  /* ── WAITING SCREEN ── */
+  #screen-waiting {
+    background: #050508;
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+  }
+  .wait-heading {
+    font-size: 2rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 2rem;
+  }
+  .wait-active-label {
+    font-size: 0.9rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: rgba(255,255,255,0.65);
-    margin-top: 0.3rem;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.4rem;
+  }
+  .wait-active-name {
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: #4ade80;
+    letter-spacing: -1px;
+    text-shadow: 0 0 40px rgba(74,222,128,0.45), 0 0 80px rgba(74,222,128,0.15);
+    margin-bottom: 2.5rem;
+    line-height: 1;
+  }
+
+  /* Nudge button restyle — pill shape to match sketch circle */
+  .nudge-btn {
+    background: transparent;
+    border: 2px solid rgba(74,222,128,0.5);
+    color: #4ade80;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.55rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+  }
+  .nudge-btn:disabled, .nudge-btn[style*="opacity: 0.35"] {
+    border-color: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.3);
   }
   @keyframes flashIn {
     0%   { opacity: 0; transform: scale(0.96); }
@@ -437,7 +495,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.92);
+    background: #000;
     z-index: 8000;
     flex-direction: column;
     align-items: center;
@@ -469,6 +527,7 @@
     align-items: center;
     justify-content: flex-end;
     padding-bottom: 12vh;
+    background: #000;
   }
   .awards-reveal.show { display: flex; }
   #awards-canvas {
@@ -594,6 +653,13 @@
     cursor: pointer;
     z-index: 4;
     color: #fff;
+  }
+  .pass-tap-its {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 0 24px rgba(0,0,0,0.8);
+    margin-bottom: 0.5rem;
   }
   .pass-tap-arrow {
     font-size: 9rem;
@@ -1387,20 +1453,20 @@
       <div style="margin-top:0.75rem;">
         <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.3rem;">Pass Direction <span style="color:#e05555;">*</span></div>
         <div class="pass-dir-group">
-          <input type="radio" name="pass-direction" id="pd-ccw" value="ccw" class="pass-dir-option">
-          <label class="pass-dir-label" for="pd-ccw">
-            <span class="dir-icon">↺</span>
-            Counter<br>Clockwise
+          <input type="radio" name="pass-direction" id="pd-cw" value="cw" class="pass-dir-option">
+          <label class="pass-dir-label" for="pd-cw">
+            <span class="dir-icon">↻</span>
+            Clockwise
           </label>
           <input type="radio" name="pass-direction" id="pd-both" value="both" class="pass-dir-option">
           <label class="pass-dir-label" for="pd-both">
             <span class="dir-icon">↔</span>
             Both
           </label>
-          <input type="radio" name="pass-direction" id="pd-cw" value="cw" class="pass-dir-option">
-          <label class="pass-dir-label" for="pd-cw">
-            <span class="dir-icon">↻</span>
-            Clockwise
+          <input type="radio" name="pass-direction" id="pd-ccw" value="ccw" class="pass-dir-option">
+          <label class="pass-dir-label" for="pd-ccw">
+            <span class="dir-icon">↺</span>
+            Counter<br>Clockwise
           </label>
         </div>
         <div class="pass-dir-required-note" id="pass-dir-note" style="display:none;color:#e05555;">⚠ Please choose a pass direction to continue.</div>
@@ -1531,6 +1597,10 @@
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-lobby" class="screen">
   <div class="card" style="max-width:480px;">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+      <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">← Back</button>
+      <span style="font-size:0.75rem;color:var(--muted);">Edit settings &amp; features</span>
+    </div>
     <div style="text-align:center; margin-bottom:1rem;">
       <div class="room-code-label">Room Code — Share with players</div>
       <div class="room-code" id="display-code">----</div>
@@ -1597,6 +1667,7 @@
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-active">
     <div class="host-game-menu-drawer" id="host-game-drawer-active">
+      <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -1632,9 +1703,9 @@
       </div>
     </div>
   </div>
-  <div class="active-center">
+  <div class="active-center" id="active-center">
+    <div class="active-center-its">It's Your Turn</div>
     <div class="active-center-name" id="active-player-display"></div>
-    <div class="active-center-label">Your turn</div>
   </div>
   <button class="action-btn btn-right" onclick="passTurn('right')" id="btn-right">
     <div class="btn-arrow">→</div>
@@ -1643,6 +1714,7 @@
   </button>
   <!-- Single-tap pass button (shown for CW or CCW mode) -->
   <button class="pass-tap-btn" id="pass-tap-btn" onclick="passTurnSingle()" style="display:none;">
+    <div class="pass-tap-its">It's Your Turn</div>
     <div class="pass-tap-arrow" id="pass-tap-arrow">↻</div>
     <div class="pass-tap-label">Pass</div>
     <div class="pass-tap-player" id="pass-tap-player"></div>
@@ -1658,6 +1730,7 @@
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
+      <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -1687,24 +1760,22 @@
       </div>
     </div>
   </div>
-  <div style="text-align:center;">
+  <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:0; width:100%;">
     <!-- Timer bar (waiting) -->
-    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:0.75rem;" id="timer-bar-wait">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:1.5rem;" id="timer-bar-wait">
       <div class="timer-row" id="timer-row-turn-wait"></div>
       <div class="timer-row" id="timer-row-round-wait"></div>
       <div class="timer-row" id="timer-row-game-wait"></div>
       <div class="timer-row" id="timer-row-countdown-wait"></div>
     </div>
-    <div class="waiting-player-num" id="waiting-num">P1</div>
-    <div class="waiting-name" id="waiting-name">You</div>
-    <div class="waiting-label">Waiting for your turn…</div>
-    <div class="active-indicator">Now playing:</div>
-    <div class="active-player-name-display" id="waiting-active-name"></div>
-    <div class="active-player-label">Active Player</div>
+    <div class="wait-heading">Waiting For Your Turn</div>
+    <div class="wait-active-label">Active Player:</div>
+    <div class="wait-active-name" id="waiting-active-name"></div>
 
     <!-- NUDGE AREA -->
     <div class="nudge-area" id="nudge-area">
       <button class="nudge-btn" id="nudge-btn" onclick="sendNudge()">👉</button>
+      <span style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.08em;text-transform:uppercase;">Nudge</span>
       <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
     </div>
   </div>
@@ -1715,7 +1786,8 @@
 <!-- ═══════════════════════════════════════════ -->
 <div class="awards-standby" id="awards-standby">
   <div class="awards-standby-icon">🏆</div>
-  <div class="awards-standby-text">Achievement Awards</div>
+  <div class="awards-standby-text" id="awards-standby-text">Achievement Awards</div>
+  <button id="awards-skip-btn" onclick="skipAwards()" style="display:none; margin-top:1.5rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.5); font-size:0.78rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:0.5rem 1.25rem; border-radius:20px; cursor:pointer;">⏭ Skip Awards</button>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -1817,6 +1889,84 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  MID-GAME ROOM SETTINGS OVERLAY (host only) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="info-overlay" id="midgame-settings-overlay">
+  <div class="info-modal" style="width:min(360px,92vw);max-height:88vh;overflow-y:auto;padding:1.5rem 1.25rem;">
+    <div style="font-size:1.05rem;font-weight:800;color:var(--text);text-align:center;margin-bottom:1.1rem;">⚙️ Room Settings</div>
+
+    <!-- Nudge -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+      <input type="checkbox" id="mg-nudge-toggle" onchange="onMidGameToggle('nudge',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">👉 Nudge</span>
+    </div>
+    <div id="mg-nudge-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.5rem;">
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;">Unlock After</div>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <input type="number" id="mg-nudge-delay" value="30" min="0" max="3600" step="5" style="width:60px;text-align:center;padding:0.3rem;font-size:0.85rem;margin:0;">
+        <span style="font-size:0.8rem;color:var(--muted);">sec</span>
+        <span style="color:var(--muted);font-size:0.8rem;">or</span>
+        <input type="number" id="mg-nudge-delay-min" value="" min="0" max="60" step="1" placeholder="—" style="width:52px;text-align:center;padding:0.3rem;font-size:0.85rem;margin:0;" oninput="mgSyncNudgeMin(this.value)">
+        <span style="font-size:0.8rem;color:var(--muted);">min</span>
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.2rem;">Nudge Mode</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;">
+        <label style="display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;margin:0;font-size:0.82rem;color:var(--text);line-height:1.4;">
+          <input type="radio" name="mg-nudge-mode" value="multi" checked style="width:auto;margin:0;margin-top:2px;flex-shrink:0;accent-color:var(--accent);">
+          <span><strong>Multi Nudge</strong> — tap as many times as you want</span>
+        </label>
+        <label style="display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;margin:0;font-size:0.82rem;color:var(--text);line-height:1.4;">
+          <input type="radio" name="mg-nudge-mode" value="single" style="width:auto;margin:0;margin-top:2px;flex-shrink:0;accent-color:var(--accent);">
+          <span><strong>Single Nudge</strong> — one nudge per turn per player</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Achievement Awards -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
+      <input type="checkbox" id="mg-awards-toggle" onchange="onMidGameToggle('awards',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">🏆 Achievement Awards</span>
+    </div>
+
+    <!-- Timers -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+      <input type="checkbox" id="mg-timers-toggle" onchange="onMidGameToggle('timers',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">⏱ Timers</span>
+    </div>
+    <div id="mg-timers-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.4rem;">
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">Count-Up Timers</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-turn-on" checked style="width:auto;margin:0;accent-color:var(--accent);"> Turn</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-turn-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-round-on" style="width:auto;margin:0;accent-color:var(--accent);"> Round</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-round-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-game-on" style="width:auto;margin:0;accent-color:var(--accent);"> Game</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-game-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-top:0.3rem;">Countdown (per turn)</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <label style="font-size:0.82rem;color:var(--text);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-countdown-on" onchange="mgCountdownToggle(this.checked)" style="width:auto;margin:0;accent-color:var(--accent);"> Enable</label>
+        <label style="font-size:0.82rem;color:var(--muted);margin:0;cursor:pointer;display:flex;align-items:center;gap:0.4rem;"><input type="checkbox" id="mg-timer-countdown-visible" checked style="width:auto;margin:0;accent-color:var(--accent);"> Visible</label>
+      </div>
+      <div id="mg-countdown-inputs" style="display:none;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-top:0.2rem;">
+        <input type="number" id="mg-timer-countdown-min" value="0" min="0" max="60" placeholder="0" style="width:50px;text-align:center;padding:0.3rem;font-size:0.82rem;margin:0;">
+        <span style="font-size:0.8rem;color:var(--muted);">min</span>
+        <input type="number" id="mg-timer-countdown-sec" value="30" min="0" max="59" placeholder="30" style="width:50px;text-align:center;padding:0.3rem;font-size:0.82rem;margin:0;">
+        <span style="font-size:0.8rem;color:var(--muted);">sec</span>
+      </div>
+    </div>
+
+    <p id="mg-status" style="font-size:0.78rem;color:var(--accent-light);text-align:center;min-height:1.1em;margin:0 0 0.5rem;"></p>
+    <button class="info-modal-close" onclick="saveMidGameSettings()">✓ Apply Changes</button>
+    <button class="btn-secondary btn-sm" onclick="closeMidGameSettings()" style="width:100%;margin-top:0.5rem;">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FEATURE INFO OVERLAY                       -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="info-overlay" id="info-overlay">
@@ -1861,6 +2011,7 @@ let myName = '';
 let featureNudgeEnabled = false;
 let featureAwardsEnabled = false;
 let passDirection = '';         // 'ccw' | 'both' | 'cw' — mandatory before room creation
+let ceremonyAborted = false;    // set by host Skip Awards button
 let featureTimersEnabled = false;
 
 // Timer config (read from Firebase)
@@ -1884,6 +2035,7 @@ let timerIsActive = false; // true only when this device is the active player
 // Stored in Firebase as rooms/{code}/playerTimes/{id} in seconds
 let nudgeDelaySeconds = 30;
 let nudgeMode = 'multi';       // 'multi' or 'single'
+let suppressNextTurnSound = false; // set after mid-game settings save to avoid spurious chime
 let nudgeCountdownTimer = null;
 let nudgeUnlocked = false;
 let nudgeUsedThisTurn = false;  // for single nudge mode
@@ -2012,6 +2164,20 @@ window.goHome = function() {
   showScreen('home');
 };
 
+window.goBackToCreate = async function() {
+  // Close the Firebase room so it doesn't linger, then return to create screen
+  if (db && roomCode) {
+    cleanupListeners();
+    await remove(ref(db, `rooms/${roomCode}`));
+  }
+  roomCode = null; myId = null; isHost = false;
+  // Re-populate create screen with what the host had typed
+  showScreen('create');
+  // Restore host name field
+  const nameEl = document.getElementById('host-name');
+  if (nameEl && myName) nameEl.value = myName;
+};
+
 window.confirmLeave = function() {
   if (confirm('Leave the room?')) {
     resetOrientation();
@@ -2051,6 +2217,17 @@ function generateQR() {
 
 
 // ── COLOR UTILITY ──────────────────────────────
+// Returns true for colors bright enough to need black text
+function isLightColor(hex) {
+  if (!hex || hex[0] !== '#' || hex.length < 7) return false;
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  // Perceived luminance (ITU-R BT.709)
+  const luminance = 0.2126*r + 0.7152*g + 0.0722*b;
+  return luminance > 160;
+}
+
 function adjustBrightness(hex, factor) {
   // factor: -1 to 1, negative = darker
   let r = parseInt(hex.slice(1,3),16);
@@ -2081,23 +2258,122 @@ window.toggleHostMenu = function(ctx) {
 };
 
 window.hostMenuAction = function(action) {
-  // Close all drawers
   ['active','wait'].forEach(ctx => {
     hostMenuOpen[ctx] = false;
     document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
   });
   if (action === 'end-round') {
-    if (featureTimersEnabled && timerCfg.round) {
-      resetRoundTimer();
-    } else {
-      alert('End Round — coming soon for non-timer mode!');
-    }
+    if (featureTimersEnabled && timerCfg.round) resetRoundTimer();
+    else alert('End Round — coming soon for non-timer mode!');
   } else if (action === 'save-game') {
     alert('Save Game — coming soon!');
   } else if (action === 'end-game') {
     if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Achievement Awards?' : '?'))) {
       triggerEndGame();
     }
+  }
+};
+
+// ── MID-GAME ROOM SETTINGS ────────────────────
+let mgCountdownWasActive = false;
+
+window.openMidGameSettings = function() {
+  if (!db || !roomCode) return;
+  ['active','wait'].forEach(ctx => {
+    hostMenuOpen[ctx] = false;
+    document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
+  });
+
+  document.getElementById('mg-nudge-toggle').checked  = featureNudgeEnabled;
+  document.getElementById('mg-awards-toggle').checked = featureAwardsEnabled;
+  document.getElementById('mg-timers-toggle').checked = featureTimersEnabled;
+  document.getElementById('mg-nudge-settings').style.display  = featureNudgeEnabled  ? 'flex' : 'none';
+  document.getElementById('mg-timers-settings').style.display = featureTimersEnabled ? 'flex' : 'none';
+  document.getElementById('mg-nudge-delay').value = nudgeDelaySeconds;
+  const modeRadio = document.querySelector(`input[name="mg-nudge-mode"][value="${nudgeMode}"]`);
+  if (modeRadio) modeRadio.checked = true;
+
+  if (featureTimersEnabled) {
+    document.getElementById('mg-timer-turn-on').checked          = timerCfg.turn;
+    document.getElementById('mg-timer-turn-visible').checked     = timerCfg.turnVisible;
+    document.getElementById('mg-timer-round-on').checked         = timerCfg.round;
+    document.getElementById('mg-timer-round-visible').checked    = timerCfg.roundVisible;
+    document.getElementById('mg-timer-game-on').checked          = timerCfg.game;
+    document.getElementById('mg-timer-game-visible').checked     = timerCfg.gameVisible;
+    document.getElementById('mg-timer-countdown-on').checked     = timerCfg.countdown;
+    document.getElementById('mg-timer-countdown-visible').checked= timerCfg.countdownVisible;
+    mgCountdownWasActive = timerCfg.countdown;
+    document.getElementById('mg-countdown-inputs').style.display = timerCfg.countdown ? 'flex' : 'none';
+    const totalSecs = timerCfg.countdownSecs || 30;
+    document.getElementById('mg-timer-countdown-min').value = Math.floor(totalSecs / 60);
+    document.getElementById('mg-timer-countdown-sec').value = totalSecs % 60;
+  } else {
+    mgCountdownWasActive = false;
+  }
+
+  document.getElementById('mg-status').textContent = '';
+  document.getElementById('midgame-settings-overlay').classList.add('show');
+};
+
+window.closeMidGameSettings = function() {
+  document.getElementById('midgame-settings-overlay').classList.remove('show');
+};
+
+window.onMidGameToggle = function(key, checked) {
+  if (key === 'nudge')  document.getElementById('mg-nudge-settings').style.display  = checked ? 'flex' : 'none';
+  if (key === 'timers') document.getElementById('mg-timers-settings').style.display = checked ? 'flex' : 'none';
+};
+
+window.mgSyncNudgeMin = function(val) {
+  const mins = parseFloat(val);
+  if (!isNaN(mins) && mins >= 0) document.getElementById('mg-nudge-delay').value = Math.round(mins * 60);
+};
+
+window.mgCountdownToggle = function(checked) {
+  document.getElementById('mg-countdown-inputs').style.display = checked ? 'flex' : 'none';
+};
+
+window.saveMidGameSettings = async function() {
+  if (!db || !roomCode) return;
+  const statusEl = document.getElementById('mg-status');
+  statusEl.textContent = 'Saving…';
+
+  const nudgeOn     = document.getElementById('mg-nudge-toggle').checked;
+  const awardsOn    = document.getElementById('mg-awards-toggle').checked;
+  const timersOn    = document.getElementById('mg-timers-toggle').checked;
+  const countdownOn = timersOn && document.getElementById('mg-timer-countdown-on').checked;
+  const countdownNewlyEnabled = countdownOn && !mgCountdownWasActive;
+
+  const newFeatures = {
+    passDirection,
+    nudge:                 nudgeOn,
+    nudgeDelay:            nudgeOn ? (parseInt(document.getElementById('mg-nudge-delay').value) || 30) : 0,
+    nudgeMode:             nudgeOn ? (document.querySelector('input[name="mg-nudge-mode"]:checked')?.value || 'multi') : 'multi',
+    awards:                awardsOn,
+    timers:                timersOn,
+    timerTurnOn:           timersOn && document.getElementById('mg-timer-turn-on').checked,
+    timerTurnVisible:      document.getElementById('mg-timer-turn-visible').checked,
+    timerRoundOn:          timersOn && document.getElementById('mg-timer-round-on').checked,
+    timerRoundVisible:     document.getElementById('mg-timer-round-visible').checked,
+    timerGameOn:           timersOn && document.getElementById('mg-timer-game-on').checked,
+    timerGameVisible:      document.getElementById('mg-timer-game-visible').checked,
+    timerCountdownOn:      countdownOn,
+    timerCountdownVisible: document.getElementById('mg-timer-countdown-visible').checked,
+    timerCountdownSecs:    (parseInt(document.getElementById('mg-timer-countdown-min').value) || 0) * 60
+                         + (parseInt(document.getElementById('mg-timer-countdown-sec').value)  || 30)
+  };
+
+  try {
+    const updates = { [`rooms/${roomCode}/features`]: newFeatures };
+    if (countdownNewlyEnabled) {
+      updates[`rooms/${roomCode}/timerCountdown`] = newFeatures.timerCountdownSecs;
+    }
+    await update(ref(db), updates);
+    suppressNextTurnSound = true;
+    statusEl.textContent = '✓ Applied!';
+    setTimeout(closeMidGameSettings, 700);
+  } catch(e) {
+    statusEl.textContent = 'Error: ' + e.message;
   }
 };
 window.onNudgeToggle = function(checked) {
@@ -2157,6 +2433,9 @@ window.closeFeatureInfo = function() {
 };
 document.getElementById('info-overlay').addEventListener('click', function(e) {
   if (e.target === this) this.classList.remove('show');
+});
+document.getElementById('midgame-settings-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeMidGameSettings();
 });
 
 // ── NUDGE LOGIC ────────────────────────────────
@@ -2409,6 +2688,7 @@ async function triggerEndGame() {
 // Host runs the ceremony timeline and pushes state to Firebase
 async function runCeremonyAsHost() {
   if (!db || !roomCode) return;
+  ceremonyAborted = false;
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   const room = snap.val();
@@ -2505,7 +2785,9 @@ async function runCeremonyAsHost() {
 
   // Present each award
   for (const award of awards) {
+    if (ceremonyAborted) return;
     await presentAward(award);
+    if (ceremonyAborted) return;
   }
 
   // All done — push gameover
@@ -2514,10 +2796,30 @@ async function runCeremonyAsHost() {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+// Sleep that resolves early if ceremonyAborted is set (polls every 200ms)
+function sleepAbortable(ms) {
+  return new Promise(resolve => {
+    const end = Date.now() + ms;
+    const check = () => {
+      if (ceremonyAborted || Date.now() >= end) resolve();
+      else setTimeout(check, 200);
+    };
+    setTimeout(check, 200);
+  });
+}
+
+// Host can skip remaining awards — aborts loop and sends everyone to game-over
+window.skipAwards = async function() {
+  if (!db || !roomCode || !isHost) return;
+  ceremonyAborted = true;
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  stopFireworks();
+  await update(ref(db, `rooms/${roomCode}`), { status: 'gameover', ceremonyStep: 'gameover' });
+};
+
 async function presentAward(award) {
   if (!db || !roomCode) return;
 
-  // Push: everyone goes standby, announce category
   await update(ref(db, `rooms/${roomCode}`), {
     ceremonyStep: 'announcing',
     ceremonyAward: {
@@ -2531,24 +2833,17 @@ async function presentAward(award) {
     }
   });
 
-  // Host speaks the lead-in
   speakText(`The achievement award for ${award.category} goes to...`);
+  await sleepAbortable(4500);
+  if (ceremonyAborted) return;
 
-  // Wait for speech + 3 second dramatic pause
-  await sleep(4500);
-
-  // Push: reveal winner
   await update(ref(db, `rooms/${roomCode}`), { ceremonyStep: 'reveal' });
-
-  // Host speaks the name
   speakText(award.winner.name);
+  await sleepAbortable(5000);
+  if (ceremonyAborted) return;
 
-  // Hold reveal for a few seconds
-  await sleep(5000);
-
-  // Back to standby before next award
   await update(ref(db, `rooms/${roomCode}`), { ceremonyStep: 'standby', ceremonyAward: null });
-  await sleep(1500);
+  await sleepAbortable(1500);
 }
 
 // All devices react to ceremony state from Firebase
@@ -2615,6 +2910,8 @@ function showGameOver() {
 function showStandby() {
   const el = document.getElementById('awards-standby-text');
   if (el) el.textContent = 'Achievement Awards';
+  const skipBtn = document.getElementById('awards-skip-btn');
+  if (skipBtn) skipBtn.style.display = isHost ? 'block' : 'none';
   document.getElementById('awards-standby').classList.add('show');
 }
 
@@ -3005,10 +3302,13 @@ function renderManageList(players, rawPlayers) {
   el.innerHTML = '';
   players.forEach((p, i) => {
     const isOut = rawPlayers[p.id] && rawPlayers[p.id].knockedOut === true;
+    const dotColor = (!isOut && p.color) ? p.color : null;
+    const dotText  = dotColor && isLightColor(dotColor) ? '#000' : '#fff';
+    const dotStyle = dotColor ? `style="background:${dotColor};color:${dotText};"` : '';
     const div = document.createElement('div');
     div.className = 'manage-player-item' + (isOut ? ' knocked-out' : '');
     div.innerHTML = `
-      <div class="manage-num ${isOut ? 'out' : ''}">${i+1}</div>
+      <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
       <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
       <div class="manage-actions">
         <button class="manage-btn" onclick="moveManagePlayer('${p.id}', -1)" ${i===0?'disabled':''} title="Move up">▲</button>
@@ -3061,9 +3361,12 @@ window.createRoom = async function() {
   myName = name;
   roomCode = genCode();
 
-  const roomRef = ref(db, `rooms/${roomCode}`);
+  let roomRef = ref(db, `rooms/${roomCode}`);
   const existing = await get(roomRef);
-  if (existing.exists()) { roomCode = genCode(); } // retry if collision
+  if (existing.exists()) {
+    roomCode = genCode();
+    roomRef = ref(db, `rooms/${roomCode}`);
+  }
 
   await set(roomRef, {
     host: myId,
@@ -3295,33 +3598,42 @@ function listenGameState() {
       document.getElementById('active-player-display').textContent = myName;
       document.getElementById('left-player-name').textContent  = leftIdx2 ? leftIdx2.name : '';
       document.getElementById('right-player-name').textContent = rightIdx2 ? rightIdx2.name : '';
-      // Apply neighbor colors to buttons
+      // Apply neighbor colors to buttons (semi-transparent so player bg gradient shows through)
       const leftColor  = leftIdx2?.color  || '#2563eb';
       const rightColor = rightIdx2?.color || '#c05e00';
-      document.getElementById('btn-left').style.background  = leftColor;
-      document.getElementById('btn-right').style.background = rightColor;
+      const myPlayerColor = activePlayer.color || '#7c3aed';
+      const toRgba = (hex, alpha) => {
+        const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+        return `rgba(${r},${g},${b},${alpha})`;
+      };
+      document.getElementById('btn-left').style.background  = toRgba(leftColor,  0.70);
+      document.getElementById('btn-right').style.background = toRgba(rightColor, 0.70);
       document.getElementById('screen-active').style.setProperty('--active-left',  adjustBrightness(leftColor, -0.45));
       document.getElementById('screen-active').style.setProperty('--active-right', adjustBrightness(rightColor, -0.45));
+      // Background: player's own color as a wide radial glow — brighter center, slow feather to dark
+      const myColorMid  = adjustBrightness(myPlayerColor, -0.40); // bright centre
+      const myColorEdge = adjustBrightness(myPlayerColor, -0.78); // tinted but dim at edge
+      document.getElementById('screen-active').style.background =
+        `radial-gradient(ellipse 160% 160% at 50% 50%, ${myColorMid} 0%, ${myColorEdge} 50%, #050508 100%)`;
       const arcEl = document.getElementById('active-room-code-display');
       if (arcEl) arcEl.textContent = roomCode;
 
       // Apply pass direction UI mode
       const isBoth = passDirection === 'both' || !passDirection;
-      document.getElementById('btn-left').style.display    = isBoth ? '' : 'none';
-      document.getElementById('btn-right').style.display   = isBoth ? '' : 'none';
-      document.getElementById('active-divider').style.display = isBoth ? '' : 'none';
-      const tapBtn   = document.getElementById('pass-tap-btn');
-      const tapArrow = document.getElementById('pass-tap-arrow');
+      document.getElementById('btn-left').style.display        = isBoth ? '' : 'none';
+      document.getElementById('btn-right').style.display       = isBoth ? '' : 'none';
+      document.getElementById('active-divider').style.display  = isBoth ? '' : 'none';
+      document.getElementById('active-center').style.display   = isBoth ? '' : 'none';
+      const tapBtn    = document.getElementById('pass-tap-btn');
+      const tapArrow  = document.getElementById('pass-tap-arrow');
       const tapPlayer = document.getElementById('pass-tap-player');
       if (isBoth) {
         tapBtn.style.display = 'none';
       } else {
         tapBtn.style.display = '';
         tapArrow.textContent = passDirection === 'cw' ? '↻' : '↺';
-        // Show next player name
         const nextNeighbor = passDirection === 'cw' ? leftIdx2 : rightIdx2;
         tapPlayer.textContent = nextNeighbor ? '→ ' + nextNeighbor.name : '';
-        // Tint background with next player's color
         const tapColor = nextNeighbor?.color || '#7c3aed';
         document.getElementById('screen-active').style.setProperty('--active-left',  adjustBrightness(tapColor, -0.5));
         document.getElementById('screen-active').style.setProperty('--active-right', adjustBrightness(tapColor, -0.3));
@@ -3334,13 +3646,12 @@ function listenGameState() {
       clearNudgeTimer();
       showScreen('active');
       requestWakeLock();
-      if (soundEnabled) playTurnSound();
+      if (soundEnabled && !suppressNextTurnSound) playTurnSound();
+      suppressNextTurnSound = false;
     } else {
       // Show waiting screen
       const myPlayer = localPlayers.find(p => p.id === myId);
       const myIdx = localPlayers.indexOf(myPlayer);
-      document.getElementById('waiting-num').textContent = 'P' + (myIdx + 1);
-      document.getElementById('waiting-name').textContent = myName;
       document.getElementById('waiting-active-name').textContent = activePlayer.name;
       const wrcEl = document.getElementById('wait-room-code-display');
       if (wrcEl) wrcEl.textContent = roomCode;
@@ -3352,6 +3663,8 @@ function listenGameState() {
       if (turnChanged || firstTurn) initTimersForTurn(room, false);
       else syncTimersFromRoom(room);
       showScreen('waiting');
+      // Reset the active screen background so it doesn't persist for next turn
+      document.getElementById('screen-active').style.background = '';
       requestWakeLock();
     }
   });
@@ -3432,10 +3745,12 @@ function renderLobbyList(players) {
   const el = document.getElementById('lobby-player-list');
   el.innerHTML = '';
   players.forEach((p, i) => {
+    const dotColor = p.color || 'var(--accent)';
+    const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
     const div = document.createElement('div');
     div.className = 'player-item';
     div.innerHTML = `
-      <div class="player-num">${i+1}</div>
+      <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">Host (You)</span>' : '<span class="player-badge">Player</span>'}
       <div class="move-btns">
@@ -3450,10 +3765,12 @@ function renderWaitingLobbyList(players) {
   const el = document.getElementById('wl-player-list');
   el.innerHTML = '';
   players.forEach((p, i) => {
+    const dotColor = p.color || 'var(--accent)';
+    const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
     const div = document.createElement('div');
     div.className = 'player-item';
     div.innerHTML = `
-      <div class="player-num">${i+1}</div>
+      <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">You</span>' : ''}`;
     el.appendChild(div);
