@@ -199,8 +199,15 @@
   .player-badge.host { background: #2a1a3a; color: var(--accent-light); }
   .player-badge.active-turn { background: #1a3a1a; color: #4ade80; }
 
-  .move-btns { display: flex; gap: 4px; }
-  .move-btn { width: 26px; height: 26px; border-radius: 6px; background: #2a2a3a; border: none; color: var(--text); font-size: 0.75rem; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .drag-handle {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 1.1rem; cursor: grab; flex-shrink: 0;
+    border-radius: 6px; transition: background 0.15s, color 0.15s;
+    touch-action: none; user-select: none;
+  }
+  .drag-handle:active { cursor: grabbing; background: rgba(124,92,191,0.15); color: var(--accent-light); }
+  .player-item.drag-over { border-color: var(--accent); background: rgba(124,92,191,0.12); }
+  .player-item.dragging  { opacity: 0.4; }
 
   /* ── STATUS BAR ── */
   .status { font-size: 0.85rem; color: var(--muted); text-align: center; margin: 0.5rem 0; }
@@ -1239,10 +1246,18 @@
   .manage-num { width: 24px; height: 24px; border-radius: 50%; background: #7c5cbf; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; }
   .manage-num.out { background: #3a1a1a; color: #6a4a4a; }
   .manage-name { flex: 1; font-size: 0.9rem; }
-  .manage-actions { display: flex; gap: 4px; }
+  .manage-actions { display: flex; gap: 4px; align-items: center; }
   .manage-btn { width: 26px; height: 26px; border-radius: 6px; background: #2a2a3a; border: none; color: #f0eeff; font-size: 0.7rem; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
   .manage-btn.ko-btn { background: #3a1515; color: #f87171; }
   .manage-btn.active-btn { background: #153a15; color: #4ade80; }
+  .manage-drag-handle {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    color: #7a7a9a; font-size: 1.1rem; cursor: grab; flex-shrink: 0;
+    border-radius: 6px; touch-action: none; user-select: none;
+  }
+  .manage-drag-handle:active { cursor: grabbing; background: rgba(124,92,191,0.15); color: var(--accent-light); }
+  .manage-player-item.drag-over { border-color: var(--accent); }
+  .manage-player-item.dragging  { opacity: 0.4; }
   .host-manage-btn {
     position: absolute;
     bottom: 16px;
@@ -1312,7 +1327,42 @@
     margin: 0.5rem 0;
   }
   .setup-inputs { margin-top: 1rem; }
-  .setup-inputs input { margin-bottom: 0.5rem; font-family: monospace; font-size: 0.85rem; }
+  /* ── VICTORY POINTS ENTRY OVERLAY ── */
+  .vp-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.96); z-index: 8050;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 2rem 1.5rem; gap: 1rem;
+  }
+  .vp-overlay.show { display: flex; }
+  .vp-overlay-title { font-size: 1.8rem; font-weight: 900; color: #fff; text-align: center; }
+  .vp-overlay-sub { font-size: 0.9rem; color: rgba(255,255,255,0.5); text-align: center; margin-top: -0.5rem; }
+  .vp-score-input {
+    width: min(240px, 90vw);
+    font-size: 2.5rem; font-weight: 800; text-align: center;
+    background: #1a1a2e; border: 2px solid var(--accent); border-radius: 14px;
+    color: #fff; padding: 0.65rem; outline: none; letter-spacing: 0.05em;
+  }
+  .vp-score-input:focus { border-color: var(--accent-light); }
+  .vp-submit-btn {
+    width: min(240px, 90vw); padding: 0.9rem;
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+  }
+  .vp-submitted-msg { font-size: 1rem; color: rgba(255,255,255,0.55); text-align: center; }
+  .vp-waiting-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; width: min(280px, 90vw); }
+  .vp-waiting-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.88rem; color: rgba(255,255,255,0.6);
+  }
+  .vp-waiting-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .vp-begin-btn {
+    width: min(280px, 90vw); padding: 0.9rem;
+    background: #2a7a2a; color: #fff; border: none;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 700;
+    cursor: pointer; display: none; margin-top: 0.5rem;
+  }
+  .vp-begin-btn.show { display: block; }
 </style>
 </head>
 <body>
@@ -1542,7 +1592,7 @@
       </div>
 
       <!-- TIMERS -->
-      <div class="feature-row" style="margin-bottom:0;">
+      <div class="feature-row">
         <div class="neo-toggle-container">
           <input class="neo-toggle-input" id="feature-timers-toggle" type="checkbox" onchange="onTimersToggle(this.checked)">
           <label class="neo-toggle" for="feature-timers-toggle">
@@ -1568,6 +1618,34 @@
         <span class="feature-name">⏱ Timers</span>
         <button class="feature-edit-btn" id="timers-edit-btn" onclick="openFeatureSettings('timers')" title="Edit settings">EDIT</button>
         <button class="feature-info-btn" onclick="showFeatureInfo('timers')" title="What is this?">?</button>
+      </div>
+
+      <!-- VICTORY POINTS -->
+      <div class="feature-row" style="margin-bottom:0;">
+        <div class="neo-toggle-container">
+          <input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)">
+          <label class="neo-toggle" for="feature-vp-toggle">
+            <div class="neo-track">
+              <div class="neo-background-layer"></div>
+              <div class="neo-grid-layer"></div>
+              <div class="neo-spectrum-analyzer">
+                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+                <div class="neo-spectrum-bar"></div>
+              </div>
+              <div class="neo-track-highlight"></div>
+            </div>
+            <div class="neo-thumb">
+              <div class="neo-thumb-ring"></div>
+              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+            </div>
+            <div class="neo-gesture-area"></div>
+            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+          </label>
+          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+        </div>
+        <span class="feature-name">🏅 Victory Points</span>
+        <button class="feature-info-btn" onclick="showFeatureInfo('vp')" title="What is this?">?</button>
       </div>
 
     </div><!-- /card-section features -->
@@ -1824,6 +1902,24 @@
 
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  VICTORY POINTS ENTRY OVERLAY               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="vp-overlay" id="vp-overlay">
+  <div style="font-size:2.5rem;">🏅</div>
+  <div class="vp-overlay-title">Enter Your Score</div>
+  <div class="vp-overlay-sub" id="vp-overlay-sub">How many Victory Points did you earn?</div>
+  <div id="vp-input-section">
+    <input class="vp-score-input" id="vp-score-input" type="number" min="0" max="99999" placeholder="0" inputmode="numeric">
+    <button class="vp-submit-btn" onclick="submitVP()" style="margin-top:0.75rem;">Submit Score</button>
+  </div>
+  <div id="vp-waiting-section" style="display:none; flex-direction:column; align-items:center; gap:0.75rem; width:100%;">
+    <div class="vp-submitted-msg">✓ Score submitted! Waiting for others…</div>
+    <div class="vp-waiting-list" id="vp-waiting-list"></div>
+    <button class="vp-begin-btn" id="vp-begin-btn" onclick="beginAwardsAfterVP()">🏆 Begin Achievement Awards</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FEATURE SETTINGS OVERLAYS                  -->
 <!-- ═══════════════════════════════════════════ -->
 
@@ -1932,6 +2028,12 @@
       <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">🏆 Achievement Awards</span>
     </div>
 
+    <!-- Victory Points -->
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+      <input type="checkbox" id="mg-vp-toggle" onchange="onMidGameToggle('vp',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
+      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">🏅 Victory Points</span>
+    </div>
+
     <!-- Timers -->
     <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
       <input type="checkbox" id="mg-timers-toggle" onchange="onMidGameToggle('timers',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
@@ -2014,6 +2116,7 @@ let myName = '';
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
 let featureAwardsEnabled = false;
+let featureVPEnabled = false;
 let passDirection = '';         // 'ccw' | 'both' | 'cw' — mandatory before room creation
 let ceremonyAborted = false;    // set by host Skip Awards button
 let featureTimersEnabled = false;
@@ -2127,12 +2230,13 @@ function requireDb() {
 window.showCreateRoom = function() {
   featureNudgeEnabled  = false;
   featureAwardsEnabled = false;
+  featureVPEnabled     = false;
   featureTimersEnabled = false;
   passDirection = '';
   // Uncheck pass direction radios
   document.querySelectorAll('input[name="pass-direction"]').forEach(r => r.checked = false);
   document.getElementById('pass-dir-note').style.display = 'none';
-  ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle'].forEach(id => {
+  ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle'].forEach(id => {
     const el = document.getElementById(id); if (el) el.checked = false;
   });
   ['nudge-edit-btn','timers-edit-btn'].forEach(id => {
@@ -2290,6 +2394,7 @@ window.openMidGameSettings = function() {
 
   document.getElementById('mg-nudge-toggle').checked  = featureNudgeEnabled;
   document.getElementById('mg-awards-toggle').checked = featureAwardsEnabled;
+  document.getElementById('mg-vp-toggle').checked     = featureVPEnabled;
   document.getElementById('mg-timers-toggle').checked = featureTimersEnabled;
   document.getElementById('mg-nudge-settings').style.display  = featureNudgeEnabled  ? 'flex' : 'none';
   document.getElementById('mg-timers-settings').style.display = featureTimersEnabled ? 'flex' : 'none';
@@ -2344,6 +2449,7 @@ window.saveMidGameSettings = async function() {
 
   const nudgeOn     = document.getElementById('mg-nudge-toggle').checked;
   const awardsOn    = document.getElementById('mg-awards-toggle').checked;
+  const vpOn        = document.getElementById('mg-vp-toggle').checked;
   const timersOn    = document.getElementById('mg-timers-toggle').checked;
   const countdownOn = timersOn && document.getElementById('mg-timer-countdown-on').checked;
   const countdownNewlyEnabled = countdownOn && !mgCountdownWasActive;
@@ -2354,6 +2460,7 @@ window.saveMidGameSettings = async function() {
     nudgeDelay:            nudgeOn ? (parseInt(document.getElementById('mg-nudge-delay').value) || 30) : 0,
     nudgeMode:             nudgeOn ? (document.querySelector('input[name="mg-nudge-mode"]:checked')?.value || 'multi') : 'multi',
     awards:                awardsOn,
+    victoryPoints:         vpOn,
     timers:                timersOn,
     timerTurnOn:           timersOn && document.getElementById('mg-timer-turn-on').checked,
     timerTurnVisible:      document.getElementById('mg-timer-turn-visible').checked,
@@ -2391,6 +2498,10 @@ window.onAwardsToggle = function(checked) {
   featureAwardsEnabled = checked;
 };
 
+window.onVPToggle = function(checked) {
+  featureVPEnabled = checked;
+};
+
 window.openFeatureSettings = function(key) {
   document.getElementById(key + '-settings-overlay').classList.add('show');
 };
@@ -2421,6 +2532,11 @@ const FEATURE_INFO = {
   awards: {
     title: 'Achievement Awards',
     body: `After the host ends the game, an awards ceremony plays out on everyone's phones.\n\nA voice announces each award category, then pauses for drama... and reveals the winner. Only the winner's phone lights up with a celebration while everyone else sees a dark standby screen.\n\nAwards are based on stats collected during the game — like who got nudged the most. More awards will be added as new features are introduced!`
+  },
+  vp: {
+    icon: '🏅',
+    title: 'Victory Points',
+    body: `When the host ends the game, every player is prompted to enter their final Victory Point total.\n\nOnce all players have submitted their scores, the host starts the Achievement Awards. The player with the most Victory Points receives a special announcement during the ceremony!\n\nPerfect for any game that tracks points — like Wingspan, Ticket to Ride, or Catan.`
   }
 };
 
@@ -2678,12 +2794,13 @@ function playBuzzerSound() {
 
 async function triggerEndGame() {
   if (!db || !roomCode) return;
-  if (featureAwardsEnabled) {
-    // Push ceremony status to Firebase so all devices react
+  if (featureVPEnabled) {
+    // Push vp-entry status — all players see the score entry overlay
+    await update(ref(db, `rooms/${roomCode}`), { status: 'vp-entry', vpScores: null, vpReady: null });
+  } else if (featureAwardsEnabled) {
     await update(ref(db, `rooms/${roomCode}`), { status: 'ceremony', ceremonyStep: 'standby' });
     runCeremonyAsHost();
   } else {
-    // No awards — just end cleanly
     await update(ref(db, `rooms/${roomCode}`), { status: 'gameover' });
     showGameOver();
   }
@@ -2699,14 +2816,34 @@ async function runCeremonyAsHost() {
 
   const players = buildOrderedPlayers(room.players || {});
   const nudgeTotals = room.nudgeTotals || {};
+  const vpScores = room.vpScores || {};
 
   // Read features fresh from room — don't rely on local state
   const roomFeatures = room.features || {};
   const nudgeOn  = !!roomFeatures.nudge;
   const timersOn = !!roomFeatures.timers && !!roomFeatures.timerTurnOn;
+  const vpOn     = !!roomFeatures.victoryPoints;
 
   // Build award list
   const awards = [];
+
+  // Victory Points award (first, if enabled)
+  if (vpOn && Object.keys(vpScores).length > 0) {
+    const byVP = players
+      .map(p => ({ ...p, vp: vpScores[p.id] ?? 0 }))
+      .sort((a, b) => b.vp - a.vp);
+    if (byVP.length > 0) {
+      const winner = byVP[0];
+      awards.push({
+        key: 'most-vp',
+        category: 'Most Victory Points',
+        trophy: '🏅',
+        winner,
+        stat: `${winner.vp} point${winner.vp !== 1 ? 's' : ''}`,
+        customSpeech: `The player with the most Victory Points is...`
+      });
+    }
+  }
 
   if (nudgeOn) {
     // Award: Most Nudged (most nudges received)
@@ -2837,7 +2974,7 @@ async function presentAward(award) {
     }
   });
 
-  speakText(`The achievement award for ${award.category} goes to...`);
+  speakText(award.customSpeech || `The achievement award for ${award.category} goes to...`);
   await sleepAbortable(4500);
   if (ceremonyAborted) return;
 
@@ -2883,6 +3020,8 @@ function hideAllAwardOverlays() {
   document.getElementById('awards-standby').classList.remove('show');
   document.getElementById('awards-reveal').classList.remove('show');
   document.getElementById('awards-gameover').classList.remove('show');
+  const vpOv = document.getElementById('vp-overlay');
+  if (vpOv) vpOv.classList.remove('show');
   stopFireworks();
 }
 
@@ -2939,6 +3078,8 @@ window.playAgain = async function() {
   updates[`rooms/${roomCode}/nudgeTotals`] = null;
   updates[`rooms/${roomCode}/nudgeSentTotals`] = null;
   updates[`rooms/${roomCode}/playerTimes`] = null;
+  updates[`rooms/${roomCode}/vpScores`] = null;
+  updates[`rooms/${roomCode}/vpReady`] = null;
   updates[`rooms/${roomCode}/timerRound`] = 0;
   updates[`rooms/${roomCode}/timerGame`] = 0;
   updates[`rooms/${roomCode}/ceremonyStep`] = null;
@@ -3311,37 +3452,39 @@ function renderManageList(players, rawPlayers) {
     const dotStyle = dotColor ? `style="background:${dotColor};color:${dotText};"` : '';
     const div = document.createElement('div');
     div.className = 'manage-player-item' + (isOut ? ' knocked-out' : '');
+    div.setAttribute('draggable', 'true');
+    div.dataset.dragId = p.id;
     div.innerHTML = `
       <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
       <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
       <div class="manage-actions">
-        <button class="manage-btn" onclick="moveManagePlayer('${p.id}', -1)" ${i===0?'disabled':''} title="Move up">▲</button>
-        <button class="manage-btn" onclick="moveManagePlayer('${p.id}', 1)" ${i===players.length-1?'disabled':''} title="Move down">▼</button>
         <button class="manage-btn ${isOut ? 'active-btn' : 'ko-btn'}" onclick="toggleKnockOut('${p.id}', ${isOut})" title="${isOut ? 'Bring back' : 'Skip turn'}">
           ${isOut ? '✓' : '✕'}
         </button>
+        <div class="manage-drag-handle" title="Hold to drag">☰</div>
       </div>`;
     el.appendChild(div);
+  });
+  makeDraggable(el, async (srcId, destId) => {
+    const snap = await get(ref(db, `rooms/${roomCode}/players`));
+    if (!snap.exists()) return;
+    const ps = buildOrderedPlayers(snap.val());
+    const srcIdx  = ps.findIndex(p => p.id === srcId);
+    const destIdx = ps.findIndex(p => p.id === destId);
+    if (srcIdx < 0 || destIdx < 0) return;
+    const updates = {};
+    const step = srcIdx < destIdx ? 1 : -1;
+    for (let i = srcIdx; i !== destIdx; i += step) {
+      updates[`rooms/${roomCode}/players/${ps[i + step].id}/order`] = i;
+    }
+    updates[`rooms/${roomCode}/players/${ps[srcIdx].id}/order`] = destIdx;
+    await update(ref(db), updates);
   });
 }
 
 window.toggleKnockOut = async function(playerId, currentlyOut) {
   if (!db || !roomCode) return;
   await update(ref(db, `rooms/${roomCode}/players/${playerId}`), { knockedOut: !currentlyOut });
-};
-
-window.moveManagePlayer = async function(playerId, dir) {
-  if (!db || !roomCode) return;
-  const snap = await get(ref(db, `rooms/${roomCode}/players`));
-  if (!snap.exists()) return;
-  const players = buildOrderedPlayers(snap.val());
-  const idx = players.findIndex(p => p.id === playerId);
-  const swapIdx = idx + dir;
-  if (swapIdx < 0 || swapIdx >= players.length) return;
-  const updates = {};
-  updates[`rooms/${roomCode}/players/${players[idx].id}/order`] = swapIdx;
-  updates[`rooms/${roomCode}/players/${players[swapIdx].id}/order`] = idx;
-  await update(ref(db), updates);
 };
 
 // ── CREATE ROOM ──────────────────────────────
@@ -3382,6 +3525,7 @@ window.createRoom = async function() {
       nudgeDelay: featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0,
       nudgeMode: featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi',
       awards: featureAwardsEnabled,
+      victoryPoints: featureVPEnabled,
       timers: featureTimersEnabled,
       timerTurnOn:          featureTimersEnabled && document.getElementById('timer-turn-on').checked,
       timerTurnVisible:     document.getElementById('timer-turn-visible').checked,
@@ -3537,7 +3681,7 @@ function listenGameState() {
       hideAllAwardOverlays();
       // fall through to normal game rendering below
     }
-    if (room.status !== 'playing' && room.status !== 'ceremony') { showScreen('home'); return; }
+    if (room.status !== 'playing' && room.status !== 'ceremony' && room.status !== 'vp-entry') { showScreen('home'); return; }
 
     localPlayers = buildOrderedPlayers(room.players || {});
     const activeIdx = room.activePlayerIndex || 0;
@@ -3550,6 +3694,7 @@ function listenGameState() {
     nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
     nudgeMode = roomFeatures.nudgeMode || 'multi';
     featureAwardsEnabled = !!roomFeatures.awards;
+    featureVPEnabled     = !!roomFeatures.victoryPoints;
     featureTimersEnabled = !!roomFeatures.timers;
     passDirection = roomFeatures.passDirection || 'both';
     if (featureTimersEnabled) {
@@ -3564,6 +3709,13 @@ function listenGameState() {
         countdownVisible: roomFeatures.timerCountdownVisible !== false,
         countdownSecs:    roomFeatures.timerCountdownSecs || 30
       };
+    }
+
+    // VP entry phase — show score input overlay to all players
+    if (room.status === 'vp-entry') {
+      stopTimerTick();
+      showVPEntryOverlay(room);
+      return;
     }
 
     // Handle ceremony state pushed by host
@@ -3649,7 +3801,7 @@ function listenGameState() {
       clearNudgeTimer();
       showScreen('active');
       requestWakeLock();
-      if (soundEnabled && !suppressNextTurnSound) playTurnSound();
+      if (soundEnabled && !suppressNextTurnSound && (turnChanged || firstTurn)) playTurnSound();
       suppressNextTurnSound = false;
     } else {
       // Show waiting screen
@@ -3764,15 +3916,30 @@ function renderLobbyList(players) {
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
     const div = document.createElement('div');
     div.className = 'player-item';
+    div.setAttribute('draggable', 'true');
+    div.dataset.dragId = p.id;
     div.innerHTML = `
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">Host (You)</span>' : '<span class="player-badge">Player</span>'}
-      <div class="move-btns">
-        <button class="move-btn" onclick="movePlayer(${i}, -1)" ${i===0?'disabled':''}>▲</button>
-        <button class="move-btn" onclick="movePlayer(${i}, 1)"  ${i===players.length-1?'disabled':''}>▼</button>
-      </div>`;
+      <div class="drag-handle" title="Hold to drag">☰</div>`;
     el.appendChild(div);
+  });
+  makeDraggable(el, async (srcId, destId) => {
+    const snap = await get(ref(db, `rooms/${roomCode}/players`));
+    if (!snap.exists()) return;
+    const ps = buildOrderedPlayers(snap.val());
+    const srcIdx  = ps.findIndex(p => p.id === srcId);
+    const destIdx = ps.findIndex(p => p.id === destId);
+    if (srcIdx < 0 || destIdx < 0) return;
+    const updates = {};
+    // Shift orders between src and dest
+    const step = srcIdx < destIdx ? 1 : -1;
+    for (let i = srcIdx; i !== destIdx; i += step) {
+      updates[`rooms/${roomCode}/players/${ps[i + step].id}/order`] = i;
+    }
+    updates[`rooms/${roomCode}/players/${ps[srcIdx].id}/order`] = destIdx;
+    await update(ref(db), updates);
   });
 }
 
@@ -3792,23 +3959,153 @@ function renderWaitingLobbyList(players) {
   });
 }
 
-window.movePlayer = async function(index, dir) {
-  if (!db || !roomCode) return;
-  const snap = await get(ref(db, `rooms/${roomCode}/players`));
-  if (!snap.exists()) return;
-  localPlayers = buildOrderedPlayers(snap.val());
-  const swapIdx = index + dir;
-  if (swapIdx < 0 || swapIdx >= localPlayers.length) return;
-
-  const updates = {};
-  updates[`rooms/${roomCode}/players/${localPlayers[index].id}/order`] = swapIdx;
-  updates[`rooms/${roomCode}/players/${localPlayers[swapIdx].id}/order`] = index;
-  await update(ref(db), updates);
-};
-
 function cleanupListeners() {
   unsubscribers.forEach(fn => fn());
   unsubscribers = [];
+}
+
+// ── VICTORY POINTS ENTRY ──────────────────────
+let vpSubmitted = false;
+
+function showVPEntryOverlay(room) {
+  const overlay = document.getElementById('vp-overlay');
+  if (!overlay) return;
+  overlay.classList.add('show');
+  vpSubmitted = false;
+
+  const vpReady  = room.vpReady  || {};
+  const vpScores = room.vpScores || {};
+  const myReady  = vpReady[myId];
+
+  const inputSection   = document.getElementById('vp-input-section');
+  const waitingSection = document.getElementById('vp-waiting-section');
+
+  if (myReady) {
+    inputSection.style.display   = 'none';
+    waitingSection.style.display = 'flex';
+  } else {
+    inputSection.style.display   = 'block';
+    waitingSection.style.display = 'none';
+  }
+
+  // Render waiting list
+  const waitList = document.getElementById('vp-waiting-list');
+  if (waitList) {
+    waitList.innerHTML = '';
+    localPlayers.forEach(p => {
+      const ready = vpReady[p.id];
+      const score = vpScores[p.id];
+      const dotColor = p.color || 'var(--accent)';
+      const div = document.createElement('div');
+      div.className = 'vp-waiting-item';
+      div.innerHTML = `
+        <div class="vp-waiting-dot" style="background:${ready ? '#4ade80' : 'rgba(255,255,255,0.2)'}"></div>
+        <span style="color:${ready ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)'}">
+          ${esc(p.name)}${ready ? ` — ${score} pts` : ' (waiting…)'}
+        </span>`;
+      waitList.appendChild(div);
+    });
+  }
+
+  // Host sees Begin button once all ready
+  const beginBtn = document.getElementById('vp-begin-btn');
+  if (beginBtn && isHost) {
+    const allReady = localPlayers.length > 0 && localPlayers.every(p => vpReady[p.id]);
+    beginBtn.classList.toggle('show', allReady);
+  }
+}
+
+window.submitVP = async function() {
+  if (!db || !roomCode) return;
+  const val = parseInt(document.getElementById('vp-score-input').value);
+  if (isNaN(val) || val < 0) { alert('Please enter a valid score.'); return; }
+  const updates = {};
+  updates[`rooms/${roomCode}/vpScores/${myId}`]  = val;
+  updates[`rooms/${roomCode}/vpReady/${myId}`]   = true;
+  await update(ref(db), updates);
+  document.getElementById('vp-input-section').style.display   = 'none';
+  document.getElementById('vp-waiting-section').style.display = 'flex';
+  vpSubmitted = true;
+};
+
+window.beginAwardsAfterVP = async function() {
+  if (!db || !roomCode || !isHost) return;
+  if (featureAwardsEnabled) {
+    await update(ref(db, `rooms/${roomCode}`), { status: 'ceremony', ceremonyStep: 'standby' });
+    document.getElementById('vp-overlay').classList.remove('show');
+    runCeremonyAsHost();
+  } else {
+    await update(ref(db, `rooms/${roomCode}`), { status: 'gameover' });
+    document.getElementById('vp-overlay').classList.remove('show');
+    showGameOver();
+  }
+};
+
+// ── DRAG-TO-REORDER ──────────────────────────────
+// Shared drag logic for both lobby list and manage list
+function makeDraggable(listEl, onReorder) {
+  let dragSrc = null;
+  listEl.querySelectorAll('[data-drag-id]').forEach(item => {
+    const handle = item.querySelector('.drag-handle, .manage-drag-handle');
+    if (!handle) return;
+
+    // Mouse drag
+    handle.addEventListener('mousedown', e => {
+      dragSrc = item;
+      item.classList.add('dragging');
+      e.preventDefault();
+    });
+
+    // Touch drag
+    handle.addEventListener('touchstart', e => {
+      dragSrc = item;
+      item.classList.add('dragging');
+    }, { passive: true });
+
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (dragSrc && dragSrc !== item) {
+        listEl.querySelectorAll('[data-drag-id]').forEach(i => i.classList.remove('drag-over'));
+        item.classList.add('drag-over');
+      }
+    });
+
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrc && dragSrc !== item) {
+        const srcId  = dragSrc.dataset.dragId;
+        const destId = item.dataset.dragId;
+        listEl.querySelectorAll('[data-drag-id]').forEach(i => {
+          i.classList.remove('drag-over');
+          i.classList.remove('dragging');
+        });
+        dragSrc = null;
+        onReorder(srcId, destId);
+      }
+    });
+
+    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
+  });
+
+  // Touch-based drop via touchend
+  document.addEventListener('touchend', e => {
+    if (!dragSrc) return;
+    const touch = e.changedTouches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    const target = el && el.closest('[data-drag-id]');
+    listEl.querySelectorAll('[data-drag-id]').forEach(i => {
+      i.classList.remove('drag-over');
+      i.classList.remove('dragging');
+    });
+    if (target && target !== dragSrc && listEl.contains(target)) {
+      const srcId  = dragSrc.dataset.dragId;
+      const destId = target.dataset.dragId;
+      dragSrc = null;
+      onReorder(srcId, destId);
+    } else {
+      dragSrc = null;
+    }
+  }, { passive: true });
 }
 
 // ── THEME (light/dark) ────────────────────────
