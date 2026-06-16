@@ -649,6 +649,31 @@
     opacity: 0.7;
   }
 
+  /* ── IN-GAME TEXT OUTLINE (readability on light player colors) ── */
+  .pass-tap-its,
+  .pass-tap-arrow,
+  .pass-tap-label,
+  .pass-tap-player,
+  .btn-arrow,
+  .btn-label,
+  .btn-player-name,
+  .active-center-its,
+  .active-center-name,
+  .nudge-active-counter,
+  .timer-pill,
+  .exit-btn,
+  .host-game-menu-btn,
+  .host-manage-btn,
+  .settings-gear {
+    text-shadow:
+      0 0 3px #000,
+      0 1px 4px rgba(0,0,0,0.9),
+      -1px -1px 0 rgba(0,0,0,0.7),
+       1px -1px 0 rgba(0,0,0,0.7),
+      -1px  1px 0 rgba(0,0,0,0.7),
+       1px  1px 0 rgba(0,0,0,0.7);
+  }
+
   /* ── SINGLE-TAP ACTIVE SCREEN ── */
   .pass-tap-btn {
     position: absolute;
@@ -1052,21 +1077,19 @@
     z-index: 20;
   }
   .host-game-menu-btn {
-    height: 36px;
-    border-radius: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     background: rgba(0,0,0,0.45);
     border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.55);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    padding: 0 14px;
+    color: rgba(255,255,255,0.85);
+    font-size: 1.25rem;
+    padding: 0;
     cursor: pointer;
-    white-space: nowrap;
-    text-transform: uppercase;
     display: none;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
   }
   .host-game-menu-btn.visible { display: flex; }
   .host-game-menu-drawer {
@@ -1754,7 +1777,7 @@
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
     </div>
-    <button class="host-game-menu-btn" id="host-game-menu-btn-active" onclick="toggleHostMenu('active')">☰ Host</button>
+    <button class="host-game-menu-btn" id="host-game-menu-btn-active" onclick="toggleHostMenu('active')">👑</button>
   </div>
   <button class="action-btn btn-left" onclick="passTurn('left')" id="btn-left">
     <div class="btn-arrow">←</div>
@@ -1817,7 +1840,7 @@
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
     </div>
-    <button class="host-game-menu-btn" id="host-game-menu-btn-wait" onclick="toggleHostMenu('wait')">☰ Host</button>
+    <button class="host-game-menu-btn" id="host-game-menu-btn-wait" onclick="toggleHostMenu('wait')">👑</button>
   </div>
   <div class="settings-panel">
     <button class="settings-gear" id="settings-gear-btn-wait" onclick="toggleSettingsWait()" title="Settings">⚙️</button>
@@ -2632,6 +2655,7 @@ function syncNudgeToActiveScreen(room) {
   if (newCount > activeNudgeCount) {
     const diff = newCount - activeNudgeCount;
     activeNudgeCount = newCount;
+    if (soundEnabled) playNudgeSound();
     for (let i = 0; i < Math.min(diff, 6); i++) {
       setTimeout(() => spawnNudgeFloat(floatContainer), i * 100);
     }
@@ -3422,6 +3446,26 @@ function playTurnSound() {
   } catch(e) {}
 }
 
+function playNudgeSound() {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    // Short sharp knock — two quick taps
+    [[400, 0, 0.08], [300, 0.1, 0.18]].forEach(([freq, start, end]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + start);
+      gain.gain.setValueAtTime(0.3, now + start);
+      gain.gain.linearRampToValueAtTime(0, now + end);
+      osc.start(now + start);
+      osc.stop(now + end + 0.02);
+    });
+  } catch(e) {}
+}
+
 
 // ── HOST MANAGE PLAYERS PANEL ──────────────────
 let manageUnsub = null;
@@ -3452,7 +3496,7 @@ function renderManageList(players, rawPlayers) {
     const dotStyle = dotColor ? `style="background:${dotColor};color:${dotText};"` : '';
     const div = document.createElement('div');
     div.className = 'manage-player-item' + (isOut ? ' knocked-out' : '');
-    div.setAttribute('draggable', 'true');
+    div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
       <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
@@ -3916,7 +3960,7 @@ function renderLobbyList(players) {
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
     const div = document.createElement('div');
     div.className = 'player-item';
-    div.setAttribute('draggable', 'true');
+    div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
@@ -4001,7 +4045,7 @@ function showVPEntryOverlay(room) {
       div.innerHTML = `
         <div class="vp-waiting-dot" style="background:${ready ? '#4ade80' : 'rgba(255,255,255,0.2)'}"></div>
         <span style="color:${ready ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)'}">
-          ${esc(p.name)}${ready ? ` — ${score} pts` : ' (waiting…)'}
+          ${esc(p.name)}${ready ? ' ✓' : ' (waiting…)'}
         </span>`;
       waitList.appendChild(div);
     });
@@ -4045,67 +4089,86 @@ window.beginAwardsAfterVP = async function() {
 // Shared drag logic for both lobby list and manage list
 function makeDraggable(listEl, onReorder) {
   let dragSrc = null;
+  let touchDragSrc = null;
+
   listEl.querySelectorAll('[data-drag-id]').forEach(item => {
     const handle = item.querySelector('.drag-handle, .manage-drag-handle');
     if (!handle) return;
 
-    // Mouse drag
-    handle.addEventListener('mousedown', e => {
+    // ── HTML5 drag (desktop/mouse) ──
+    // Only start drag when the handle is grabbed
+    handle.addEventListener('mousedown', () => { item.setAttribute('draggable', 'true'); });
+    document.addEventListener('mouseup', () => {
+      listEl.querySelectorAll('[data-drag-id]').forEach(i => i.setAttribute('draggable', 'false'));
+    }, { once: false });
+
+    item.addEventListener('dragstart', e => {
       dragSrc = item;
       item.classList.add('dragging');
-      e.preventDefault();
+      e.dataTransfer.effectAllowed = 'move';
     });
-
-    // Touch drag
-    handle.addEventListener('touchstart', e => {
-      dragSrc = item;
-      item.classList.add('dragging');
-    }, { passive: true });
-
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      listEl.querySelectorAll('[data-drag-id]').forEach(i => i.classList.remove('drag-over'));
+      dragSrc = null;
+    });
     item.addEventListener('dragover', e => {
       e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
       if (dragSrc && dragSrc !== item) {
         listEl.querySelectorAll('[data-drag-id]').forEach(i => i.classList.remove('drag-over'));
         item.classList.add('drag-over');
       }
     });
-
+    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
     item.addEventListener('drop', e => {
       e.preventDefault();
+      item.classList.remove('drag-over');
       if (dragSrc && dragSrc !== item) {
         const srcId  = dragSrc.dataset.dragId;
         const destId = item.dataset.dragId;
-        listEl.querySelectorAll('[data-drag-id]').forEach(i => {
-          i.classList.remove('drag-over');
-          i.classList.remove('dragging');
-        });
         dragSrc = null;
         onReorder(srcId, destId);
       }
     });
 
-    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
-  });
+    // ── Touch drag ──
+    handle.addEventListener('touchstart', e => {
+      touchDragSrc = item;
+      item.classList.add('dragging');
+    }, { passive: true });
 
-  // Touch-based drop via touchend
-  document.addEventListener('touchend', e => {
-    if (!dragSrc) return;
-    const touch = e.changedTouches[0];
-    const el = document.elementFromPoint(touch.clientX, touch.clientY);
-    const target = el && el.closest('[data-drag-id]');
-    listEl.querySelectorAll('[data-drag-id]').forEach(i => {
-      i.classList.remove('drag-over');
-      i.classList.remove('dragging');
-    });
-    if (target && target !== dragSrc && listEl.contains(target)) {
-      const srcId  = dragSrc.dataset.dragId;
-      const destId = target.dataset.dragId;
-      dragSrc = null;
-      onReorder(srcId, destId);
-    } else {
-      dragSrc = null;
-    }
-  }, { passive: true });
+    handle.addEventListener('touchmove', e => {
+      if (!touchDragSrc) return;
+      e.preventDefault(); // prevent page scroll while dragging
+      const touch = e.touches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      const target = el && el.closest('[data-drag-id]');
+      listEl.querySelectorAll('[data-drag-id]').forEach(i => i.classList.remove('drag-over'));
+      if (target && target !== touchDragSrc && listEl.contains(target)) {
+        target.classList.add('drag-over');
+      }
+    }, { passive: false });
+
+    handle.addEventListener('touchend', e => {
+      if (!touchDragSrc) return;
+      const touch = e.changedTouches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      const target = el && el.closest('[data-drag-id]');
+      listEl.querySelectorAll('[data-drag-id]').forEach(i => {
+        i.classList.remove('drag-over');
+        i.classList.remove('dragging');
+      });
+      if (target && target !== touchDragSrc && listEl.contains(target)) {
+        const srcId  = touchDragSrc.dataset.dragId;
+        const destId = target.dataset.dragId;
+        touchDragSrc = null;
+        onReorder(srcId, destId);
+      } else {
+        touchDragSrc = null;
+      }
+    }, { passive: true });
+  });
 }
 
 // ── THEME (light/dark) ────────────────────────
