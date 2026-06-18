@@ -109,7 +109,7 @@
 
   /* ── SETUP / LOBBY SCREENS ── */
   .logo { font-size: 2.2rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
-  .tagline { color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem; }
+  .tagline { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
 
   .card {
     background: var(--surface);
@@ -968,6 +968,95 @@
     justify-content: center;
   }
   .info-overlay.show { display: flex; }
+
+  /* ── TOOLS OVERLAY (list of tools) ── */
+  .tools-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.82); z-index: 9600;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .tools-overlay.show { display: flex; }
+  .tools-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(340px, 92vw);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .tools-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.4rem;
+  }
+  .tool-list-btn {
+    width: 100%; padding: 0.75rem 1rem;
+    background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-size: 0.95rem; font-weight: 600;
+    display: flex; align-items: center; gap: 0.6rem;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }
+  .tool-list-btn:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
+  body.light-mode .tool-list-btn { background: #f0f0fb; }
+
+  /* ── RANDOM NUMBER TOOL OVERLAY ── */
+  .rng-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 9650;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .rng-overlay.show { display: flex; }
+  .rng-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(360px, 92vw);
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .rng-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.25rem;
+  }
+  .rng-section-label {
+    font-size: 0.72rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-top: 0.5rem; margin-bottom: 0.1rem;
+  }
+  .rng-range-row { display: flex; align-items: center; gap: 0.5rem; }
+  .rng-range-row input {
+    margin-bottom: 0; text-align: center;
+  }
+  .rng-range-row span { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+  .dice-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+  }
+  .dice-btn {
+    padding: 0.65rem 0.4rem; background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .dice-btn:active { transform: scale(0.96); }
+  .dice-btn:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
+  body.light-mode .dice-btn { background: #f0f0fb; }
+  .rng-result {
+    margin-top: 0.65rem;
+    background: #1e1e2e;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    min-height: 60px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  body.light-mode .rng-result { background: #f0f0fb; }
+  .rng-result-value {
+    font-size: 2.2rem; font-weight: 800; color: var(--accent-light);
+    font-family: 'Courier New', monospace;
+  }
+  .rng-result-sub {
+    font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem;
+  }
   .info-modal {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1475,8 +1564,20 @@
     </div>
   </div>
   <p id="home-status" class="status"></p>
+
+  <!-- Tools card -->
+  <div class="card" style="margin-top:0.85rem; padding:1.1rem;">
+    <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('timers')">⏱️ Timers</button>
+      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('rng')">🎲 Random Number</button>
+      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('picker')">🎯 Player Picker</button>
+      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('status')">🩹 Status Effects</button>
+    </div>
+  </div>
+
   <!-- Theme toggle -->
-  <div style="margin-top:1.5rem;">
+  <div style="margin-top:1rem;">
     <button id="theme-toggle-btn" onclick="toggleTheme()" style="
       width:auto; padding:0; border:none; background:none; cursor:pointer;
       display:flex; align-items:center; justify-content:center;
@@ -1773,6 +1874,7 @@
   <div class="host-game-menu" id="host-game-menu-active">
     <div class="host-game-menu-drawer" id="host-game-drawer-active">
       <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
+      <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -1836,6 +1938,7 @@
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
       <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
+      <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -2119,6 +2222,54 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  TOOLS OVERLAY (list of tools)              -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="tools-overlay">
+  <div class="tools-modal">
+    <div class="tools-modal-title">🧰 Tools</div>
+    <button class="tool-list-btn" onclick="openTool('timers')">⏱️ Timers</button>
+    <button class="tool-list-btn" onclick="openTool('rng')">🎲 Random Number</button>
+    <button class="tool-list-btn" onclick="openTool('picker')">🎯 Player Picker</button>
+    <button class="tool-list-btn" onclick="openTool('status')">🩹 Status Effects</button>
+    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeToolsOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  RANDOM NUMBER TOOL OVERLAY                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="rng-overlay" id="rng-overlay">
+  <div class="rng-modal">
+    <div class="rng-modal-title">🎲 Random Number</div>
+
+    <div class="rng-section-label">Number Range</div>
+    <div class="rng-range-row">
+      <input type="number" id="rng-min" value="1" step="1">
+      <span>to</span>
+      <input type="number" id="rng-max" value="100" step="1">
+    </div>
+    <button class="btn-primary btn-sm" style="width:100%;" onclick="rollRangeNumber()">Pick a Number</button>
+
+    <div class="rng-section-label">Roll a Die</div>
+    <div class="dice-grid">
+      <button class="dice-btn" onclick="rollDie(4)">d4</button>
+      <button class="dice-btn" onclick="rollDie(6)">d6</button>
+      <button class="dice-btn" onclick="rollDie(8)">d8</button>
+      <button class="dice-btn" onclick="rollDie(10)">d10</button>
+      <button class="dice-btn" onclick="rollDie(12)">d12</button>
+      <button class="dice-btn" onclick="rollDie(20)">d20</button>
+    </div>
+
+    <div class="rng-result" id="rng-result">
+      <div class="rng-result-value" id="rng-result-value">—</div>
+      <div class="rng-result-sub" id="rng-result-sub">Pick a range or roll a die</div>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeRngOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FIREBASE SDK                               -->
 <!-- ═══════════════════════════════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -2276,6 +2427,64 @@ window.showCreateRoom = function() {
 };
 window.showJoinRoom   = () => showScreen('join');
 
+// ── TOOLS ────────────────────────────────────────
+// Reachable from the home screen card and from the in-game host menu (Tools).
+// Timers / Player Picker / Status Effects are placeholders for now;
+// Random Number is fully functional.
+const TOOL_LABELS = {
+  timers: 'Timers',
+  picker: 'Random Player Picker',
+  status: 'Status Effects'
+};
+
+window.openToolsOverlay = function() {
+  document.getElementById('tools-overlay').classList.add('show');
+};
+window.closeToolsOverlay = function() {
+  document.getElementById('tools-overlay').classList.remove('show');
+};
+
+window.openTool = function(toolId) {
+  // Close the tools list (if open) before opening a specific tool
+  closeToolsOverlay();
+  if (toolId === 'rng') {
+    openRngOverlay();
+    return;
+  }
+  const label = TOOL_LABELS[toolId] || toolId;
+  alert(label + ' is coming soon!');
+};
+
+// ── RANDOM NUMBER TOOL ───────────────────────────
+window.openRngOverlay = function() {
+  document.getElementById('rng-result-value').textContent = '—';
+  document.getElementById('rng-result-sub').textContent = 'Pick a range or roll a die';
+  document.getElementById('rng-overlay').classList.add('show');
+};
+window.closeRngOverlay = function() {
+  document.getElementById('rng-overlay').classList.remove('show');
+};
+
+window.rollRangeNumber = function() {
+  let min = parseInt(document.getElementById('rng-min').value);
+  let max = parseInt(document.getElementById('rng-max').value);
+  if (isNaN(min) || isNaN(max)) {
+    document.getElementById('rng-result-value').textContent = '—';
+    document.getElementById('rng-result-sub').textContent = 'Enter valid numbers for both fields';
+    return;
+  }
+  if (min > max) { const t = min; min = max; max = t; }
+  const result = Math.floor(Math.random() * (max - min + 1)) + min;
+  document.getElementById('rng-result-value').textContent = result;
+  document.getElementById('rng-result-sub').textContent = `Range ${min}–${max}`;
+};
+
+window.rollDie = function(sides) {
+  const result = Math.floor(Math.random() * sides) + 1;
+  document.getElementById('rng-result-value').textContent = result;
+  document.getElementById('rng-result-sub').textContent = `d${sides} roll`;
+};
+
 window.goHome = function() {
   // Reset QR
   const qrBox = document.getElementById('qr-code');
@@ -2393,7 +2602,9 @@ window.hostMenuAction = function(action) {
     hostMenuOpen[ctx] = false;
     document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
   });
-  if (action === 'end-round') {
+  if (action === 'open-tools') {
+    openToolsOverlay();
+  } else if (action === 'end-round') {
     if (featureTimersEnabled && timerCfg.round) resetRoundTimer();
     else alert('End Round — coming soon for non-timer mode!');
   } else if (action === 'save-game') {
@@ -3296,7 +3507,6 @@ window.openColorPicker = function(context) {
     const sw = document.createElement('div');
     sw.className = 'color-swatch' + (c.hex === tempSelectedColor ? ' selected' : '');
     sw.style.background = c.hex;
-    if (c.hex === '#000000') sw.style.borderColor = 'rgba(255,255,255,0.4)';
     sw.title = c.name;
     sw.setAttribute('role', 'button');
     sw.setAttribute('tabindex', '0');
@@ -3423,8 +3633,8 @@ document.addEventListener('visibilitychange', async () => {
 //
 const CUSTOM_SOUNDS = {
   turnPass:    null,  // e.g. 'sounds/pass-turn.mp3'
-  nudge:       null,  // e.g. 'sounds/nudge.mp3'
-  awardsVoice: null   // e.g. 'sounds/awards-voice.mp3'
+  nudge:       'sounds/notif11.mp3',  // e.g. 'sounds/nudge.mp3'
+  awardsVoice: null,   // e.g. 'sounds/awards-voice.mp3'
 };
 
 // Preload Audio objects once paths are set
