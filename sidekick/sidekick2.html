@@ -602,6 +602,32 @@
     margin-bottom: 1rem;
   }
 
+  /* ── GAME SAVED SCREEN ── */
+  .saved-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 8300;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 2rem;
+  }
+  .saved-screen.show { display: flex; }
+  .saved-screen-icon { font-size: 3rem; }
+  .saved-screen-title { font-size: 1.6rem; font-weight: 900; color: var(--accent-light); }
+  .saved-screen-sub { font-size: 0.9rem; color: var(--muted); max-width: 320px; }
+  .saved-screen-code {
+    font-family: 'Courier New', monospace;
+    font-size: 2rem; font-weight: 800; letter-spacing: 0.15em;
+    background: #1e1e2e; border: 1px solid var(--border); border-radius: 12px;
+    padding: 0.75rem 1.5rem; margin: 0.5rem 0; color: var(--text);
+  }
+  body.light-mode .saved-screen-code { background: #f0f0fb; }
+
   /* ── PASS DIRECTION SELECTOR ── */
   .pass-dir-group {
     display: flex;
@@ -968,6 +994,95 @@
     justify-content: center;
   }
   .info-overlay.show { display: flex; }
+
+  /* ── TOOLS OVERLAY (list of tools) ── */
+  .tools-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.82); z-index: 9600;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .tools-overlay.show { display: flex; }
+  .tools-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(340px, 92vw);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .tools-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.4rem;
+  }
+  .tool-list-btn {
+    width: 100%; padding: 0.75rem 1rem;
+    background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-size: 0.95rem; font-weight: 600;
+    display: flex; align-items: center; gap: 0.6rem;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }
+  .tool-list-btn:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
+  body.light-mode .tool-list-btn { background: #f0f0fb; }
+
+  /* ── RANDOM NUMBER TOOL OVERLAY ── */
+  .rng-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 9650;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .rng-overlay.show { display: flex; }
+  .rng-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(360px, 92vw);
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .rng-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.25rem;
+  }
+  .rng-section-label {
+    font-size: 0.72rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-top: 0.5rem; margin-bottom: 0.1rem;
+  }
+  .rng-range-row { display: flex; align-items: center; gap: 0.5rem; }
+  .rng-range-row input {
+    margin-bottom: 0; text-align: center;
+  }
+  .rng-range-row span { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+  .dice-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+  }
+  .dice-btn {
+    padding: 0.65rem 0.4rem; background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .dice-btn:active { transform: scale(0.96); }
+  .dice-btn:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
+  body.light-mode .dice-btn { background: #f0f0fb; }
+  .rng-result {
+    margin-top: 0.65rem;
+    background: #1e1e2e;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    min-height: 60px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  body.light-mode .rng-result { background: #f0f0fb; }
+  .rng-result-value {
+    font-size: 2.2rem; font-weight: 800; color: var(--accent-light);
+    font-family: 'Courier New', monospace;
+  }
+  .rng-result-sub {
+    font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem;
+  }
   .info-modal {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1474,6 +1589,7 @@
       <button class="btn-secondary" onclick="showJoinRoom()">Join a Room</button>
     </div>
   </div>
+  <button class="btn-secondary btn-sm" style="margin-top:0.6rem; width:auto; padding:0.4rem 1rem; font-size:0.8rem; background:transparent; border:1px solid var(--border);" onclick="openResumeOverlay()">💾 Resume a Saved Game</button>
   <p id="home-status" class="status"></p>
 
   <!-- Tools card -->
@@ -1785,6 +1901,7 @@
   <div class="host-game-menu" id="host-game-menu-active">
     <div class="host-game-menu-drawer" id="host-game-drawer-active">
       <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
+      <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -1848,6 +1965,7 @@
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
       <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
+      <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
       <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
       <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
@@ -2131,6 +2249,102 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  RESUME GAME OVERLAY                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="resume-overlay">
+  <div class="tools-modal">
+    <div class="tools-modal-title">💾 Resume a Saved Game</div>
+
+    <div id="resume-code-step">
+      <input type="text" id="resume-code" placeholder="Enter save code" maxlength="6"
+        style="text-transform:uppercase; text-align:center; font-family:'Courier New',monospace; font-size:1.2rem; letter-spacing:0.1em;">
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="resumeFromSaveCode()">Continue</button>
+      <p id="resume-status" class="status"></p>
+    </div>
+
+    <div id="resume-who-step" style="display:none;">
+      <div class="rng-section-label" style="margin-top:0;">Who are you?</div>
+      <div id="resume-who-list" style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.4rem;"></div>
+    </div>
+
+    <div id="resume-newcode-step" style="display:none; text-align:center;">
+      <div class="rng-section-label" style="margin-top:0;">New Room Code</div>
+      <div class="saved-screen-code" style="font-size:1.6rem; margin:0.5rem auto;" id="resume-new-code">----</div>
+      <p style="font-size:0.85rem; color:var(--muted);">Share this with the rest of the group so they can rejoin.</p>
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="enterResumedGame()">Continue to Game</button>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.6rem;" onclick="closeResumeOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  GAME SAVED SCREEN                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="saved-screen" id="saved-screen">
+  <div class="saved-screen-icon">💾</div>
+  <div class="saved-screen-title">Game Saved</div>
+  <div id="saved-screen-host-view" style="display:none;">
+    <div class="saved-screen-sub">Share this code with your group. Anyone can use it on the home screen to pick the game back up.</div>
+    <div class="saved-screen-code" id="saved-screen-code">----</div>
+    <div class="saved-screen-sub" style="margin-top:0.5rem;">Saved games are kept for 24 hours.</div>
+    <button class="btn-secondary btn-sm" style="margin-top:1rem; width:auto; padding:0.6rem 1.5rem;" onclick="leaveSavedScreen()">🏠 Back to Home</button>
+  </div>
+  <div id="saved-screen-player-view" style="display:none;">
+    <div class="saved-screen-sub">The host saved the game. Ask them for the save code when you're ready to pick it back up.</div>
+    <button class="btn-secondary btn-sm" style="margin-top:1rem; width:auto; padding:0.6rem 1.5rem;" onclick="leaveSavedScreen()">🏠 Back to Home</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TOOLS OVERLAY (list of tools)              -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="tools-overlay">
+  <div class="tools-modal">
+    <div class="tools-modal-title">🧰 Tools</div>
+    <button class="tool-list-btn" onclick="openTool('timers')">⏱️ Timers</button>
+    <button class="tool-list-btn" onclick="openTool('rng')">🎲 Random Number</button>
+    <button class="tool-list-btn" onclick="openTool('picker')">🎯 Player Picker</button>
+    <button class="tool-list-btn" onclick="openTool('status')">🩹 Status Effects</button>
+    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeToolsOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  RANDOM NUMBER TOOL OVERLAY                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="rng-overlay" id="rng-overlay">
+  <div class="rng-modal">
+    <div class="rng-modal-title">🎲 Random Number</div>
+
+    <div class="rng-section-label">Number Range</div>
+    <div class="rng-range-row">
+      <input type="number" id="rng-min" value="1" step="1">
+      <span>to</span>
+      <input type="number" id="rng-max" value="100" step="1">
+    </div>
+    <button class="btn-primary btn-sm" style="width:100%;" onclick="rollRangeNumber()">Pick a Number</button>
+
+    <div class="rng-section-label">Roll a Die</div>
+    <div class="dice-grid">
+      <button class="dice-btn" onclick="rollDie(4)">d4</button>
+      <button class="dice-btn" onclick="rollDie(6)">d6</button>
+      <button class="dice-btn" onclick="rollDie(8)">d8</button>
+      <button class="dice-btn" onclick="rollDie(10)">d10</button>
+      <button class="dice-btn" onclick="rollDie(12)">d12</button>
+      <button class="dice-btn" onclick="rollDie(20)">d20</button>
+    </div>
+
+    <div class="rng-result" id="rng-result">
+      <div class="rng-result-value" id="rng-result-value">—</div>
+      <div class="rng-result-sub" id="rng-result-sub">Pick a range or roll a die</div>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeRngOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FIREBASE SDK                               -->
 <!-- ═══════════════════════════════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -2147,6 +2361,24 @@ let isHost = false;
 let unsubscribers = [];
 let localPlayers = [];
 let myName = '';
+
+// ── SESSION PERSISTENCE (silent auto-resume) ────
+// Remembers which room/player this device was last part of, so closing
+// the app (or stepping out for food) and coming back drops you right
+// back in without rejoining as a new player.
+const SK_SESSION_KEY = 'sk_session';
+function saveSession() {
+  if (!roomCode || !myId) return;
+  try {
+    localStorage.setItem(SK_SESSION_KEY, JSON.stringify({ roomCode, myId, myName, isHost }));
+  } catch {}
+}
+function loadSession() {
+  try { return JSON.parse(localStorage.getItem(SK_SESSION_KEY) || 'null'); } catch { return null; }
+}
+function clearSession() {
+  try { localStorage.removeItem(SK_SESSION_KEY); } catch {}
+}
 
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
@@ -2261,6 +2493,73 @@ function requireDb() {
   return true;
 }
 
+// ── SILENT AUTO-RESUME ──────────────────────────
+// If this device has a saved session (it created/joined a room before),
+// and the room + player still exist in Firebase, drop straight back in
+// instead of showing the home screen. Handles "we stepped out for food"
+// automatically — no code to remember, nothing to tap.
+async function tryAutoResume() {
+  if (autoJoinCode) return;           // explicit QR join link always wins
+  let session = loadSession();
+  if (!session || !session.roomCode || !session.myId) return;
+
+  try {
+    let snap = await get(ref(db, `rooms/${session.roomCode}`));
+    if (!snap.exists()) { clearSession(); return; }
+    let room = snap.val();
+
+    // Idle-room cleanup: treat as abandoned if untouched for 24h+
+    if (room.lastActivity && Date.now() - room.lastActivity > 24 * 60 * 60 * 1000) {
+      await remove(ref(db, `rooms/${session.roomCode}`));
+      clearSession();
+      return;
+    }
+
+    // A Resume Game elsewhere may have left a redirect pointer behind —
+    // follow it (one hop is enough; redirects aren't chained).
+    if (room.status === 'redirected' && room.redirectTo) {
+      const newSnap = await get(ref(db, `rooms/${room.redirectTo}`));
+      if (!newSnap.exists()) { clearSession(); return; }
+      session = { ...session, roomCode: room.redirectTo };
+      room = newSnap.val();
+    }
+
+    const players = room.players || {};
+    if (!players[session.myId]) { clearSession(); return; } // player isn't in this room (e.g. resumed as someone else)
+
+    // Restore identity
+    roomCode = session.roomCode;
+    myId = session.myId;
+    myName = session.myName || players[session.myId].name || '';
+    isHost = !!session.isHost;
+    saveSession(); // persist the followed redirect so future loads skip the hop
+
+    if (room.status === 'lobby') {
+      if (isHost) {
+        document.getElementById('display-code').textContent = roomCode;
+        showScreen('lobby');
+        listenLobby();
+      } else {
+        document.getElementById('wl-code').textContent = roomCode;
+        showScreen('waiting-lobby');
+        listenWaitingLobby();
+      }
+    } else if (room.status === 'playing' || room.status === 'ceremony' || room.status === 'vp-entry') {
+      listenGameState();
+    } else if (room.status === 'gameover') {
+      showGameOver();
+    } else if (room.status === 'saved') {
+      if (!isHost) showSavedScreenForPlayer();
+    } else {
+      // 'closed' or unrecognized — nothing to resume into
+      clearSession();
+    }
+  } catch {
+    // Network hiccup etc. — fall through to normal home screen, don't clear session
+  }
+}
+tryAutoResume();
+
 // ── NAV ──────────────────────────────────────
 window.showCreateRoom = function() {
   featureNudgeEnabled  = false;
@@ -2288,20 +2587,73 @@ window.showCreateRoom = function() {
 };
 window.showJoinRoom   = () => showScreen('join');
 
-// ── TOOLS (home screen) ─────────────────────────
-// Placeholder hooks — real Timers/RNG/Player Picker/Status Effects screens
-// (plus in-game host overlay access) to be built out in a future pass.
+// ── TOOLS ────────────────────────────────────────
+// Reachable from the home screen card and from the in-game host menu (Tools).
+// Timers / Player Picker / Status Effects are placeholders for now;
+// Random Number is fully functional.
 const TOOL_LABELS = {
   timers: 'Timers',
-  rng: 'Random Number Generator',
   picker: 'Random Player Picker',
   status: 'Status Effects'
 };
+
+window.openToolsOverlay = function() {
+  document.getElementById('tools-overlay').classList.add('show');
+};
+window.closeToolsOverlay = function() {
+  document.getElementById('tools-overlay').classList.remove('show');
+};
+
 window.openTool = function(toolId) {
+  // Close the tools list (if open) before opening a specific tool
+  closeToolsOverlay();
+  if (toolId === 'rng') {
+    openRngOverlay();
+    return;
+  }
   const label = TOOL_LABELS[toolId] || toolId;
   alert(label + ' is coming soon!');
 };
 
+// ── RANDOM NUMBER TOOL ───────────────────────────
+window.openRngOverlay = function() {
+  document.getElementById('rng-result-value').textContent = '—';
+  document.getElementById('rng-result-sub').textContent = 'Pick a range or roll a die';
+  document.getElementById('rng-overlay').classList.add('show');
+};
+window.closeRngOverlay = function() {
+  document.getElementById('rng-overlay').classList.remove('show');
+};
+
+window.rollRangeNumber = function() {
+  let min = parseInt(document.getElementById('rng-min').value);
+  let max = parseInt(document.getElementById('rng-max').value);
+  if (isNaN(min) || isNaN(max)) {
+    document.getElementById('rng-result-value').textContent = '—';
+    document.getElementById('rng-result-sub').textContent = 'Enter valid numbers for both fields';
+    return;
+  }
+  if (min > max) { const t = min; min = max; max = t; }
+  const result = Math.floor(Math.random() * (max - min + 1)) + min;
+  document.getElementById('rng-result-value').textContent = result;
+  document.getElementById('rng-result-sub').textContent = `Range ${min}–${max}`;
+};
+
+window.rollDie = function(sides) {
+  const result = Math.floor(Math.random() * sides) + 1;
+  document.getElementById('rng-result-value').textContent = result;
+  document.getElementById('rng-result-sub').textContent = `d${sides} roll`;
+};
+
+window.leaveSavedScreen = function() {
+  cleanupListeners();
+  stopTimerTick();
+  clearNudgeTimer();
+  document.getElementById('saved-screen').classList.remove('show');
+  // Keep the session intact — the room is parked in 'saved' status, and
+  // this device's session is still valid for whoever resumes it next.
+  goHome();
+};
 
 window.goHome = function() {
   // Reset QR
@@ -2329,6 +2681,7 @@ window.goBackToCreate = async function() {
     await remove(ref(db, `rooms/${roomCode}`));
   }
   roomCode = null; myId = null; isHost = false;
+  clearSession();
   // Re-populate create screen with what the host had typed
   showScreen('create');
   // Restore host name field
@@ -2420,11 +2773,15 @@ window.hostMenuAction = function(action) {
     hostMenuOpen[ctx] = false;
     document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
   });
-  if (action === 'end-round') {
+  if (action === 'open-tools') {
+    openToolsOverlay();
+  } else if (action === 'end-round') {
     if (featureTimersEnabled && timerCfg.round) resetRoundTimer();
     else alert('End Round — coming soon for non-timer mode!');
   } else if (action === 'save-game') {
-    alert('Save Game — coming soon!');
+    if (confirm('Save the game? Everyone will be paused until you resume with the save code.')) {
+      saveCurrentGame();
+    }
   } else if (action === 'end-game') {
     if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Achievement Awards?' : '?'))) {
       triggerEndGame();
@@ -3153,6 +3510,7 @@ window.closeRoomFinal = async function() {
   featureAwardsEnabled = false;
   featureNudgeEnabled = false;
   roomCode = null; myId = null;
+  clearSession();
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
@@ -3166,6 +3524,7 @@ window.endGameFinal = async function() {
   window.speechSynthesis && window.speechSynthesis.cancel();
   lastActivePlayerId = null;
   roomCode = null; myId = null;
+  clearSession();
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
@@ -3637,6 +3996,7 @@ window.createRoom = async function() {
     host: myId,
     status: 'lobby',
     activePlayerIndex: 0,
+    lastActivity: Date.now(),
     features: {
       passDirection,
       nudge: featureNudgeEnabled,
@@ -3662,6 +4022,7 @@ window.createRoom = async function() {
   });
 
   document.getElementById('display-code').textContent = roomCode;
+  saveSession();
   showScreen('lobby');
   listenLobby();
 };
@@ -3678,6 +4039,12 @@ window.joinRoom = async function() {
   const snap = await get(roomRef);
   if (!snap.exists()) { status('join-status','Room not found.','error'); return; }
   const room = snap.val();
+  // Idle-room cleanup: rooms with no recorded activity in 24h are treated as abandoned
+  if (room.lastActivity && Date.now() - room.lastActivity > 24 * 60 * 60 * 1000) {
+    await remove(roomRef);
+    status('join-status','That room expired (rooms idle 24+ hours are cleared).','error');
+    return;
+  }
   if (room.status !== 'lobby' && room.status !== 'playing') { status('join-status','Room is not available.','error'); return; }
 
   isHost = false;
@@ -3688,6 +4055,8 @@ window.joinRoom = async function() {
   const players = room.players || {};
   const order = Object.keys(players).length;
   await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor });
+  await update(roomRef, { lastActivity: Date.now() });
+  saveSession();
 
   if (room.status === 'playing') {
     document.getElementById('wl-code').textContent = code;
@@ -3707,6 +4076,7 @@ function listenLobby() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
+    if (followRedirectIfAny(room)) return;
 
     if (room.status === 'playing') {
       cleanupListeners();
@@ -3725,6 +4095,20 @@ function listenLobby() {
   unsubscribers.push(() => unsub());
 }
 
+// Follows a 'redirected' room (left behind by a Resume Game) to its new
+// room code, reattaching this device's session automatically. Returns
+// true if a redirect was followed (caller should stop processing this
+// snapshot), false otherwise.
+function followRedirectIfAny(room) {
+  if (room.status !== 'redirected' || !room.redirectTo) return false;
+  const newCode = room.redirectTo;
+  roomCode = newCode;
+  saveSession();
+  cleanupListeners();
+  listenGameState();
+  return true;
+}
+
 // ── WAITING LOBBY LISTENER (non-host) ──────────────
 function listenWaitingLobby() {
   cleanupListeners();
@@ -3732,6 +4116,7 @@ function listenWaitingLobby() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
+    if (followRedirectIfAny(room)) return;
 
     if (room.status === 'playing') {
       cleanupListeners();
@@ -3790,8 +4175,15 @@ function listenGameState() {
       return;
     }
     const room = snap.val();
+    if (followRedirectIfAny(room)) return;
     // Room closed by host — send everyone home immediately
     if (room.status === 'closed') { hideAllAwardOverlays(); showScreen('home'); return; }
+    // Host saved the game — pause everyone on the Game Saved screen
+    if (room.status === 'saved') {
+      hideAllAwardOverlays();
+      if (!isHost) showSavedScreenForPlayer();
+      return;
+    }
     // Gameover — show the end screen
     if (room.status === 'gameover') { showGameOver(); return; }
     // Playing — if we were on any award overlay, clear it and resume game
@@ -3994,7 +4386,153 @@ window.passTurn = async function(direction) {
   await update(ref(db, `rooms/${roomCode}`), { activePlayerIndex: nextIdx });
 };
 
-// ── LEAVE / CLOSE ──────────────────────────────
+// ── SAVE GAME / RESUME ──────────────────────────
+// Host-triggered: snapshots the live room into savedGames/{code}, freezes
+// the live room so non-host players see a "saved" screen, and pauses
+// timers. Anyone can later use the save code from the home screen to
+// spin up a fresh live room pre-loaded with everything as it was.
+function genSaveCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+window.saveCurrentGame = async function() {
+  if (!db || !roomCode || !isHost) return;
+  const roomRef = ref(db, `rooms/${roomCode}`);
+  const snap = await get(roomRef);
+  if (!snap.exists()) return;
+  const room = snap.val();
+
+  const saveCode = genSaveCode();
+  const snapshot = JSON.parse(JSON.stringify(room)); // deep copy
+  snapshot.savedAt = Date.now();
+  snapshot._originalRoomCode = roomCode;
+
+  await update(ref(db), {
+    [`savedGames/${saveCode}`]: snapshot,
+    [`rooms/${roomCode}/status`]: 'saved'
+  });
+
+  stopTimerTick();
+  clearNudgeTimer();
+
+  document.getElementById('saved-screen-code').textContent = saveCode;
+  document.getElementById('saved-screen-host-view').style.display = 'block';
+  document.getElementById('saved-screen-player-view').style.display = 'none';
+  document.getElementById('saved-screen').classList.add('show');
+};
+
+// Called by the non-host listener when room.status becomes 'saved'
+function showSavedScreenForPlayer() {
+  stopTimerTick();
+  clearNudgeTimer();
+  document.getElementById('saved-screen-host-view').style.display = 'none';
+  document.getElementById('saved-screen-player-view').style.display = 'block';
+  document.getElementById('saved-screen').classList.add('show');
+};
+
+let pendingResumeCode = null;
+let pendingResumeData = null;
+
+window.resumeFromSaveCode = async function() {
+  if (!requireDb()) return;
+  const codeInput = document.getElementById('resume-code');
+  const code = codeInput ? codeInput.value.toUpperCase().trim() : '';
+  if (!code) { status('resume-status', 'Enter a save code.', 'error'); return; }
+
+  const saveRef = ref(db, `savedGames/${code}`);
+  const snap = await get(saveRef);
+  if (!snap.exists()) { status('resume-status', 'Save code not found or expired.', 'error'); return; }
+  const saved = snap.val();
+
+  // 24-hour expiry check
+  if (Date.now() - (saved.savedAt || 0) > 24 * 60 * 60 * 1000) {
+    await remove(saveRef);
+    status('resume-status', 'That save has expired (saves last 24 hours).', 'error');
+    return;
+  }
+
+  // Show a "who are you" picker so the resuming device reattaches to the
+  // correct existing player rather than joining as a stranger.
+  pendingResumeCode = code;
+  pendingResumeData = saved;
+  const players = buildOrderedPlayers(saved.players || {});
+  const listEl = document.getElementById('resume-who-list');
+  listEl.innerHTML = '';
+  players.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'tool-list-btn';
+    btn.textContent = p.name;
+    btn.onclick = () => finishResume(p.id, false);
+    listEl.appendChild(btn);
+  });
+  const hostBtn = document.createElement('button');
+  hostBtn.className = 'tool-list-btn';
+  hostBtn.style.marginTop = '0.5rem';
+  hostBtn.textContent = "🆕 I'm new / just spectating as host";
+  hostBtn.onclick = () => finishResume(null, true);
+  listEl.appendChild(hostBtn);
+
+  document.getElementById('resume-code-step').style.display = 'none';
+  document.getElementById('resume-who-step').style.display = 'block';
+};
+
+async function finishResume(existingPlayerId, asHostOnly) {
+  const newCode = genCode();
+  const restored = JSON.parse(JSON.stringify(pendingResumeData));
+  const originalCode = restored._originalRoomCode || null;
+  delete restored.savedAt;
+  delete restored._originalRoomCode;
+  restored.status = 'playing';
+  restored.lastActivity = Date.now();
+
+  await update(ref(db), { [`rooms/${newCode}`]: restored });
+  await remove(ref(db, `savedGames/${pendingResumeCode}`));
+
+  // Leave a short-lived redirect at the old room code so other players'
+  // devices (still holding the old roomCode in their saved session) get
+  // pointed at the new room automatically instead of finding nothing.
+  if (originalCode) {
+    await update(ref(db), {
+      [`rooms/${originalCode}`]: { status: 'redirected', redirectTo: newCode, redirectAt: Date.now() }
+    });
+  }
+
+  roomCode = newCode;
+  if (existingPlayerId) {
+    // Reattach to an existing player record — same seat, color, score, turn position
+    myId = existingPlayerId;
+    myName = restored.players[existingPlayerId]?.name || '';
+    isHost = false; // restore as a regular player; can be promoted via Manage Players if needed
+  } else {
+    // Host-only resume: not occupying a player seat, just running the room
+    myId = uid();
+    myName = 'Host';
+    isHost = true;
+  }
+  saveSession();
+
+  document.getElementById('resume-new-code').textContent = newCode;
+  document.getElementById('resume-who-step').style.display = 'none';
+  document.getElementById('resume-newcode-step').style.display = 'block';
+}
+
+window.openResumeOverlay = function() {
+  document.getElementById('resume-code').value = '';
+  document.getElementById('resume-code-step').style.display = 'block';
+  document.getElementById('resume-who-step').style.display = 'none';
+  document.getElementById('resume-newcode-step').style.display = 'none';
+  status('resume-status', '');
+  document.getElementById('resume-overlay').classList.add('show');
+};
+window.closeResumeOverlay = function() {
+  document.getElementById('resume-overlay').classList.remove('show');
+};
+window.enterResumedGame = function() {
+  closeResumeOverlay();
+  listenGameState();
+};
+
 window.leaveRoom = async function() {
   if (!db || !roomCode || !myId) { showScreen('home'); return; }
   releaseWakeLock();
@@ -4005,6 +4543,7 @@ window.leaveRoom = async function() {
   lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
   roomCode = null; myId = null;
+  clearSession();
   showScreen('home');
 };
 
@@ -4017,6 +4556,7 @@ window.closeRoom = async function() {
   lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}`));
   roomCode = null; myId = null;
+  clearSession();
   showScreen('home');
 };
 
