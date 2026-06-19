@@ -602,6 +602,32 @@
     margin-bottom: 1rem;
   }
 
+  /* ── GAME SAVED SCREEN ── */
+  .saved-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 8300;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 2rem;
+  }
+  .saved-screen.show { display: flex; }
+  .saved-screen-icon { font-size: 3rem; }
+  .saved-screen-title { font-size: 1.6rem; font-weight: 900; color: var(--accent-light); }
+  .saved-screen-sub { font-size: 0.9rem; color: var(--muted); max-width: 320px; }
+  .saved-screen-code {
+    font-family: 'Courier New', monospace;
+    font-size: 2rem; font-weight: 800; letter-spacing: 0.15em;
+    background: #1e1e2e; border: 1px solid var(--border); border-radius: 12px;
+    padding: 0.75rem 1.5rem; margin: 0.5rem 0; color: var(--text);
+  }
+  body.light-mode .saved-screen-code { background: #f0f0fb; }
+
   /* ── PASS DIRECTION SELECTOR ── */
   .pass-dir-group {
     display: flex;
@@ -998,6 +1024,23 @@
   }
   .tool-list-btn:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
   body.light-mode .tool-list-btn { background: #f0f0fb; }
+
+  /* ── SAVED GAME LIST ROW ── */
+  .save-row {
+    background: #1e1e2e; border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.65rem 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;
+  }
+  body.light-mode .save-row { background: #f0f0fb; }
+  .save-row-name { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+  .save-row-date { font-size: 0.72rem; color: var(--muted); }
+  .save-row-actions { display: flex; gap: 0.4rem; margin-top: 0.2rem; }
+  .save-row-actions button {
+    flex: 1; padding: 0.4rem 0.3rem; font-size: 0.78rem; font-weight: 600;
+    border-radius: 8px; border: 1px solid var(--border); background: transparent;
+    color: var(--text); cursor: pointer;
+  }
+  .save-row-actions button:hover { border-color: var(--accent); }
+  .save-row-actions button.danger { color: #ff5c5c; }
 
   /* ── RANDOM NUMBER TOOL OVERLAY ── */
   .rng-overlay {
@@ -1563,6 +1606,7 @@
       <button class="btn-secondary" onclick="showJoinRoom()">Join a Room</button>
     </div>
   </div>
+  <button class="btn-secondary btn-sm" style="margin-top:0.6rem; width:auto; padding:0.4rem 1rem; font-size:0.8rem; background:transparent; border:1px solid var(--border);" onclick="openMySavedGames()">💾 My Saved Games</button>
   <p id="home-status" class="status"></p>
 
   <!-- Tools card -->
@@ -2222,6 +2266,68 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  MY SAVED GAMES (list)                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="my-saves-overlay">
+  <div class="tools-modal" style="max-height:80vh; overflow-y:auto;">
+    <div class="tools-modal-title">💾 My Saved Games</div>
+    <div id="my-saves-list" style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div style="color:var(--muted); font-size:0.85rem; text-align:center; padding:0.5rem;">Loading…</div>
+    </div>
+    <button class="btn-secondary btn-sm" style="margin-top:0.6rem;" onclick="closeMySavedGames(); openResumeOverlay();">Resume by code instead</button>
+    <button class="btn-secondary btn-sm" onclick="closeMySavedGames()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  RESUME GAME OVERLAY                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="resume-overlay">
+  <div class="tools-modal">
+    <div class="tools-modal-title">💾 Resume a Saved Game</div>
+
+    <div id="resume-code-step">
+      <input type="text" id="resume-code" placeholder="Enter save code" maxlength="6"
+        style="text-transform:uppercase; text-align:center; font-family:'Courier New',monospace; font-size:1.2rem; letter-spacing:0.1em;">
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="resumeFromSaveCode()">Continue</button>
+      <p id="resume-status" class="status"></p>
+    </div>
+
+    <div id="resume-who-step" style="display:none;">
+      <div class="rng-section-label" style="margin-top:0;">Who are you?</div>
+      <div id="resume-who-list" style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.4rem;"></div>
+    </div>
+
+    <div id="resume-newcode-step" style="display:none; text-align:center;">
+      <div class="rng-section-label" style="margin-top:0;">New Room Code</div>
+      <div class="saved-screen-code" style="font-size:1.6rem; margin:0.5rem auto;" id="resume-new-code">----</div>
+      <p style="font-size:0.85rem; color:var(--muted);">Share this with the rest of the group so they can rejoin.</p>
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="enterResumedGame()">Continue to Game</button>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.6rem;" onclick="closeResumeOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  GAME SAVED SCREEN                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="saved-screen" id="saved-screen">
+  <div class="saved-screen-icon">💾</div>
+  <div class="saved-screen-title">Game Saved</div>
+  <div id="saved-screen-host-view" style="display:none;">
+    <div class="saved-screen-sub" id="saved-screen-name" style="font-weight:700; color:var(--text);">—</div>
+    <div class="saved-screen-sub">This save is now in your "My Saved Games" list on the home screen. You can also share the code below for someone else to resume it directly.</div>
+    <div class="saved-screen-code" id="saved-screen-code">----</div>
+    <button class="btn-secondary btn-sm" style="margin-top:1rem; width:auto; padding:0.6rem 1.5rem;" onclick="leaveSavedScreen()">🏠 Back to Home</button>
+  </div>
+  <div id="saved-screen-player-view" style="display:none;">
+    <div class="saved-screen-sub">The host saved the game. Ask them for the save code when you're ready to pick it back up.</div>
+    <button class="btn-secondary btn-sm" style="margin-top:1rem; width:auto; padding:0.6rem 1.5rem;" onclick="leaveSavedScreen()">🏠 Back to Home</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  TOOLS OVERLAY (list of tools)              -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="tools-overlay">
@@ -2286,6 +2392,43 @@ let isHost = false;
 let unsubscribers = [];
 let localPlayers = [];
 let myName = '';
+
+// ── SESSION PERSISTENCE (silent auto-resume) ────
+// Remembers which room/player this device was last part of, so closing
+// the app (or stepping out for food) and coming back drops you right
+// back in without rejoining as a new player.
+const SK_SESSION_KEY = 'sk_session';
+function saveSession() {
+  if (!roomCode || !myId) return;
+  try {
+    localStorage.setItem(SK_SESSION_KEY, JSON.stringify({ roomCode, myId, myName, isHost }));
+  } catch {}
+}
+function loadSession() {
+  try { return JSON.parse(localStorage.getItem(SK_SESSION_KEY) || 'null'); } catch { return null; }
+}
+function clearSession() {
+  try { localStorage.removeItem(SK_SESSION_KEY); } catch {}
+}
+
+// ── HOST IDENTITY (stub for future Host Profiles) ──
+// Until real accounts/login exist, each device gets a stable random ID
+// the first time it's needed. Saved games are filed under this ID. When
+// real auth ships, this is the one place to swap "local ID" for "auth UID"
+// — everything built on top (the saved-games list, ownership) stays the same.
+const SK_HOSTID_KEY = 'sk_host_id';
+function getHostId() {
+  try {
+    let id = localStorage.getItem(SK_HOSTID_KEY);
+    if (!id) {
+      id = 'h_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36);
+      localStorage.setItem(SK_HOSTID_KEY, id);
+    }
+    return id;
+  } catch {
+    return 'h_anon'; // localStorage unavailable — saves won't persist across sessions, but won't crash
+  }
+}
 
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
@@ -2400,6 +2543,73 @@ function requireDb() {
   return true;
 }
 
+// ── SILENT AUTO-RESUME ──────────────────────────
+// If this device has a saved session (it created/joined a room before),
+// and the room + player still exist in Firebase, drop straight back in
+// instead of showing the home screen. Handles "we stepped out for food"
+// automatically — no code to remember, nothing to tap.
+async function tryAutoResume() {
+  if (autoJoinCode) return;           // explicit QR join link always wins
+  let session = loadSession();
+  if (!session || !session.roomCode || !session.myId) return;
+
+  try {
+    let snap = await get(ref(db, `rooms/${session.roomCode}`));
+    if (!snap.exists()) { clearSession(); return; }
+    let room = snap.val();
+
+    // Idle-room cleanup: treat as abandoned if untouched for 24h+
+    if (room.lastActivity && Date.now() - room.lastActivity > 24 * 60 * 60 * 1000) {
+      await remove(ref(db, `rooms/${session.roomCode}`));
+      clearSession();
+      return;
+    }
+
+    // A Resume Game elsewhere may have left a redirect pointer behind —
+    // follow it (one hop is enough; redirects aren't chained).
+    if (room.status === 'redirected' && room.redirectTo) {
+      const newSnap = await get(ref(db, `rooms/${room.redirectTo}`));
+      if (!newSnap.exists()) { clearSession(); return; }
+      session = { ...session, roomCode: room.redirectTo };
+      room = newSnap.val();
+    }
+
+    const players = room.players || {};
+    if (!players[session.myId]) { clearSession(); return; } // player isn't in this room (e.g. resumed as someone else)
+
+    // Restore identity
+    roomCode = session.roomCode;
+    myId = session.myId;
+    myName = session.myName || players[session.myId].name || '';
+    isHost = !!session.isHost;
+    saveSession(); // persist the followed redirect so future loads skip the hop
+
+    if (room.status === 'lobby') {
+      if (isHost) {
+        document.getElementById('display-code').textContent = roomCode;
+        showScreen('lobby');
+        listenLobby();
+      } else {
+        document.getElementById('wl-code').textContent = roomCode;
+        showScreen('waiting-lobby');
+        listenWaitingLobby();
+      }
+    } else if (room.status === 'playing' || room.status === 'ceremony' || room.status === 'vp-entry') {
+      listenGameState();
+    } else if (room.status === 'gameover') {
+      showGameOver();
+    } else if (room.status === 'saved') {
+      if (!isHost) showSavedScreenForPlayer();
+    } else {
+      // 'closed' or unrecognized — nothing to resume into
+      clearSession();
+    }
+  } catch {
+    // Network hiccup etc. — fall through to normal home screen, don't clear session
+  }
+}
+tryAutoResume();
+
 // ── NAV ──────────────────────────────────────
 window.showCreateRoom = function() {
   featureNudgeEnabled  = false;
@@ -2485,6 +2695,16 @@ window.rollDie = function(sides) {
   document.getElementById('rng-result-sub').textContent = `d${sides} roll`;
 };
 
+window.leaveSavedScreen = function() {
+  cleanupListeners();
+  stopTimerTick();
+  clearNudgeTimer();
+  document.getElementById('saved-screen').classList.remove('show');
+  // Keep the session intact — the room is parked in 'saved' status, and
+  // this device's session is still valid for whoever resumes it next.
+  goHome();
+};
+
 window.goHome = function() {
   // Reset QR
   const qrBox = document.getElementById('qr-code');
@@ -2511,6 +2731,7 @@ window.goBackToCreate = async function() {
     await remove(ref(db, `rooms/${roomCode}`));
   }
   roomCode = null; myId = null; isHost = false;
+  clearSession();
   // Re-populate create screen with what the host had typed
   showScreen('create');
   // Restore host name field
@@ -2608,7 +2829,9 @@ window.hostMenuAction = function(action) {
     if (featureTimersEnabled && timerCfg.round) resetRoundTimer();
     else alert('End Round — coming soon for non-timer mode!');
   } else if (action === 'save-game') {
-    alert('Save Game — coming soon!');
+    if (confirm('Save the game? Everyone will be paused until you resume with the save code.')) {
+      saveCurrentGame();
+    }
   } else if (action === 'end-game') {
     if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Achievement Awards?' : '?'))) {
       triggerEndGame();
@@ -3337,6 +3560,7 @@ window.closeRoomFinal = async function() {
   featureAwardsEnabled = false;
   featureNudgeEnabled = false;
   roomCode = null; myId = null;
+  clearSession();
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
@@ -3350,6 +3574,7 @@ window.endGameFinal = async function() {
   window.speechSynthesis && window.speechSynthesis.cancel();
   lastActivePlayerId = null;
   roomCode = null; myId = null;
+  clearSession();
   releaseWakeLock();
   resetOrientation();
   cleanupListeners();
@@ -3821,6 +4046,7 @@ window.createRoom = async function() {
     host: myId,
     status: 'lobby',
     activePlayerIndex: 0,
+    lastActivity: Date.now(),
     features: {
       passDirection,
       nudge: featureNudgeEnabled,
@@ -3846,6 +4072,7 @@ window.createRoom = async function() {
   });
 
   document.getElementById('display-code').textContent = roomCode;
+  saveSession();
   showScreen('lobby');
   listenLobby();
 };
@@ -3862,6 +4089,12 @@ window.joinRoom = async function() {
   const snap = await get(roomRef);
   if (!snap.exists()) { status('join-status','Room not found.','error'); return; }
   const room = snap.val();
+  // Idle-room cleanup: rooms with no recorded activity in 24h are treated as abandoned
+  if (room.lastActivity && Date.now() - room.lastActivity > 24 * 60 * 60 * 1000) {
+    await remove(roomRef);
+    status('join-status','That room expired (rooms idle 24+ hours are cleared).','error');
+    return;
+  }
   if (room.status !== 'lobby' && room.status !== 'playing') { status('join-status','Room is not available.','error'); return; }
 
   isHost = false;
@@ -3872,6 +4105,8 @@ window.joinRoom = async function() {
   const players = room.players || {};
   const order = Object.keys(players).length;
   await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor });
+  await update(roomRef, { lastActivity: Date.now() });
+  saveSession();
 
   if (room.status === 'playing') {
     document.getElementById('wl-code').textContent = code;
@@ -3891,6 +4126,7 @@ function listenLobby() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
+    if (followRedirectIfAny(room)) return;
 
     if (room.status === 'playing') {
       cleanupListeners();
@@ -3909,6 +4145,20 @@ function listenLobby() {
   unsubscribers.push(() => unsub());
 }
 
+// Follows a 'redirected' room (left behind by a Resume Game) to its new
+// room code, reattaching this device's session automatically. Returns
+// true if a redirect was followed (caller should stop processing this
+// snapshot), false otherwise.
+function followRedirectIfAny(room) {
+  if (room.status !== 'redirected' || !room.redirectTo) return false;
+  const newCode = room.redirectTo;
+  roomCode = newCode;
+  saveSession();
+  cleanupListeners();
+  listenGameState();
+  return true;
+}
+
 // ── WAITING LOBBY LISTENER (non-host) ──────────────
 function listenWaitingLobby() {
   cleanupListeners();
@@ -3916,6 +4166,7 @@ function listenWaitingLobby() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
+    if (followRedirectIfAny(room)) return;
 
     if (room.status === 'playing') {
       cleanupListeners();
@@ -3974,8 +4225,15 @@ function listenGameState() {
       return;
     }
     const room = snap.val();
+    if (followRedirectIfAny(room)) return;
     // Room closed by host — send everyone home immediately
     if (room.status === 'closed') { hideAllAwardOverlays(); showScreen('home'); return; }
+    // Host saved the game — pause everyone on the Game Saved screen
+    if (room.status === 'saved') {
+      hideAllAwardOverlays();
+      if (!isHost) showSavedScreenForPlayer();
+      return;
+    }
     // Gameover — show the end screen
     if (room.status === 'gameover') { showGameOver(); return; }
     // Playing — if we were on any award overlay, clear it and resume game
@@ -4178,7 +4436,276 @@ window.passTurn = async function(direction) {
   await update(ref(db, `rooms/${roomCode}`), { activePlayerIndex: nextIdx });
 };
 
-// ── LEAVE / CLOSE ──────────────────────────────
+// ── SAVE GAME / RESUME ──────────────────────────
+// Host-triggered: snapshots the live room into savedGames/{code}, freezes
+// the live room so non-host players see a "saved" screen, and pauses
+// timers. Anyone can later use the save code from the home screen to
+// spin up a fresh live room pre-loaded with everything as it was.
+function genSaveCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+window.saveCurrentGame = async function() {
+  if (!db || !roomCode || !isHost) return;
+
+  const name = prompt('Name this save (e.g. "Friday D&D — Session 12"):', '');
+  if (name === null) return; // cancelled
+  const saveName = name.trim() || `Saved Game — ${new Date().toLocaleDateString()}`;
+
+  try {
+    const roomRef = ref(db, `rooms/${roomCode}`);
+    const snap = await get(roomRef);
+    if (!snap.exists()) { alert('Could not save: room not found.'); return; }
+    const room = snap.val();
+
+    const hostUserId = getHostId();
+    const saveCode = genSaveCode();
+    const snapshot = JSON.parse(JSON.stringify(room)); // deep copy
+    snapshot.name = saveName;
+    snapshot.savedAt = Date.now();
+    snapshot._originalRoomCode = roomCode;
+    snapshot._hostUserId = hostUserId;
+
+    await update(ref(db), {
+      [`savedGames/${hostUserId}/${saveCode}`]: snapshot,
+      [`saveCodeIndex/${saveCode}`]: hostUserId,   // lets a different device resolve a shared code
+      [`rooms/${roomCode}/status`]: 'saved'
+    });
+
+    stopTimerTick();
+    clearNudgeTimer();
+
+    document.getElementById('saved-screen-code').textContent = saveCode;
+    document.getElementById('saved-screen-name').textContent = saveName;
+    document.getElementById('saved-screen-host-view').style.display = 'block';
+    document.getElementById('saved-screen-player-view').style.display = 'none';
+    document.getElementById('saved-screen').classList.add('show');
+  } catch (err) {
+    alert('Save failed: ' + (err && err.message ? err.message : err));
+  }
+};
+
+// Called by the non-host listener when room.status becomes 'saved'
+function showSavedScreenForPlayer() {
+  stopTimerTick();
+  clearNudgeTimer();
+  document.getElementById('saved-screen-host-view').style.display = 'none';
+  document.getElementById('saved-screen-player-view').style.display = 'block';
+  document.getElementById('saved-screen').classList.add('show');
+};
+
+let pendingResumeCode = null;
+let pendingResumeHostId = null;
+let pendingResumeData = null;
+
+window.resumeFromSaveCode = async function() {
+  if (!requireDb()) return;
+  const codeInput = document.getElementById('resume-code');
+  const code = codeInput ? codeInput.value.toUpperCase().trim() : '';
+  if (!code) { status('resume-status', 'Enter a save code.', 'error'); return; }
+
+  const indexSnap = await get(ref(db, `saveCodeIndex/${code}`));
+  if (!indexSnap.exists()) { status('resume-status', 'Save code not found.', 'error'); return; }
+  const hostUserId = indexSnap.val();
+
+  const saveRef = ref(db, `savedGames/${hostUserId}/${code}`);
+  const snap = await get(saveRef);
+  if (!snap.exists()) { status('resume-status', 'Save code not found.', 'error'); return; }
+  const saved = snap.val();
+
+  // Show a "who are you" picker so the resuming device reattaches to the
+  // correct existing player rather than joining as a stranger.
+  pendingResumeCode = code;
+  pendingResumeHostId = hostUserId;
+  pendingResumeData = saved;
+  const players = buildOrderedPlayers(saved.players || {});
+  const listEl = document.getElementById('resume-who-list');
+  listEl.innerHTML = '';
+  players.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'tool-list-btn';
+    btn.textContent = p.name;
+    btn.onclick = () => finishResume(p.id, false);
+    listEl.appendChild(btn);
+  });
+  const hostBtn = document.createElement('button');
+  hostBtn.className = 'tool-list-btn';
+  hostBtn.style.marginTop = '0.5rem';
+  hostBtn.textContent = "🆕 I'm new / just spectating as host";
+  hostBtn.onclick = () => finishResume(null, true);
+  listEl.appendChild(hostBtn);
+
+  document.getElementById('resume-code-step').style.display = 'none';
+  document.getElementById('resume-who-step').style.display = 'block';
+};
+
+async function finishResume(existingPlayerId, asHostOnly) {
+  const newCode = genCode();
+  const restored = JSON.parse(JSON.stringify(pendingResumeData));
+  const originalCode = restored._originalRoomCode || null;
+  delete restored.savedAt;
+  delete restored._originalRoomCode;
+  delete restored._hostUserId;
+  delete restored.name;
+  restored.status = 'playing';
+  restored.lastActivity = Date.now();
+
+  await update(ref(db), { [`rooms/${newCode}`]: restored });
+  // Note: the saved entry under savedGames/{hostUserId}/{code} is intentionally
+  // left in place — it's a library checkpoint the host can return to again,
+  // not a disposable one-time token. Only the saveCodeIndex pointer (used for
+  // code-based lookup) could be cleared here, but leaving it lets the same
+  // code be reused to resume from this same checkpoint again later.
+
+  // Leave a short-lived redirect at the old room code so other players'
+  // devices (still holding the old roomCode in their saved session) get
+  // pointed at the new room automatically instead of finding nothing.
+  if (originalCode) {
+    await update(ref(db), {
+      [`rooms/${originalCode}`]: { status: 'redirected', redirectTo: newCode, redirectAt: Date.now() }
+    });
+  }
+
+  roomCode = newCode;
+  if (existingPlayerId) {
+    // Reattach to an existing player record — same seat, color, score, turn position
+    myId = existingPlayerId;
+    myName = restored.players[existingPlayerId]?.name || '';
+    isHost = false; // restore as a regular player; can be promoted via Manage Players if needed
+  } else {
+    // Host-only resume: not occupying a player seat, just running the room
+    myId = uid();
+    myName = 'Host';
+    isHost = true;
+  }
+  saveSession();
+
+  document.getElementById('resume-new-code').textContent = newCode;
+  document.getElementById('resume-who-step').style.display = 'none';
+  document.getElementById('resume-newcode-step').style.display = 'block';
+}
+
+// ── MY SAVED GAMES (list, scoped to this device's host ID) ──
+window.openMySavedGames = async function() {
+  if (!requireDb()) return;
+  document.getElementById('my-saves-overlay').classList.add('show');
+  const listEl = document.getElementById('my-saves-list');
+  listEl.innerHTML = '<div style="color:var(--muted); font-size:0.85rem; text-align:center; padding:0.5rem;">Loading…</div>';
+
+  try {
+    const hostUserId = getHostId();
+    const snap = await get(ref(db, `savedGames/${hostUserId}`));
+    if (!snap.exists()) {
+      listEl.innerHTML = '<div style="color:var(--muted); font-size:0.85rem; text-align:center; padding:0.5rem;">No saved games yet.</div>';
+      return;
+    }
+    const saves = snap.val();
+    const codes = Object.keys(saves).sort((a,b) => (saves[b].savedAt||0) - (saves[a].savedAt||0));
+    listEl.innerHTML = '';
+    codes.forEach(code => renderSaveRow(listEl, code, saves[code]));
+  } catch (err) {
+    listEl.innerHTML = '<div style="color:#ff5c5c; font-size:0.85rem; text-align:center; padding:0.5rem;">Could not load saves: ' + (err && err.message ? err.message : err) + '</div>';
+  }
+};
+window.closeMySavedGames = function() {
+  document.getElementById('my-saves-overlay').classList.remove('show');
+};
+
+function renderSaveRow(listEl, code, save) {
+  const row = document.createElement('div');
+  row.className = 'save-row';
+  const dateStr = save.savedAt ? new Date(save.savedAt).toLocaleString() : '';
+  row.innerHTML = `
+    <div class="save-row-name">${escapeHtml(save.name || 'Untitled Save')}</div>
+    <div class="save-row-date">${escapeHtml(dateStr)} · code ${escapeHtml(code)}</div>
+    <div class="save-row-actions">
+      <button data-act="resume">▶ Resume</button>
+      <button data-act="rename">✎ Rename</button>
+      <button data-act="delete" class="danger">🗑 Delete</button>
+    </div>
+  `;
+  row.querySelector('[data-act="resume"]').onclick = () => resumeFromList(code, save);
+  row.querySelector('[data-act="rename"]').onclick = () => renameSave(code, save, row);
+  row.querySelector('[data-act="delete"]').onclick = () => deleteSave(code, row);
+  listEl.appendChild(row);
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+async function resumeFromList(code, save) {
+  closeMySavedGames();
+  pendingResumeCode = code;
+  pendingResumeHostId = getHostId();
+  pendingResumeData = save;
+
+  const players = buildOrderedPlayers(save.players || {});
+  const listEl = document.getElementById('resume-who-list');
+  listEl.innerHTML = '';
+  players.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'tool-list-btn';
+    btn.textContent = p.name;
+    btn.onclick = () => finishResume(p.id, false);
+    listEl.appendChild(btn);
+  });
+  const hostBtn = document.createElement('button');
+  hostBtn.className = 'tool-list-btn';
+  hostBtn.style.marginTop = '0.5rem';
+  hostBtn.textContent = "🆕 I'm new / just spectating as host";
+  hostBtn.onclick = () => finishResume(null, true);
+  listEl.appendChild(hostBtn);
+
+  document.getElementById('resume-code-step').style.display = 'none';
+  document.getElementById('resume-who-step').style.display = 'block';
+  document.getElementById('resume-newcode-step').style.display = 'none';
+  document.getElementById('resume-overlay').classList.add('show');
+}
+
+async function renameSave(code, save, row) {
+  const newName = prompt('Rename this save:', save.name || '');
+  if (newName === null || !newName.trim()) return;
+  try {
+    await update(ref(db, `savedGames/${getHostId()}/${code}`), { name: newName.trim() });
+    row.querySelector('.save-row-name').textContent = newName.trim();
+    save.name = newName.trim();
+  } catch (err) {
+    alert('Rename failed: ' + (err && err.message ? err.message : err));
+  }
+}
+
+async function deleteSave(code, row) {
+  if (!confirm('Delete this saved game? This cannot be undone.')) return;
+  try {
+    await remove(ref(db, `savedGames/${getHostId()}/${code}`));
+    await remove(ref(db, `saveCodeIndex/${code}`));
+    row.remove();
+  } catch (err) {
+    alert('Delete failed: ' + (err && err.message ? err.message : err));
+  }
+}
+
+
+window.openResumeOverlay = function() {
+  document.getElementById('resume-code').value = '';
+  document.getElementById('resume-code-step').style.display = 'block';
+  document.getElementById('resume-who-step').style.display = 'none';
+  document.getElementById('resume-newcode-step').style.display = 'none';
+  status('resume-status', '');
+  document.getElementById('resume-overlay').classList.add('show');
+};
+window.closeResumeOverlay = function() {
+  document.getElementById('resume-overlay').classList.remove('show');
+};
+window.enterResumedGame = function() {
+  closeResumeOverlay();
+  listenGameState();
+};
+
 window.leaveRoom = async function() {
   if (!db || !roomCode || !myId) { showScreen('home'); return; }
   releaseWakeLock();
@@ -4189,6 +4716,7 @@ window.leaveRoom = async function() {
   lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
   roomCode = null; myId = null;
+  clearSession();
   showScreen('home');
 };
 
@@ -4201,6 +4729,7 @@ window.closeRoom = async function() {
   lastActivePlayerId = null;
   await remove(ref(db, `rooms/${roomCode}`));
   roomCode = null; myId = null;
+  clearSession();
   showScreen('home');
 };
 
