@@ -1917,6 +1917,10 @@
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-active">
     <div class="host-game-menu-drawer" id="host-game-drawer-active">
+      <div style="text-align:center; padding:0.4rem 0 0.6rem; border-bottom:1px solid var(--border); margin-bottom:0.3rem;">
+        <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
+        <div style="font-family:'Courier New',monospace; font-size:1.3rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-menu-room-code-active">----</div>
+      </div>
       <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
       <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
@@ -1981,6 +1985,10 @@
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
+      <div style="text-align:center; padding:0.4rem 0 0.6rem; border-bottom:1px solid var(--border); margin-bottom:0.3rem;">
+        <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
+        <div style="font-family:'Courier New',monospace; font-size:1.3rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-menu-room-code-wait">----</div>
+      </div>
       <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
       <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
       <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
@@ -2294,15 +2302,11 @@
     </div>
 
     <div id="resume-who-step" style="display:none;">
+      <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:var(--text); margin-bottom:0.6rem; cursor:pointer;">
+        <input type="checkbox" id="resume-as-host" style="width:auto; margin:0;"> I'm the host of this room
+      </label>
       <div class="rng-section-label" style="margin-top:0;">Who are you?</div>
       <div id="resume-who-list" style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.4rem;"></div>
-    </div>
-
-    <div id="resume-newcode-step" style="display:none; text-align:center;">
-      <div class="rng-section-label" style="margin-top:0;">New Room Code</div>
-      <div class="saved-screen-code" style="font-size:1.6rem; margin:0.5rem auto;" id="resume-new-code">----</div>
-      <p style="font-size:0.85rem; color:var(--muted);">Share this with the rest of the group so they can rejoin.</p>
-      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="enterResumedGame()">Continue to Game</button>
     </div>
 
     <button class="btn-secondary btn-sm" style="margin-top:0.6rem;" onclick="closeResumeOverlay()">Close</button>
@@ -2317,12 +2321,12 @@
   <div class="saved-screen-title">Game Saved</div>
   <div id="saved-screen-host-view" style="display:none;">
     <div class="saved-screen-sub" id="saved-screen-name" style="font-weight:700; color:var(--text);">—</div>
-    <div class="saved-screen-sub">This save is now in your "My Saved Games" list on the home screen. You can also share the code below for someone else to resume it directly.</div>
+    <div class="saved-screen-sub">This save is in your "My Saved Games" list on the home screen. The room code below stays the same — anyone can rejoin with it once you resume.</div>
     <div class="saved-screen-code" id="saved-screen-code">----</div>
     <button class="btn-secondary btn-sm" style="margin-top:1rem; width:auto; padding:0.6rem 1.5rem;" onclick="leaveSavedScreen()">🏠 Back to Home</button>
   </div>
   <div id="saved-screen-player-view" style="display:none;">
-    <div class="saved-screen-sub">The host saved the game. Ask them for the save code when you're ready to pick it back up.</div>
+    <div class="saved-screen-sub">The host saved the game. Wait for them to resume it — your seat and score will be right where you left them.</div>
     <button class="btn-secondary btn-sm" style="margin-top:1rem; width:auto; padding:0.6rem 1.5rem;" onclick="leaveSavedScreen()">🏠 Back to Home</button>
   </div>
 </div>
@@ -2565,15 +2569,6 @@ async function tryAutoResume() {
       return;
     }
 
-    // A Resume Game elsewhere may have left a redirect pointer behind —
-    // follow it (one hop is enough; redirects aren't chained).
-    if (room.status === 'redirected' && room.redirectTo) {
-      const newSnap = await get(ref(db, `rooms/${room.redirectTo}`));
-      if (!newSnap.exists()) { clearSession(); return; }
-      session = { ...session, roomCode: room.redirectTo };
-      room = newSnap.val();
-    }
-
     const players = room.players || {};
     if (!players[session.myId]) { clearSession(); return; } // player isn't in this room (e.g. resumed as someone else)
 
@@ -2582,7 +2577,6 @@ async function tryAutoResume() {
     myId = session.myId;
     myName = session.myName || players[session.myId].name || '';
     isHost = !!session.isHost;
-    saveSession(); // persist the followed redirect so future loads skip the hop
 
     if (room.status === 'lobby') {
       if (isHost) {
@@ -2599,7 +2593,11 @@ async function tryAutoResume() {
     } else if (room.status === 'gameover') {
       showGameOver();
     } else if (room.status === 'saved') {
-      if (!isHost) showSavedScreenForPlayer();
+      document.getElementById('saved-screen-code').textContent = roomCode;
+      document.getElementById('saved-screen-name').textContent = '';
+      document.getElementById('saved-screen-host-view').style.display = isHost ? 'block' : 'none';
+      document.getElementById('saved-screen-player-view').style.display = isHost ? 'none' : 'block';
+      document.getElementById('saved-screen').classList.add('show');
     } else {
       // 'closed' or unrecognized — nothing to resume into
       clearSession();
@@ -4126,7 +4124,6 @@ function listenLobby() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
-    if (followRedirectIfAny(room)) return;
 
     if (room.status === 'playing') {
       cleanupListeners();
@@ -4145,20 +4142,6 @@ function listenLobby() {
   unsubscribers.push(() => unsub());
 }
 
-// Follows a 'redirected' room (left behind by a Resume Game) to its new
-// room code, reattaching this device's session automatically. Returns
-// true if a redirect was followed (caller should stop processing this
-// snapshot), false otherwise.
-function followRedirectIfAny(room) {
-  if (room.status !== 'redirected' || !room.redirectTo) return false;
-  const newCode = room.redirectTo;
-  roomCode = newCode;
-  saveSession();
-  cleanupListeners();
-  listenGameState();
-  return true;
-}
-
 // ── WAITING LOBBY LISTENER (non-host) ──────────────
 function listenWaitingLobby() {
   cleanupListeners();
@@ -4166,7 +4149,6 @@ function listenWaitingLobby() {
   const unsub = onValue(roomRef, snap => {
     if (!snap.exists()) { showScreen('home'); return; }
     const room = snap.val();
-    if (followRedirectIfAny(room)) return;
 
     if (room.status === 'playing') {
       cleanupListeners();
@@ -4225,7 +4207,6 @@ function listenGameState() {
       return;
     }
     const room = snap.val();
-    if (followRedirectIfAny(room)) return;
     // Room closed by host — send everyone home immediately
     if (room.status === 'closed') { hideAllAwardOverlays(); showScreen('home'); return; }
     // Host saved the game — pause everyone on the Game Saved screen
@@ -4334,6 +4315,8 @@ function listenGameState() {
       document.getElementById('btn-right').style.background = 'transparent';
       const arcEl = document.getElementById('active-room-code-display');
       if (arcEl) arcEl.textContent = roomCode;
+      const hmrcActive = document.getElementById('host-menu-room-code-active');
+      if (hmrcActive) hmrcActive.textContent = roomCode;
 
       // Apply pass direction UI mode
       const isBoth = passDirection === 'both' || !passDirection;
@@ -4387,6 +4370,8 @@ function listenGameState() {
       }
       const wrcEl = document.getElementById('wait-room-code-display');
       if (wrcEl) wrcEl.textContent = roomCode;
+      const hmrcWait = document.getElementById('host-menu-room-code-wait');
+      if (hmrcWait) hmrcWait.textContent = roomCode;
       // Nudge area
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
@@ -4476,7 +4461,7 @@ window.saveCurrentGame = async function() {
     stopTimerTick();
     clearNudgeTimer();
 
-    document.getElementById('saved-screen-code').textContent = saveCode;
+    document.getElementById('saved-screen-code').textContent = roomCode;
     document.getElementById('saved-screen-name').textContent = saveName;
     document.getElementById('saved-screen-host-view').style.display = 'block';
     document.getElementById('saved-screen-player-view').style.display = 'none';
@@ -4519,6 +4504,7 @@ window.resumeFromSaveCode = async function() {
   pendingResumeCode = code;
   pendingResumeHostId = hostUserId;
   pendingResumeData = saved;
+  document.getElementById('resume-as-host').checked = false;
   const players = buildOrderedPlayers(saved.players || {});
   const listEl = document.getElementById('resume-who-list');
   listEl.innerHTML = '';
@@ -4526,24 +4512,25 @@ window.resumeFromSaveCode = async function() {
     const btn = document.createElement('button');
     btn.className = 'tool-list-btn';
     btn.textContent = p.name;
-    btn.onclick = () => finishResume(p.id, false);
+    btn.onclick = () => finishResume(p.id);
     listEl.appendChild(btn);
   });
-  const hostBtn = document.createElement('button');
-  hostBtn.className = 'tool-list-btn';
-  hostBtn.style.marginTop = '0.5rem';
-  hostBtn.textContent = "🆕 I'm new / just spectating as host";
-  hostBtn.onclick = () => finishResume(null, true);
-  listEl.appendChild(hostBtn);
+  const newBtn = document.createElement('button');
+  newBtn.className = 'tool-list-btn';
+  newBtn.style.marginTop = '0.5rem';
+  newBtn.textContent = "🆕 I'm not on this list (spectating)";
+  newBtn.onclick = () => finishResume(null);
+  listEl.appendChild(newBtn);
 
   document.getElementById('resume-code-step').style.display = 'none';
   document.getElementById('resume-who-step').style.display = 'block';
 };
 
-async function finishResume(existingPlayerId, asHostOnly) {
-  const newCode = genCode();
+async function finishResume(existingPlayerId) {
   const restored = JSON.parse(JSON.stringify(pendingResumeData));
   const originalCode = restored._originalRoomCode || null;
+  if (!originalCode) { alert('This save is missing its original room code and cannot be restored.'); return; }
+
   delete restored.savedAt;
   delete restored._originalRoomCode;
   delete restored._hostUserId;
@@ -4551,39 +4538,35 @@ async function finishResume(existingPlayerId, asHostOnly) {
   restored.status = 'playing';
   restored.lastActivity = Date.now();
 
-  await update(ref(db), { [`rooms/${newCode}`]: restored });
-  // Note: the saved entry under savedGames/{hostUserId}/{code} is intentionally
-  // left in place — it's a library checkpoint the host can return to again,
-  // not a disposable one-time token. Only the saveCodeIndex pointer (used for
-  // code-based lookup) could be cleared here, but leaving it lets the same
-  // code be reused to resume from this same checkpoint again later.
-
-  // Leave a short-lived redirect at the old room code so other players'
-  // devices (still holding the old roomCode in their saved session) get
-  // pointed at the new room automatically instead of finding nothing.
-  if (originalCode) {
-    await update(ref(db), {
-      [`rooms/${originalCode}`]: { status: 'redirected', redirectTo: newCode, redirectAt: Date.now() }
-    });
+  // Safety check: don't clobber a room if someone else is already using
+  // this exact code for an unrelated live game (extremely unlikely with a
+  // 4-character code, but cheap to guard against).
+  const existingSnap = await get(ref(db, `rooms/${originalCode}`));
+  if (existingSnap.exists() && existingSnap.val().status !== 'saved') {
+    alert('That room code is currently in use by another game. Please try again in a moment.');
+    return;
   }
 
-  roomCode = newCode;
+  await update(ref(db), { [`rooms/${originalCode}`]: restored });
+
+  const wantsHost = !!document.getElementById('resume-as-host').checked;
+  roomCode = originalCode;
   if (existingPlayerId) {
     // Reattach to an existing player record — same seat, color, score, turn position
     myId = existingPlayerId;
     myName = restored.players[existingPlayerId]?.name || '';
-    isHost = false; // restore as a regular player; can be promoted via Manage Players if needed
+    isHost = wantsHost; // can be both: occupying a seat AND running the host menu
   } else {
-    // Host-only resume: not occupying a player seat, just running the room
+    // Not on the player list — spectating only, host status from the checkbox
     myId = uid();
     myName = 'Host';
-    isHost = true;
+    isHost = wantsHost;
   }
   saveSession();
 
-  document.getElementById('resume-new-code').textContent = newCode;
-  document.getElementById('resume-who-step').style.display = 'none';
-  document.getElementById('resume-newcode-step').style.display = 'block';
+  closeResumeOverlay();
+  closeMySavedGames();
+  listenGameState();
 }
 
 // ── MY SAVED GAMES (list, scoped to this device's host ID) ──
@@ -4642,6 +4625,7 @@ async function resumeFromList(code, save) {
   pendingResumeCode = code;
   pendingResumeHostId = getHostId();
   pendingResumeData = save;
+  document.getElementById('resume-as-host').checked = true; // resuming from your own saved list — most likely you're the host
 
   const players = buildOrderedPlayers(save.players || {});
   const listEl = document.getElementById('resume-who-list');
@@ -4650,19 +4634,18 @@ async function resumeFromList(code, save) {
     const btn = document.createElement('button');
     btn.className = 'tool-list-btn';
     btn.textContent = p.name;
-    btn.onclick = () => finishResume(p.id, false);
+    btn.onclick = () => finishResume(p.id);
     listEl.appendChild(btn);
   });
-  const hostBtn = document.createElement('button');
-  hostBtn.className = 'tool-list-btn';
-  hostBtn.style.marginTop = '0.5rem';
-  hostBtn.textContent = "🆕 I'm new / just spectating as host";
-  hostBtn.onclick = () => finishResume(null, true);
-  listEl.appendChild(hostBtn);
+  const newBtn = document.createElement('button');
+  newBtn.className = 'tool-list-btn';
+  newBtn.style.marginTop = '0.5rem';
+  newBtn.textContent = "🆕 I'm not on this list (spectating)";
+  newBtn.onclick = () => finishResume(null);
+  listEl.appendChild(newBtn);
 
   document.getElementById('resume-code-step').style.display = 'none';
   document.getElementById('resume-who-step').style.display = 'block';
-  document.getElementById('resume-newcode-step').style.display = 'none';
   document.getElementById('resume-overlay').classList.add('show');
 }
 
@@ -4694,16 +4677,11 @@ window.openResumeOverlay = function() {
   document.getElementById('resume-code').value = '';
   document.getElementById('resume-code-step').style.display = 'block';
   document.getElementById('resume-who-step').style.display = 'none';
-  document.getElementById('resume-newcode-step').style.display = 'none';
   status('resume-status', '');
   document.getElementById('resume-overlay').classList.add('show');
 };
 window.closeResumeOverlay = function() {
   document.getElementById('resume-overlay').classList.remove('show');
-};
-window.enterResumedGame = function() {
-  closeResumeOverlay();
-  listenGameState();
 };
 
 window.leaveRoom = async function() {
