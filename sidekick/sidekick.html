@@ -1594,7 +1594,8 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-home" class="screen active">
+<div id="screen-home" class="screen active" style="position:relative;">
+  <button class="btn-secondary btn-sm" id="account-btn" style="position:absolute; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">👤 Account</button>
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
     <span style="font-size:1rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);opacity:0.7;">Game Night</span>
     <span>SideKick</span>
@@ -1606,7 +1607,6 @@
       <button class="btn-secondary" onclick="showJoinRoom()">Join a Room</button>
     </div>
   </div>
-  <button class="btn-secondary btn-sm" style="margin-top:0.6rem; width:auto; padding:0.4rem 1rem; font-size:0.8rem; background:transparent; border:1px solid var(--border);" onclick="openMySavedGames()">💾 My Saved Games</button>
   <p id="home-status" class="status"></p>
 
   <!-- Tools card -->
@@ -1839,6 +1839,19 @@
     </button>
     <button class="btn-primary" onclick="joinRoom()">Join Room</button>
     <p id="join-status" class="status"></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  RETURNING PLAYER CONFIRMATION              -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="rejoin-confirm-overlay">
+  <div class="tools-modal" style="text-align:center;">
+    <div class="tools-modal-title">👋 Welcome Back?</div>
+    <p class="saved-screen-sub" id="rejoin-confirm-text">Someone named "Sarah" is already in this room.</p>
+    <button class="btn-primary btn-sm" style="width:100%;" onclick="confirmRejoinAsExisting()">✅ Yes, that's me</button>
+    <button class="btn-secondary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="confirmRejoinAsNew()">🆕 No, I'm a different person</button>
+    <button class="btn-secondary btn-sm" style="width:100%; margin-top:0.5rem;" onclick="cancelRejoinConfirm()">Cancel</button>
   </div>
 </div>
 
@@ -2274,6 +2287,52 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  ACCOUNT (login / signup)                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="account-overlay">
+  <div class="tools-modal">
+    <div class="tools-modal-title" id="account-modal-title">👤 Host Login</div>
+
+    <div id="account-form-step">
+      <input type="email" id="account-email" placeholder="Email" autocomplete="email">
+      <input type="password" id="account-password" placeholder="Password" autocomplete="current-password" style="margin-top:0.5rem;">
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.6rem;" id="account-submit-btn" onclick="submitAccountForm()">Log In</button>
+      <p id="account-status" class="status"></p>
+      <button class="btn-secondary btn-sm" style="margin-top:0.3rem; width:100%; text-align:center;" onclick="toggleAccountMode()" id="account-toggle-btn">Need an account? Sign up free</button>
+    </div>
+
+    <div id="account-signedin-step" style="display:none; text-align:center;">
+      <div class="saved-screen-sub" id="account-signedin-email" style="font-weight:700; color:var(--text);">—</div>
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.8rem;" onclick="closeAccountOverlay(); openProfileScreen();">👤 Go to Profile</button>
+      <button class="btn-secondary btn-sm" style="width:100%; margin-top:0.4rem;" onclick="doSignOut()">Sign Out</button>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.6rem;" onclick="closeAccountOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  PROFILE SCREEN                             -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-profile" class="screen">
+  <div class="card" style="width:min(380px,92vw);">
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+      <div id="profile-avatar" style="width:64px; height:64px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:800; color:#fff;">?</div>
+      <div id="profile-email" style="font-weight:700; color:var(--text);">—</div>
+      <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Host Account</div>
+    </div>
+
+    <button class="tool-list-btn" onclick="openMySavedGames()">💾 My Saved Games</button>
+    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="alert('Avatar customization is coming soon!')">🖼️ Change Avatar</button>
+    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="alert('Account settings are coming soon!')">⚙️ Account Settings</button>
+
+    <button class="btn-secondary btn-sm" style="margin-top:1rem; width:100%;" onclick="backToHomeFromProfile()">🏠 Back to Home</button>
+    <div style="height:1.5rem;"></div>
+    <button class="btn-secondary btn-sm" style="width:100%; color:#ff5c5c; border-color:#ff5c5c;" onclick="confirmSignOut()">Sign Out</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  MY SAVED GAMES (list)                      -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="my-saves-overlay">
@@ -2387,6 +2446,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // ── STATE ──────────────────────────────────────
 let db = null;
@@ -2415,22 +2476,131 @@ function clearSession() {
   try { localStorage.removeItem(SK_SESSION_KEY); } catch {}
 }
 
-// ── HOST IDENTITY (stub for future Host Profiles) ──
-// Until real accounts/login exist, each device gets a stable random ID
-// the first time it's needed. Saved games are filed under this ID. When
-// real auth ships, this is the one place to swap "local ID" for "auth UID"
-// — everything built on top (the saved-games list, ownership) stays the same.
-const SK_HOSTID_KEY = 'sk_host_id';
+// ── HOST IDENTITY ──────────────────────────────
+// Hosting requires a signed-in account. Saved games are filed under the
+// real Firebase Auth UID. Call requireHostAccount() before any host-only
+// action to make sure someone's actually logged in first.
 function getHostId() {
+  return currentUser ? currentUser.uid : null;
+}
+function requireHostAccount() {
+  if (currentUser) return true;
+  openAccountOverlay('login');
+  return false;
+}
+
+// ── ACCOUNT UI ───────────────────────────────────
+let accountMode = 'login'; // 'login' | 'signup'
+
+window.openAccountOverlay = function(mode) {
+  if (!requireDb()) return;
+  accountMode = mode || 'login';
+  document.getElementById('account-email').value = '';
+  document.getElementById('account-password').value = '';
+  status('account-status', '');
+
+  if (currentUser) {
+    document.getElementById('account-form-step').style.display = 'none';
+    document.getElementById('account-signedin-step').style.display = 'block';
+    document.getElementById('account-signedin-email').textContent = currentUser.email || '';
+  } else {
+    document.getElementById('account-form-step').style.display = 'block';
+    document.getElementById('account-signedin-step').style.display = 'none';
+    renderAccountMode();
+  }
+  document.getElementById('account-overlay').classList.add('show');
+};
+window.closeAccountOverlay = function() {
+  document.getElementById('account-overlay').classList.remove('show');
+};
+
+function renderAccountMode() {
+  const isLogin = accountMode === 'login';
+  document.getElementById('account-modal-title').textContent = isLogin ? '👤 Host Login' : '👤 Create Host Account';
+  document.getElementById('account-submit-btn').textContent = isLogin ? 'Log In' : 'Sign Up Free';
+  document.getElementById('account-toggle-btn').textContent = isLogin ? 'Need an account? Sign up free' : 'Already have an account? Log in';
+}
+window.toggleAccountMode = function() {
+  accountMode = accountMode === 'login' ? 'signup' : 'login';
+  status('account-status', '');
+  renderAccountMode();
+};
+
+window.submitAccountForm = async function() {
+  if (!auth) { status('account-status', 'Not connected to Firebase yet.', 'error'); return; }
+  const email = document.getElementById('account-email').value.trim();
+  const password = document.getElementById('account-password').value;
+  if (!email || !password) { status('account-status', 'Enter an email and password.', 'error'); return; }
+  if (password.length < 6) { status('account-status', 'Password must be at least 6 characters.', 'error'); return; }
+
   try {
-    let id = localStorage.getItem(SK_HOSTID_KEY);
-    if (!id) {
-      id = 'h_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36);
-      localStorage.setItem(SK_HOSTID_KEY, id);
+    if (accountMode === 'signup') {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } else {
+      await signInWithEmailAndPassword(auth, email, password);
     }
-    return id;
-  } catch {
-    return 'h_anon'; // localStorage unavailable — saves won't persist across sessions, but won't crash
+    closeAccountOverlay();
+  } catch (err) {
+    status('account-status', friendlyAuthError(err), 'error');
+  }
+};
+
+function friendlyAuthError(err) {
+  const code = err && err.code || '';
+  if (code.includes('email-already-in-use')) return 'That email already has an account — try logging in instead.';
+  if (code.includes('invalid-email')) return 'That email address looks invalid.';
+  if (code.includes('user-not-found') || code.includes('wrong-password') || code.includes('invalid-credential')) return 'Incorrect email or password.';
+  if (code.includes('weak-password')) return 'Password must be at least 6 characters.';
+  if (code.includes('network-request-failed')) return 'Network error — check your connection and try again.';
+  return (err && err.message) ? err.message : 'Something went wrong. Please try again.';
+}
+
+window.doSignOut = async function() {
+  if (!auth) return;
+  try {
+    await signOut(auth);
+    showScreen('home');
+  } catch (err) {
+    alert('Sign out failed: ' + (err && err.message ? err.message : err));
+  }
+};
+
+window.confirmSignOut = function() {
+  if (confirm('Sign out of your host account?')) {
+    doSignOut();
+  }
+};
+
+// Defensively closes any overlay that might still be showing (e.g. if My
+// Saved Games or Account was left open) before switching screens, so the
+// button always visibly takes you home.
+window.backToHomeFromProfile = function() {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+  showScreen('home');
+};
+
+window.openProfileScreen = function() {
+  if (!currentUser) { openAccountOverlay('login'); return; }
+  document.getElementById('profile-email').textContent = currentUser.email || '';
+  const initial = (currentUser.email || '?').charAt(0).toUpperCase();
+  document.getElementById('profile-avatar').textContent = initial;
+  showScreen('profile');
+};
+
+// Reflects sign-in state on the home screen's account button
+function updateAccountButtonUI() {
+  const btn = document.getElementById('account-btn');
+  if (!btn) return;
+  if (currentUser) {
+    const initial = (currentUser.email || '?').charAt(0).toUpperCase();
+    btn.textContent = '👤 ' + initial;
+    btn.onclick = () => openProfileScreen();
+  } else {
+    btn.textContent = '👤 Account';
+    btn.onclick = () => openAccountOverlay('login');
   }
 }
 
@@ -2508,10 +2678,18 @@ window.saveConfig = function() {
   document.getElementById('setup-overlay').classList.remove('show');
 };
 
+let auth = null;
+let currentUser = null; // Firebase Auth user object, or null if signed out
+
 function initFirebase(cfg) {
   try {
     const app = initializeApp(cfg, cfg.projectId);
     db = getDatabase(app);
+    auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      currentUser = user;
+      updateAccountButtonUI();
+    });
   } catch(e) {
     status('home-status', 'Firebase error: ' + e.message, 'error');
   }
@@ -2610,6 +2788,7 @@ tryAutoResume();
 
 // ── NAV ──────────────────────────────────────
 window.showCreateRoom = function() {
+  if (!requireHostAccount()) return;
   featureNudgeEnabled  = false;
   featureAwardsEnabled = false;
   featureVPEnabled     = false;
@@ -4095,6 +4274,26 @@ window.joinRoom = async function() {
   }
   if (room.status !== 'lobby' && room.status !== 'playing') { status('join-status','Room is not available.','error'); return; }
 
+  // Check for an existing player with this exact name (case-insensitive) —
+  // most likely a returning guest, not someone brand new.
+  const players = room.players || {};
+  const match = Object.entries(players).find(([id, p]) => (p.name || '').trim().toLowerCase() === name.toLowerCase());
+
+  if (match) {
+    pendingRejoinCode = code;
+    pendingRejoinName = name;
+    pendingRejoinPlayerId = match[0];
+    document.getElementById('rejoin-confirm-text').textContent = `Someone named "${match[1].name}" is already in this room.`;
+    document.getElementById('rejoin-confirm-overlay').classList.add('show');
+    return;
+  }
+
+  await joinAsNewPlayer(code, room, name);
+};
+
+// Joins fresh — used for genuinely new players, and for "No, I'm a
+// different person" when a name happens to match an existing player.
+async function joinAsNewPlayer(code, room, name) {
   isHost = false;
   myId = uid();
   myName = name;
@@ -4103,7 +4302,7 @@ window.joinRoom = async function() {
   const players = room.players || {};
   const order = Object.keys(players).length;
   await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor });
-  await update(roomRef, { lastActivity: Date.now() });
+  await update(ref(db, `rooms/${code}`), { lastActivity: Date.now() });
   saveSession();
 
   if (room.status === 'playing') {
@@ -4115,6 +4314,42 @@ window.joinRoom = async function() {
   document.getElementById('wl-code').textContent = code;
   showScreen('waiting-lobby');
   listenWaitingLobby();
+}
+
+let pendingRejoinCode = null;
+let pendingRejoinName = null;
+let pendingRejoinPlayerId = null;
+
+window.confirmRejoinAsExisting = async function() {
+  document.getElementById('rejoin-confirm-overlay').classList.remove('show');
+  isHost = false;
+  myId = pendingRejoinPlayerId;
+  myName = pendingRejoinName;
+  roomCode = pendingRejoinCode;
+  await update(ref(db, `rooms/${roomCode}`), { lastActivity: Date.now() });
+  saveSession();
+
+  const snap = await get(ref(db, `rooms/${roomCode}`));
+  const room = snap.exists() ? snap.val() : {};
+  if (room.status === 'playing') {
+    document.getElementById('wl-code').textContent = roomCode;
+    listenGameState();
+  } else {
+    document.getElementById('wl-code').textContent = roomCode;
+    showScreen('waiting-lobby');
+    listenWaitingLobby();
+  }
+};
+
+window.confirmRejoinAsNew = async function() {
+  document.getElementById('rejoin-confirm-overlay').classList.remove('show');
+  const snap = await get(ref(db, `rooms/${pendingRejoinCode}`));
+  if (!snap.exists()) { status('join-status', 'Room not found.', 'error'); return; }
+  await joinAsNewPlayer(pendingRejoinCode, snap.val(), pendingRejoinName);
+};
+
+window.cancelRejoinConfirm = function() {
+  document.getElementById('rejoin-confirm-overlay').classList.remove('show');
 };
 
 // ── LOBBY LISTENER (host) ──────────────────────────
@@ -4433,6 +4668,7 @@ function genSaveCode() {
 
 window.saveCurrentGame = async function() {
   if (!db || !roomCode || !isHost) return;
+  if (!requireHostAccount()) return;
 
   const name = prompt('Name this save (e.g. "Friday D&D — Session 12"):', '');
   if (name === null) return; // cancelled
