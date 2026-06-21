@@ -106,6 +106,18 @@
   /* ── SCREENS ── */
   .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
   .screen.active { display: flex; }
+  /* Setup/menu screens (Home, Create, Join, Lobby, Waiting Lobby, Profile)
+     can be taller than some phones' viewports — drop the centering and
+     allow vertical scroll so nothing gets cut off with no way to reach it.
+     The live Active Turn and Waiting screens intentionally do NOT get this
+     class, since scrolling mid-game would be disruptive. */
+  .screen.scrollable {
+    justify-content: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: max(2rem, env(safe-area-inset-top));
+    padding-bottom: 2.5rem;
+  }
 
   /* ── SETUP / LOBBY SCREENS ── */
   .logo { font-size: 2.2rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
@@ -1100,6 +1112,71 @@
   .rng-result-sub {
     font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem;
   }
+  /* ── TIMER TOOL OVERLAY ── */
+  .timer-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 9650;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .timer-overlay.show { display: flex; }
+  .timer-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(380px, 92vw);
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .timer-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.25rem;
+  }
+  .timer-tabs {
+    display: flex; border: 1.5px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-bottom: 0.5rem;
+  }
+  .timer-tab {
+    flex: 1; padding: 0.55rem 0.3rem; text-align: center;
+    font-size: 0.78rem; font-weight: 700; color: var(--muted);
+    background: transparent; border: none; cursor: pointer;
+    border-right: 1px solid var(--border);
+  }
+  .timer-tab:last-child { border-right: none; }
+  .timer-tab.active { background: var(--accent); color: #fff; }
+  .timer-pane { display: none; flex-direction: column; gap: 0.5rem; }
+  .timer-pane.active { display: flex; }
+  .timer-display {
+    font-family: 'Courier New', monospace;
+    font-size: 2.6rem; font-weight: 800; color: var(--accent-light);
+    text-align: center; background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 0.5rem; letter-spacing: 0.05em;
+  }
+  body.light-mode .timer-display { background: #f0f0fb; }
+  .timer-display.alarm { color: #ff5c5c; animation: timerPulse 0.6s ease-in-out infinite; }
+  @keyframes timerPulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .timer-input-row { display: flex; align-items: center; gap: 0.4rem; }
+  .timer-input-row input {
+    margin-bottom: 0; text-align: center; flex: 1;
+  }
+  .timer-input-row span { color: var(--muted); font-size: 0.85rem; }
+  .timer-btn-row { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
+  .timer-btn-row button { flex: 1; }
+  .timer-presets { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.3rem; }
+  .timer-preset-btn {
+    flex: 1; min-width: 60px; padding: 0.4rem 0.3rem; font-size: 0.75rem; font-weight: 600;
+    border-radius: 8px; border: 1px solid var(--border); background: transparent;
+    color: var(--text); cursor: pointer;
+  }
+  .timer-preset-btn:hover { border-color: var(--accent); }
+  .lap-list { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.4rem; max-height: 140px; overflow-y: auto; }
+  .lap-row {
+    display: flex; justify-content: space-between; font-size: 0.8rem;
+    padding: 0.35rem 0.6rem; background: #1e1e2e; border-radius: 8px; color: var(--text);
+  }
+  body.light-mode .lap-row { background: #f0f0fb; }
+  .lap-row .lap-num { color: var(--muted); }
+
   .info-modal {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1594,8 +1671,8 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-home" class="screen active" style="position:relative;">
-  <button class="btn-secondary btn-sm" id="account-btn" style="position:absolute; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">👤 Account</button>
+<div id="screen-home" class="screen active scrollable" style="position:relative;">
+  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">👤 Account</button>
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
     <span style="font-size:1rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);opacity:0.7;">Game Night</span>
     <span>SideKick</span>
@@ -1653,7 +1730,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: CREATE ROOM                        -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-create" class="screen">
+<div id="screen-create" class="screen scrollable">
   <div class="card">
 
     <!-- Header -->
@@ -1823,7 +1900,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: JOIN ROOM                          -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-join" class="screen">
+<div id="screen-join" class="screen scrollable">
   <div class="card">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
       <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto">← Back</button>
@@ -1858,7 +1935,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: HOST LOBBY                         -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-lobby" class="screen">
+<div id="screen-lobby" class="screen scrollable">
   <div class="card" style="max-width:480px;">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
       <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">← Back</button>
@@ -1896,7 +1973,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: PLAYER WAITING ROOM (non-host)     -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-waiting-lobby" class="screen">
+<div id="screen-waiting-lobby" class="screen scrollable">
   <div style="text-align:center;">
     <div class="room-code-label" style="color:var(--muted);">Joined room</div>
     <div class="room-code" id="wl-code">----</div>
@@ -2314,7 +2391,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  PROFILE SCREEN                             -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-profile" class="screen">
+<div id="screen-profile" class="screen scrollable">
   <div class="card" style="width:min(380px,92vw);">
     <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-bottom:1rem;">
       <div id="profile-avatar" style="width:64px; height:64px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:800; color:#fff;">?</div>
@@ -2435,6 +2512,63 @@
     </div>
 
     <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeRngOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TIMER TOOL OVERLAY                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="timer-overlay" id="timer-overlay">
+  <div class="timer-modal">
+    <div class="timer-modal-title">⏱️ Timers</div>
+
+    <div class="timer-tabs">
+      <button class="timer-tab active" id="timer-tab-countdown" onclick="switchTimerTab('countdown')">Countdown</button>
+      <button class="timer-tab" id="timer-tab-stopwatch" onclick="switchTimerTab('stopwatch')">Stopwatch</button>
+      <button class="timer-tab" id="timer-tab-lap" onclick="switchTimerTab('lap')">Lap Timer</button>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="timer-pane active" id="timer-pane-countdown">
+      <div class="timer-display" id="cd-display">00:00</div>
+      <div class="timer-input-row" id="cd-input-row">
+        <input type="number" id="cd-min" placeholder="Min" min="0" value="5">
+        <span>:</span>
+        <input type="number" id="cd-sec" placeholder="Sec" min="0" max="59" value="0">
+      </div>
+      <div class="timer-presets">
+        <button class="timer-preset-btn" onclick="setCountdownPreset(1)">1 min</button>
+        <button class="timer-preset-btn" onclick="setCountdownPreset(3)">3 min</button>
+        <button class="timer-preset-btn" onclick="setCountdownPreset(5)">5 min</button>
+        <button class="timer-preset-btn" onclick="setCountdownPreset(10)">10 min</button>
+      </div>
+      <div class="timer-btn-row">
+        <button class="btn-primary btn-sm" id="cd-start-btn" onclick="startCountdown()">▶ Start</button>
+        <button class="btn-secondary btn-sm" onclick="resetCountdown()">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- STOPWATCH -->
+    <div class="timer-pane" id="timer-pane-stopwatch">
+      <div class="timer-display" id="sw-display">00:00</div>
+      <div class="timer-btn-row">
+        <button class="btn-primary btn-sm" id="sw-start-btn" onclick="toggleStopwatch()">▶ Start</button>
+        <button class="btn-secondary btn-sm" onclick="resetStopwatch()">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- LAP TIMER -->
+    <div class="timer-pane" id="timer-pane-lap">
+      <div class="timer-display" id="lap-display">00:00</div>
+      <div class="timer-btn-row">
+        <button class="btn-primary btn-sm" id="lap-start-btn" onclick="toggleLapTimer()">▶ Start</button>
+        <button class="btn-secondary btn-sm" onclick="recordLap()">🚩 Lap</button>
+        <button class="btn-secondary btn-sm" onclick="resetLapTimer()">↺ Reset</button>
+      </div>
+      <div class="lap-list" id="lap-list"></div>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeTimerOverlay()">Close</button>
   </div>
 </div>
 
@@ -2575,7 +2709,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -2838,6 +2972,10 @@ window.openTool = function(toolId) {
     openRngOverlay();
     return;
   }
+  if (toolId === 'timers') {
+    openTimerOverlay();
+    return;
+  }
   const label = TOOL_LABELS[toolId] || toolId;
   alert(label + ' is coming soon!');
 };
@@ -2870,6 +3008,164 @@ window.rollDie = function(sides) {
   const result = Math.floor(Math.random() * sides) + 1;
   document.getElementById('rng-result-value').textContent = result;
   document.getElementById('rng-result-sub').textContent = `d${sides} roll`;
+};
+
+// ── TIMER TOOL ───────────────────────────────────
+// Fully standalone — independent of the in-game turn/round/game timer
+// system (timerCfg/timerInterval). Usable from the home screen or as a
+// host overlay mid-game, with no effect on turn-taking whatsoever.
+window.openTimerOverlay = function() {
+  document.getElementById('timer-overlay').classList.add('show');
+};
+window.closeTimerOverlay = function() {
+  document.getElementById('timer-overlay').classList.remove('show');
+};
+
+window.switchTimerTab = function(tab) {
+  ['countdown','stopwatch','lap'].forEach(t => {
+    document.getElementById('timer-tab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('timer-pane-' + t).classList.toggle('active', t === tab);
+  });
+};
+
+function formatClock(totalSeconds, withHours) {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = Math.floor(totalSeconds % 60);
+  if (withHours && h > 0) {
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ── Countdown ──
+let cdSecondsLeft = 0;
+let toolCdInterval = null;
+let cdRunning = false;
+
+window.setCountdownPreset = function(minutes) {
+  document.getElementById('cd-min').value = minutes;
+  document.getElementById('cd-sec').value = 0;
+};
+
+window.startCountdown = function() {
+  if (cdRunning) {
+    // Acts as Pause
+    clearInterval(toolCdInterval);
+    toolCdInterval = null;
+    cdRunning = false;
+    document.getElementById('cd-start-btn').textContent = '▶ Resume';
+    return;
+  }
+  if (cdSecondsLeft <= 0) {
+    const min = parseInt(document.getElementById('cd-min').value) || 0;
+    const sec = parseInt(document.getElementById('cd-sec').value) || 0;
+    cdSecondsLeft = (min * 60) + sec;
+    if (cdSecondsLeft <= 0) return;
+  }
+  cdRunning = true;
+  document.getElementById('cd-start-btn').textContent = '⏸ Pause';
+  document.getElementById('cd-display').classList.remove('alarm');
+  document.getElementById('cd-input-row').style.display = 'none';
+  toolCdInterval = setInterval(() => {
+    cdSecondsLeft--;
+    document.getElementById('cd-display').textContent = formatClock(Math.max(0, cdSecondsLeft), true);
+    if (cdSecondsLeft <= 0) {
+      clearInterval(toolCdInterval);
+      toolCdInterval = null;
+      cdRunning = false;
+      document.getElementById('cd-start-btn').textContent = '▶ Start';
+      document.getElementById('cd-display').classList.add('alarm');
+      playBuzzerSound();
+    }
+  }, 1000);
+};
+
+window.resetCountdown = function() {
+  clearInterval(toolCdInterval);
+  toolCdInterval = null;
+  cdRunning = false;
+  cdSecondsLeft = 0;
+  document.getElementById('cd-display').textContent = '00:00';
+  document.getElementById('cd-display').classList.remove('alarm');
+  document.getElementById('cd-start-btn').textContent = '▶ Start';
+  document.getElementById('cd-input-row').style.display = 'flex';
+};
+
+// ── Stopwatch ──
+let swElapsed = 0; // seconds
+let toolSwInterval = null;
+let swRunning = false;
+
+window.toggleStopwatch = function() {
+  if (swRunning) {
+    clearInterval(toolSwInterval);
+    toolSwInterval = null;
+    swRunning = false;
+    document.getElementById('sw-start-btn').textContent = '▶ Resume';
+    return;
+  }
+  swRunning = true;
+  document.getElementById('sw-start-btn').textContent = '⏸ Pause';
+  toolSwInterval = setInterval(() => {
+    swElapsed++;
+    document.getElementById('sw-display').textContent = formatClock(swElapsed, true);
+  }, 1000);
+};
+
+window.resetStopwatch = function() {
+  clearInterval(toolSwInterval);
+  toolSwInterval = null;
+  swRunning = false;
+  swElapsed = 0;
+  document.getElementById('sw-display').textContent = '00:00';
+  document.getElementById('sw-start-btn').textContent = '▶ Start';
+};
+
+// ── Lap Timer ──
+let lapElapsed = 0; // seconds, running total since last reset
+let toolLapInterval = null;
+let lapRunning = false;
+let lapLastMark = 0;   // elapsed value at the last recorded lap
+let lapCount = 0;
+
+window.toggleLapTimer = function() {
+  if (lapRunning) {
+    clearInterval(toolLapInterval);
+    toolLapInterval = null;
+    lapRunning = false;
+    document.getElementById('lap-start-btn').textContent = '▶ Resume';
+    return;
+  }
+  lapRunning = true;
+  document.getElementById('lap-start-btn').textContent = '⏸ Pause';
+  toolLapInterval = setInterval(() => {
+    lapElapsed++;
+    document.getElementById('lap-display').textContent = formatClock(lapElapsed, true);
+  }, 1000);
+};
+
+window.recordLap = function() {
+  lapCount++;
+  const lapDuration = lapElapsed - lapLastMark;
+  lapLastMark = lapElapsed;
+  const listEl = document.getElementById('lap-list');
+  const row = document.createElement('div');
+  row.className = 'lap-row';
+  row.innerHTML = `<span class="lap-num">Lap ${lapCount}</span><span>${formatClock(lapDuration, true)} <span style="color:var(--muted);">(total ${formatClock(lapElapsed, true)})</span></span>`;
+  listEl.insertBefore(row, listEl.firstChild); // most recent lap on top
+};
+
+window.resetLapTimer = function() {
+  clearInterval(toolLapInterval);
+  toolLapInterval = null;
+  lapRunning = false;
+  lapElapsed = 0;
+  lapLastMark = 0;
+  lapCount = 0;
+  document.getElementById('lap-display').textContent = '00:00';
+  document.getElementById('lap-start-btn').textContent = '▶ Start';
+  document.getElementById('lap-list').innerHTML = '';
 };
 
 window.leaveSavedScreen = function() {
