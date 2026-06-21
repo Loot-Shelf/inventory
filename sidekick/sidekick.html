@@ -104,19 +104,20 @@
   }
 
   /* ── SCREENS ── */
-  .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+  .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; overflow: hidden; }
   .screen.active { display: flex; }
   /* Setup/menu screens (Home, Create, Join, Lobby, Waiting Lobby, Profile)
-     can be taller than some phones' viewports — drop the centering and
-     allow vertical scroll so nothing gets cut off with no way to reach it.
-     The live Active Turn and Waiting screens intentionally do NOT get this
-     class, since scrolling mid-game would be disruptive. */
-  .screen.scrollable {
-    justify-content: flex-start;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-top: max(2rem, env(safe-area-inset-top));
-    padding-bottom: 2.5rem;
+     wrap their content in .screen-content-scaler, which JS shrinks via
+     transform:scale() if it would otherwise overflow a shorter phone's
+     viewport. No scrolling involved — everything always fits, and stays
+     centered, on any screen size. The live Active Turn and Waiting screens
+     intentionally do NOT get this treatment. */
+  .screen-content-scaler {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: center center;
+    width: 100%;
   }
 
   /* ── SETUP / LOBBY SCREENS ── */
@@ -1671,8 +1672,9 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-home" class="screen active scrollable" style="position:relative;">
+<div id="screen-home" class="screen active" style="position:relative;">
   <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">👤 Account</button>
+  <div class="screen-content-scaler" id="scaler-home">
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
     <span style="font-size:1rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);opacity:0.7;">Game Night</span>
     <span>SideKick</span>
@@ -1725,12 +1727,14 @@
       </div>
     </button>
   </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: CREATE ROOM                        -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-create" class="screen scrollable">
+<div id="screen-create" class="screen">
+  <div class="screen-content-scaler" id="scaler-create">
   <div class="card">
 
     <!-- Header -->
@@ -1895,12 +1899,14 @@
 
     </div><!-- /card-section features -->
   </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: JOIN ROOM                          -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-join" class="screen scrollable">
+<div id="screen-join" class="screen">
+  <div class="screen-content-scaler" id="scaler-join">
   <div class="card">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
       <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto">← Back</button>
@@ -1916,6 +1922,7 @@
     </button>
     <button class="btn-primary" onclick="joinRoom()">Join Room</button>
     <p id="join-status" class="status"></p>
+  </div>
   </div>
 </div>
 
@@ -1935,7 +1942,8 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: HOST LOBBY                         -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-lobby" class="screen scrollable">
+<div id="screen-lobby" class="screen">
+  <div class="screen-content-scaler" id="scaler-lobby">
   <div class="card" style="max-width:480px;">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
       <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">← Back</button>
@@ -1968,12 +1976,14 @@
     <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="margin-top:0.5rem;">Start Game</button>
     <button class="btn-danger btn-sm" onclick="closeRoom()" style="width:100%;margin-top:0.5rem;">Close Room</button>
   </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: PLAYER WAITING ROOM (non-host)     -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-waiting-lobby" class="screen scrollable">
+<div id="screen-waiting-lobby" class="screen">
+  <div class="screen-content-scaler" id="scaler-waiting-lobby">
   <div style="text-align:center;">
     <div class="room-code-label" style="color:var(--muted);">Joined room</div>
     <div class="room-code" id="wl-code">----</div>
@@ -1981,6 +1991,7 @@
     <p style="color:var(--muted); font-size:0.9rem;">Waiting for host to start…</p>
     <div class="player-list" id="wl-player-list" style="margin-top:1.5rem; max-width:320px; margin-left:auto; margin-right:auto;"></div>
     <button class="btn-secondary btn-sm" onclick="leaveRoom()" style="margin-top:1.5rem;">Leave</button>
+  </div>
   </div>
 </div>
 
@@ -2391,7 +2402,8 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  PROFILE SCREEN                             -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-profile" class="screen scrollable">
+<div id="screen-profile" class="screen">
+  <div class="screen-content-scaler" id="scaler-profile">
   <div class="card" style="width:min(380px,92vw);">
     <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-bottom:1rem;">
       <div id="profile-avatar" style="width:64px; height:64px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:800; color:#fff;">?</div>
@@ -2406,6 +2418,7 @@
     <button class="btn-secondary btn-sm" style="margin-top:1rem; width:100%;" onclick="backToHomeFromProfile()">🏠 Back to Home</button>
     <div style="height:1.5rem;"></div>
     <button class="btn-secondary btn-sm" style="width:100%; color:#ff5c5c; border-color:#ff5c5c;" onclick="confirmSignOut()">Sign Out</button>
+  </div>
   </div>
 </div>
 
@@ -2782,7 +2795,45 @@ function genCode() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
+  requestAnimationFrame(rescaleCurrentScreen);
 }
+
+// ── AUTO-SCALE TO FIT (no scrolling) ────────────
+// Setup/menu screens wrap their content in .screen-content-scaler. If that
+// content would be taller than the available viewport height, shrink it
+// with transform:scale() so everything is visible at once on any phone,
+// with no scrolling and no clipping. Screens whose content already fits
+// are left at scale(1) — completely unaffected, still centered normally.
+// The live Active Turn / Waiting screens have no scaler and are untouched.
+function rescaleCurrentScreen() {
+  const activeScreen = document.querySelector('.screen.active');
+  if (!activeScreen) return;
+  const scaler = activeScreen.querySelector(':scope > .screen-content-scaler');
+  if (!scaler) return; // Active Turn / Waiting screens have no scaler — nothing to do
+
+  // Reset to natural size first so we measure true content height, not a
+  // previously-applied scale compounding on itself.
+  scaler.style.transform = 'none';
+
+  const screenPaddingY = 64; // approx 2rem top + 2rem bottom from .screen's padding
+  const available = window.innerHeight - screenPaddingY;
+  const natural = scaler.scrollHeight;
+
+  if (natural > available && natural > 0) {
+    const factor = Math.max(0.55, available / natural); // never shrink below 55% — stays legible
+    scaler.style.transform = `scale(${factor})`;
+  }
+}
+
+let rescaleResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(rescaleResizeTimer);
+  rescaleResizeTimer = setTimeout(rescaleCurrentScreen, 120);
+});
+window.addEventListener('orientationchange', () => {
+  setTimeout(rescaleCurrentScreen, 200);
+});
+
 function status(id, msg, type='') {
   const el = document.getElementById(id);
   if (!el) return;
@@ -3231,6 +3282,7 @@ window.toggleQR = function() {
   hint.style.display = qrVisible ? 'block' : 'none';
   btn.textContent = qrVisible ? '✕ Hide QR Code' : '📷 Show QR Code';
   if (qrVisible) generateQR(); // always regenerate with current roomCode
+  requestAnimationFrame(rescaleCurrentScreen);
 };
 
 function generateQR() {
@@ -5284,6 +5336,7 @@ function renderLobbyList(players) {
     updates[`rooms/${roomCode}/players/${ps[srcIdx].id}/order`] = destIdx;
     await update(ref(db), updates);
   });
+  requestAnimationFrame(rescaleCurrentScreen);
 }
 
 function renderWaitingLobbyList(players) {
@@ -5300,6 +5353,7 @@ function renderWaitingLobbyList(players) {
       ${p.id === myId ? '<span class="player-badge host">You</span>' : ''}`;
     el.appendChild(div);
   });
+  requestAnimationFrame(rescaleCurrentScreen);
 }
 
 function cleanupListeners() {
