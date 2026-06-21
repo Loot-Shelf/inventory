@@ -698,6 +698,8 @@
   .btn-player-name,
   .active-center-its,
   .active-center-name,
+  .active-center-its,
+  .pass-tap-its,
   .nudge-active-counter,
   .timer-pill,
   .exit-btn,
@@ -1149,9 +1151,9 @@
   .timer-pane.active { display: flex; }
   .timer-display {
     font-family: 'Courier New', monospace;
-    font-size: 2.6rem; font-weight: 800; color: var(--accent-light);
+    font-size: 2.2rem; font-weight: 800; color: var(--accent-light);
     text-align: center; background: #1e1e2e; border: 1px solid var(--border);
-    border-radius: 12px; padding: 1rem 0.5rem; letter-spacing: 0.05em;
+    border-radius: 12px; padding: 1rem 0.5rem; letter-spacing: 0.02em;
   }
   body.light-mode .timer-display { background: #f0f0fb; }
   .timer-display.alarm { color: #ff5c5c; animation: timerPulse 0.6s ease-in-out infinite; }
@@ -1458,8 +1460,8 @@
   .manage-card h3 { font-size: 1rem; color: #f0eeff; margin-bottom: 1rem; }
   .manage-player-item {
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
+    flex-direction: column;
+    gap: 0.4rem;
     background: #1e1e2e;
     border: 1px solid #2a2a3a;
     border-radius: 10px;
@@ -1467,6 +1469,21 @@
     margin-bottom: 0.5rem;
     transition: opacity 0.2s;
   }
+  .manage-player-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .manage-kick-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .manage-kick-btn {
+    font-size: 0.72rem; font-weight: 600; color: #f87171;
+    background: transparent; border: 1px solid rgba(248,113,113,0.4);
+    border-radius: 7px; padding: 0.3rem 0.6rem; cursor: pointer;
+  }
+  .manage-kick-btn:hover { background: rgba(248,113,113,0.1); }
   .manage-player-item.knocked-out {
     opacity: 0.45;
     border-color: #3a1a1a;
@@ -1479,14 +1496,14 @@
   .manage-num { width: 24px; height: 24px; border-radius: 50%; background: #7c5cbf; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; }
   .manage-num.out { background: #3a1a1a; color: #6a4a4a; }
   .manage-name { flex: 1; font-size: 0.9rem; }
-  .manage-actions { display: flex; gap: 4px; align-items: center; }
-  .manage-btn { width: 26px; height: 26px; border-radius: 6px; background: #2a2a3a; border: none; color: #f0eeff; font-size: 0.7rem; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
-  .manage-btn.ko-btn { background: #3a1515; color: #f87171; }
-  .manage-btn.active-btn { background: #153a15; color: #4ade80; }
+  .manage-actions { display: flex; gap: 12px; align-items: center; }
+  .manage-btn { width: 38px; height: 38px; border-radius: 8px; background: #2a2a3a; border: 1.5px solid #3a3a4a; color: #f0eeff; font-size: 0.95rem; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .manage-btn.ko-btn { background: #3a1515; border-color: #5a2525; color: #f87171; }
+  .manage-btn.active-btn { background: #153a15; border-color: #255a25; color: #4ade80; }
   .manage-drag-handle {
-    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
-    color: #7a7a9a; font-size: 1.1rem; cursor: grab; flex-shrink: 0;
-    border-radius: 6px; touch-action: none; user-select: none;
+    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+    color: #7a7a9a; font-size: 1.3rem; cursor: grab; flex-shrink: 0;
+    border-radius: 8px; border: 1.5px solid #3a3a4a; touch-action: none; user-select: none;
   }
   .manage-drag-handle:active { cursor: grabbing; background: rgba(124,92,191,0.15); color: var(--accent-light); }
   .manage-player-item.drag-over { border-color: var(--accent); }
@@ -2275,9 +2292,30 @@
     <div style="font-size:1.05rem;font-weight:800;color:var(--text);text-align:center;margin-bottom:1.1rem;">⚙️ Room Settings</div>
 
     <!-- Nudge -->
-    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
-      <input type="checkbox" id="mg-nudge-toggle" onchange="onMidGameToggle('nudge',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
-      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">👉 Nudge</span>
+    <div class="feature-row" style="margin-bottom:0.5rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="mg-nudge-toggle" type="checkbox" onchange="onMidGameToggle('nudge',this.checked)">
+        <label class="neo-toggle" for="mg-nudge-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div>
+            <div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb">
+            <div class="neo-thumb-ring"></div>
+            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+          </div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">👉 Nudge</span>
     </div>
     <div id="mg-nudge-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.5rem;">
       <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;">Unlock After</div>
@@ -2302,21 +2340,84 @@
     </div>
 
     <!-- Achievement Awards -->
-    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
-      <input type="checkbox" id="mg-awards-toggle" onchange="onMidGameToggle('awards',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
-      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">🏆 Achievement Awards</span>
+    <div class="feature-row" style="margin-bottom:0.75rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="mg-awards-toggle" type="checkbox" onchange="onMidGameToggle('awards',this.checked)">
+        <label class="neo-toggle" for="mg-awards-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div>
+            <div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb">
+            <div class="neo-thumb-ring"></div>
+            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+          </div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">🏆 Achievement Awards</span>
     </div>
 
     <!-- Victory Points -->
-    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
-      <input type="checkbox" id="mg-vp-toggle" onchange="onMidGameToggle('vp',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
-      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">🏅 Victory Points</span>
+    <div class="feature-row" style="margin-bottom:0.5rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="mg-vp-toggle" type="checkbox" onchange="onMidGameToggle('vp',this.checked)">
+        <label class="neo-toggle" for="mg-vp-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div>
+            <div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb">
+            <div class="neo-thumb-ring"></div>
+            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+          </div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">🏅 Victory Points</span>
     </div>
 
     <!-- Timers -->
-    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
-      <input type="checkbox" id="mg-timers-toggle" onchange="onMidGameToggle('timers',this.checked)" style="width:auto;margin:0;accent-color:var(--accent);">
-      <span style="font-size:0.9rem;font-weight:600;color:var(--text);flex:1;">⏱ Timers</span>
+    <div class="feature-row" style="margin-bottom:0.5rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="mg-timers-toggle" type="checkbox" onchange="onMidGameToggle('timers',this.checked)">
+        <label class="neo-toggle" for="mg-timers-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div>
+            <div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb">
+            <div class="neo-thumb-ring"></div>
+            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+          </div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">⏱ Timers</span>
     </div>
     <div id="mg-timers-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.4rem;">
       <div style="font-size:0.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">Count-Up Timers</div>
@@ -2543,7 +2644,7 @@
 
     <!-- COUNTDOWN -->
     <div class="timer-pane active" id="timer-pane-countdown">
-      <div class="timer-display" id="cd-display">00:00</div>
+      <div class="timer-display" id="cd-display">00:00.00</div>
       <div class="timer-input-row" id="cd-input-row">
         <input type="number" id="cd-min" placeholder="Min" min="0" value="5">
         <span>:</span>
@@ -2563,7 +2664,7 @@
 
     <!-- STOPWATCH -->
     <div class="timer-pane" id="timer-pane-stopwatch">
-      <div class="timer-display" id="sw-display">00:00</div>
+      <div class="timer-display" id="sw-display">00:00.00</div>
       <div class="timer-btn-row">
         <button class="btn-primary btn-sm" id="sw-start-btn" onclick="toggleStopwatch()">▶ Start</button>
         <button class="btn-secondary btn-sm" onclick="resetStopwatch()">↺ Reset</button>
@@ -2572,7 +2673,7 @@
 
     <!-- LAP TIMER -->
     <div class="timer-pane" id="timer-pane-lap">
-      <div class="timer-display" id="lap-display">00:00</div>
+      <div class="timer-display" id="lap-display">00:00.00</div>
       <div class="timer-btn-row">
         <button class="btn-primary btn-sm" id="lap-start-btn" onclick="toggleLapTimer()">▶ Start</button>
         <button class="btn-secondary btn-sm" onclick="recordLap()">🚩 Lap</button>
@@ -3079,18 +3180,26 @@ window.switchTimerTab = function(tab) {
   });
 };
 
-function formatClock(totalSeconds, withHours) {
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = Math.floor(totalSeconds % 60);
+function formatClock(totalSeconds, withHours, withMs) {
+  const sign = totalSeconds < 0 ? '-' : '';
+  const abs = Math.abs(totalSeconds);
+  const h = Math.floor(abs / 3600);
+  const m = Math.floor((abs % 3600) / 60);
+  const s = Math.floor(abs % 60);
+  const ms = Math.floor((abs - Math.floor(abs)) * 1000);
+  let out;
   if (withHours && h > 0) {
-    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    out = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  } else {
+    out = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   }
-  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if (withMs) out += `.${String(ms).padStart(3,'0').slice(0,2)}`;
+  return sign + out;
 }
 
 // ── Countdown ──
-let cdSecondsLeft = 0;
+let cdTargetTime = 0;   // Date.now() timestamp when countdown reaches zero
+let cdRemainingAtPause = 0; // seconds left, saved when paused
 let toolCdInterval = null;
 let cdRunning = false;
 
@@ -3102,108 +3211,126 @@ window.setCountdownPreset = function(minutes) {
 window.startCountdown = function() {
   if (cdRunning) {
     // Acts as Pause
+    cdRemainingAtPause = (cdTargetTime - Date.now()) / 1000;
     clearInterval(toolCdInterval);
     toolCdInterval = null;
     cdRunning = false;
     document.getElementById('cd-start-btn').textContent = '▶ Resume';
     return;
   }
-  if (cdSecondsLeft <= 0) {
+  let secondsLeft = cdRemainingAtPause;
+  if (secondsLeft <= 0) {
     const min = parseInt(document.getElementById('cd-min').value) || 0;
     const sec = parseInt(document.getElementById('cd-sec').value) || 0;
-    cdSecondsLeft = (min * 60) + sec;
-    if (cdSecondsLeft <= 0) return;
+    secondsLeft = (min * 60) + sec;
+    if (secondsLeft <= 0) return;
   }
+  cdTargetTime = Date.now() + (secondsLeft * 1000);
   cdRunning = true;
   document.getElementById('cd-start-btn').textContent = '⏸ Pause';
   document.getElementById('cd-display').classList.remove('alarm');
   document.getElementById('cd-input-row').style.display = 'none';
   toolCdInterval = setInterval(() => {
-    cdSecondsLeft--;
-    document.getElementById('cd-display').textContent = formatClock(Math.max(0, cdSecondsLeft), true);
-    if (cdSecondsLeft <= 0) {
+    const remaining = (cdTargetTime - Date.now()) / 1000;
+    if (remaining <= 0) {
+      document.getElementById('cd-display').textContent = formatClock(0, true, true);
       clearInterval(toolCdInterval);
       toolCdInterval = null;
       cdRunning = false;
+      cdRemainingAtPause = 0;
       document.getElementById('cd-start-btn').textContent = '▶ Start';
       document.getElementById('cd-display').classList.add('alarm');
       playBuzzerSound();
+      return;
     }
-  }, 1000);
+    document.getElementById('cd-display').textContent = formatClock(remaining, true, true);
+  }, 30);
 };
 
 window.resetCountdown = function() {
   clearInterval(toolCdInterval);
   toolCdInterval = null;
   cdRunning = false;
-  cdSecondsLeft = 0;
-  document.getElementById('cd-display').textContent = '00:00';
+  cdRemainingAtPause = 0;
+  cdTargetTime = 0;
+  document.getElementById('cd-display').textContent = '00:00.00';
   document.getElementById('cd-display').classList.remove('alarm');
   document.getElementById('cd-start-btn').textContent = '▶ Start';
   document.getElementById('cd-input-row').style.display = 'flex';
 };
 
 // ── Stopwatch ──
-let swElapsed = 0; // seconds
+let swStartTime = 0;    // Date.now() when current run segment started
+let swAccumulated = 0;  // seconds accumulated from previous run segments
 let toolSwInterval = null;
 let swRunning = false;
 
 window.toggleStopwatch = function() {
   if (swRunning) {
+    swAccumulated += (Date.now() - swStartTime) / 1000;
     clearInterval(toolSwInterval);
     toolSwInterval = null;
     swRunning = false;
     document.getElementById('sw-start-btn').textContent = '▶ Resume';
     return;
   }
+  swStartTime = Date.now();
   swRunning = true;
   document.getElementById('sw-start-btn').textContent = '⏸ Pause';
   toolSwInterval = setInterval(() => {
-    swElapsed++;
-    document.getElementById('sw-display').textContent = formatClock(swElapsed, true);
-  }, 1000);
+    const elapsed = swAccumulated + (Date.now() - swStartTime) / 1000;
+    document.getElementById('sw-display').textContent = formatClock(elapsed, true, true);
+  }, 30);
 };
 
 window.resetStopwatch = function() {
   clearInterval(toolSwInterval);
   toolSwInterval = null;
   swRunning = false;
-  swElapsed = 0;
-  document.getElementById('sw-display').textContent = '00:00';
+  swAccumulated = 0;
+  swStartTime = 0;
+  document.getElementById('sw-display').textContent = '00:00.00';
   document.getElementById('sw-start-btn').textContent = '▶ Start';
 };
 
 // ── Lap Timer ──
-let lapElapsed = 0; // seconds, running total since last reset
+let lapStartTime = 0;
+let lapAccumulated = 0; // seconds accumulated from previous run segments
 let toolLapInterval = null;
 let lapRunning = false;
-let lapLastMark = 0;   // elapsed value at the last recorded lap
+let lapLastMark = 0;    // elapsed value (seconds) at the last recorded lap
 let lapCount = 0;
+
+function currentLapElapsed() {
+  return lapAccumulated + (lapRunning ? (Date.now() - lapStartTime) / 1000 : 0);
+}
 
 window.toggleLapTimer = function() {
   if (lapRunning) {
+    lapAccumulated += (Date.now() - lapStartTime) / 1000;
     clearInterval(toolLapInterval);
     toolLapInterval = null;
     lapRunning = false;
     document.getElementById('lap-start-btn').textContent = '▶ Resume';
     return;
   }
+  lapStartTime = Date.now();
   lapRunning = true;
   document.getElementById('lap-start-btn').textContent = '⏸ Pause';
   toolLapInterval = setInterval(() => {
-    lapElapsed++;
-    document.getElementById('lap-display').textContent = formatClock(lapElapsed, true);
-  }, 1000);
+    document.getElementById('lap-display').textContent = formatClock(currentLapElapsed(), true, true);
+  }, 30);
 };
 
 window.recordLap = function() {
   lapCount++;
-  const lapDuration = lapElapsed - lapLastMark;
-  lapLastMark = lapElapsed;
+  const now = currentLapElapsed();
+  const lapDuration = now - lapLastMark;
+  lapLastMark = now;
   const listEl = document.getElementById('lap-list');
   const row = document.createElement('div');
   row.className = 'lap-row';
-  row.innerHTML = `<span class="lap-num">Lap ${lapCount}</span><span>${formatClock(lapDuration, true)} <span style="color:var(--muted);">(total ${formatClock(lapElapsed, true)})</span></span>`;
+  row.innerHTML = `<span class="lap-num">Lap ${lapCount}</span><span>${formatClock(lapDuration, true, true)} <span style="color:var(--muted);">(total ${formatClock(now, true, true)})</span></span>`;
   listEl.insertBefore(row, listEl.firstChild); // most recent lap on top
 };
 
@@ -3211,10 +3338,11 @@ window.resetLapTimer = function() {
   clearInterval(toolLapInterval);
   toolLapInterval = null;
   lapRunning = false;
-  lapElapsed = 0;
+  lapAccumulated = 0;
+  lapStartTime = 0;
   lapLastMark = 0;
   lapCount = 0;
-  document.getElementById('lap-display').textContent = '00:00';
+  document.getElementById('lap-display').textContent = '00:00.00';
   document.getElementById('lap-start-btn').textContent = '▶ Start';
   document.getElementById('lap-list').innerHTML = '';
 };
@@ -4507,14 +4635,22 @@ function renderManageList(players, rawPlayers) {
     div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
-      <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
-      <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
-      <div class="manage-actions">
-        <button class="manage-btn ${isOut ? 'active-btn' : 'ko-btn'}" onclick="toggleKnockOut('${p.id}', ${isOut})" title="${isOut ? 'Bring back' : 'Skip turn'}">
-          ${isOut ? '✓' : '✕'}
-        </button>
-        <div class="manage-drag-handle" title="Hold to drag">☰</div>
-      </div>`;
+      <div class="manage-player-row">
+        <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
+        <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
+        <div class="manage-actions">
+          <button class="manage-btn ${isOut ? 'active-btn' : 'ko-btn'}" onclick="toggleKnockOut('${p.id}', ${isOut})" title="${isOut ? 'Bring back' : 'Skip turn'}">
+            ${isOut ? '✓' : '✕'}
+          </button>
+          <div class="manage-drag-handle" title="Hold to drag">☰</div>
+        </div>
+      </div>
+      ${p.id === myId ? '' : `
+      <div class="manage-kick-row">
+        <button class="manage-kick-btn" data-kick-id="${p.id}">🚫 Remove from room</button>
+      </div>`}`;
+    const kickBtn = div.querySelector('.manage-kick-btn');
+    if (kickBtn) kickBtn.addEventListener('click', () => kickPlayer(p.id, p.name));
     el.appendChild(div);
   });
   makeDraggable(el, async (srcId, destId) => {
@@ -4537,6 +4673,60 @@ function renderManageList(players, rawPlayers) {
 window.toggleKnockOut = async function(playerId, currentlyOut) {
   if (!db || !roomCode) return;
   await update(ref(db, `rooms/${roomCode}/players/${playerId}`), { knockedOut: !currentlyOut });
+};
+
+// Permanently removes a player from the room. Unlike the temporary
+// skip-turn toggle above, this deletes their record entirely — they'd
+// need to rejoin with the room code as a new player if they come back.
+// If the kicked player was currently active, the turn is advanced first
+// using the exact same passTurn() logic the app already uses for normal
+// turns, so direction handling can't drift out of sync between the two.
+// Only after that does this function recompute activePlayerIndex against
+// the player list with the kicked player actually removed.
+window.kickPlayer = async function(playerId, playerName) {
+  if (!db || !roomCode) return;
+  if (!confirm(`Remove ${playerName} from the room? They can rejoin later with the room code, but as a new player.`)) return;
+
+  let snap = await get(ref(db, `rooms/${roomCode}`));
+  if (!snap.exists()) return;
+  let room = snap.val();
+  const allPlayersBefore = buildOrderedPlayers(room.players || {});
+  if (allPlayersBefore.length <= 1) {
+    alert("Can't remove the last player in the room.");
+    return;
+  }
+
+  const activeIdxBefore = room.activePlayerIndex ?? 0;
+  const activePlayerBefore = allPlayersBefore[activeIdxBefore] || allPlayersBefore[0];
+  const kickingActivePlayer = activePlayerBefore.id === playerId;
+
+  if (kickingActivePlayer) {
+    // Reuse the exact same direction logic the app already uses for a
+    // normal turn pass — same mapping passTurnSingle uses (cw -> 'left',
+    // ccw -> 'right'); Both mode has no single forced direction, so
+    // default to 'left' there, same as the app's own 'both' fallback.
+    const dir = (room.features?.passDirection || passDirection || 'both') === 'ccw' ? 'right' : 'left';
+    await passTurn(dir);
+    // Re-read the room now that passTurn has moved the turn off the
+    // player we're about to remove.
+    snap = await get(ref(db, `rooms/${roomCode}`));
+    if (!snap.exists()) return;
+    room = snap.val();
+  }
+
+  const allPlayersNow = buildOrderedPlayers(room.players || {});
+  const activeIdxNow = room.activePlayerIndex ?? 0;
+  const stillActivePlayer = allPlayersNow[activeIdxNow];
+  const newActivePlayerId = stillActivePlayer ? stillActivePlayer.id : null;
+
+  const updates = {};
+  updates[`rooms/${roomCode}/players/${playerId}`] = null; // delete this player's record
+
+  const allPlayersAfter = allPlayersNow.filter(p => p.id !== playerId);
+  const newActiveIdx = newActivePlayerId ? allPlayersAfter.findIndex(p => p.id === newActivePlayerId) : 0;
+  updates[`rooms/${roomCode}/activePlayerIndex`] = newActiveIdx === -1 ? 0 : newActiveIdx;
+
+  await update(ref(db), updates);
 };
 
 // ── CREATE ROOM ──────────────────────────────
@@ -4916,7 +5106,7 @@ function listenGameState() {
         tapBtn.style.display = '';
         tapArrow.textContent = passDirection === 'cw' ? '↻' : '↺';
         const nextNeighbor = passDirection === 'cw' ? leftIdx2 : rightIdx2;
-        tapPlayer.textContent = nextNeighbor ? '→ ' + nextNeighbor.name : '';
+        tapPlayer.textContent = nextNeighbor ? 'to ' + nextNeighbor.name : '';
         // Keep background based on MY color — don't let neighbor color override it
       }
       // Nudge: sync floating counter on active player screen
