@@ -1584,6 +1584,31 @@
   }
   .host-manage-btn.visible { display: flex; align-items: center; }
 
+  /* ── UNDO TURN BUTTON ── */
+  .undo-turn-btn {
+    display: none;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    height: 36px;
+    border-radius: 18px;
+    background: rgba(124,92,191,0.85);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0 14px;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    z-index: 21;
+  }
+  .undo-turn-btn.visible { display: flex; }
+  /* When the host's Players button is also showing in this corner, stack
+     Undo Turn above it instead of overlapping. */
+  .undo-turn-btn.stacked { bottom: 60px; }
+
   /* ── SPINNER ── */
   .spinner {
     width: 36px; height: 36px;
@@ -2154,6 +2179,7 @@
 <div id="screen-waiting" class="screen">
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
+  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()">↩ Undo Turn</button>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
@@ -4386,6 +4412,8 @@ window.playAgain = async function() {
   const updates = {};
   updates[`rooms/${roomCode}/status`] = 'playing';
   updates[`rooms/${roomCode}/activePlayerIndex`] = 0;
+  updates[`rooms/${roomCode}/previousPlayerId`] = null;
+  updates[`rooms/${roomCode}/previousPlayerIndex`] = null;
   updates[`rooms/${roomCode}/nudges`] = null;
   updates[`rooms/${roomCode}/nudgeTotals`] = null;
   updates[`rooms/${roomCode}/nudgeSentTotals`] = null;
@@ -4922,6 +4950,11 @@ window.kickPlayer = async function(playerId, playerName) {
 
   const updates = {};
   updates[`rooms/${roomCode}/players/${playerId}`] = null; // delete this player's record
+  // The just-kicked player may now be sitting in previousPlayerId (e.g. if
+  // passTurn() above just moved off them) — clear it since that ID is
+  // about to be deleted and undoTurn() should never resolve to a ghost.
+  updates[`rooms/${roomCode}/previousPlayerId`] = null;
+  updates[`rooms/${roomCode}/previousPlayerIndex`] = null;
 
   const allPlayersAfter = allPlayersNow.filter(p => p.id !== playerId);
   const newActiveIdx = newActivePlayerId ? allPlayersAfter.findIndex(p => p.id === newActivePlayerId) : 0;
@@ -5159,6 +5192,8 @@ window.startGame = async function() {
   localPlayers.forEach((p, i) => { updates[`rooms/${roomCode}/players/${p.id}/order`] = i; });
   updates[`rooms/${roomCode}/status`] = 'playing';
   updates[`rooms/${roomCode}/activePlayerIndex`] = firstIdx;
+  updates[`rooms/${roomCode}/previousPlayerId`] = null;
+  updates[`rooms/${roomCode}/previousPlayerIndex`] = null;
   await update(ref(db), updates);
 };
 
@@ -5350,6 +5385,16 @@ function listenGameState() {
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
       if (featureNudgeEnabled && (turnChanged || firstTurn)) startNudgeCountdown(nudgeDelaySeconds);
+      // Undo Turn — visible only to whoever was active immediately before
+      // the current player. Disappears the moment anyone else's turn ends
+      // too, since previousPlayerId moves on at that point.
+      const undoBtn = document.getElementById('undo-turn-btn');
+      if (undoBtn) {
+        const canUndo = room.previousPlayerId === myId;
+        undoBtn.classList.toggle('visible', canUndo);
+        const hostBtnVisible = isHost && document.getElementById('host-manage-btn-wait')?.classList.contains('visible');
+        undoBtn.classList.toggle('stacked', canUndo && hostBtnVisible);
+      }
       // Timers: sync from Firebase (don't tick locally on waiting screen)
       if (turnChanged || firstTurn) initTimersForTurn(room, false);
       else syncTimersFromRoom(room);
@@ -5387,12 +5432,46 @@ window.passTurn = async function(direction) {
     : (currentActive - 1 + n) % n;
   const nextPlayer = activePlayers[nextActiveIdx];
   const nextIdx = allPlayers.findIndex(p => p.id === nextPlayer.id);
+  const outgoingPlayer = allPlayers[current];
 
   // Commit this player's turn time before passing
   await commitTurnTime(myId, timerTurn);
   stopTimerTick();
 
-  await update(ref(db, `rooms/${roomCode}`), { activePlayerIndex: nextIdx });
+  await update(ref(db, `rooms/${roomCode}`), {
+    activePlayerIndex: nextIdx,
+    // Records who was just active, so they get a one-time Undo Turn option
+    // on their waiting screen. Overwritten on every pass, so only the
+    // single most recent outgoing player ever has it — the moment anyone
+    // else's turn ends too, this player's chance to undo is gone.
+    previousPlayerId: outgoingPlayer ? outgoingPlayer.id : null,
+    previousPlayerIndex: current
+  });
+};
+
+// Brings the turn back to whoever was active immediately before the
+// current player — a one-time "I forgot something" correction. Only
+// works for the single most recent outgoing player; once anyone else's
+// turn ends too, previousPlayerId has moved on and this is no longer
+// available to them. Works identically regardless of pass direction
+// (CW/CCW/Both), since it restores by player ID rather than replaying
+// any direction-specific math.
+window.undoTurn = async function() {
+  if (!db || !roomCode) return;
+  const snap = await get(ref(db, `rooms/${roomCode}`));
+  if (!snap.exists()) return;
+  const room = snap.val();
+  if (!room.previousPlayerId || room.previousPlayerId !== myId) return; // not eligible — button shouldn't even be visible
+
+  const allPlayers = buildOrderedPlayers(room.players || {});
+  const restoredIdx = allPlayers.findIndex(p => p.id === room.previousPlayerId);
+  if (restoredIdx === -1) return; // previous player no longer exists (e.g. kicked) — nothing to restore to
+
+  await update(ref(db, `rooms/${roomCode}`), {
+    activePlayerIndex: restoredIdx,
+    previousPlayerId: null,
+    previousPlayerIndex: null
+  });
 };
 
 // ── SAVE GAME / RESUME ──────────────────────────
