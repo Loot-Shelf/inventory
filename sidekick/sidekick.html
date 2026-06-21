@@ -1057,7 +1057,61 @@
   .save-row-actions button:hover { border-color: var(--accent); }
   .save-row-actions button.danger { color: #ff5c5c; }
 
-  /* ── RANDOM NUMBER TOOL OVERLAY ── */
+  /* ── PLAYER PICKER TOOL OVERLAY ── */
+  .picker-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 9650;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .picker-overlay.show { display: flex; }
+  .picker-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(400px, 92vw);
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .picker-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.25rem;
+  }
+  .picker-textarea {
+    width: 100%; background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.7rem 0.8rem; color: var(--text);
+    font-size: 0.95rem; resize: vertical; min-height: 110px;
+    font-family: inherit; outline: none; margin-bottom: 0;
+  }
+  .picker-textarea:focus { border-color: var(--accent); }
+  body.light-mode .picker-textarea { background: #f0f0fb; }
+  .picker-count-row { display: flex; align-items: center; gap: 0.5rem; }
+  .picker-count-row input {
+    margin-bottom: 0; text-align: center; flex: 1;
+  }
+  .picker-count-row span { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+  .picker-results {
+    margin-top: 0.4rem; display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .picker-name-chip {
+    display: inline-flex; align-items: center; padding: 0.45rem 0.8rem;
+    border-radius: 999px; font-size: 0.88rem; font-weight: 600;
+    background: #1e1e2e; border: 1.5px solid var(--border); color: var(--text);
+  }
+  body.light-mode .picker-name-chip { background: #f0f0fb; }
+  .picker-name-chip.picked {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .picker-chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .picker-team-group {
+    border: 1.5px solid var(--border); border-radius: 12px; padding: 0.6rem 0.7rem;
+  }
+  .picker-team-title {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.4rem;
+  }
+
+
   .rng-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.85); z-index: 9650;
@@ -2687,6 +2741,47 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  PLAYER PICKER TOOL OVERLAY                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="picker-overlay" id="picker-overlay">
+  <div class="picker-modal">
+    <div class="picker-modal-title">🎯 Player Picker</div>
+
+    <div class="timer-tabs">
+      <button class="timer-tab active" id="picker-tab-list" onclick="switchPickerTab('list')">Player List</button>
+      <button class="timer-tab" id="picker-tab-teams" onclick="switchPickerTab('teams')">Team Maker</button>
+    </div>
+
+    <div class="rng-section-label" style="margin-top:0;">Names (one per line)</div>
+    <textarea class="picker-textarea" id="picker-names" placeholder="Alex&#10;Jordan&#10;Sam&#10;Taylor"></textarea>
+
+    <!-- PLAYER LIST MODE -->
+    <div id="picker-pane-list">
+      <div class="rng-section-label">How Many to Pick</div>
+      <div class="picker-count-row">
+        <input type="number" id="picker-pick-count" value="1" min="1">
+        <span>player(s)</span>
+      </div>
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.4rem;" onclick="runPlayerPick()">🎯 Pick</button>
+    </div>
+
+    <!-- TEAM MAKER MODE -->
+    <div id="picker-pane-teams" style="display:none;">
+      <div class="rng-section-label">Number of Teams</div>
+      <div class="picker-count-row">
+        <input type="number" id="picker-team-count" value="2" min="2">
+        <span>team(s)</span>
+      </div>
+      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.4rem;" onclick="runTeamMaker()">🎲 Make Teams</button>
+    </div>
+
+    <div class="picker-results" id="picker-results"></div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closePickerOverlay()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FIREBASE SDK                               -->
 <!-- ═══════════════════════════════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -2823,7 +2918,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -3128,6 +3223,10 @@ window.openTool = function(toolId) {
     openTimerOverlay();
     return;
   }
+  if (toolId === 'picker') {
+    openPickerOverlay();
+    return;
+  }
   const label = TOOL_LABELS[toolId] || toolId;
   alert(label + ' is coming soon!');
 };
@@ -3345,6 +3444,108 @@ window.resetLapTimer = function() {
   document.getElementById('lap-display').textContent = '00:00.00';
   document.getElementById('lap-start-btn').textContent = '▶ Start';
   document.getElementById('lap-list').innerHTML = '';
+};
+
+// ── PLAYER PICKER TOOL ───────────────────────────
+// Fully standalone — just text in, random selection out. No connection
+// to the live room's player list, turn order, or any synced state.
+const TEAM_COLORS = ['#cc0000', '#005ee7', '#0a5d00', '#FF7900', '#4c00a4', '#ff32c3', '#999999', '#542a0e'];
+
+window.openPickerOverlay = function() {
+  document.getElementById('picker-results').innerHTML = '';
+  document.getElementById('picker-overlay').classList.add('show');
+};
+window.closePickerOverlay = function() {
+  document.getElementById('picker-overlay').classList.remove('show');
+};
+
+window.switchPickerTab = function(tab) {
+  ['list','teams'].forEach(t => {
+    document.getElementById('picker-tab-' + t).classList.toggle('active', t === tab);
+  });
+  document.getElementById('picker-pane-list').style.display  = tab === 'list'  ? 'block' : 'none';
+  document.getElementById('picker-pane-teams').style.display = tab === 'teams' ? 'block' : 'none';
+  document.getElementById('picker-results').innerHTML = '';
+};
+
+function getPickerNames() {
+  const raw = document.getElementById('picker-names').value;
+  return raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+}
+
+// Fisher-Yates shuffle — unbiased, standard approach for "randomly order this list"
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+window.runPlayerPick = function() {
+  const names = getPickerNames();
+  const resultsEl = document.getElementById('picker-results');
+  if (names.length === 0) {
+    resultsEl.innerHTML = '<p class="status error">Enter at least one name first.</p>';
+    return;
+  }
+  let count = parseInt(document.getElementById('picker-pick-count').value) || 1;
+  count = Math.max(1, Math.min(count, names.length));
+
+  const shuffled = shuffleArray(names);
+  const picked = new Set(shuffled.slice(0, count));
+
+  const row = document.createElement('div');
+  row.className = 'picker-chip-row';
+  names.forEach(name => {
+    const chip = document.createElement('span');
+    chip.className = 'picker-name-chip' + (picked.has(name) ? ' picked' : '');
+    chip.textContent = name;
+    row.appendChild(chip);
+  });
+  resultsEl.innerHTML = '';
+  resultsEl.appendChild(row);
+};
+
+window.runTeamMaker = function() {
+  const names = getPickerNames();
+  const resultsEl = document.getElementById('picker-results');
+  if (names.length === 0) {
+    resultsEl.innerHTML = '<p class="status error">Enter at least one name first.</p>';
+    return;
+  }
+  let teamCount = parseInt(document.getElementById('picker-team-count').value) || 2;
+  teamCount = Math.max(2, Math.min(teamCount, names.length));
+
+  const shuffled = shuffleArray(names);
+  const teams = Array.from({length: teamCount}, () => []);
+  shuffled.forEach((name, i) => teams[i % teamCount].push(name));
+
+  resultsEl.innerHTML = '';
+  teams.forEach((team, i) => {
+    const color = TEAM_COLORS[i % TEAM_COLORS.length];
+    const group = document.createElement('div');
+    group.className = 'picker-team-group';
+    group.style.borderColor = color;
+    const title = document.createElement('div');
+    title.className = 'picker-team-title';
+    title.style.color = color;
+    title.textContent = `Team ${i + 1} (${team.length})`;
+    const chipRow = document.createElement('div');
+    chipRow.className = 'picker-chip-row';
+    team.forEach(name => {
+      const chip = document.createElement('span');
+      chip.className = 'picker-name-chip picked';
+      chip.style.background = color;
+      chip.style.borderColor = color;
+      chip.textContent = name;
+      chipRow.appendChild(chip);
+    });
+    group.appendChild(title);
+    group.appendChild(chipRow);
+    resultsEl.appendChild(group);
+  });
 };
 
 window.leaveSavedScreen = function() {
