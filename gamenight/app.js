@@ -1,0 +1,16 @@
+// app.js
+document.addEventListener('DOMContentLoaded', function() {
+    const turnTracker = document.getElementById('turnTracker');
+
+    // Function to update the current turn tracker
+    function updateTurnTracker(currentPlayer) {
+        turnTracker.textContent = `It's ${currentPlayer}'s Turn!`;
+    }
+
+    // Example: Simulate a turn being taken by a player
+    setInterval(function() {
+        const currentPlayer = 'Player 1'; // Change this to simulate different players taking turns
+        updateTurnTracker(currentPlayer);
+    }, 5000); // Update every second (adjust as needed)
+});
+
