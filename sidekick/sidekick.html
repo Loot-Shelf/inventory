@@ -1584,6 +1584,77 @@
   }
   .host-manage-btn.visible { display: flex; align-items: center; }
 
+  /* ── STATUS EFFECTS ── */
+  .status-effects-btn {
+    display: none;
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    height: 36px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0 12px;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    z-index: 21;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+  .status-effects-btn.visible { display: flex; }
+  .status-effects-btn.has-status { border-color: #f97316; color: #f97316; }
+  /* Host: sits to the right of the bottom-left crown (host-game-menu) btn */
+  .status-effects-btn.host-offset { left: 64px; }
+
+  .status-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88); z-index: 9700;
+    align-items: center; justify-content: center; padding: 1rem;
+  }
+  .status-overlay.show { display: flex; }
+  .status-menu-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem;
+    width: min(340px, 92vw); max-height: 80vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .status-menu-title { font-size: 1rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 0.25rem; }
+  .status-option-btn {
+    width: 100%; padding: 0.75rem 1rem; background: #1e1e2e;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    color: var(--text); font-size: 0.9rem; font-weight: 600;
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+  }
+  .status-option-btn.active { border-color: #f97316; background: rgba(249,115,22,0.12); color: #f97316; }
+  .status-option-btn:hover { border-color: var(--accent); }
+  body.light-mode .status-option-btn { background: #f0f0fb; }
+
+  /* turn-start status alert */
+  .status-alert-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92); z-index: 9800;
+    align-items: center; justify-content: center; padding: 1rem;
+  }
+  .status-alert-overlay.show { display: flex; }
+  .status-alert-modal {
+    background: var(--surface); border: 2px solid #f97316;
+    border-radius: 18px; padding: 1.75rem 1.25rem;
+    width: min(360px, 92vw);
+    box-shadow: 0 8px 40px rgba(249,115,22,0.35);
+    display: flex; flex-direction: column; gap: 0.6rem; text-align: center;
+  }
+  .status-alert-icon { font-size: 2.4rem; }
+  .status-alert-title { font-size: 1.2rem; font-weight: 900; color: #f97316; }
+  .status-alert-name { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .status-alert-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+  .status-alert-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+  .status-alert-buttons button { flex: 1; }
+
   /* ── UNDO TURN BUTTON ── */
   .undo-turn-btn {
     display: none;
@@ -1966,7 +2037,7 @@
       </div>
 
       <!-- VICTORY POINTS -->
-      <div class="feature-row" style="margin-bottom:0;">
+      <div class="feature-row" style="margin-bottom:0.75rem;">
         <div class="neo-toggle-container">
           <input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)">
           <label class="neo-toggle" for="feature-vp-toggle">
@@ -1991,6 +2062,34 @@
         </div>
         <span class="feature-name">🏅 Victory Points</span>
         <button class="feature-info-btn" onclick="showFeatureInfo('vp')" title="What is this?">?</button>
+      </div>
+
+      <!-- STATUS EFFECTS -->
+      <div class="feature-row" style="margin-bottom:0;">
+        <div class="neo-toggle-container">
+          <input class="neo-toggle-input" id="feature-status-toggle" type="checkbox" onchange="onStatusEffectsToggle(this.checked)">
+          <label class="neo-toggle" for="feature-status-toggle">
+            <div class="neo-track">
+              <div class="neo-background-layer"></div>
+              <div class="neo-grid-layer"></div>
+              <div class="neo-spectrum-analyzer">
+                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+                <div class="neo-spectrum-bar"></div>
+              </div>
+              <div class="neo-track-highlight"></div>
+            </div>
+            <div class="neo-thumb">
+              <div class="neo-thumb-ring"></div>
+              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+            </div>
+            <div class="neo-gesture-area"></div>
+            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+          </label>
+          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+        </div>
+        <span class="feature-name">🩹 Status Effects</span>
+        <button class="feature-info-btn" onclick="showFeatureInfo('status')" title="What is this?">?</button>
       </div>
 
     </div><!-- /card-section features -->
@@ -2097,6 +2196,7 @@
 <div id="screen-active" class="screen">
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn" onclick="openManagePanel()">👥 Players</button>
+  <button class="status-effects-btn" id="status-btn-active" onclick="openStatusMenu()">🩹 Status</button>
   <!-- Nudge counter shown to active player -->
   <!-- Nudge counter - hidden, tracked for awards only -->
   <div class="nudge-active-counter" id="nudge-active-counter" style="display:none!important;">
@@ -2180,6 +2280,7 @@
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
   <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()">↩ Undo Turn</button>
+  <button class="status-effects-btn" id="status-btn-wait" onclick="openStatusMenu()">🩹 Status</button>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
@@ -2527,6 +2628,34 @@
     </div>
 
     <p id="mg-status" style="font-size:0.78rem;color:var(--accent-light);text-align:center;min-height:1.1em;margin:0 0 0.5rem;"></p>
+
+    <!-- Status Effects -->
+    <div class="feature-row" style="margin-bottom:0.75rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="mg-status-toggle" type="checkbox" onchange="onMidGameToggle('statusEffects',this.checked)">
+        <label class="neo-toggle" for="mg-status-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div>
+            <div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb">
+            <div class="neo-thumb-ring"></div>
+            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+          </div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">🩹 Status Effects</span>
+    </div>
+
     <button class="info-modal-close" onclick="saveMidGameSettings()">✓ Apply Changes</button>
     <button class="btn-secondary btn-sm" onclick="closeMidGameSettings()" style="width:100%;margin-top:0.5rem;">Cancel</button>
   </div>
@@ -2808,6 +2937,58 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  STATUS EFFECTS MENU OVERLAY                -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="status-overlay" id="status-menu-overlay">
+  <div class="status-menu-modal">
+    <div class="status-menu-title">🩹 Status Effects</div>
+    <div class="rng-section-label" style="margin-top:0;" id="status-menu-subtitle">Your active statuses</div>
+
+    <!-- Paralyzed -->
+    <button class="status-option-btn" id="status-opt-paralyzed" onclick="toggleMyStatus('paralyzed')">
+      <span>😵 Paralyzed</span>
+      <span style="margin-left:auto; font-size:0.75rem; color:var(--muted);" id="status-opt-paralyzed-label">Inactive</span>
+    </button>
+    <div class="rng-section-label" style="font-size:0.72rem; margin:0 0 0.3rem 0.2rem;">
+      Your turn must be skipped.
+    </div>
+
+    <!-- Poisoned -->
+    <button class="status-option-btn" id="status-opt-poisoned" onclick="toggleMyStatus('poisoned')">
+      <span>☠️ Poisoned</span>
+      <span style="margin-left:auto; font-size:0.75rem; color:var(--muted);" id="status-opt-poisoned-label">Inactive</span>
+    </button>
+    <div class="rng-section-label" style="font-size:0.72rem; margin:0 0 0.3rem 0.2rem;">
+      Lose HP each turn.
+    </div>
+    <div id="poison-hp-row" style="display:none; align-items:center; gap:0.5rem; margin-bottom:0.3rem;">
+      <span style="font-size:0.85rem; color:var(--muted);">HP to lose:</span>
+      <input type="number" id="poison-hp-input" value="5" min="1" max="999" style="width:70px; margin:0; padding:0.4rem 0.6rem; font-size:0.9rem;">
+      <button class="btn-primary btn-sm" style="width:auto; padding:0.4rem 0.8rem;" onclick="confirmPoisonHP()">✓ Set</button>
+    </div>
+
+    <button class="btn-secondary btn-sm" style="margin-top:0.5rem;" onclick="closeStatusMenu()">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  STATUS ALERT (shown at turn start)         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="status-alert-overlay" id="status-alert-overlay">
+  <div class="status-alert-modal">
+    <div class="status-alert-icon" id="status-alert-icon">⚠️</div>
+    <div class="status-alert-title">Status Effect Active</div>
+    <div class="status-alert-name" id="status-alert-name"></div>
+    <div class="status-alert-desc" id="status-alert-desc"></div>
+    <div class="status-alert-buttons">
+      <button class="btn-secondary btn-sm" onclick="resolveStatusAlert('remove')">Remove Status</button>
+      <button class="btn-primary btn-sm" onclick="resolveStatusAlert('keep')">Keep Status</button>
+    </div>
+    <button class="btn-secondary btn-sm" style="margin-top:0.5rem;" id="status-alert-ok" onclick="closeStatusAlert()">OK — Start My Turn</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  FIREBASE SDK                               -->
 <!-- ═══════════════════════════════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -2944,7 +3125,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -2977,6 +3158,7 @@ function updateAccountButtonUI() {
 let featureNudgeEnabled = false;
 let featureAwardsEnabled = false;
 let featureVPEnabled = false;
+let featureStatusEffectsEnabled = false;
 let passDirection = '';         // 'ccw' | 'both' | 'cw' — mandatory before room creation
 let ceremonyAborted = false;    // set by host Skip Awards button
 let featureTimersEnabled = false;
@@ -3199,12 +3381,13 @@ window.showCreateRoom = function() {
   featureNudgeEnabled  = false;
   featureAwardsEnabled = false;
   featureVPEnabled     = false;
+  featureStatusEffectsEnabled = false;
   featureTimersEnabled = false;
   passDirection = '';
   // Uncheck pass direction radios
   document.querySelectorAll('input[name="pass-direction"]').forEach(r => r.checked = false);
   document.getElementById('pass-dir-note').style.display = 'none';
-  ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle'].forEach(id => {
+  ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle','feature-status-toggle'].forEach(id => {
     const el = document.getElementById(id); if (el) el.checked = false;
   });
   ['nudge-edit-btn','timers-edit-btn'].forEach(id => {
@@ -3251,6 +3434,10 @@ window.openTool = function(toolId) {
   }
   if (toolId === 'picker') {
     openPickerOverlay();
+    return;
+  }
+  if (toolId === 'status') {
+    openStatusMenu();
     return;
   }
   const label = TOOL_LABELS[toolId] || toolId;
@@ -3574,6 +3761,152 @@ window.runTeamMaker = function() {
   });
 };
 
+// ── STATUS EFFECTS ────────────────────────────────
+// Status data lives under rooms/{code}/players/{myId}/statusEffects
+// Each connected client can write their own player's status at any time.
+// The turn-start check fires inside listenGameState when isMe && turnChanged,
+// reading the active player's stored statuses from the room snapshot.
+
+const STATUS_DEFS = {
+  paralyzed: {
+    icon: '😵',
+    name: 'Paralyzed',
+    desc: 'Your turn must be skipped. Pass your turn without taking any action.'
+  },
+  poisoned: {
+    icon: '☠️',
+    name: 'Poisoned',
+    desc: 'You are poisoned! Apply the listed HP loss to your character this turn.'
+  }
+};
+
+let pendingStatusAlerts = []; // queue of statuses to alert through, one at a time
+let currentStatusAlertKey = null;
+
+window.openStatusMenu = function() {
+  if (!featureStatusEffectsEnabled) {
+    alert('Status Effects is not enabled for this room. The host can turn it on in Room Settings.');
+    return;
+  }
+  refreshStatusMenuUI();
+  document.getElementById('status-menu-overlay').classList.add('show');
+};
+window.closeStatusMenu = function() {
+  document.getElementById('status-menu-overlay').classList.remove('show');
+  document.getElementById('poison-hp-row').style.display = 'none';
+};
+
+function refreshStatusMenuUI() {
+  if (!db || !roomCode || !myId) return;
+  get(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects`)).then(snap => {
+    const effects = snap.exists() ? snap.val() : {};
+    const pBtn  = document.getElementById('status-opt-paralyzed');
+    const pLbl  = document.getElementById('status-opt-paralyzed-label');
+    const poBtn = document.getElementById('status-opt-poisoned');
+    const poLbl = document.getElementById('status-opt-poisoned-label');
+    const hasParalyzed = !!effects.paralyzed;
+    const hasPoisoned  = !!(effects.poisoned?.active);
+    pBtn.classList.toggle('active', hasParalyzed);
+    pLbl.textContent = hasParalyzed ? 'Active' : 'Inactive';
+    poBtn.classList.toggle('active', hasPoisoned);
+    poLbl.textContent = hasPoisoned ? `Active (${effects.poisoned?.hpLoss || 0} HP)` : 'Inactive';
+    // Update the corner button indicators
+    updateStatusButtonIndicator(effects);
+  }).catch(() => {});
+}
+
+window.toggleMyStatus = function(key) {
+  if (!db || !roomCode || !myId) return;
+  get(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects`)).then(snap => {
+    const effects = snap.exists() ? snap.val() : {};
+    if (key === 'paralyzed') {
+      const nowOn = !effects.paralyzed;
+      update(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects`), { paralyzed: nowOn })
+        .then(() => refreshStatusMenuUI());
+    } else if (key === 'poisoned') {
+      const nowActive = !(effects.poisoned?.active);
+      if (nowActive) {
+        // Show HP input row so player can set the amount before applying
+        document.getElementById('poison-hp-row').style.display = 'flex';
+        document.getElementById('poison-hp-input').value = effects.poisoned?.hpLoss || 5;
+      } else {
+        update(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects/poisoned`), { active: false, hpLoss: 0 })
+          .then(() => { document.getElementById('poison-hp-row').style.display = 'none'; refreshStatusMenuUI(); });
+      }
+    }
+  }).catch(() => {});
+};
+
+window.confirmPoisonHP = function() {
+  const hp = parseInt(document.getElementById('poison-hp-input').value) || 5;
+  update(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects/poisoned`), { active: true, hpLoss: hp })
+    .then(() => { document.getElementById('poison-hp-row').style.display = 'none'; refreshStatusMenuUI(); });
+};
+
+function updateStatusButtonIndicator(effects) {
+  const hasAny = !!effects.paralyzed || !!(effects.poisoned?.active);
+  ['status-btn-active','status-btn-wait'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.classList.toggle('has-status', hasAny);
+  });
+}
+
+// Called from listenGameState when the local player's turn just started.
+// Reads their active statuses and queues up alerts for each one.
+function checkStatusEffectsOnTurnStart(room) {
+  if (!featureStatusEffectsEnabled) return;
+  const effects = room.players?.[myId]?.statusEffects || {};
+  pendingStatusAlerts = [];
+  if (effects.paralyzed) pendingStatusAlerts.push('paralyzed');
+  if (effects.poisoned?.active) pendingStatusAlerts.push('poisoned');
+  if (pendingStatusAlerts.length > 0) showNextStatusAlert();
+}
+
+function showNextStatusAlert() {
+  if (pendingStatusAlerts.length === 0) return;
+  currentStatusAlertKey = pendingStatusAlerts.shift();
+  const def = STATUS_DEFS[currentStatusAlertKey];
+  if (!def) { showNextStatusAlert(); return; }
+
+  document.getElementById('status-alert-icon').textContent = def.icon;
+  document.getElementById('status-alert-name').textContent = def.name;
+
+  // For poison, augment the description with the actual HP amount
+  let desc = def.desc;
+  if (currentStatusAlertKey === 'poisoned') {
+    get(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects/poisoned`)).then(snap => {
+      const hp = snap.exists() ? (snap.val()?.hpLoss || 5) : 5;
+      document.getElementById('status-alert-desc').textContent = `You lose ${hp} HP this turn. Apply this to your character now.`;
+    });
+  } else {
+    document.getElementById('status-alert-desc').textContent = desc;
+  }
+
+  document.getElementById('status-alert-overlay').classList.add('show');
+}
+
+window.resolveStatusAlert = function(choice) {
+  if (choice === 'remove' && currentStatusAlertKey && db && roomCode && myId) {
+    if (currentStatusAlertKey === 'paralyzed') {
+      update(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects`), { paralyzed: false });
+    } else if (currentStatusAlertKey === 'poisoned') {
+      update(ref(db, `rooms/${roomCode}/players/${myId}/statusEffects/poisoned`), { active: false, hpLoss: 0 });
+    }
+  }
+  // 'keep': do nothing, status stays; 'remove': already written above
+  // Either way, move to the next status in the queue (if any)
+  if (pendingStatusAlerts.length > 0) {
+    document.getElementById('status-alert-overlay').classList.remove('show');
+    showNextStatusAlert();
+  }
+  // If no more statuses, the OK button reveals itself for the final close
+};
+
+window.closeStatusAlert = function() {
+  document.getElementById('status-alert-overlay').classList.remove('show');
+  currentStatusAlertKey = null;
+};
+
 window.leaveSavedScreen = function() {
   cleanupListeners();
   stopTimerTick();
@@ -3733,6 +4066,7 @@ window.openMidGameSettings = function() {
   document.getElementById('mg-awards-toggle').checked = featureAwardsEnabled;
   document.getElementById('mg-vp-toggle').checked     = featureVPEnabled;
   document.getElementById('mg-timers-toggle').checked = featureTimersEnabled;
+  document.getElementById('mg-status-toggle').checked = featureStatusEffectsEnabled;
   document.getElementById('mg-nudge-settings').style.display  = featureNudgeEnabled  ? 'flex' : 'none';
   document.getElementById('mg-timers-settings').style.display = featureTimersEnabled ? 'flex' : 'none';
   document.getElementById('mg-nudge-delay').value = nudgeDelaySeconds;
@@ -3784,11 +4118,12 @@ window.saveMidGameSettings = async function() {
   const statusEl = document.getElementById('mg-status');
   statusEl.textContent = 'Saving…';
 
-  const nudgeOn     = document.getElementById('mg-nudge-toggle').checked;
-  const awardsOn    = document.getElementById('mg-awards-toggle').checked;
-  const vpOn        = document.getElementById('mg-vp-toggle').checked;
-  const timersOn    = document.getElementById('mg-timers-toggle').checked;
-  const countdownOn = timersOn && document.getElementById('mg-timer-countdown-on').checked;
+  const nudgeOn       = document.getElementById('mg-nudge-toggle').checked;
+  const awardsOn      = document.getElementById('mg-awards-toggle').checked;
+  const vpOn          = document.getElementById('mg-vp-toggle').checked;
+  const timersOn      = document.getElementById('mg-timers-toggle').checked;
+  const statusOn      = document.getElementById('mg-status-toggle').checked;
+  const countdownOn   = timersOn && document.getElementById('mg-timer-countdown-on').checked;
   const countdownNewlyEnabled = countdownOn && !mgCountdownWasActive;
 
   const newFeatures = {
@@ -3798,6 +4133,7 @@ window.saveMidGameSettings = async function() {
     nudgeMode:             nudgeOn ? (document.querySelector('input[name="mg-nudge-mode"]:checked')?.value || 'multi') : 'multi',
     awards:                awardsOn,
     victoryPoints:         vpOn,
+    statusEffects:         statusOn,
     timers:                timersOn,
     timerTurnOn:           timersOn && document.getElementById('mg-timer-turn-on').checked,
     timerTurnVisible:      document.getElementById('mg-timer-turn-visible').checked,
@@ -3839,6 +4175,10 @@ window.onVPToggle = function(checked) {
   featureVPEnabled = checked;
 };
 
+window.onStatusEffectsToggle = function(checked) {
+  featureStatusEffectsEnabled = checked;
+};
+
 window.openFeatureSettings = function(key) {
   document.getElementById(key + '-settings-overlay').classList.add('show');
 };
@@ -3874,6 +4214,11 @@ const FEATURE_INFO = {
     icon: '🏅',
     title: 'Victory Points',
     body: `When the host ends the game, every player is prompted to enter their final Victory Point total.\n\nOnce all players have submitted their scores, the host starts the Achievement Awards. The player with the most Victory Points receives a special announcement during the ceremony!\n\nPerfect for any game that tracks points — like Wingspan, Ticket to Ride, or Catan.`
+  },
+  status: {
+    icon: '🩹',
+    title: 'Status Effects',
+    body: `Players can apply status effects to themselves at any time using the 🩹 Status button in the bottom-left corner of the game screen.\n\nWhen a player with an active status becomes the active player, an alert appears describing the effect. They can choose to Keep or Remove the status, then tap OK to begin their turn normally.\n\nAvailable statuses:\n• 😵 Paralyzed — Your turn must be skipped.\n• ☠️ Poisoned — Lose a set number of HP this turn.\n\nMore status effects can be added in future updates!`
   }
 };
 
@@ -5003,6 +5348,7 @@ window.createRoom = async function() {
       nudgeMode: featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi',
       awards: featureAwardsEnabled,
       victoryPoints: featureVPEnabled,
+      statusEffects: featureStatusEffectsEnabled,
       timers: featureTimersEnabled,
       timerTurnOn:          featureTimersEnabled && document.getElementById('timer-turn-on').checked,
       timerTurnVisible:     document.getElementById('timer-turn-visible').checked,
@@ -5244,8 +5590,9 @@ function listenGameState() {
     nudgeDelaySeconds = roomFeatures.nudgeDelay || 30;
     nudgeMode = roomFeatures.nudgeMode || 'multi';
     featureAwardsEnabled = !!roomFeatures.awards;
-    featureVPEnabled     = !!roomFeatures.victoryPoints;
-    featureTimersEnabled = !!roomFeatures.timers;
+    featureVPEnabled              = !!roomFeatures.victoryPoints;
+    featureStatusEffectsEnabled   = !!roomFeatures.statusEffects;
+    featureTimersEnabled          = !!roomFeatures.timers;
     passDirection = roomFeatures.passDirection || 'both';
     if (featureTimersEnabled) {
       timerCfg = {
@@ -5355,6 +5702,16 @@ function listenGameState() {
       requestWakeLock();
       if (soundEnabled && !suppressNextTurnSound && (turnChanged || firstTurn)) playTurnSound();
       suppressNextTurnSound = false;
+      // Status Effects: alert this player of any active statuses at turn start
+      if (turnChanged || firstTurn) checkStatusEffectsOnTurnStart(room);
+      // Status Effects button — visible for all players when feature is on
+      ['status-btn-active'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.classList.toggle('visible', featureStatusEffectsEnabled);
+          btn.classList.toggle('host-offset', isHost);
+        }
+      });
     } else {
       // Show waiting screen
       const myPlayer = localPlayers.find(p => p.id === myId);
@@ -5394,6 +5751,17 @@ function listenGameState() {
         undoBtn.classList.toggle('visible', canUndo);
         const hostBtnVisible = isHost && document.getElementById('host-manage-btn-wait')?.classList.contains('visible');
         undoBtn.classList.toggle('stacked', canUndo && hostBtnVisible);
+      }
+      // Status Effects button — visible for all players when feature is on
+      const statusBtnWait = document.getElementById('status-btn-wait');
+      if (statusBtnWait) {
+        statusBtnWait.classList.toggle('visible', featureStatusEffectsEnabled);
+        statusBtnWait.classList.toggle('host-offset', isHost);
+      }
+      // Also refresh the status button indicator in case statuses changed
+      if (featureStatusEffectsEnabled) {
+        const effects = room.players?.[myId]?.statusEffects || {};
+        updateStatusButtonIndicator(effects);
       }
       // Timers: sync from Firebase (don't tick locally on waiting screen)
       if (turnChanged || firstTurn) initTimersForTurn(room, false);
