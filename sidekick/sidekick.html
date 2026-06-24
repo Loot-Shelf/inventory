@@ -1393,14 +1393,14 @@
 
   .exit-btn {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    height: 36px;
-    border-radius: 18px;
+    top: 14px;
+    right: 14px;
+    height: 28px;
+    border-radius: 14px;
     background: rgba(0,0,0,0.45);
     border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.55);
-    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     display: flex;
@@ -1408,7 +1408,7 @@
     justify-content: center;
     cursor: pointer;
     z-index: 20;
-    padding: 0 14px;
+    padding: 0 10px;
     white-space: nowrap;
     width: auto;
     text-transform: uppercase;
@@ -1564,17 +1564,17 @@
   .manage-player-item.dragging  { opacity: 0.4; }
   .host-manage-btn {
     position: absolute;
-    bottom: 16px;
-    right: 16px;
-    height: 36px;
-    border-radius: 18px;
+    bottom: 14px;
+    right: 14px;
+    height: 28px;
+    border-radius: 14px;
     background: rgba(0,0,0,0.45);
     border: 1px solid rgba(255,255,255,0.15);
     color: rgba(255,255,255,0.55);
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.05em;
-    padding: 0 14px;
+    padding: 0 10px;
     cursor: pointer;
     z-index: 20;
     white-space: nowrap;
@@ -1588,19 +1588,19 @@
   .status-effects-btn {
     display: none;
     position: absolute;
-    bottom: 16px;
-    left: 16px;
-    height: 36px;
-    border-radius: 18px;
+    bottom: 14px;
+    left: 14px;
+    height: 28px;
+    border-radius: 14px;
     background: rgba(0,0,0,0.45);
     border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.75);
-    font-size: 0.72rem;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.04em;
-    padding: 0 12px;
+    padding: 0 9px;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
     cursor: pointer;
     z-index: 21;
     text-shadow: 0 1px 4px rgba(0,0,0,0.6);
@@ -1608,7 +1608,7 @@
   .status-effects-btn.visible { display: flex; }
   .status-effects-btn.has-status { border-color: #f97316; color: #f97316; }
   /* Host: sits to the right of the bottom-left crown (host-game-menu) btn */
-  .status-effects-btn.host-offset { left: 64px; }
+  .status-effects-btn.host-offset { left: 58px; }
 
   .status-overlay {
     display: none; position: fixed; inset: 0;
@@ -1624,13 +1624,15 @@
     display: flex; flex-direction: column; gap: 0.5rem;
   }
   .status-menu-title { font-size: 1rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 0.25rem; }
-  .status-option-btn {
+  .status-option-btn { 
     width: 100%; padding: 0.75rem 1rem; background: #1e1e2e;
     border: 1.5px solid var(--border); border-radius: 10px;
     color: var(--text); font-size: 0.9rem; font-weight: 600;
     display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
   }
+  .status-option-btn .status-opt-label { color: var(--muted); transition: color 0.2s; }
   .status-option-btn.active { border-color: #f97316; background: rgba(249,115,22,0.12); color: #f97316; }
+  .status-option-btn.active .status-opt-label { color: #f97316; }
   .status-option-btn:hover { border-color: var(--accent); }
   body.light-mode .status-option-btn { background: #f0f0fb; }
 
@@ -1659,26 +1661,36 @@
   .undo-turn-btn {
     display: none;
     position: absolute;
-    bottom: 16px;
-    right: 16px;
-    height: 36px;
-    border-radius: 18px;
-    background: rgba(124,92,191,0.85);
-    border: 1px solid rgba(255,255,255,0.25);
+    bottom: 14px;
+    right: 14px;
+    height: 28px;
+    border-radius: 14px;
+    background: rgba(124,92,191,0.75);
+    border: 1px solid rgba(255,255,255,0.2);
     color: #fff;
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.05em;
-    padding: 0 14px;
+    padding: 0 10px;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.3rem;
     cursor: pointer;
     z-index: 21;
   }
   .undo-turn-btn.visible { display: flex; }
   /* When the host's Players button is also showing in this corner, stack
      Undo Turn above it instead of overlapping. */
-  .undo-turn-btn.stacked { bottom: 60px; }
+  .undo-turn-btn.stacked { bottom: 50px; }
+
+  /* ── TOUCH GUARDS: block accidental pass-turn taps in button zones ── */
+  .touch-guard {
+    position: absolute;
+    left: 0; right: 0;
+    z-index: 15;
+    pointer-events: all;
+  }
+  .touch-guard-top { top: 0; height: 68px; }
+  .touch-guard-bottom { bottom: 0; height: 68px; }
 
   /* ── SPINNER ── */
   .spinner {
@@ -2194,6 +2206,9 @@
 <!--  SCREEN: ACTIVE PLAYER                      -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-active" class="screen">
+  <!-- Touch guards: prevent accidental pass-turn taps on button zones -->
+  <div class="touch-guard touch-guard-top"></div>
+  <div class="touch-guard touch-guard-bottom"></div>
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn" onclick="openManagePanel()">👥 Players</button>
   <button class="status-effects-btn" id="status-btn-active" onclick="openStatusMenu()">🩹 Status</button>
@@ -2277,6 +2292,9 @@
 <!--  SCREEN: WAITING (inactive player)          -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-waiting" class="screen">
+  <!-- Touch guards: prevent accidental pass-turn taps on button zones -->
+  <div class="touch-guard touch-guard-top"></div>
+  <div class="touch-guard touch-guard-bottom"></div>
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
   <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()">↩ Undo Turn</button>
@@ -2947,7 +2965,7 @@
     <!-- Paralyzed -->
     <button class="status-option-btn" id="status-opt-paralyzed" onclick="toggleMyStatus('paralyzed')">
       <span>😵 Paralyzed</span>
-      <span style="margin-left:auto; font-size:0.75rem; color:var(--muted);" id="status-opt-paralyzed-label">Inactive</span>
+      <span style="margin-left:auto; font-size:0.75rem;" id="status-opt-paralyzed-label" class="status-opt-label">Inactive</span>
     </button>
     <div class="rng-section-label" style="font-size:0.72rem; margin:0 0 0.3rem 0.2rem;">
       Your turn must be skipped.
@@ -2956,7 +2974,7 @@
     <!-- Poisoned -->
     <button class="status-option-btn" id="status-opt-poisoned" onclick="toggleMyStatus('poisoned')">
       <span>☠️ Poisoned</span>
-      <span style="margin-left:auto; font-size:0.75rem; color:var(--muted);" id="status-opt-poisoned-label">Inactive</span>
+      <span style="margin-left:auto; font-size:0.75rem;" id="status-opt-poisoned-label" class="status-opt-label">Inactive</span>
     </button>
     <div class="rng-section-label" style="font-size:0.72rem; margin:0 0 0.3rem 0.2rem;">
       Lose HP each turn.
