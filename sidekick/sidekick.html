@@ -421,12 +421,17 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    outline: 1.5px solid rgba(128,128,128,0.2);
   }
   .color-swatch:hover { transform: scale(1.1); }
   .color-swatch.selected {
     border-color: #fff;
     transform: scale(1.1);
     box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+  }
+  body.light-mode .color-swatch.selected {
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.25);
   }
   .color-picker-confirm {
     width: 100%;
@@ -1919,7 +1924,7 @@
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-home" class="screen active" style="position:relative;">
-  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">👤 Account</button>
+  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">🔑 Login</button>
   <div class="screen-content-scaler" id="scaler-home">
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
     <span style="font-size:1rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);opacity:0.7;">Game Night</span>
@@ -1937,11 +1942,10 @@
   <!-- Tools card -->
   <div class="card" style="margin-top:0.85rem; padding:1.1rem;">
     <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
       <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('timers')">⏱️ Timers</button>
-      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('rng')">🎲 Random Number</button>
-      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('picker')">🎯 Player Picker</button>
-      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('status')">🩹 Status Effects</button>
+      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('rng')">🎲 Random</button>
+      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('picker')">🎯 Picker</button>
     </div>
   </div>
 
@@ -2028,149 +2032,11 @@
     <!-- Section 2: Game Settings / Features -->
     <div class="card-section" style="margin-top:1rem;">
       <div class="card-section-title">Game Settings / Features</div>
-
-      <!-- NUDGE -->
-      <div class="feature-row">
-        <div class="neo-toggle-container">
-          <input class="neo-toggle-input" id="feature-nudge-toggle" type="checkbox" onchange="onNudgeToggle(this.checked)">
-          <label class="neo-toggle" for="feature-nudge-toggle">
-            <div class="neo-track">
-              <div class="neo-background-layer"></div>
-              <div class="neo-grid-layer"></div>
-              <div class="neo-spectrum-analyzer">
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div>
-              </div>
-              <div class="neo-track-highlight"></div>
-            </div>
-            <div class="neo-thumb">
-              <div class="neo-thumb-ring"></div>
-              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-            </div>
-            <div class="neo-gesture-area"></div>
-            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-          </label>
-          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-        </div>
-        <span class="feature-name">👉 Nudge</span>
-        <button class="feature-edit-btn" id="nudge-edit-btn" onclick="openFeatureSettings('nudge')" title="Edit settings">EDIT</button>
-        <button class="feature-info-btn" onclick="showFeatureInfo('nudge')" title="What is this?">?</button>
-      </div>
-
-      <!-- ACHIEVEMENT AWARDS -->
-      <div class="feature-row">
-        <div class="neo-toggle-container">
-          <input class="neo-toggle-input" id="feature-awards-toggle" type="checkbox" onchange="onAwardsToggle(this.checked)">
-          <label class="neo-toggle" for="feature-awards-toggle">
-            <div class="neo-track">
-              <div class="neo-background-layer"></div>
-              <div class="neo-grid-layer"></div>
-              <div class="neo-spectrum-analyzer">
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div>
-              </div>
-              <div class="neo-track-highlight"></div>
-            </div>
-            <div class="neo-thumb">
-              <div class="neo-thumb-ring"></div>
-              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-            </div>
-            <div class="neo-gesture-area"></div>
-            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-          </label>
-          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-        </div>
-        <span class="feature-name">🏆 Achievement Awards</span>
-        <button class="feature-info-btn" onclick="showFeatureInfo('awards')" title="What is this?">?</button>
-      </div>
-
-      <!-- TIMERS -->
-      <div class="feature-row">
-        <div class="neo-toggle-container">
-          <input class="neo-toggle-input" id="feature-timers-toggle" type="checkbox" onchange="onTimersToggle(this.checked)">
-          <label class="neo-toggle" for="feature-timers-toggle">
-            <div class="neo-track">
-              <div class="neo-background-layer"></div>
-              <div class="neo-grid-layer"></div>
-              <div class="neo-spectrum-analyzer">
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div>
-              </div>
-              <div class="neo-track-highlight"></div>
-            </div>
-            <div class="neo-thumb">
-              <div class="neo-thumb-ring"></div>
-              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-            </div>
-            <div class="neo-gesture-area"></div>
-            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-          </label>
-          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-        </div>
-        <span class="feature-name">⏱ Timers</span>
-        <button class="feature-edit-btn" id="timers-edit-btn" onclick="openFeatureSettings('timers')" title="Edit settings">EDIT</button>
-        <button class="feature-info-btn" onclick="showFeatureInfo('timers')" title="What is this?">?</button>
-      </div>
-
-      <!-- VICTORY POINTS -->
-      <div class="feature-row" style="margin-bottom:0.75rem;">
-        <div class="neo-toggle-container">
-          <input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)">
-          <label class="neo-toggle" for="feature-vp-toggle">
-            <div class="neo-track">
-              <div class="neo-background-layer"></div>
-              <div class="neo-grid-layer"></div>
-              <div class="neo-spectrum-analyzer">
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div>
-              </div>
-              <div class="neo-track-highlight"></div>
-            </div>
-            <div class="neo-thumb">
-              <div class="neo-thumb-ring"></div>
-              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-            </div>
-            <div class="neo-gesture-area"></div>
-            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-          </label>
-          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-        </div>
-        <span class="feature-name">🏅 Victory Points</span>
-        <button class="feature-info-btn" onclick="showFeatureInfo('vp')" title="What is this?">?</button>
-      </div>
-
-      <!-- STATUS EFFECTS -->
-      <div class="feature-row" style="margin-bottom:0;">
-        <div class="neo-toggle-container">
-          <input class="neo-toggle-input" id="feature-status-toggle" type="checkbox" onchange="onStatusEffectsToggle(this.checked)">
-          <label class="neo-toggle" for="feature-status-toggle">
-            <div class="neo-track">
-              <div class="neo-background-layer"></div>
-              <div class="neo-grid-layer"></div>
-              <div class="neo-spectrum-analyzer">
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-                <div class="neo-spectrum-bar"></div>
-              </div>
-              <div class="neo-track-highlight"></div>
-            </div>
-            <div class="neo-thumb">
-              <div class="neo-thumb-ring"></div>
-              <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-            </div>
-            <div class="neo-gesture-area"></div>
-            <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-          </label>
-          <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-        </div>
-        <span class="feature-name">🩹 Status Effects</span>
-        <button class="feature-info-btn" onclick="showFeatureInfo('status')" title="What is this?">?</button>
-      </div>
-
+      <button class="btn-secondary" onclick="openFeaturesOverlay()" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; font-size:0.88rem;">
+        <span>⚙️ Configure Features</span>
+        <span style="color:var(--muted); font-size:0.78rem;">›</span>
+      </button>
+      <div id="features-summary" style="margin-top:0.5rem; font-size:0.75rem; color:var(--muted); min-height:1.1em; text-align:center;">All features off</div>
     </div><!-- /card-section features -->
   </div>
   </div>
@@ -2203,6 +2069,21 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  RETURNING PLAYER CONFIRMATION              -->
 <!-- ═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════ -->
+<!--  QR CODE OVERLAY                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="qr-overlay" style="display:none; z-index:9500;">
+  <div class="tools-modal" style="text-align:center; padding:1.5rem 1.25rem; max-width:300px;">
+    <div class="tools-modal-title" style="margin-bottom:0.5rem;">📷 Scan to Join</div>
+    <div style="font-size:0.78rem; color:var(--muted); margin-bottom:1rem;" id="qr-overlay-code">Room: ----</div>
+    <div style="background:#fff; border-radius:14px; padding:1rem; display:inline-block; margin-bottom:0.75rem;">
+      <div id="qr-code"></div>
+    </div>
+    <p style="font-size:0.72rem; color:var(--muted); margin-bottom:1rem;">Players scan this to join instantly</p>
+    <button class="btn-secondary btn-sm" style="width:100%;" onclick="closeQROverlay()">✕ Close</button>
+  </div>
+</div>
+
 <div class="tools-overlay" id="rejoin-confirm-overlay">
   <div class="tools-modal" style="text-align:center;">
     <div class="tools-modal-title">👋 Welcome Back?</div>
@@ -2224,18 +2105,14 @@
       <span style="font-size:0.75rem;color:var(--muted);">Edit settings &amp; features</span>
     </div>
     <div style="text-align:center; margin-bottom:1rem;">
-      <div class="room-code-label">Room Code — Share with players</div>
+      <div class="room-code-label">Room Code — Share With Players</div>
       <div class="room-code" id="display-code">----</div>
     </div>
     <div style="text-align:center; margin-bottom:1rem;">
       <button class="btn-secondary btn-sm" onclick="toggleQR()" id="qr-toggle-btn" style="width:auto; font-size:0.8rem;">📷 Show QR Code</button>
-      <div id="qr-container" style="display:none; margin-top:1rem; background:#fff; border-radius:12px; padding:1rem; align-items:center; justify-content:center;">
-        <div id="qr-code"></div>
-      </div>
-      <p id="qr-hint" style="display:none; font-size:0.72rem; color:var(--muted); margin-top:0.5rem;">Players scan this to join instantly</p>
     </div>
     <div style="margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between;">
-      <span style="font-size:0.8rem; color:var(--muted);">PLAYERS (drag to reorder)</span>
+      <span style="font-size:0.8rem; color:var(--muted);">PLAYER LIST (drag to reorder)</span>
       <span id="player-count" style="font-size:0.8rem; color:var(--muted);">0 joined</span>
     </div>
     <div class="player-list" id="lobby-player-list"></div>
@@ -2247,8 +2124,8 @@
       </label>
       <span style="font-size:0.82rem; color:var(--muted);">🎲 Random first player</span>
     </div>
-    <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="margin-top:0.5rem;">Start Game</button>
-    <button class="btn-danger btn-sm" onclick="closeRoom()" style="width:100%;margin-top:0.5rem;">Close Room</button>
+    <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="margin-top:0.5rem;">▶ Start Game</button>
+    <button class="btn-danger btn-sm" onclick="confirmCloseRoom()" style="width:100%;margin-top:0.5rem;">🚪 Close Room</button>
   </div>
   </div>
 </div>
@@ -2295,18 +2172,7 @@
   </div>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-active">
-    <div class="host-game-menu-drawer" id="host-game-drawer-active">
-      <div style="text-align:center; padding:0.4rem 0 0.6rem; border-bottom:1px solid var(--border); margin-bottom:0.3rem;">
-        <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
-        <div style="font-family:'Courier New',monospace; font-size:1.3rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-menu-room-code-active">----</div>
-      </div>
-      <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
-      <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
-      <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
-      <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
-      <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
-    </div>
-    <button class="host-game-menu-btn" id="host-game-menu-btn-active" onclick="toggleHostMenu('active')">👑</button>
+    <button class="host-game-menu-btn" id="host-game-menu-btn-active" onclick="openHostCrownMenu()">👑</button>
   </div>
   <button class="action-btn btn-left" onclick="passTurn('left')" id="btn-left">
     <div class="btn-arrow">←</div>
@@ -2368,18 +2234,7 @@
   <button class="status-effects-btn" id="status-btn-wait" onclick="openStatusMenu()" title="Status Effects">🩹</button>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
-    <div class="host-game-menu-drawer" id="host-game-drawer-wait">
-      <div style="text-align:center; padding:0.4rem 0 0.6rem; border-bottom:1px solid var(--border); margin-bottom:0.3rem;">
-        <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
-        <div style="font-family:'Courier New',monospace; font-size:1.3rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-menu-room-code-wait">----</div>
-      </div>
-      <button class="host-menu-item" onclick="openMidGameSettings()">⚙️ Room Settings</button>
-      <button class="host-menu-item" onclick="hostMenuAction('open-tools')">🧰 Tools</button>
-      <button class="host-menu-item" onclick="hostMenuAction('end-round')">🔁 End Round</button>
-      <button class="host-menu-item" onclick="hostMenuAction('save-game')">💾 Save Game</button>
-      <button class="host-menu-item danger" onclick="hostMenuAction('end-game')">🏆 End Game</button>
-    </div>
-    <button class="host-game-menu-btn" id="host-game-menu-btn-wait" onclick="toggleHostMenu('wait')">👑</button>
+    <button class="host-game-menu-btn" id="host-game-menu-btn-wait" onclick="openHostCrownMenu()">👑</button>
   </div>
   <div class="settings-panel">
     <button class="settings-gear" id="settings-gear-btn-wait" onclick="toggleSettingsWait()" title="Settings">⚙️</button>
@@ -2484,6 +2339,139 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  FEATURE SETTINGS OVERLAYS                  -->
 <!-- ═══════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  GAME FEATURES CONFIG OVERLAY               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="info-overlay" id="features-config-overlay">
+  <div class="info-modal" style="width:min(380px,95vw); max-height:90vh; overflow-y:auto; padding:1.5rem 1.25rem;">
+    <div style="font-size:1.05rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:1.25rem;">⚙️ Game Features</div>
+
+    <!-- NUDGE -->
+    <div class="feature-row">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="feature-nudge-toggle" type="checkbox" onchange="onNudgeToggle(this.checked)">
+        <label class="neo-toggle" for="feature-nudge-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">👉 Nudge</span>
+      <button class="feature-edit-btn" id="nudge-edit-btn" onclick="openFeatureSettings('nudge')" title="Edit settings">EDIT</button>
+      <button class="feature-info-btn" onclick="showFeatureInfo('nudge')" title="What is this?">?</button>
+    </div>
+
+    <!-- ACHIEVEMENT AWARDS -->
+    <div class="feature-row">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="feature-awards-toggle" type="checkbox" onchange="onAwardsToggle(this.checked)">
+        <label class="neo-toggle" for="feature-awards-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">🏆 Achievement Awards</span>
+      <button class="feature-info-btn" onclick="showFeatureInfo('awards')" title="What is this?">?</button>
+    </div>
+
+    <!-- TIMERS -->
+    <div class="feature-row">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="feature-timers-toggle" type="checkbox" onchange="onTimersToggle(this.checked)">
+        <label class="neo-toggle" for="feature-timers-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">⏱ Timers</span>
+      <button class="feature-edit-btn" id="timers-edit-btn" onclick="openFeatureSettings('timers')" title="Edit settings">EDIT</button>
+      <button class="feature-info-btn" onclick="showFeatureInfo('timers')" title="What is this?">?</button>
+    </div>
+
+    <!-- VICTORY POINTS -->
+    <div class="feature-row" style="margin-bottom:0.75rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)">
+        <label class="neo-toggle" for="feature-vp-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">🏅 Victory Points</span>
+      <button class="feature-info-btn" onclick="showFeatureInfo('vp')" title="What is this?">?</button>
+    </div>
+
+    <!-- STATUS EFFECTS -->
+    <div class="feature-row" style="margin-bottom:1.25rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="feature-status-toggle" type="checkbox" onchange="onStatusEffectsToggle(this.checked)">
+        <label class="neo-toggle" for="feature-status-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">🩹 Status Effects</span>
+      <button class="feature-info-btn" onclick="showFeatureInfo('status')" title="What is this?">?</button>
+    </div>
+
+    <button class="info-modal-close" onclick="closeFeaturesOverlay()" style="width:100%;">✓ Done</button>
+  </div>
+</div>
 
 <!-- Nudge Settings Overlay -->
 <div class="feature-settings-overlay" id="nudge-settings-overlay">
@@ -3222,7 +3210,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -3246,7 +3234,7 @@ function updateAccountButtonUI() {
     btn.textContent = '👤 ' + initial;
     btn.onclick = () => openProfileScreen();
   } else {
-    btn.textContent = '👤 Account';
+    btn.textContent = '🔑 Login';
     btn.onclick = () => openAccountOverlay('login');
   }
 }
@@ -3498,8 +3486,9 @@ window.showCreateRoom = function() {
   const cdInputs = document.getElementById('countdown-inputs');
   if (cdInputs) cdInputs.style.display = 'none';
   showScreen('create');
+  updateFeaturesSummary();
 };
-window.showJoinRoom   = () => showScreen('join');
+window.showJoinRoom = () => showScreen('join');
 
 // ── TOOLS ────────────────────────────────────────
 // Reachable from the home screen card and from the in-game host menu (Tools).
@@ -4018,12 +4007,7 @@ window.goHome = function() {
   // Reset QR
   const qrBox = document.getElementById('qr-code');
   if (qrBox) qrBox.innerHTML = '';
-  const qrCont = document.getElementById('qr-container');
-  if (qrCont) qrCont.style.display = 'none';
-  const qrHint = document.getElementById('qr-hint');
-  if (qrHint) qrHint.style.display = 'none';
-  const qrBtn = document.getElementById('qr-toggle-btn');
-  if (qrBtn) qrBtn.textContent = '📷 Show QR Code';
+  closeQROverlay();
   // Clear any inputs and errors when going back
   document.getElementById('host-name').value = '';
   document.getElementById('join-name').value = '';
@@ -4059,15 +4043,23 @@ window.confirmLeave = function() {
 let qrGenerated = false;
 let qrVisible = false;
 window.toggleQR = function() {
-  const container = document.getElementById('qr-container');
-  const hint = document.getElementById('qr-hint');
-  const btn = document.getElementById('qr-toggle-btn');
-  qrVisible = !qrVisible;
-  container.style.display = qrVisible ? 'flex' : 'none';
-  hint.style.display = qrVisible ? 'block' : 'none';
-  btn.textContent = qrVisible ? '✕ Hide QR Code' : '📷 Show QR Code';
-  if (qrVisible) generateQR(); // always regenerate with current roomCode
-  requestAnimationFrame(rescaleCurrentScreen);
+  const overlay = document.getElementById('qr-overlay');
+  const codeLabel = document.getElementById('qr-overlay-code');
+  if (codeLabel) codeLabel.textContent = 'Room: ' + (roomCode || '----');
+  generateQR();
+  overlay.style.display = 'flex';
+  qrVisible = true;
+};
+
+window.closeQROverlay = function() {
+  document.getElementById('qr-overlay').style.display = 'none';
+  qrVisible = false;
+};
+
+window.confirmCloseRoom = function() {
+  if (confirm('Close the room? All players will be disconnected and the room will be deleted.')) {
+    closeRoom();
+  }
 };
 
 function generateQR() {
@@ -4118,21 +4110,20 @@ function adjustBrightness(hex, factor) {
 
 // ── HOST GAME MENU ──────────────────────────────
 let hostMenuOpen = { active: false, wait: false };
-window.toggleHostMenu = function(ctx) {
-  // Close the other one first
-  const other = ctx === 'active' ? 'wait' : 'active';
-  hostMenuOpen[other] = false;
-  document.getElementById(`host-game-drawer-${other}`)?.classList.remove('open');
-
-  hostMenuOpen[ctx] = !hostMenuOpen[ctx];
-  document.getElementById(`host-game-drawer-${ctx}`).classList.toggle('open', hostMenuOpen[ctx]);
+window.openHostCrownMenu = function() {
+  const codeEl = document.getElementById('host-crown-room-code');
+  if (codeEl) codeEl.textContent = roomCode || '----';
+  document.getElementById('host-crown-overlay').classList.add('show');
 };
 
+window.closeHostCrownMenu = function() {
+  document.getElementById('host-crown-overlay').classList.remove('show');
+};
+
+// Keep toggleHostMenu as no-op for any lingering references
+window.toggleHostMenu = function() {};
+
 window.hostMenuAction = function(action) {
-  ['active','wait'].forEach(ctx => {
-    hostMenuOpen[ctx] = false;
-    document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
-  });
   if (action === 'open-tools') {
     openToolsOverlay();
   } else if (action === 'end-round') {
@@ -4154,10 +4145,6 @@ let mgCountdownWasActive = false;
 
 window.openMidGameSettings = function() {
   if (!db || !roomCode) return;
-  ['active','wait'].forEach(ctx => {
-    hostMenuOpen[ctx] = false;
-    document.getElementById(`host-game-drawer-${ctx}`)?.classList.remove('open');
-  });
 
   document.getElementById('mg-nudge-toggle').checked  = featureNudgeEnabled;
   document.getElementById('mg-awards-toggle').checked = featureAwardsEnabled;
@@ -4262,19 +4249,44 @@ window.onNudgeToggle = function(checked) {
   const editBtn = document.getElementById('nudge-edit-btn');
   if (editBtn) editBtn.classList.toggle('visible', checked);
   if (checked) openFeatureSettings('nudge');
+  updateFeaturesSummary();
 };
 
 window.onAwardsToggle = function(checked) {
   featureAwardsEnabled = checked;
+  updateFeaturesSummary();
 };
 
 window.onVPToggle = function(checked) {
   featureVPEnabled = checked;
+  updateFeaturesSummary();
 };
 
 window.onStatusEffectsToggle = function(checked) {
   featureStatusEffectsEnabled = checked;
+  updateFeaturesSummary();
 };
+
+window.openFeaturesOverlay = function() {
+  document.getElementById('features-config-overlay').classList.add('show');
+};
+
+window.closeFeaturesOverlay = function() {
+  document.getElementById('features-config-overlay').classList.remove('show');
+  updateFeaturesSummary();
+};
+
+function updateFeaturesSummary() {
+  const el = document.getElementById('features-summary');
+  if (!el) return;
+  const active = [];
+  if (featureNudgeEnabled)         active.push('👉 Nudge');
+  if (featureAwardsEnabled)        active.push('🏆 Awards');
+  if (featureTimersEnabled)        active.push('⏱ Timers');
+  if (featureVPEnabled)            active.push('🏅 VP');
+  if (featureStatusEffectsEnabled) active.push('🩹 Status');
+  el.textContent = active.length ? active.join(' · ') : 'All features off';
+}
 
 window.openFeatureSettings = function(key) {
   document.getElementById(key + '-settings-overlay').classList.add('show');
@@ -4454,6 +4466,7 @@ window.onTimersToggle = function(checked) {
   const editBtn = document.getElementById('timers-edit-btn');
   if (editBtn) editBtn.classList.toggle('visible', checked);
   if (checked) openFeatureSettings('timers');
+  updateFeaturesSummary();
 };
 window.onCountdownToggle = function(checked) {
   document.getElementById('countdown-inputs').style.display = checked ? 'flex' : 'none';
@@ -5768,8 +5781,6 @@ function listenGameState() {
       document.getElementById('btn-right').style.background = 'transparent';
       const arcEl = document.getElementById('active-room-code-display');
       if (arcEl) arcEl.textContent = roomCode;
-      const hmrcActive = document.getElementById('host-menu-room-code-active');
-      if (hmrcActive) hmrcActive.textContent = roomCode;
 
       // Apply pass direction UI mode
       const isBoth = passDirection === 'both' || !passDirection;
@@ -5833,8 +5844,6 @@ function listenGameState() {
       }
       const wrcEl = document.getElementById('wait-room-code-display');
       if (wrcEl) wrcEl.textContent = roomCode;
-      const hmrcWait = document.getElementById('host-menu-room-code-wait');
-      if (hmrcWait) hmrcWait.textContent = roomCode;
       // Nudge area
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
@@ -6524,6 +6533,22 @@ window.dismissInstall = function() {
     <div style="margin-top:1rem; display:flex; gap:0.5rem;">
       <button class="btn-secondary btn-sm" onclick="closeManagePanel()" style="flex:1;">Done</button>
     </div>
+  </div>
+</div>
+
+<!-- HOST CROWN MENU OVERLAY -->
+<div class="manage-overlay" id="host-crown-overlay">
+  <div class="manage-card" style="max-width:300px; padding:1.25rem;">
+    <div style="text-align:center; padding-bottom:0.75rem; border-bottom:1px solid var(--border); margin-bottom:0.75rem;">
+      <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
+      <div style="font-family:'Courier New',monospace; font-size:1.5rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-crown-room-code">----</div>
+    </div>
+    <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); openMidGameSettings()">⚙️ Room Settings</button>
+    <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); openToolsOverlay()">🧰 Tools</button>
+    <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); hostMenuAction('end-round')">🔁 End Round</button>
+    <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); hostMenuAction('save-game')">💾 Save Game</button>
+    <button class="host-menu-item danger" style="width:100%; border-radius:10px; margin-bottom:0.75rem;" onclick="closeHostCrownMenu(); hostMenuAction('end-game')">🏆 End Game</button>
+    <button class="btn-secondary btn-sm" style="width:100%;" onclick="closeHostCrownMenu()">✕ Close</button>
   </div>
 </div>
 
