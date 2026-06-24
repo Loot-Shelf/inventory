@@ -1566,14 +1566,14 @@
     position: absolute;
     bottom: 14px;
     right: 14px;
-    height: 28px;
-    border-radius: 14px;
-    background: rgba(0,0,0,0.45);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.55);
-    font-size: 0.65rem;
+    height: 32px;
+    border-radius: 16px;
+    background: rgba(0,0,0,0.5);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.65);
+    font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     padding: 0 10px;
     cursor: pointer;
     z-index: 20;
@@ -1581,6 +1581,7 @@
     width: auto;
     text-transform: uppercase;
     display: none;
+    gap: 0.25rem;
   }
   .host-manage-btn.visible { display: flex; align-items: center; }
 
@@ -1590,23 +1591,22 @@
     position: absolute;
     bottom: 14px;
     left: 14px;
-    height: 28px;
-    border-radius: 14px;
-    background: rgba(0,0,0,0.45);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.65);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 0 9px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.75);
+    font-size: 1.1rem;
     align-items: center;
-    gap: 0.25rem;
+    justify-content: center;
     cursor: pointer;
     z-index: 21;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    padding: 0;
+    line-height: 1;
   }
   .status-effects-btn.visible { display: flex; }
-  .status-effects-btn.has-status { border-color: #f97316; color: #f97316; }
+  .status-effects-btn.has-status { border-color: #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.5); }
   /* Host: sits to the right of the bottom-left crown (host-game-menu) btn */
   .status-effects-btn.host-offset { left: 58px; }
 
@@ -1624,17 +1624,63 @@
     display: flex; flex-direction: column; gap: 0.5rem;
   }
   .status-menu-title { font-size: 1rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 0.25rem; }
-  .status-option-btn { 
-    width: 100%; padding: 0.75rem 1rem; background: #1e1e2e;
-    border: 1.5px solid var(--border); border-radius: 10px;
-    color: var(--text); font-size: 0.9rem; font-weight: 600;
-    display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+  /* ── STATUS TOGGLE ROWS ── */
+  .status-toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 0.9rem; background: #1e1e2e;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    cursor: pointer; gap: 0.75rem; transition: border-color 0.2s, background 0.2s;
+    user-select: none;
   }
-  .status-option-btn .status-opt-label { color: var(--muted); transition: color 0.2s; }
-  .status-option-btn.active { border-color: #f97316; background: rgba(249,115,22,0.12); color: #f97316; }
-  .status-option-btn.active .status-opt-label { color: #f97316; }
-  .status-option-btn:hover { border-color: var(--accent); }
-  body.light-mode .status-option-btn { background: #f0f0fb; }
+  .status-toggle-row:hover { border-color: var(--accent); }
+  .status-toggle-row.active { border-color: #f97316; background: rgba(249,115,22,0.08); }
+  body.light-mode .status-toggle-row { background: #f0f0fb; }
+  .status-toggle-info { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0; }
+  .status-toggle-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .status-toggle-name { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .status-toggle-row.active .status-toggle-name { color: #f97316; }
+  .status-toggle-desc { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+  /* Pill toggle switch */
+  .status-pill {
+    flex-shrink: 0;
+    width: 56px; height: 28px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    position: relative;
+    display: flex; align-items: center;
+    transition: background 0.25s, border-color 0.25s;
+    overflow: hidden;
+  }
+  .status-toggle-row.active .status-pill {
+    background: #f97316;
+    border-color: #f97316;
+  }
+  .status-pill-thumb {
+    position: absolute;
+    left: 3px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), background 0.25s;
+    z-index: 1;
+  }
+  .status-toggle-row.active .status-pill-thumb {
+    transform: translateX(28px);
+    background: #fff;
+  }
+  .status-pill-label {
+    position: absolute;
+    right: 5px;
+    font-size: 0.58rem; font-weight: 800; letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.5);
+    transition: right 0.25s, color 0.25s;
+    z-index: 0;
+  }
+  .status-toggle-row.active .status-pill-label {
+    right: auto; left: 5px;
+    color: rgba(255,255,255,0.9);
+  }
 
   /* turn-start status alert */
   .status-alert-overlay {
@@ -1663,24 +1709,22 @@
     position: absolute;
     bottom: 14px;
     right: 14px;
-    height: 28px;
-    border-radius: 14px;
-    background: rgba(124,92,191,0.75);
-    border: 1px solid rgba(255,255,255,0.2);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(124,92,191,0.7);
+    border: 1.5px solid rgba(255,255,255,0.22);
     color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    padding: 0 10px;
+    font-size: 1.1rem;
     align-items: center;
-    gap: 0.3rem;
+    justify-content: center;
     cursor: pointer;
     z-index: 21;
+    padding: 0;
+    line-height: 1;
   }
   .undo-turn-btn.visible { display: flex; }
-  /* When the host's Players button is also showing in this corner, stack
-     Undo Turn above it instead of overlapping. */
-  .undo-turn-btn.stacked { bottom: 50px; }
+  .undo-turn-btn.stacked { bottom: 58px; }
 
   /* ── TOUCH GUARDS: block accidental pass-turn taps in button zones ── */
   .touch-guard {
@@ -1688,9 +1732,32 @@
     left: 0; right: 0;
     z-index: 15;
     pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .touch-guard-top { top: 0; height: 68px; }
-  .touch-guard-bottom { bottom: 0; height: 68px; }
+  .touch-guard-top {
+    top: 0; height: 68px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    align-items: flex-end;
+    padding-bottom: 4px;
+  }
+  .touch-guard-bottom {
+    bottom: 0; height: 68px;
+    background: linear-gradient(to top, rgba(0,0,0,0.28) 0%, transparent 100%);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    align-items: flex-start;
+    padding-top: 4px;
+  }
+  /* Subtle "menu zone" label — centered, very faint */
+  .touch-guard::after {
+    content: '';
+    display: block;
+    width: 32px; height: 2px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.12);
+  }
 
   /* ── SPINNER ── */
   .spinner {
@@ -2211,7 +2278,7 @@
   <div class="touch-guard touch-guard-bottom"></div>
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn" onclick="openManagePanel()">👥 Players</button>
-  <button class="status-effects-btn" id="status-btn-active" onclick="openStatusMenu()">🩹 Status</button>
+  <button class="status-effects-btn" id="status-btn-active" onclick="openStatusMenu()" title="Status Effects">🩹</button>
   <!-- Nudge counter shown to active player -->
   <!-- Nudge counter - hidden, tracked for awards only -->
   <div class="nudge-active-counter" id="nudge-active-counter" style="display:none!important;">
@@ -2297,8 +2364,8 @@
   <div class="touch-guard touch-guard-bottom"></div>
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
-  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()">↩ Undo Turn</button>
-  <button class="status-effects-btn" id="status-btn-wait" onclick="openStatusMenu()">🩹 Status</button>
+  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()" title="Undo Turn">↩</button>
+  <button class="status-effects-btn" id="status-btn-wait" onclick="openStatusMenu()" title="Status Effects">🩹</button>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
     <div class="host-game-menu-drawer" id="host-game-drawer-wait">
@@ -2963,21 +3030,33 @@
     <div class="rng-section-label" style="margin-top:0;" id="status-menu-subtitle">Your active statuses</div>
 
     <!-- Paralyzed -->
-    <button class="status-option-btn" id="status-opt-paralyzed" onclick="toggleMyStatus('paralyzed')">
-      <span>😵 Paralyzed</span>
-      <span style="margin-left:auto; font-size:0.75rem;" id="status-opt-paralyzed-label" class="status-opt-label">Inactive</span>
-    </button>
-    <div class="rng-section-label" style="font-size:0.72rem; margin:0 0 0.3rem 0.2rem;">
-      Your turn must be skipped.
+    <div class="status-toggle-row" id="status-opt-paralyzed" onclick="toggleMyStatus('paralyzed')">
+      <div class="status-toggle-info">
+        <span class="status-toggle-icon">😵</span>
+        <div>
+          <div class="status-toggle-name">Paralyzed</div>
+          <div class="status-toggle-desc">Your turn must be skipped.</div>
+        </div>
+      </div>
+      <div class="status-pill" id="status-pill-paralyzed">
+        <div class="status-pill-thumb"></div>
+        <span class="status-pill-label" id="status-opt-paralyzed-label">OFF</span>
+      </div>
     </div>
 
     <!-- Poisoned -->
-    <button class="status-option-btn" id="status-opt-poisoned" onclick="toggleMyStatus('poisoned')">
-      <span>☠️ Poisoned</span>
-      <span style="margin-left:auto; font-size:0.75rem;" id="status-opt-poisoned-label" class="status-opt-label">Inactive</span>
-    </button>
-    <div class="rng-section-label" style="font-size:0.72rem; margin:0 0 0.3rem 0.2rem;">
-      Lose HP each turn.
+    <div class="status-toggle-row" id="status-opt-poisoned" onclick="toggleMyStatus('poisoned')">
+      <div class="status-toggle-info">
+        <span class="status-toggle-icon">☠️</span>
+        <div>
+          <div class="status-toggle-name">Poisoned</div>
+          <div class="status-toggle-desc">Lose HP each turn.</div>
+        </div>
+      </div>
+      <div class="status-pill" id="status-pill-poisoned">
+        <div class="status-pill-thumb"></div>
+        <span class="status-pill-label" id="status-opt-poisoned-label">OFF</span>
+      </div>
     </div>
     <div id="poison-hp-row" style="display:none; align-items:center; gap:0.5rem; margin-bottom:0.3rem;">
       <span style="font-size:0.85rem; color:var(--muted);">HP to lose:</span>
@@ -3825,9 +3904,9 @@ function refreshStatusMenuUI() {
     const hasParalyzed = !!effects.paralyzed;
     const hasPoisoned  = !!(effects.poisoned?.active);
     pBtn.classList.toggle('active', hasParalyzed);
-    pLbl.textContent = hasParalyzed ? 'Active' : 'Inactive';
+    pLbl.textContent = hasParalyzed ? 'ON' : 'OFF';
     poBtn.classList.toggle('active', hasPoisoned);
-    poLbl.textContent = hasPoisoned ? `Active (${effects.poisoned?.hpLoss || 0} HP)` : 'Inactive';
+    poLbl.textContent = hasPoisoned ? 'ON' : 'OFF';
     // Update the corner button indicators
     updateStatusButtonIndicator(effects);
   }).catch(() => {});
