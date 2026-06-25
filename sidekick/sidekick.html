@@ -151,7 +151,7 @@
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-danger { background: var(--danger); color: #fff; }
-  .btn-sm { width: auto; padding: 0.4rem 0.9rem; font-size: 0.8rem; border-radius: 8px; }
+  .btn-sm { width: auto; padding: 0.65rem 1.1rem; font-size: 0.88rem; border-radius: 8px; }
 
   input {
     width: 100%;
@@ -1149,8 +1149,8 @@
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
   }
   .dice-btn {
-    padding: 0.65rem 0.4rem; background: #1e1e2e; border: 1px solid var(--border);
-    border-radius: 10px; color: var(--text); font-size: 0.9rem; font-weight: 700;
+    padding: 0.85rem 0.4rem; background: #1e1e2e; border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 1rem; font-weight: 700;
     cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.1s;
   }
   .dice-btn:active { transform: scale(0.96); }
@@ -1199,8 +1199,8 @@
     overflow: hidden; margin-bottom: 0.5rem;
   }
   .timer-tab {
-    flex: 1; padding: 0.55rem 0.3rem; text-align: center;
-    font-size: 0.78rem; font-weight: 700; color: var(--muted);
+    flex: 1; padding: 0.72rem 0.3rem; text-align: center;
+    font-size: 0.83rem; font-weight: 700; color: var(--muted);
     background: transparent; border: none; cursor: pointer;
     border-right: 1px solid var(--border);
   }
@@ -1226,7 +1226,7 @@
   .timer-btn-row button { flex: 1; }
   .timer-presets { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.3rem; }
   .timer-preset-btn {
-    flex: 1; min-width: 60px; padding: 0.4rem 0.3rem; font-size: 0.75rem; font-weight: 600;
+    flex: 1; min-width: 60px; padding: 0.65rem 0.3rem; font-size: 0.82rem; font-weight: 600;
     border-radius: 8px; border: 1px solid var(--border); background: transparent;
     color: var(--text); cursor: pointer;
   }
@@ -1472,7 +1472,7 @@
   .ctrl-row { display: flex; align-items: center; gap: 7px; }
   .ctrl-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; width: 44px; flex-shrink: 0; }
   .ctrl-btn {
-    width: 32px; height: 32px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.15);
     background: rgba(255,255,255,0.08);
@@ -1943,9 +1943,9 @@
   <div class="card" style="margin-top:0.85rem; padding:1.1rem;">
     <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
-      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('timers')">⏱️ Timers</button>
-      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('rng')">🎲 Random</button>
-      <button class="btn-secondary btn-sm" style="width:100%; padding:0.6rem 0.5rem; font-size:0.85rem;" onclick="openTool('picker')">🎯 Picker</button>
+      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
+      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random</button>
+      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Picker</button>
     </div>
   </div>
 
@@ -2181,27 +2181,7 @@
   </button>
   <div class="active-divider" id="active-divider"></div>
   <div class="settings-panel">
-    <button class="settings-gear" id="settings-gear-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
-    <div class="settings-drawer" id="settings-drawer">
-      <div class="settings-inner">
-        <div class="ctrl-row">
-          <span class="ctrl-label">Sound</span>
-          <button class="ctrl-btn active-ctrl" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">🔊</button>
-        </div>
-        <div class="ctrl-sep"></div>
-        <div class="ctrl-row">
-          <span class="ctrl-label">Screen</span>
-          <button class="ctrl-btn" id="orient-portrait" onclick="setOrientation('portrait')" title="Portrait">📱</button>
-          <button class="ctrl-btn" id="orient-landscape" onclick="setOrientation('landscape')" title="Landscape">🔲</button>
-          <button class="ctrl-btn active-ctrl" id="orient-auto" onclick="setOrientation('auto')" title="Auto">🔄</button>
-        </div>
-        <div class="ctrl-sep"></div>
-        <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
-          <span class="ctrl-label" style="width:auto;">Room</span>
-          <span id="active-room-code-display" style="font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;color:var(--accent-light);letter-spacing:0.2em;">----</span>
-        </div>
-      </div>
-    </div>
+    <button class="settings-gear" id="settings-gear-btn" onclick="openSettingsOverlay()" title="Settings">⚙️</button>
   </div>
   <div class="active-center" id="active-center">
     <div class="active-center-its">It's Your Turn</div>
@@ -2237,27 +2217,7 @@
     <button class="host-game-menu-btn" id="host-game-menu-btn-wait" onclick="openHostCrownMenu()">👑</button>
   </div>
   <div class="settings-panel">
-    <button class="settings-gear" id="settings-gear-btn-wait" onclick="toggleSettingsWait()" title="Settings">⚙️</button>
-    <div class="settings-drawer" id="settings-drawer-wait">
-      <div class="settings-inner">
-        <div class="ctrl-row">
-          <span class="ctrl-label">Sound</span>
-          <button class="ctrl-btn" id="sound-toggle-wait" onclick="toggleSound()" title="Toggle Sound">🔊</button>
-        </div>
-        <div class="ctrl-sep"></div>
-        <div class="ctrl-row">
-          <span class="ctrl-label">Screen</span>
-          <button class="ctrl-btn" id="orient-portrait-wait" onclick="setOrientation('portrait')" title="Portrait">📱</button>
-          <button class="ctrl-btn" id="orient-landscape-wait" onclick="setOrientation('landscape')" title="Landscape">🔲</button>
-          <button class="ctrl-btn active-ctrl" id="orient-auto-wait" onclick="setOrientation('auto')" title="Auto">🔄</button>
-        </div>
-        <div class="ctrl-sep"></div>
-        <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
-          <span class="ctrl-label" style="width:auto;">Room</span>
-          <span id="wait-room-code-display" style="font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;color:var(--accent-light);letter-spacing:0.2em;">----</span>
-        </div>
-      </div>
-    </div>
+    <button class="settings-gear" id="settings-gear-btn-wait" onclick="openSettingsOverlay()" title="Settings">⚙️</button>
   </div>
   <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:0; width:100%;">
     <!-- Timer bar (waiting) -->
@@ -3049,7 +3009,7 @@
     <div id="poison-hp-row" style="display:none; align-items:center; gap:0.5rem; margin-bottom:0.3rem;">
       <span style="font-size:0.85rem; color:var(--muted);">HP to lose:</span>
       <input type="number" id="poison-hp-input" value="5" min="1" max="999" style="width:70px; margin:0; padding:0.4rem 0.6rem; font-size:0.9rem;">
-      <button class="btn-primary btn-sm" style="width:auto; padding:0.4rem 0.8rem;" onclick="confirmPoisonHP()">✓ Set</button>
+      <button class="btn-primary btn-sm" style="width:auto; padding:0.65rem 1rem;" onclick="confirmPoisonHP()">✓ Set</button>
     </div>
 
     <button class="btn-secondary btn-sm" style="margin-top:0.5rem;" onclick="closeStatusMenu()">Close</button>
@@ -3210,7 +3170,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -5098,29 +5058,26 @@ window.confirmColor = function() {
 document.getElementById('color-picker-overlay').addEventListener('click', function(e) {
   if (e.target === this) this.classList.remove('show');
 });
-let settingsOpen = false;
-window.toggleSettings = function() {
-  settingsOpen = !settingsOpen;
-  document.getElementById('settings-gear-btn').classList.toggle('open', settingsOpen);
-  document.getElementById('settings-drawer').classList.toggle('open', settingsOpen);
+window.openSettingsOverlay = function() {
+  // Sync room code display
+  const rc = document.getElementById('settings-overlay-room-code');
+  if (rc) rc.textContent = roomCode || '----';
+  document.getElementById('settings-overlay').classList.add('show');
 };
-
-let settingsOpenWait = false;
-window.toggleSettingsWait = function() {
-  settingsOpenWait = !settingsOpenWait;
-  document.getElementById('settings-gear-btn-wait').classList.toggle('open', settingsOpenWait);
-  document.getElementById('settings-drawer-wait').classList.toggle('open', settingsOpenWait);
+window.closeSettingsOverlay = function() {
+  document.getElementById('settings-overlay').classList.remove('show');
 };
+// No-ops for any lingering references
+window.toggleSettings = function() { openSettingsOverlay(); };
+window.toggleSettingsWait = function() { openSettingsOverlay(); };
 
 // ── SOUND TOGGLE ──────────────────────────────
 let soundEnabled = true;
 window.toggleSound = function() {
   soundEnabled = !soundEnabled;
   const icon = soundEnabled ? '🔊' : '🔇';
-  ['sound-toggle', 'sound-toggle-wait'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) { btn.textContent = icon; btn.classList.toggle('active-ctrl', soundEnabled); }
-  });
+  const btn = document.getElementById('sound-toggle');
+  if (btn) { btn.textContent = icon; btn.classList.toggle('active-ctrl', soundEnabled); }
 };
 
 // ── ORIENTATION CONTROL ──────────────────────
@@ -5128,10 +5085,8 @@ let currentOrientation = 'auto';
 window.setOrientation = function(mode) {
   currentOrientation = mode;
   ['portrait','landscape','auto'].forEach(m => {
-    ['orient-'+m, 'orient-'+m+'-wait'].forEach(id => {
-      const b = document.getElementById(id);
-      if (b) b.classList.toggle('active-ctrl', m === mode);
-    });
+    const b = document.getElementById('orient-' + m);
+    if (b) b.classList.toggle('active-ctrl', m === mode);
   });
   applyOrientation(mode);
 };
@@ -5779,7 +5734,7 @@ function listenGameState() {
       // Both mode: buttons are transparent overlays — neighbor color shows only as subtle arrow/label tint, not bg
       document.getElementById('btn-left').style.background  = 'transparent';
       document.getElementById('btn-right').style.background = 'transparent';
-      const arcEl = document.getElementById('active-room-code-display');
+      const arcEl = document.getElementById('settings-overlay-room-code');
       if (arcEl) arcEl.textContent = roomCode;
 
       // Apply pass direction UI mode
@@ -5842,8 +5797,6 @@ function listenGameState() {
         nudgeBtn.style.borderColor = `rgba(${apR},${apG},${apB},0.55)`;
         nudgeBtn.style.boxShadow   = `0 0 18px rgba(${apR},${apG},${apB},0.2)`;
       }
-      const wrcEl = document.getElementById('wait-room-code-display');
-      if (wrcEl) wrcEl.textContent = roomCode;
       // Nudge area
       const nudgeArea = document.getElementById('nudge-area');
       if (nudgeArea) nudgeArea.classList.toggle('visible', featureNudgeEnabled);
@@ -6526,6 +6479,39 @@ window.dismissInstall = function() {
 <!-- ═══════════════════════════════════════════ -->
 <!--  HOST MANAGE PLAYERS PANEL                  -->
 <!-- ═══════════════════════════════════════════ -->
+<!-- SETTINGS OVERLAY (⚙️ gear — all players) -->
+<div class="manage-overlay" id="settings-overlay">
+  <div class="manage-card" style="max-width:300px; padding:1.25rem;">
+    <div style="font-size:1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:1.1rem;">⚙️ Settings</div>
+
+    <!-- Sound -->
+    <div class="ctrl-row" style="justify-content:space-between; margin-bottom:0.75rem;">
+      <span style="font-size:0.9rem; font-weight:600; color:var(--text);">Sound</span>
+      <button class="ctrl-btn active-ctrl" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound" style="width:48px;height:48px;font-size:1.1rem;">🔊</button>
+    </div>
+    <div style="height:1px; background:var(--border); margin-bottom:0.75rem;"></div>
+
+    <!-- Orientation -->
+    <div style="margin-bottom:0.75rem;">
+      <div style="font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:0.5rem;">Screen Orientation</div>
+      <div style="display:flex; gap:0.5rem;">
+        <button class="ctrl-btn" id="orient-portrait" onclick="setOrientation('portrait')" title="Portrait" style="flex:1; width:auto; height:48px; font-size:1.1rem; border-radius:10px;">📱<br><span style="font-size:0.62rem;">Portrait</span></button>
+        <button class="ctrl-btn" id="orient-landscape" onclick="setOrientation('landscape')" title="Landscape" style="flex:1; width:auto; height:48px; font-size:1.1rem; border-radius:10px;">🔲<br><span style="font-size:0.62rem;">Landscape</span></button>
+        <button class="ctrl-btn active-ctrl" id="orient-auto" onclick="setOrientation('auto')" title="Auto" style="flex:1; width:auto; height:48px; font-size:1.1rem; border-radius:10px;">🔄<br><span style="font-size:0.62rem;">Auto</span></button>
+      </div>
+    </div>
+    <div style="height:1px; background:var(--border); margin-bottom:0.75rem;"></div>
+
+    <!-- Room Code -->
+    <div style="text-align:center; margin-bottom:1.1rem;">
+      <div style="font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.25rem;">Room Code</div>
+      <span id="settings-overlay-room-code" style="font-family:'Courier New',monospace;font-size:1.6rem;font-weight:800;color:var(--accent-light);letter-spacing:0.2em;">----</span>
+    </div>
+
+    <button class="btn-secondary" style="width:100%;" onclick="closeSettingsOverlay()">✕ Close</button>
+  </div>
+</div>
+
 <div class="manage-overlay" id="manage-overlay">
   <div class="manage-card">
     <h3>👥 Manage Players</h3>
