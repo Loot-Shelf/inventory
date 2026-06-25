@@ -48,10 +48,6 @@
   body.light-mode #screen-waiting {
     background: #f5f5ff;
   }
-  body.light-mode .nudge-btn {
-    border-color: rgba(40,160,80,0.5);
-    color: #1a8040;
-  }
   body.light-mode .manage-card,
   body.light-mode .info-modal,
   body.light-mode .feature-settings-modal,
@@ -1271,20 +1267,53 @@
     gap: 0.5rem;
   }
   .nudge-area.visible { display: flex; }
+  /* ── 3D Nudge Button ── */
   .nudge-btn {
-    width: 88px; height: 88px;
-    border-radius: 50%;
-    border: 3px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.07);
-    font-size: 3rem;
+    --primary: 255, 205, 69;
+    --secondary: 180, 90, 20;
+    width: 90px;
+    height: 60px;
+    border: none;
+    outline: 5px solid rgba(255, 205, 69, 0.5);
+    border-radius: 100%;
+    position: relative;
+    transition: .3s;
     cursor: pointer;
-    transition: transform 0.1s, background 0.15s;
-    display: flex; align-items: center; justify-content: center;
-    -webkit-tap-highlight-color: transparent;
     user-select: none;
     touch-action: manipulation;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
   }
-  .nudge-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.15); }
+  .nudge-btn .back {
+    background: rgb(var(--secondary));
+    border-radius: 100%;
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+  }
+  .nudge-btn .front {
+    background: linear-gradient(0deg, rgba(var(--primary), .6) 20%, rgba(var(--primary)) 50%);
+    box-shadow: 0 .5em 1em -0.2em rgba(var(--secondary), .5);
+    border-radius: 100%;
+    position: absolute;
+    border: 1px solid rgb(var(--secondary));
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-family: inherit;
+    transform: translateY(-15%);
+    transition: .1s;
+    color: rgb(var(--secondary));
+  }
+  .nudge-btn:active .front {
+    transform: translateY(0%);
+    box-shadow: 0 0;
+  }
+  .nudge-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .nudge-count-label {
     font-size: 0.8rem;
     color: var(--muted);
@@ -1941,11 +1970,11 @@
 
   <!-- Tools card -->
   <div class="card" style="margin-top:0.85rem; padding:1.1rem;">
-    <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
+    <div style="font-size:1.0rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random</button>
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Picker</button>
+      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
+      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Random Team Maker</button>
     </div>
   </div>
 
@@ -1994,9 +2023,9 @@
 
     <!-- Section 1: Game Room -->
     <div class="card-section">
-      <div class="card-section-title">Game Room</div>
+      <div class="card-section-title"><center>Game Room</center></div>
       <label>Name</label>
-      <input id="host-name" placeholder="Enter Your Player / Team Name" maxlength="20">
+      <input id="host-name" placeholder="Type Player / Team Name" maxlength="20">
       <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
         <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
         <span id="host-color-label">Choose Your Player Color</span>
@@ -2009,17 +2038,17 @@
           <input type="radio" name="pass-direction" id="pd-cw" value="cw" class="pass-dir-option">
           <label class="pass-dir-label" for="pd-cw">
             <span class="dir-icon">↻</span>
-            Clockwise
+            Clockwise<br>/<br>Left
           </label>
           <input type="radio" name="pass-direction" id="pd-both" value="both" class="pass-dir-option">
           <label class="pass-dir-label" for="pd-both">
             <span class="dir-icon">↔</span>
-            Both
+            Both<br> Left & Right
           </label>
           <input type="radio" name="pass-direction" id="pd-ccw" value="ccw" class="pass-dir-option">
           <label class="pass-dir-label" for="pd-ccw">
             <span class="dir-icon">↺</span>
-            Counter<br>Clockwise
+            Counter<br>Clockwise<br>/<br>Right
           </label>
         </div>
         <div class="pass-dir-required-note" id="pass-dir-note" style="display:none;color:#e05555;">⚠ Please choose a pass direction to continue.</div>
@@ -2050,15 +2079,15 @@
   <div class="card">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
       <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto">← Back</button>
-      <span style="font-weight:600;">Join Room</span>
+      <span style="font-weight:500;">Join Room</span>
     </div>
-    <label>Room Code</label>
-    <input id="join-code" placeholder="e.g. XKQM" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center">
-    <label>Your Name</label>
-    <input id="join-name" placeholder="Enter your name" maxlength="20">
+    <center><label>Room Code</label></center>
+    <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center">
+    <center><label>Your Name</label></center>
+    <input id="join-name" placeholder="Type Your Name" maxlength="20">
     <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn">
       <span class="color-preview-swatch" id="join-color-swatch" style="background:#FF0000;"></span>
-      <span id="join-color-label">Choose Player Color</span>
+      <span id="join-color-label">Choose Your Player Color</span>
     </button>
     <button class="btn-primary" onclick="joinRoom()">Join Room</button>
     <p id="join-status" class="status"></p>
@@ -2102,7 +2131,7 @@
   <div class="card" style="max-width:480px;">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
       <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">← Back</button>
-      <span style="font-size:0.75rem;color:var(--muted);">Edit settings &amp; features</span>
+      <span style="font-size:1.0rem;color:var(--muted);">Edit settings &amp; features</span>
     </div>
     <div style="text-align:center; margin-bottom:1rem;">
       <div class="room-code-label">Room Code — Share With Players</div>
@@ -2112,7 +2141,7 @@
       <button class="btn-secondary btn-sm" onclick="toggleQR()" id="qr-toggle-btn" style="width:auto; font-size:0.8rem;">📷 Show QR Code</button>
     </div>
     <div style="margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between;">
-      <span style="font-size:0.8rem; color:var(--muted);">PLAYER LIST (drag to reorder)</span>
+      <span style="font-size:0.8rem; color:var(--muted);">Player List (drag to reorder)</span>
       <span id="player-count" style="font-size:0.8rem; color:var(--muted);">0 joined</span>
     </div>
     <div class="player-list" id="lobby-player-list"></div>
@@ -2122,7 +2151,7 @@
         <input type="checkbox" id="random-first-player" onchange="onRandomFirstToggle(this.checked)">
         <span class="toggle-slider"></span>
       </label>
-      <span style="font-size:0.82rem; color:var(--muted);">🎲 Random first player</span>
+      <span style="font-size:0.82rem; color:var(--muted);">🎲 Pick a Random first player</span>
     </div>
     <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="margin-top:0.5rem;">▶ Start Game</button>
     <button class="btn-danger btn-sm" onclick="confirmCloseRoom()" style="width:100%;margin-top:0.5rem;">🚪 Close Room</button>
@@ -2233,7 +2262,10 @@
 
     <!-- NUDGE AREA -->
     <div class="nudge-area" id="nudge-area">
-      <button class="nudge-btn" id="nudge-btn" onclick="sendNudge()">👉</button>
+      <button class="nudge-btn" id="nudge-btn" onclick="sendNudge()">
+        <span class="back"></span>
+        <span class="front">👉</span>
+      </button>
       <span style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.08em;text-transform:uppercase;">Nudge</span>
       <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
     </div>
