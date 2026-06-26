@@ -1277,7 +1277,7 @@
     outline: 5px solid rgba(255, 205, 69, 0.5);
     border-radius: 100%;
     position: relative;
-    transition: .3s;
+    transition: .1s;
     cursor: pointer;
     user-select: none;
     touch-action: manipulation;
@@ -1972,8 +1972,8 @@
   <div class="card" style="margin-top:0.85rem; padding:1.1rem;">
     <div style="font-size:1.0rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
+      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Random Team Maker</button>
     </div>
   </div>
@@ -2267,6 +2267,7 @@
         <span class="front">👉</span>
       </button>
       <span style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.08em;text-transform:uppercase;">Nudge</span>
+      <span>You Know You Want To...</span>
       <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
     </div>
   </div>
