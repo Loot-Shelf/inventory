@@ -1876,6 +1876,74 @@
     cursor: pointer; display: none; margin-top: 0.5rem;
   }
   .vp-begin-btn.show { display: block; }
+
+  /* ── D&D TURN COMPONENTS ── */
+  .dnd-action-grid {
+    width: 210px; height: 210px;
+    background: #000;
+    border-radius: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 6px; gap: 4px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.07);
+  }
+  .dnd-cell {
+    background: linear-gradient(to bottom, #333, #242323);
+    border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    border-top: 1px solid #4e4d4d;
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 5px 1px rgba(0,0,0,0.2);
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+  .dnd-cell::before {
+    content: '';
+    position: absolute; inset: 0; scale: 1.02;
+    border-radius: 25px;
+    background: linear-gradient(to bottom, transparent 10%, transparent, transparent 90%),
+                linear-gradient(to left, transparent 10%, transparent, transparent 90%);
+    transition: all 200ms cubic-bezier(0.4,0,0.2,1);
+    z-index: 0;
+  }
+  .dnd-cell.used {
+    background: linear-gradient(to bottom, #1d1d1d, #1d1d1d);
+    border-top: none;
+    box-shadow: 0 17px 5px 1px rgba(0,0,0,0);
+  }
+  .dnd-cell.used::before {
+    background: linear-gradient(to bottom, transparent 10%, #8B0000, transparent 90%),
+                linear-gradient(to left, transparent 10%, #8B0000, transparent 90%);
+  }
+  .dnd-cell-inner {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+  }
+  .dnd-label {
+    color: rgb(17,177,2);
+    font-size: 13px; line-height: 14px; padding: 0;
+    font-weight: 700; text-transform: uppercase;
+    text-align: center;
+    text-shadow: -1px -1px 1px rgba(224,224,224,0.1), 0 2px 3px rgba(0,0,0,0.3);
+    transition: color 0.1s linear, text-shadow 0.1s linear;
+  }
+  .dnd-cell.used .dnd-label {
+    color: #FF0000;
+    text-shadow: 0 0 12px #8B0000;
+  }
+  .dnd-center-pip {
+    width: 12px; height: 12px;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotate(45deg);
+    background: #333; border-radius: 2px;
+    border: 1px solid #4e4d4d;
+    transition: all 0.12s linear;
+    z-index: 2; pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -2117,7 +2185,7 @@
     <div class="tools-modal-title" style="margin-bottom:0.5rem;">📷 Scan to Join</div>
     <div style="font-size:0.78rem; color:var(--muted); margin-bottom:1rem;" id="qr-overlay-code">Room: ----</div>
     <div style="background:#fff; border-radius:14px; padding:1rem; display:inline-block; margin-bottom:0.75rem;">
-      <div id="qr-code"></div>
+      <div id="qr-code-overlay"></div>
     </div>
     <p style="font-size:0.72rem; color:var(--muted); margin-bottom:1rem;">Players scan this to join instantly</p>
     <button class="btn-secondary btn-sm" style="width:100%;" onclick="closeQROverlay()">✕ Close</button>
@@ -2149,7 +2217,7 @@
         <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">&#8592; Back</button>
       </div>
       <div style="background:#fff;border-radius:14px;padding:1rem;display:inline-block;margin-bottom:0.75rem;">
-        <div id="qr-code"></div>
+        <div id="qr-code-lobby"></div>
       </div>
       <div class="room-code" id="display-code">----</div>
     </div>
@@ -2250,6 +2318,56 @@
     <div class="pass-tap-label">Pass</div>
     <div class="pass-tap-player" id="pass-tap-player"></div>
   </button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  D&D TURN COMPONENTS OVERLAY               -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="dnd-overlay" style="display:none; position:fixed; inset:0; z-index:50; pointer-events:none;">
+  <!-- Transparent top zone — menus still tappable (z-index 20+) -->
+  <div style="position:absolute; top:68px; bottom:68px; left:0; right:0; pointer-events:all; display:flex; align-items:center; justify-content:center;">
+    <div style="display:flex; flex-direction:column; align-items:center; gap:1rem;">
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5);">Your Turn Actions</div>
+      <!-- 2×2 toggle grid -->
+      <div class="dnd-action-grid" id="dnd-action-grid">
+        <div class="dnd-cell" id="dnd-movement" onclick="dndToggle('movement')">
+          <div class="dnd-cell-inner">
+            <span class="dnd-label">Movement</span>
+          </div>
+        </div>
+        <div class="dnd-cell" id="dnd-action" onclick="dndToggle('action')">
+          <div class="dnd-cell-inner">
+            <span class="dnd-label">Action</span>
+          </div>
+        </div>
+        <div class="dnd-cell" id="dnd-bonus" onclick="dndToggle('bonus')">
+          <div class="dnd-cell-inner">
+            <span class="dnd-label">Bonus<br>Action</span>
+          </div>
+        </div>
+        <div class="dnd-cell" id="dnd-object" onclick="dndToggle('object')">
+          <div class="dnd-cell-inner">
+            <span class="dnd-label">Object<br>Interact</span>
+          </div>
+        </div>
+        <div class="dnd-center-pip"></div>
+      </div>
+      <div style="font-size:0.72rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.08em;">Tap to mark used (red)</div>
+    </div>
+  </div>
+</div>
+
+<!-- D&D "Used all actions?" confirm dialog -->
+<div id="dnd-confirm-overlay" style="display:none; position:fixed; inset:0; z-index:55; align-items:center; justify-content:center; pointer-events:all;">
+  <div style="background:rgba(10,10,15,0.96); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:1.75rem 1.5rem; width:min(320px,88vw); text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.8); display:flex; flex-direction:column; gap:0.85rem;">
+    <div style="font-size:1.5rem;">⚔️</div>
+    <div style="font-size:1.05rem; font-weight:800; color:#fff;">Have you used all of your actions?</div>
+    <div style="font-size:0.82rem; color:rgba(255,255,255,0.45);">All 4 actions are marked as used.</div>
+    <div style="display:flex; gap:0.6rem; margin-top:0.25rem;">
+      <button onclick="dndConfirmNo()" style="flex:1; padding:0.75rem; background:transparent; border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:rgba(255,255,255,0.7); font-size:0.95rem; font-weight:600; cursor:pointer;">No, go back</button>
+      <button onclick="dndConfirmYes()" style="flex:1; padding:0.75rem; background:#7c5cbf; border:none; border-radius:10px; color:#fff; font-size:0.95rem; font-weight:700; cursor:pointer;">Yes, pass turn</button>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -2482,6 +2600,29 @@
       </div>
       <span class="feature-name">🩹 Status Effects</span>
       <button class="feature-info-btn" onclick="showFeatureInfo('status')" title="What is this?">?</button>
+    </div>
+
+    <!-- D&D TURN COMPONENTS -->
+    <div class="feature-row" style="margin-bottom:1.25rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="feature-dnd-toggle" type="checkbox" onchange="onDndToggle(this.checked)">
+        <label class="neo-toggle" for="feature-dnd-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
 
     <button class="info-modal-close" onclick="closeFeaturesOverlay()" style="width:100%;">✓ Done</button>
@@ -2742,6 +2883,33 @@
         <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
       </div>
       <span class="feature-name">🩹 Status Effects</span>
+    </div>
+
+    <!-- D&D Turn Components -->
+    <div class="feature-row" style="margin-bottom:0.75rem;">
+      <div class="neo-toggle-container">
+        <input class="neo-toggle-input" id="mg-dnd-toggle" type="checkbox" onchange="onMidGameToggle('dndTurnComponents',this.checked)">
+        <label class="neo-toggle" for="mg-dnd-toggle">
+          <div class="neo-track">
+            <div class="neo-background-layer"></div>
+            <div class="neo-grid-layer"></div>
+            <div class="neo-spectrum-analyzer">
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
+              <div class="neo-spectrum-bar"></div>
+            </div>
+            <div class="neo-track-highlight"></div>
+          </div>
+          <div class="neo-thumb">
+            <div class="neo-thumb-ring"></div>
+            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
+          </div>
+          <div class="neo-gesture-area"></div>
+          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
+        </label>
+        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
+      </div>
+      <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
 
     <button class="info-modal-close" onclick="saveMidGameSettings()">✓ Apply Changes</button>
@@ -3259,6 +3427,7 @@ let featureNudgeEnabled = false;
 let featureAwardsEnabled = false;
 let featureVPEnabled = false;
 let featureStatusEffectsEnabled = false;
+let featureDndEnabled = false;
 let passDirection = '';         // 'ccw' | 'both' | 'cw' — mandatory before room creation
 let ceremonyAborted = false;    // set by host Skip Awards button
 let featureTimersEnabled = false;
@@ -3300,6 +3469,13 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   requestAnimationFrame(rescaleCurrentScreen);
+  // Hide D&D overlay whenever leaving the active turn screen
+  if (id !== 'active') {
+    const dndOv = document.getElementById('dnd-overlay');
+    const dndCf = document.getElementById('dnd-confirm-overlay');
+    if (dndOv) dndOv.style.display = 'none';
+    if (dndCf) dndCf.style.display = 'none';
+  }
 }
 
 // ── AUTO-SCALE TO FIT (no scrolling) ────────────
@@ -3483,12 +3659,13 @@ window.showCreateRoom = function() {
   featureAwardsEnabled = false;
   featureVPEnabled     = false;
   featureStatusEffectsEnabled = false;
+  featureDndEnabled    = false;
   featureTimersEnabled = false;
   passDirection = '';
   // Uncheck pass direction radios
   document.querySelectorAll('input[name="pass-direction"]').forEach(r => r.checked = false);
   document.getElementById('pass-dir-note').style.display = 'none';
-  ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle','feature-status-toggle'].forEach(id => {
+  ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle','feature-status-toggle','feature-dnd-toggle'].forEach(id => {
     const el = document.getElementById(id); if (el) el.checked = false;
   });
   ['nudge-edit-btn','timers-edit-btn'].forEach(id => {
@@ -4021,7 +4198,7 @@ window.leaveSavedScreen = function() {
 
 window.goHome = function() {
   // Reset QR (inline lobby card)
-  const qrBox = document.getElementById('qr-code');
+  const qrBox = document.getElementById('qr-code-lobby');
   if (qrBox) qrBox.innerHTML = '';
   // Clear any inputs and errors when going back
   document.getElementById('host-name').value = '';
@@ -4041,7 +4218,7 @@ window.goBackToCreate = async function() {
   roomCode = null; myId = null; isHost = false;
   clearSession();
   // Clear inline QR
-  const qrBox = document.getElementById('qr-code');
+  const qrBox = document.getElementById('qr-code-lobby');
   if (qrBox) qrBox.innerHTML = '';
   // Re-populate create screen with what the host had typed
   showScreen('create');
@@ -4081,7 +4258,8 @@ window.confirmCloseRoom = function() {
 };
 
 function generateQR() {
-  const box = document.getElementById('qr-code');
+  const box = document.getElementById('qr-code-overlay');
+  if (!box) return;
   box.innerHTML = '';
   const base = window.location.href.split('?')[0].split('#')[0];
   const joinUrl = base + '?join=' + roomCode;
@@ -4097,7 +4275,7 @@ function generateQR() {
 
 // Generate QR into the always-visible lobby card
 function generateLobbyQR() {
-  const box = document.getElementById('qr-code');
+  const box = document.getElementById('qr-code-lobby');
   if (!box) return;
   box.innerHTML = '';
   const base = window.location.href.split('?')[0].split('#')[0];
@@ -4186,6 +4364,7 @@ window.openMidGameSettings = function() {
   document.getElementById('mg-vp-toggle').checked     = featureVPEnabled;
   document.getElementById('mg-timers-toggle').checked = featureTimersEnabled;
   document.getElementById('mg-status-toggle').checked = featureStatusEffectsEnabled;
+  document.getElementById('mg-dnd-toggle').checked    = featureDndEnabled;
   document.getElementById('mg-nudge-settings').style.display  = featureNudgeEnabled  ? 'flex' : 'none';
   document.getElementById('mg-timers-settings').style.display = featureTimersEnabled ? 'flex' : 'none';
   document.getElementById('mg-nudge-delay').value = nudgeDelaySeconds;
@@ -4242,6 +4421,7 @@ window.saveMidGameSettings = async function() {
   const vpOn          = document.getElementById('mg-vp-toggle').checked;
   const timersOn      = document.getElementById('mg-timers-toggle').checked;
   const statusOn      = document.getElementById('mg-status-toggle').checked;
+  const dndOn         = document.getElementById('mg-dnd-toggle').checked;
   const countdownOn   = timersOn && document.getElementById('mg-timer-countdown-on').checked;
   const countdownNewlyEnabled = countdownOn && !mgCountdownWasActive;
 
@@ -4253,6 +4433,7 @@ window.saveMidGameSettings = async function() {
     awards:                awardsOn,
     victoryPoints:         vpOn,
     statusEffects:         statusOn,
+    dndTurnComponents:     dndOn,
     timers:                timersOn,
     timerTurnOn:           timersOn && document.getElementById('mg-timer-turn-on').checked,
     timerTurnVisible:      document.getElementById('mg-timer-turn-visible').checked,
@@ -4302,6 +4483,11 @@ window.onStatusEffectsToggle = function(checked) {
   updateFeaturesSummary();
 };
 
+window.onDndToggle = function(checked) {
+  featureDndEnabled = checked;
+  updateFeaturesSummary();
+};
+
 window.openFeaturesOverlay = function() {
   document.getElementById('features-config-overlay').classList.add('show');
 };
@@ -4320,6 +4506,7 @@ function updateFeaturesSummary() {
   if (featureTimersEnabled)        active.push('⏱ Timers');
   if (featureVPEnabled)            active.push('🏅 VP');
   if (featureStatusEffectsEnabled) active.push('🩹 Status');
+  if (featureDndEnabled)           active.push('⚔️ D&D');
   el.textContent = active.length ? active.join(' · ') : 'All features off';
 }
 
@@ -5489,6 +5676,7 @@ window.createRoom = async function() {
       awards: featureAwardsEnabled,
       victoryPoints: featureVPEnabled,
       statusEffects: featureStatusEffectsEnabled,
+      dndTurnComponents: featureDndEnabled,
       timers: featureTimersEnabled,
       timerTurnOn:          featureTimersEnabled && document.getElementById('timer-turn-on').checked,
       timerTurnVisible:     document.getElementById('timer-turn-visible').checked,
@@ -5733,6 +5921,7 @@ function listenGameState() {
     featureAwardsEnabled = !!roomFeatures.awards;
     featureVPEnabled              = !!roomFeatures.victoryPoints;
     featureStatusEffectsEnabled   = !!roomFeatures.statusEffects;
+    featureDndEnabled             = !!roomFeatures.dndTurnComponents;
     featureTimersEnabled          = !!roomFeatures.timers;
     passDirection = roomFeatures.passDirection || 'both';
     if (featureTimersEnabled) {
@@ -5843,6 +6032,8 @@ function listenGameState() {
       suppressNextTurnSound = false;
       // Status Effects: alert this player of any active statuses at turn start
       if (turnChanged || firstTurn) checkStatusEffectsOnTurnStart(room);
+      // D&D Turn Components: show action tracker overlay on turn start
+      if (featureDndEnabled && (turnChanged || firstTurn)) showDndOverlay();
       // Status Effects button — visible for all players when feature is on
       ['status-btn-active'].forEach(id => {
         const btn = document.getElementById(id);
@@ -6519,6 +6710,48 @@ window.toggleTheme = function() {
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+
+// ── D&D TURN COMPONENTS ──────────────────────
+const DND_CELLS = ['movement','action','bonus','object'];
+
+window.showDndOverlay = function() {
+  // Reset all cells to green (unused)
+  DND_CELLS.forEach(id => {
+    const el = document.getElementById('dnd-' + id);
+    if (el) el.classList.remove('used');
+  });
+  const overlay = document.getElementById('dnd-overlay');
+  if (overlay) overlay.style.display = '';
+  const confirm = document.getElementById('dnd-confirm-overlay');
+  if (confirm) confirm.style.display = 'none';
+};
+
+window.dndToggle = function(id) {
+  const el = document.getElementById('dnd-' + id);
+  if (!el) return;
+  el.classList.toggle('used');
+  // Check if all 4 are used
+  const allUsed = DND_CELLS.every(k => document.getElementById('dnd-' + k)?.classList.contains('used'));
+  if (allUsed) {
+    // Show confirmation dialog
+    const confirm = document.getElementById('dnd-confirm-overlay');
+    if (confirm) confirm.style.display = 'flex';
+  }
+};
+
+window.dndConfirmNo = function() {
+  // Dismiss confirm, go back to the grid
+  const confirm = document.getElementById('dnd-confirm-overlay');
+  if (confirm) confirm.style.display = 'none';
+};
+
+window.dndConfirmYes = function() {
+  // Hide both overlays — player is done, normal pass turn screen shows
+  const overlay = document.getElementById('dnd-overlay');
+  const confirm = document.getElementById('dnd-confirm-overlay');
+  if (overlay) overlay.style.display = 'none';
+  if (confirm) confirm.style.display = 'none';
+};
 </script>
 
 <script>
