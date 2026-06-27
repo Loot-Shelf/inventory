@@ -2030,7 +2030,7 @@
   <!-- Tools card -->
   <div class="card" style="margin-top:1.0rem; padding:1rem;">
     <div style="font-size:1.0rem; color:var(--accent-light); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Random Team Maker</button>
@@ -2476,24 +2476,7 @@
 
     <!-- NUDGE -->
     <div class="feature-row">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="feature-nudge-toggle" type="checkbox" onchange="onNudgeToggle(this.checked)">
-        <label class="neo-toggle" for="feature-nudge-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-nudge-toggle" type="checkbox" onchange="onNudgeToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">👉 Nudge</span>
       <button class="feature-edit-btn" id="nudge-edit-btn" onclick="openFeatureSettings('nudge')" title="Edit settings">EDIT</button>
       <button class="feature-info-btn" onclick="showFeatureInfo('nudge')" title="What is this?">?</button>
@@ -2501,48 +2484,14 @@
 
     <!-- ACHIEVEMENT AWARDS -->
     <div class="feature-row">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="feature-awards-toggle" type="checkbox" onchange="onAwardsToggle(this.checked)">
-        <label class="neo-toggle" for="feature-awards-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-awards-toggle" type="checkbox" onchange="onAwardsToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🏆 Achievement Awards</span>
       <button class="feature-info-btn" onclick="showFeatureInfo('awards')" title="What is this?">?</button>
     </div>
 
     <!-- TIMERS -->
     <div class="feature-row">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="feature-timers-toggle" type="checkbox" onchange="onTimersToggle(this.checked)">
-        <label class="neo-toggle" for="feature-timers-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-timers-toggle" type="checkbox" onchange="onTimersToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⏱ Timers</span>
       <button class="feature-edit-btn" id="timers-edit-btn" onclick="openFeatureSettings('timers')" title="Edit settings">EDIT</button>
       <button class="feature-info-btn" onclick="showFeatureInfo('timers')" title="What is this?">?</button>
@@ -2550,72 +2499,21 @@
 
     <!-- VICTORY POINTS -->
     <div class="feature-row" style="margin-bottom:0.75rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)">
-        <label class="neo-toggle" for="feature-vp-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🏅 Victory Points</span>
       <button class="feature-info-btn" onclick="showFeatureInfo('vp')" title="What is this?">?</button>
     </div>
 
     <!-- STATUS EFFECTS -->
     <div class="feature-row" style="margin-bottom:1.25rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="feature-status-toggle" type="checkbox" onchange="onStatusEffectsToggle(this.checked)">
-        <label class="neo-toggle" for="feature-status-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-status-toggle" type="checkbox" onchange="onStatusEffectsToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🩹 Status Effects</span>
       <button class="feature-info-btn" onclick="showFeatureInfo('status')" title="What is this?">?</button>
     </div>
 
     <!-- D&D TURN COMPONENTS -->
     <div class="feature-row" style="margin-bottom:1.25rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="feature-dnd-toggle" type="checkbox" onchange="onDndToggle(this.checked)">
-        <label class="neo-toggle" for="feature-dnd-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div><div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb"><div class="neo-thumb-ring"></div><div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div></div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-dnd-toggle" type="checkbox" onchange="onDndToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
 
@@ -2697,28 +2595,7 @@
 
     <!-- Nudge -->
     <div class="feature-row" style="margin-bottom:0.5rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="mg-nudge-toggle" type="checkbox" onchange="onMidGameToggle('nudge',this.checked)">
-        <label class="neo-toggle" for="mg-nudge-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div>
-            <div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb">
-            <div class="neo-thumb-ring"></div>
-            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-          </div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-nudge-toggle" type="checkbox" onchange="onMidGameToggle('nudge',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">👉 Nudge</span>
     </div>
     <div id="mg-nudge-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.5rem;">
@@ -2745,82 +2622,19 @@
 
     <!-- Achievement Awards -->
     <div class="feature-row" style="margin-bottom:0.75rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="mg-awards-toggle" type="checkbox" onchange="onMidGameToggle('awards',this.checked)">
-        <label class="neo-toggle" for="mg-awards-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div>
-            <div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb">
-            <div class="neo-thumb-ring"></div>
-            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-          </div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-awards-toggle" type="checkbox" onchange="onMidGameToggle('awards',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🏆 Achievement Awards</span>
     </div>
 
     <!-- Victory Points -->
     <div class="feature-row" style="margin-bottom:0.5rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="mg-vp-toggle" type="checkbox" onchange="onMidGameToggle('vp',this.checked)">
-        <label class="neo-toggle" for="mg-vp-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div>
-            <div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb">
-            <div class="neo-thumb-ring"></div>
-            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-          </div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-vp-toggle" type="checkbox" onchange="onMidGameToggle('vp',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🏅 Victory Points</span>
     </div>
 
     <!-- Timers -->
     <div class="feature-row" style="margin-bottom:0.5rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="mg-timers-toggle" type="checkbox" onchange="onMidGameToggle('timers',this.checked)">
-        <label class="neo-toggle" for="mg-timers-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div>
-            <div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb">
-            <div class="neo-thumb-ring"></div>
-            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-          </div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-timers-toggle" type="checkbox" onchange="onMidGameToggle('timers',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⏱ Timers</span>
     </div>
     <div id="mg-timers-settings" style="display:none;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;flex-direction:column;gap:0.4rem;">
@@ -2854,55 +2668,13 @@
 
     <!-- Status Effects -->
     <div class="feature-row" style="margin-bottom:0.75rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="mg-status-toggle" type="checkbox" onchange="onMidGameToggle('statusEffects',this.checked)">
-        <label class="neo-toggle" for="mg-status-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div>
-            <div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb">
-            <div class="neo-thumb-ring"></div>
-            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-          </div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-status-toggle" type="checkbox" onchange="onMidGameToggle('statusEffects',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🩹 Status Effects</span>
     </div>
 
     <!-- D&D Turn Components -->
     <div class="feature-row" style="margin-bottom:0.75rem;">
-      <div class="neo-toggle-container">
-        <input class="neo-toggle-input" id="mg-dnd-toggle" type="checkbox" onchange="onMidGameToggle('dndTurnComponents',this.checked)">
-        <label class="neo-toggle" for="mg-dnd-toggle">
-          <div class="neo-track">
-            <div class="neo-background-layer"></div>
-            <div class="neo-grid-layer"></div>
-            <div class="neo-spectrum-analyzer">
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div><div class="neo-spectrum-bar"></div>
-              <div class="neo-spectrum-bar"></div>
-            </div>
-            <div class="neo-track-highlight"></div>
-          </div>
-          <div class="neo-thumb">
-            <div class="neo-thumb-ring"></div>
-            <div class="neo-thumb-core"><div class="neo-thumb-icon"><div class="neo-thumb-wave"></div><div class="neo-thumb-pulse"></div></div></div>
-          </div>
-          <div class="neo-gesture-area"></div>
-          <div class="neo-interaction-feedback"><div class="neo-ripple"></div><div class="neo-progress-arc"></div></div>
-        </label>
-        <div class="neo-status"><div class="neo-status-indicator"><div class="neo-status-dot"></div><div class="neo-status-text"></div></div></div>
-      </div>
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-dnd-toggle" type="checkbox" onchange="onMidGameToggle('dndTurnComponents',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
 
