@@ -2315,7 +2315,11 @@
 <!--  D&D TURN COMPONENTS OVERLAY               -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="dnd-overlay" style="display:none; position:fixed; inset:0; z-index:50; pointer-events:none;">
-  <!-- Bottom zone only — between pass-to text and bottom menu strip -->
+  <!-- Pass-turn blocker: covers only the middle zone (above bottom strip, below top strip).
+       z-index 50 puts it above pass buttons (z-4) but the outer div is pointer-events:none
+       so menus at z-20/21 still receive taps through the top/bottom strips untouched. -->
+  <div style="position:absolute; top:68px; bottom:68px; left:0; right:0; pointer-events:all; background:transparent;"></div>
+  <!-- Bottom zone: grid + labels, sits inside the bottom strip area -->
   <div style="position:absolute; bottom:76px; left:0; right:0; pointer-events:all; display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
     <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5);">Your Turn Actions</div>
     <!-- 2×2 toggle grid -->
