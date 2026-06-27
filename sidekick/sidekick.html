@@ -2015,8 +2015,8 @@
   <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">🔑 Login</button>
   <div class="screen-content-scaler" id="scaler-home">
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
-    <span style="font-size:1.1rem;font-weight:600;letter-spacing:0.22em;text-transform;color:var(--muted);opacity:0.7;">iSideQuest</span>
-    <span style="font-size:3rem">SideKick</span>
+    <span style="font-size:1.1rem;font-weight:600;letter-spacing:0.22em;text-transform;color:var(--muted);opacity:0.7;">Game Night</span>
+    <span style="font-size:3.5rem">SideKick</span>
   </div>
   <div class="tagline">Pass the turn. Keep the vibe.</div>
   <div class="card">
@@ -2028,8 +2028,8 @@
   <p id="home-status" class="status"></p>
 
   <!-- Tools card -->
-  <div class="card" style="margin-top:1.5rem; padding:1.1rem;">
-    <div style="font-size:1.0rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
+  <div class="card" style="margin-top:1.0rem; padding:1rem;">
+    <div style="font-size:1.0rem; color:var(--accent-light); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
@@ -2078,26 +2078,25 @@
     <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
 
     <!-- Card 1: Player name & color -->
-    <div class="card" style="margin-bottom:0.75rem;">
-      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-        <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto;">← Back</button>
-      </div>
-      <label>Name</label>
-      <input id="host-name" placeholder="Type Player / Team Name" maxlength="20">
-      <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
-        <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
-        <span id="host-color-label">Choose Your Player Color</span>
-      </button>
-    </div>
+<div class="card" style="margin-bottom: 1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+  
+  <label style="margin-bottom: 0.25rem;">Name</label>
+  <input id="host-name" placeholder="Type Player / Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
+  
+  <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
+    <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
+    <span id="host-color-label">Choose Your Player Color</span>
+  </button>
+</div>
 
     <!-- Card 2: Pass Direction -->
-    <div class="card" style="margin-bottom:0.75rem;">
+    <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;"">
       <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem;">Pass Direction <span style="color:#e05555;">*</span></div>
       <div class="pass-dir-group">
         <input type="radio" name="pass-direction" id="pd-cw" value="cw" class="pass-dir-option">
         <label class="pass-dir-label" for="pd-cw">
           <span class="dir-icon">↻</span>
-          Clockwise<br>/<br>Left
+          <br>Left
         </label>
         <input type="radio" name="pass-direction" id="pd-both" value="both" class="pass-dir-option">
         <label class="pass-dir-label" for="pd-both">
@@ -2107,14 +2106,14 @@
         <input type="radio" name="pass-direction" id="pd-ccw" value="ccw" class="pass-dir-option">
         <label class="pass-dir-label" for="pd-ccw">
           <span class="dir-icon">↺</span>
-          Counter<br>Clockwise<br>/<br>Right
+          <br>Right
         </label>
       </div>
       <div class="pass-dir-required-note" id="pass-dir-note" style="display:none;color:#e05555;">⚠ Please choose a pass direction to continue.</div>
     </div>
 
     <!-- Card 3: Game Settings / Features -->
-    <div class="card" style="margin-bottom:0.75rem;">
+    <div class="card" style="margin-bottom:0.75rem; padding-top: 1rem; padding-bottom: 1rem;"">
       <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem;">Game Settings / Features</div>
       <button class="btn-secondary" onclick="openFeaturesOverlay()" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; font-size:0.88rem;">
         <span>⚙️ Configure Features</span>
@@ -2124,8 +2123,10 @@
     </div>
 
     <!-- Create Room button below cards -->
+     <br>
     <button class="btn-primary" onclick="createRoom()" style="max-width:400px;width:100%;">Create Room</button>
     <p id="create-status" class="status"></p>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto;">← Back</button>
 
   </div>
 </div>
@@ -2137,12 +2138,11 @@
   <div class="screen-content-scaler" id="scaler-join">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
+    <div class="logo" style="font-size:1.75rem;margin-bottom:.2rem;">Join Room</div>
 
     <!-- Card 1: Player name & color -->
-    <div class="card" style="margin-bottom:0.75rem;">
+    <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
       <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-        <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto;">&#8592; Back</button>
       </div>
       <label>Your Name</label>
       <input id="join-name" placeholder="Type Your Name" maxlength="20">
@@ -2153,7 +2153,7 @@
     </div>
 
     <!-- Card 2: Room Code -->
-    <div class="card" style="margin-bottom:0.75rem;">
+    <div class="card" style="margin-bottom:2rem; padding-top: 1rem; padding-bottom: 1rem;">
       <label style="text-align:center;display:block;">Room Code</label>
       <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center;margin-bottom:0;">
     </div>
@@ -2161,6 +2161,7 @@
     <!-- Join Room button below cards -->
     <button class="btn-primary" onclick="joinRoom()" style="max-width:400px;width:100%;">Join Room</button>
     <p id="join-status" class="status"></p>
+        <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto;">&#8592; Back</button>
 
   </div>
 </div>
@@ -2200,22 +2201,21 @@
   <div class="screen-content-scaler" id="scaler-lobby">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:1.6rem;letter-spacing:0.04em;margin-bottom:1rem;text-align:center;">Room Code &mdash; Share With Players</div>
+    <div class="logo" style="font-size:2rem;letter-spacing:0.04em;margin-bottom:.2rem;text-align:center;">Room Code </div>
 
     <!-- Card 1: QR code + room code -->
-    <div class="card" style="max-width:480px;margin-bottom:0.75rem;text-align:center;">
-      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
-        <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">&#8592; Back</button>
+    <div class="card" style="max-width:480px;margin-bottom:0.75rem;text-align:center; padding-top: .5rem; padding-bottom: .05rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:.75rem;">
       </div>
-      <div style="background:#fff;border-radius:14px;padding:1rem;display:inline-block;margin-bottom:0.75rem;">
+      <div style="background:#fff;border-radius:14px;padding:1rem;display:inline-block;margin-bottom:.2rem;">
         <div id="qr-code-lobby"></div>
       </div>
       <div class="room-code" id="display-code">----</div>
     </div>
 
     <!-- Card 2: Player list -->
-    <div class="card" style="max-width:480px;margin-bottom:0.75rem;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+    <div class="card" style="max-width:480px;margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
         <span style="font-size:1rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
         <span id="player-count" style="font-size:0.85rem;color:var(--muted);">0 joined</span>
       </div>
@@ -2224,7 +2224,7 @@
     </div>
 
     <!-- Card 3: Random first player -->
-    <div class="card" style="max-width:480px;margin-bottom:0.75rem;">
+    <div class="card" style="max-width:480px;margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
       <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
         <label class="feature-toggle" style="flex-shrink:0;">
           <input type="checkbox" id="random-first-player" onchange="onRandomFirstToggle(this.checked)">
@@ -2236,6 +2236,8 @@
 
     <!-- Start Game button below cards -->
     <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="max-width:480px;width:100%;">&#9654; Start Game</button>
+    <br>
+    <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">&#8592; Back</button>
 
   </div>
 </div>
