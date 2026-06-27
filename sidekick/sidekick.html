@@ -1879,12 +1879,12 @@
 
   /* ── D&D TURN COMPONENTS ── */
   .dnd-action-grid {
-    width: 210px; height: 210px;
+    width: 180px; height: 180px;
     background: #000;
-    border-radius: 30px;
+    border-radius: 26px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding: 6px; gap: 4px;
+    padding: 5px; gap: 4px;
     position: relative;
     box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.07);
   }
@@ -1934,15 +1934,6 @@
   .dnd-cell.used .dnd-label {
     color: #FF0000;
     text-shadow: 0 0 12px #8B0000;
-  }
-  .dnd-center-pip {
-    width: 12px; height: 12px;
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%,-50%) rotate(45deg);
-    background: #333; border-radius: 2px;
-    border: 1px solid #4e4d4d;
-    transition: all 0.12s linear;
-    z-index: 2; pointer-events: none;
   }
 </style>
 </head>
@@ -2324,36 +2315,33 @@
 <!--  D&D TURN COMPONENTS OVERLAY               -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="dnd-overlay" style="display:none; position:fixed; inset:0; z-index:50; pointer-events:none;">
-  <!-- Transparent top zone — menus still tappable (z-index 20+) -->
-  <div style="position:absolute; top:68px; bottom:68px; left:0; right:0; pointer-events:all; display:flex; align-items:center; justify-content:center;">
-    <div style="display:flex; flex-direction:column; align-items:center; gap:1rem;">
-      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5);">Your Turn Actions</div>
-      <!-- 2×2 toggle grid -->
-      <div class="dnd-action-grid" id="dnd-action-grid">
-        <div class="dnd-cell" id="dnd-movement" onclick="dndToggle('movement')">
-          <div class="dnd-cell-inner">
-            <span class="dnd-label">Movement</span>
-          </div>
+  <!-- Bottom zone only — between pass-to text and bottom menu strip -->
+  <div style="position:absolute; bottom:76px; left:0; right:0; pointer-events:all; display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
+    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5);">Your Turn Actions</div>
+    <!-- 2×2 toggle grid -->
+    <div class="dnd-action-grid" id="dnd-action-grid">
+      <div class="dnd-cell" id="dnd-movement" onclick="dndToggle('movement')">
+        <div class="dnd-cell-inner">
+          <span class="dnd-label">Movement</span>
         </div>
-        <div class="dnd-cell" id="dnd-action" onclick="dndToggle('action')">
-          <div class="dnd-cell-inner">
-            <span class="dnd-label">Action</span>
-          </div>
-        </div>
-        <div class="dnd-cell" id="dnd-bonus" onclick="dndToggle('bonus')">
-          <div class="dnd-cell-inner">
-            <span class="dnd-label">Bonus<br>Action</span>
-          </div>
-        </div>
-        <div class="dnd-cell" id="dnd-object" onclick="dndToggle('object')">
-          <div class="dnd-cell-inner">
-            <span class="dnd-label">Object<br>Interact</span>
-          </div>
-        </div>
-        <div class="dnd-center-pip"></div>
       </div>
-      <div style="font-size:0.72rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.08em;">Tap to mark used (red)</div>
+      <div class="dnd-cell" id="dnd-action" onclick="dndToggle('action')">
+        <div class="dnd-cell-inner">
+          <span class="dnd-label">Action</span>
+        </div>
+      </div>
+      <div class="dnd-cell" id="dnd-bonus" onclick="dndToggle('bonus')">
+        <div class="dnd-cell-inner">
+          <span class="dnd-label">Bonus<br>Action</span>
+        </div>
+      </div>
+      <div class="dnd-cell" id="dnd-object" onclick="dndToggle('object')">
+        <div class="dnd-cell-inner">
+          <span class="dnd-label">Object<br>Interact</span>
+        </div>
+      </div>
     </div>
+    <div style="font-size:0.72rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.08em;">Tap to mark used (red)</div>
   </div>
 </div>
 
