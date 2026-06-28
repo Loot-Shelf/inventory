@@ -2275,6 +2275,7 @@
   </div>
   <!-- Floating emoji container -->
   <div class="nudge-float-container" id="nudge-float-container"></div>
+
   <!-- Timer bar -->
   <div class="timer-bar" id="timer-bar-active">
     <div class="timer-row" id="timer-row-turn-active"></div>
@@ -4426,7 +4427,7 @@ function syncNudgeToActiveScreen(room) {
   }
 }
 
-function spawnNudgeFloat(container) {
+function spawnNudgeFloat(container, color) {
   const el = document.createElement('div');
   el.className = 'nudge-float';
   el.textContent = '👉';
@@ -6547,6 +6548,7 @@ window.installPWA = function() {
 window.dismissInstall = function() {
   document.getElementById('install-banner').style.display = 'none';
 };
+
 </script>
 
 
