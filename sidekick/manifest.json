@@ -1,12 +1,13 @@
 {
   "name": "SideKick",
   "short_name": "SideKick",
-  "description": "Pass-the-turn game room for tabletop players",
-  "start_url": "./sidekick.html",
-  "display": "fullscreen",
-  "orientation": "any",
+  "description": "Pass the turn. Keep the vibe. A real-time turn tracker for tabletop game nights.",
+  "start_url": "/sidekick.html",
+  "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
+  "scope": "/",
   "icons": [
     {
       "src": "icon-192.png",
@@ -20,5 +21,7 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "categories": ["games", "entertainment", "utilities"],
+  "screenshots": []
 }

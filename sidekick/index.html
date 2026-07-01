@@ -2595,6 +2595,98 @@
   .theme-preview.preview-nord    { background:linear-gradient(135deg,#0f141e 50%,#5e81ac 50%); border-color:#5e81ac; font-size:1.1rem; color:#88c0d0; }
   .theme-preview.preview-dracula    { background:linear-gradient(135deg,#1a1128 50%,#bd93f9 50%); border-color:#bd93f9; font-size:1.1rem; color:#ff79c6; }
   .theme-preview.preview-gothic    { background:linear-gradient(135deg,#0a0a0a 50%,#c0c0c0 50%); border-color:#c0c0c0; font-size:1.1rem; color:#e0e0e0; }
+  /* ── PAYWALL OVERLAY ── */
+  .paywall-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92); z-index: 9800;
+    align-items: center; justify-content: center;
+    padding: 1.25rem;
+  }
+  .paywall-overlay.show { display: flex; }
+  .paywall-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.75rem 1.5rem 1.5rem;
+    width: min(380px, 94vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(124,92,191,0.2);
+    display: flex; flex-direction: column; gap: 1rem;
+    position: relative;
+  }
+  .paywall-close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; color: var(--muted);
+    font-size: 1.2rem; cursor: pointer; padding: 4px 8px;
+    border-radius: 6px; line-height: 1;
+  }
+  .paywall-close:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .paywall-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(124,92,191,0.15); border: 1px solid rgba(124,92,191,0.35);
+    color: var(--accent-light); font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 10px; border-radius: 99px; align-self: flex-start;
+  }
+  .paywall-title {
+    font-size: 1.45rem; font-weight: 900; color: var(--text);
+    line-height: 1.2; margin-top: -0.25rem;
+  }
+  .paywall-subtitle {
+    font-size: 0.88rem; color: var(--muted); line-height: 1.5;
+    margin-top: -0.4rem;
+  }
+  .paywall-features {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.9rem 1rem;
+  }
+  .paywall-feature-row {
+    display: flex; align-items: center; gap: 0.65rem;
+    font-size: 0.85rem; color: var(--text);
+  }
+  .paywall-feature-row .pf-icon { font-size: 1rem; flex-shrink: 0; width: 22px; text-align: center; }
+  .paywall-feature-row .pf-check { color: #4ade80; font-size: 0.75rem; flex-shrink: 0; font-weight: 800; margin-left: auto; }
+  .paywall-price-row {
+    display: flex; align-items: baseline; gap: 0.5rem;
+    justify-content: center; margin: 0.25rem 0;
+  }
+  .paywall-price {
+    font-size: 2.6rem; font-weight: 900; color: var(--text);
+    line-height: 1;
+  }
+  .paywall-price-note {
+    font-size: 0.8rem; color: var(--muted); line-height: 1.4;
+    text-align: center; margin-top: -0.5rem;
+  }
+  .paywall-btn-buy {
+    background: linear-gradient(135deg, #7c5cbf, #9b6ddf);
+    color: #fff; border: none; border-radius: 12px;
+    padding: 0.9rem 1rem; font-size: 1rem; font-weight: 800;
+    cursor: pointer; width: 100%; letter-spacing: 0.03em;
+    box-shadow: 0 4px 20px rgba(124,92,191,0.45);
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .paywall-btn-buy:hover  { opacity: 0.92; }
+  .paywall-btn-buy:active { transform: scale(0.98); }
+  .paywall-restore {
+    text-align: center; font-size: 0.78rem; color: var(--muted);
+  }
+  .paywall-restore a {
+    color: var(--accent-light); text-decoration: underline; cursor: pointer;
+  }
+  .paywall-divider {
+    border: none; border-top: 1px solid var(--border); margin: 0;
+  }
+  /* Theme overrides for paywall */
+  body.theme-8bit .paywall-modal    { background: #0d0208; border: 3px solid var(--accent); box-shadow: 6px 6px 0 #000; border-radius: 0; }
+  body.theme-8bit .paywall-btn-buy  { background: #cc00ff; border: 3px solid #ff44ff; box-shadow: 4px 4px 0 #000; border-radius: 0; }
+  body.theme-cyberpunk .paywall-modal   { background: rgba(0,8,20,0.98); border: 1px solid #00ffe7; box-shadow: 0 0 40px rgba(0,255,231,0.2); }
+  body.theme-cyberpunk .paywall-btn-buy { background: #ff003c; box-shadow: 0 4px 20px rgba(255,0,60,0.5); }
+  body.theme-fantasy .paywall-modal     { background: linear-gradient(160deg,#1c1308,#221808); border: 2px solid #8b6914; }
+  body.theme-fantasy .paywall-btn-buy   { background: linear-gradient(to bottom,#c8942a,#8b6914); color: #0e0a04; box-shadow: 0 4px 20px rgba(200,148,42,0.4); }
 </style>
 </head>
 <body>
@@ -3596,6 +3688,77 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  PAYWALL OVERLAY                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="paywall-overlay" id="paywall-overlay">
+  <div class="paywall-modal">
+    <button class="paywall-close" onclick="closePaywall()">✕</button>
+
+    <div class="paywall-badge">🎮 Host Account</div>
+
+    <div class="paywall-title">Unlock SideKick</div>
+    <div class="paywall-subtitle">One-time purchase. Create unlimited rooms, save games, and access every feature — forever.</div>
+
+    <div class="paywall-features">
+      <div class="paywall-feature-row">
+        <span class="pf-icon">🏠</span>
+        <span>Create unlimited game rooms</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">💾</span>
+        <span>Save &amp; resume games</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">🏆</span>
+        <span>Achievement Awards ceremony</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">⏱️</span>
+        <span>Turn, round &amp; game timers</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">🔢</span>
+        <span>Round tracker</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">⚔️</span>
+        <span>D&amp;D turn components</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">🎨</span>
+        <span>Themes &amp; customization</span>
+        <span class="pf-check">✓</span>
+      </div>
+      <div class="paywall-feature-row">
+        <span class="pf-icon">👥</span>
+        <span>Guests join free — always</span>
+        <span class="pf-check">✓</span>
+      </div>
+    </div>
+
+    <hr class="paywall-divider">
+
+    <div class="paywall-price-row">
+      <div class="paywall-price">$4.99</div>
+      <div style="font-size:0.85rem; color:var(--muted); padding-bottom:4px;">one time</div>
+    </div>
+    <div class="paywall-price-note">No subscription. No recurring charges. Pay once, use forever.</div>
+
+    <button class="paywall-btn-buy" onclick="goToCheckout()">Buy Now →</button>
+
+    <div class="paywall-restore">
+      Already purchased? <a onclick="restorePurchase()">Restore access</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  RESUME GAME OVERLAY                        -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="resume-overlay">
@@ -3934,6 +4097,108 @@ function requireHostAccount() {
   return false;
 }
 
+// ── PAYWALL / PURCHASE ───────────────────────
+// Swap STRIPE_PAYMENT_LINK for your live link when ready.
+// Pass ?prefilled_email= so Stripe pre-fills the buyer's email.
+// Pass ?client_reference_id= so the webhook knows which Firebase UID to mark paid.
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_3cI8wI3rCdCE3Ze79BgA800';
+
+// How long to poll Firebase for the paid flag after returning from Stripe (ms)
+const PAID_POLL_INTERVAL = 3000;
+const PAID_POLL_MAX      = 10; // stop after ~30 seconds
+
+let paidStatusCache = null; // null = unknown, true = paid, false = not paid
+
+async function checkPaidStatus(uid) {
+  if (paidStatusCache === true) return true;
+  try {
+    const snap = await get(ref(db, `users/${uid}/paid`));
+    const paid = snap.exists() && snap.val() === true;
+    if (paid) paidStatusCache = true;
+    return paid;
+  } catch(e) {
+    return false;
+  }
+}
+
+// Call before any host-only action. Returns true if paid, false + opens paywall if not.
+async function requirePaid() {
+  if (!requireHostAccount()) return false;
+  const paid = await checkPaidStatus(currentUser.uid);
+  if (paid) return true;
+  openPaywall();
+  return false;
+}
+
+window.openPaywall = function() {
+  document.getElementById('paywall-overlay').classList.add('show');
+};
+
+window.closePaywall = function() {
+  document.getElementById('paywall-overlay').classList.remove('show');
+};
+
+window.goToCheckout = function() {
+  if (!currentUser) { openAccountOverlay('login'); return; }
+  // Build Stripe URL with Firebase UID and email pre-filled
+  let url = STRIPE_PAYMENT_LINK;
+  const params = new URLSearchParams();
+  if (currentUser.email) params.set('prefilled_email', currentUser.email);
+  params.set('client_reference_id', currentUser.uid);
+  url += (url.includes('?') ? '&' : '?') + params.toString();
+  window.location.href = url;
+};
+
+// Restore: polls Firebase for the paid flag (for users who paid on another device
+// or whose webhook was delayed). Shows feedback in the paywall modal.
+window.restorePurchase = async function() {
+  if (!currentUser) { openAccountOverlay('login'); return; }
+  const restoreBtn = document.querySelector('.paywall-restore a');
+  if (restoreBtn) restoreBtn.textContent = 'Checking…';
+  paidStatusCache = null; // force re-check
+  let attempts = 0;
+  const poll = async () => {
+    attempts++;
+    const paid = await checkPaidStatus(currentUser.uid);
+    if (paid) {
+      document.getElementById('paywall-overlay').classList.remove('show');
+      paidStatusCache = true;
+      // Proceed straight to create room
+      showCreateRoom();
+      return;
+    }
+    if (attempts < PAID_POLL_MAX) {
+      setTimeout(poll, PAID_POLL_INTERVAL);
+    } else {
+      if (restoreBtn) restoreBtn.textContent = 'No purchase found. Already purchased?';
+    }
+  };
+  poll();
+};
+
+// Check if returning from Stripe payment (payment=success in URL)
+(function checkStripeReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success' && currentUser) {
+    // Webhook may not have fired yet — poll until the flag appears
+    paidStatusCache = null;
+    let attempts = 0;
+    const poll = async () => {
+      attempts++;
+      const paid = await checkPaidStatus(currentUser.uid);
+      if (paid) {
+        // Clean up URL and go straight to create room
+        window.history.replaceState({}, '', window.location.pathname);
+        showCreateRoom();
+        return;
+      }
+      if (attempts < PAID_POLL_MAX) setTimeout(poll, PAID_POLL_INTERVAL);
+    };
+    // Wait for auth to resolve before first check
+    setTimeout(poll, 2000);
+  }
+})();
+
 // ── ACCOUNT UI ───────────────────────────────────
 let accountMode = 'login'; // 'login' | 'signup'
 
@@ -4020,7 +4285,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','calc-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','calc-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','paywall-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -4283,8 +4548,10 @@ async function tryAutoResume() {
 tryAutoResume();
 
 // ── NAV ──────────────────────────────────────
-window.showCreateRoom = function() {
+window.showCreateRoom = async function() {
   if (!requireHostAccount()) return;
+  const paid = await requirePaid();
+  if (!paid) return;
   featureNudgeEnabled  = false;
   featureAwardsEnabled = false;
   featureVPEnabled     = false;
