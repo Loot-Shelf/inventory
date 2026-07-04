@@ -9,8 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SideKick">
-<link rel="manifest" href="/sidekick/manifest.json">
-<link rel="apple-touch-icon" href="/sidekick/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -2595,6 +2595,21 @@
   .theme-preview.preview-nord    { background:linear-gradient(135deg,#0f141e 50%,#5e81ac 50%); border-color:#5e81ac; font-size:1.1rem; color:#88c0d0; }
   .theme-preview.preview-dracula    { background:linear-gradient(135deg,#1a1128 50%,#bd93f9 50%); border-color:#bd93f9; font-size:1.1rem; color:#ff79c6; }
   .theme-preview.preview-gothic    { background:linear-gradient(135deg,#0a0a0a 50%,#c0c0c0 50%); border-color:#c0c0c0; font-size:1.1rem; color:#e0e0e0; }
+  /* ── ROOM EXPIRY WARNING ── */
+  .expiry-warning {
+    display: none;
+    background: rgba(251,191,36,0.12);
+    border: 1px solid rgba(251,191,36,0.4);
+    border-radius: 10px;
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.78rem;
+    color: #fbbf24;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .expiry-warning.show { display: block; }
+  .expiry-warning strong { display: block; font-size: 0.82rem; margin-bottom: 2px; }
 </style>
 </head>
 <body>
@@ -3907,15 +3922,30 @@ let myName = '';
 // Remembers which room/player this device was last part of, so closing
 // the app (or stepping out for food) and coming back drops you right
 // back in without rejoining as a new player.
+// Sessions expire after 24 hours to match room expiry.
 const SK_SESSION_KEY = 'sk_session';
+const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 function saveSession() {
   if (!roomCode || !myId) return;
   try {
-    localStorage.setItem(SK_SESSION_KEY, JSON.stringify({ roomCode, myId, myName, isHost }));
+    localStorage.setItem(SK_SESSION_KEY, JSON.stringify({
+      roomCode, myId, myName, isHost,
+      savedAt: Date.now()
+    }));
   } catch {}
 }
 function loadSession() {
-  try { return JSON.parse(localStorage.getItem(SK_SESSION_KEY) || 'null'); } catch { return null; }
+  try {
+    const data = JSON.parse(localStorage.getItem(SK_SESSION_KEY) || 'null');
+    if (!data) return null;
+    // Reject sessions older than 24 hours
+    if (data.savedAt && Date.now() - data.savedAt > SESSION_TTL_MS) {
+      localStorage.removeItem(SK_SESSION_KEY);
+      return null;
+    }
+    return data;
+  } catch { return null; }
 }
 function clearSession() {
   try { localStorage.removeItem(SK_SESSION_KEY); } catch {}
@@ -5068,10 +5098,39 @@ function adjustBrightness(hex, factor) {
 
 // ── HOST GAME MENU ──────────────────────────────
 let hostMenuOpen = { active: false, wait: false };
+// ── ROOM EXPIRY WARNING ──────────────────────
+// Shows a warning in the crown menu when the room is within 3 hours of the
+// 24-hour expiry. Encourages the host to save before the room is cleaned up.
+const ROOM_TTL_MS    = 24 * 60 * 60 * 1000; // 24 hours
+const EXPIRY_WARN_MS =  3 * 60 * 60 * 1000; // warn at 3 hours remaining
+
+async function checkRoomExpiryWarning() {
+  const banner     = document.getElementById('expiry-warning');
+  const bannerText = document.getElementById('expiry-warning-text');
+  if (!banner || !roomCode || !db) return;
+  try {
+    const snap = await get(ref(db, `rooms/${roomCode}/lastActivity`));
+    if (!snap.exists()) return;
+    const lastActivity = snap.val();
+    const ageMs        = Date.now() - lastActivity;
+    const remainingMs  = ROOM_TTL_MS - ageMs;
+    if (remainingMs <= EXPIRY_WARN_MS && remainingMs > 0) {
+      const hrs  = Math.floor(remainingMs / (60 * 60 * 1000));
+      const mins = Math.floor((remainingMs % (60 * 60 * 1000)) / 60000);
+      const timeStr = hrs > 0 ? `${hrs}h ${mins}m` : `${mins} minutes`;
+      bannerText.textContent = `This room expires in ${timeStr}. Save your game to keep it permanently.`;
+      banner.classList.add('show');
+    } else {
+      banner.classList.remove('show');
+    }
+  } catch { /* non-critical */ }
+}
+
 window.openHostCrownMenu = function() {
   const codeEl = document.getElementById('host-crown-room-code');
   if (codeEl) codeEl.textContent = roomCode || '----';
   document.getElementById('host-crown-overlay').classList.add('show');
+  checkRoomExpiryWarning();
 };
 
 window.closeHostCrownMenu = function() {
@@ -6478,6 +6537,7 @@ window.createRoom = async function() {
     host: myId,
     status: 'lobby',
     activePlayerIndex: 0,
+    createdAt: Date.now(),
     lastActivity: Date.now(),
     features: {
       passDirection,
@@ -7618,7 +7678,7 @@ window.dndConfirmYes = function() {
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sidekick/sw.js', { scope: '/sidekick/' }).catch(() => {});
+    navigator.serviceWorker.register('sw.js').catch(() => {});
   });
 }
 
@@ -7699,6 +7759,10 @@ window.dismissInstall = function() {
     <div style="text-align:center; padding-bottom:0.75rem; border-bottom:1px solid var(--border); margin-bottom:0.75rem;">
       <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
       <div style="font-family:'Courier New',monospace; font-size:1.5rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-crown-room-code">----</div>
+    </div>
+    <div class="expiry-warning" id="expiry-warning">
+      <strong>⚠️ Room expires soon</strong>
+      <span id="expiry-warning-text">Save your game to keep it permanently.</span>
     </div>
     <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); openMidGameSettings()">⚙️ Room Settings</button>
     <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); openToolsOverlay()">🧰 Tools</button>
