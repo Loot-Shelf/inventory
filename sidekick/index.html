@@ -3446,9 +3446,9 @@
 <!--  AWARDS: GAME OVER SCREEN                   -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="awards-gameover" id="awards-gameover">
-  <div style="font-size:3rem;">🎉</div>
-  <div class="awards-gameover-title">Achievement Awards</div>
-  <div class="awards-gameover-sub">That's a wrap — great game!</div>
+  <div style="font-size:3rem;" id="awards-gameover-icon">🎉</div>
+  <div class="awards-gameover-title" id="awards-gameover-title-text">Achievement Awards</div>
+  <div class="awards-gameover-sub" id="awards-gameover-sub-text">That's a wrap — great game!</div>
   <!-- Host sees two options; non-hosts see a wait message -->
   <div id="awards-host-options" style="display:none; flex-direction:column; gap:0.75rem; width:100%; max-width:280px; margin-top:1rem;">
     <button class="btn-primary" onclick="playAgain()">🔄 Play Again</button>
@@ -4311,6 +4311,15 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 
 // ── STATE ──────────────────────────────────────
 let db = null;
+let serverTimeOffset = 0; // ms difference between Firebase server clock and this device's clock
+
+// Returns the current time synced to the Firebase server clock. Two different
+// phones' local clocks can be seconds apart, which made buzz-in reaction
+// times inconsistent between devices — this keeps all tap timestamps on one
+// shared clock instead of each device's own (possibly skewed) Date.now().
+function serverNow() {
+  return Date.now() + serverTimeOffset;
+}
 let myId = null;
 let roomCode = null;
 let isHost = false;
@@ -4600,6 +4609,11 @@ function renderBuzzScreen(buzz) {
     return;
   }
 
+  // Left the "complete" phase (e.g. host hit Play Again) — make sure the
+  // final-scores overlay is hidden on every client, not just the host's.
+  const buzzCompleteEl = document.getElementById('buzz-complete');
+  if (buzzCompleteEl) buzzCompleteEl.classList.remove('show');
+
   // Route ALL players to buzz screen
   showScreen('buzz');
 
@@ -4754,7 +4768,7 @@ window.playerBuzzIn = async function() {
   if (tapZone) tapZone.style.display = 'none';
   if (buzzBtn) buzzBtn.classList.add('tapped');
 
-  const ts = Date.now();
+  const ts = serverNow();
   const isModeDownTheLine = speedMode === 'downTheLine';
 
   if (isModeDownTheLine) {
@@ -4823,7 +4837,7 @@ window.buzzAwardPoint = async function() {
     [`rooms/${roomCode}/buzz/tapOrder`]: {},
     [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
     [`rooms/${roomCode}/buzz/currentRound`]: isComplete ? buzzCurrentRound : nextRound,
-    [`rooms/${roomCode}/buzz/roundStartTime`]: Date.now(),
+    [`rooms/${roomCode}/buzz/roundStartTime`]: serverNow(),
     [`rooms/${roomCode}/lastActivity`]: Date.now()
   });
 };
@@ -4860,14 +4874,19 @@ async function buzzResetRound(advanceRound) {
     [`rooms/${roomCode}/buzz/tapOrder`]: {},
     [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
     [`rooms/${roomCode}/buzz/currentRound`]: isComplete ? buzzCurrentRound : nextRound,
-    [`rooms/${roomCode}/buzz/roundStartTime`]: Date.now(),
+    [`rooms/${roomCode}/buzz/roundStartTime`]: serverNow(),
     [`rooms/${roomCode}/lastActivity`]: Date.now()
   });
 }
 
 // Show the Speed Round complete screen
 function showBuzzComplete() {
-  stopBuzzListener();
+  // NOTE: we intentionally do NOT stop the buzz listener here. The room is
+  // still on the buzz screen and the host may hit "Play Again", which just
+  // writes new buzz state to Firebase — if the listener were stopped here,
+  // nobody (including guests) would ever hear about that update and their
+  // screens would be stuck on "Waiting for host...". The listener is only
+  // stopped in showScreen() once someone actually leaves the buzz screens.
   const screen = document.getElementById('buzz-complete');
   if (!screen) return;
 
@@ -4904,7 +4923,7 @@ window.buzzPlayAgain = async function() {
     [`rooms/${roomCode}/buzz/winner`]: null,
     [`rooms/${roomCode}/buzz/tapOrder`]: {},
     [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
-    [`rooms/${roomCode}/buzz/roundStartTime`]: Date.now(),
+    [`rooms/${roomCode}/buzz/roundStartTime`]: serverNow(),
     [`rooms/${roomCode}/lastActivity`]: Date.now()
   });
   const screen = document.getElementById('buzz-complete');
@@ -5062,6 +5081,9 @@ function initFirebase(cfg) {
   try {
     const app = initializeApp(cfg, cfg.projectId);
     db = getDatabase(app);
+    onValue(ref(db, '.info/serverTimeOffset'), snap => {
+      serverTimeOffset = snap.val() || 0;
+    });
     auth = getAuth(app);
     onAuthStateChanged(auth, user => {
       currentUser = user;
@@ -6756,9 +6778,21 @@ function showWinnerReveal(award) {
 
 function showGameOver() {
   hideAllAwardOverlays();
-  // Set text dynamically so cached SW doesn't serve stale strings
+  // Set text dynamically so cached SW doesn't serve stale strings.
+  // Only brand this as "Achievement Awards" when that feature was actually
+  // on — otherwise show a plain, feature-neutral game-over message.
+  const iconEl  = document.getElementById('awards-gameover-icon');
   const titleEl = document.getElementById('awards-gameover-title-text');
-  if (titleEl) titleEl.textContent = 'Achievement Awards';
+  const subEl   = document.getElementById('awards-gameover-sub-text');
+  if (featureAwardsEnabled) {
+    if (iconEl)  iconEl.textContent = '🎉';
+    if (titleEl) titleEl.textContent = 'Achievement Awards';
+    if (subEl)   subEl.textContent = "That's a wrap — great game!";
+  } else {
+    if (iconEl)  iconEl.textContent = '🏁';
+    if (titleEl) titleEl.textContent = 'Game Over';
+    if (subEl)   subEl.textContent = "That's a wrap — great game!";
+  }
   // Show correct options based on role
   const hostOpts = document.getElementById('awards-host-options');
   const waitMsg  = document.getElementById('awards-wait-msg');
@@ -7596,7 +7630,7 @@ window.startGame = async function() {
       tapOrder: {},
       winner: null,
       dtlIndex: 0,
-      roundStartTime: Date.now()
+      roundStartTime: serverNow()
     };
   }
 
@@ -7611,6 +7645,12 @@ function listenGameState() {
     if (!snap.exists()) {
       // Room deleted by host — non-hosts get a home button
       hideAllAwardOverlays();
+      const iconEl  = document.getElementById('awards-gameover-icon');
+      const titleEl = document.getElementById('awards-gameover-title-text');
+      const subEl   = document.getElementById('awards-gameover-sub-text');
+      if (iconEl)  iconEl.textContent = '🚪';
+      if (titleEl) titleEl.textContent = 'Room Closed';
+      if (subEl)   subEl.textContent = 'The host closed this room.';
       const hostOpts = document.getElementById('awards-host-options');
       const waitMsg  = document.getElementById('awards-wait-msg');
       if (hostOpts) hostOpts.style.display = 'none';
