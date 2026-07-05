@@ -2803,7 +2803,8 @@
   }
   .buzz-order-pos { font-size: 0.72rem; color: rgba(255,255,255,0.35); min-width: 18px; }
   .buzz-order-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  /* Bottom bar — left: crown, center: radios, right: players */
+  .buzz-order-time { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.45); letter-spacing: 0.02em; }
+  /* Bottom bar — left: crown, center: spacer, right: players */
   .buzz-bottom-bar {
     position: absolute; bottom: 0; left: 0; right: 0;
     height: 68px; z-index: 20;
@@ -2814,16 +2815,6 @@
     align-items: center;
     padding: 0 0.75rem; pointer-events: all;
   }
-  .buzz-radio-group {
-    display: flex; align-items: center; justify-content: center; gap: 1rem;
-    font-size: 0.72rem; font-weight: 600;
-    color: rgba(255,255,255,0.5); text-transform: uppercase;
-    letter-spacing: 0.07em;
-  }
-  .buzz-radio-opt {
-    display: flex; align-items: center; gap: 4px; cursor: pointer;
-  }
-  .buzz-radio-opt input { width: auto; margin: 0; accent-color: var(--accent); }
   /* Host action buttons (shown only on host screen after buzz) */
   .buzz-host-actions {
     display: none;
@@ -2847,25 +2838,6 @@
     font-size: 0.9rem; font-weight: 700; cursor: pointer;
   }
   .buzz-next-btn:active { opacity: 0.7; }
-  .buzz-skip-btn {
-    padding: 0.75rem 0.85rem;
-    background: transparent; border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 12px; color: rgba(255,255,255,0.4);
-    font-size: 0.82rem; font-weight: 600; cursor: pointer;
-  }
-  /* Reset button (shown to winner in Player Resets mode, always to host) */
-  .buzz-reset-btn {
-    display: none;
-    position: absolute; bottom: 76px; left: 50%; transform: translateX(-50%);
-    z-index: 25; pointer-events: all;
-    padding: 0.75rem 2rem;
-    background: rgba(124,92,191,0.25);
-    border: 1px solid rgba(124,92,191,0.5);
-    border-radius: 12px; color: var(--accent-light);
-    font-size: 0.95rem; font-weight: 800; cursor: pointer;
-    letter-spacing: 0.04em;
-  }
-  .buzz-reset-btn.show { display: block; }
   /* Speed Round complete screen */
   .buzz-complete {
     display: none; position: fixed; inset: 0; z-index: 500;
@@ -3421,29 +3393,16 @@
   <div class="buzz-host-actions" id="buzz-host-actions">
     <button class="buzz-award-btn" onclick="buzzAwardPoint()">✅ Award Point</button>
     <button class="buzz-next-btn" id="buzz-next-btn" onclick="buzzNoPoint()">↩ No Point</button>
-    <button class="buzz-skip-btn" onclick="buzzSkipRound()">⏭ Skip</button>
   </div>
 
-  <!-- Reset button -->
-  <button class="buzz-reset-btn" id="buzz-reset-btn" onclick="buzzReset()">🔁 Reset Round</button>
-
-  <!-- Bottom bar: left=crown, center=radios, right=players -->
+  <!-- Bottom bar: left=crown, center=spacer, right=players -->
   <div class="buzz-bottom-bar">
     <!-- Left: host crown (hidden for non-hosts) -->
     <div id="host-crown-buzz" style="display:none;">
-      <button class="host-game-menu-btn" onclick="openHostCrownMenu()" style="width:36px;height:36px;font-size:1rem;">👑</button>
+      <button class="host-game-menu-btn" id="host-crown-btn-buzz" onclick="openHostCrownMenu()" style="width:36px;height:36px;font-size:1rem;">👑</button>
     </div>
-    <!-- Center: reset radio buttons -->
-    <div class="buzz-radio-group" id="buzz-radio-group">
-      <label class="buzz-radio-opt">
-        <input type="radio" name="buzz-reset-who" value="host" checked onchange="setBuzzResetMode('host')">
-        Host Resets
-      </label>
-      <label class="buzz-radio-opt">
-        <input type="radio" name="buzz-reset-who" value="player" onchange="setBuzzResetMode('player')">
-        Player Resets
-      </label>
-    </div>
+    <!-- Center: spacer (kept for grid layout) -->
+    <div id="buzz-bottom-spacer"></div>
     <!-- Right: players button (host only) -->
     <div>
       <button class="host-manage-btn" id="host-manage-btn-buzz" style="position:static;transform:none;margin:0;" onclick="openManagePanel()">👥</button>
@@ -4600,9 +4559,9 @@ function renderBuzzScreen(buzz) {
   buzzCurrentRound= buzz.currentRound|| 1;
   buzzScores      = buzz.scores      || {};
   buzzTapOrder    = buzz.tapOrder    || {};
-  buzzResetMode   = buzz.resetMode   || 'host';
   buzzWinner      = buzz.winner      || null;
   buzzDtlIndex    = buzz.dtlIndex    || 0;
+  buzzRoundStartTime = buzz.roundStartTime || null;
 
   // Build ordered tap list for Down The Line
   buzzDtlOrder = Object.entries(buzzTapOrder)
@@ -4621,15 +4580,12 @@ function renderBuzzScreen(buzz) {
   // Scores row
   renderBuzzScoreChips();
 
-  // Sync reset radio
-  document.querySelectorAll('input[name="buzz-reset-who"]').forEach(r => {
-    r.checked = r.value === buzzResetMode;
-  });
-
   // Host crown and manage buttons
   const crownDiv = document.getElementById('host-crown-buzz');
+  const crownBtn = document.getElementById('host-crown-btn-buzz');
   const mngBtn   = document.getElementById('host-manage-btn-buzz');
   if (crownDiv) crownDiv.style.display = isHost ? 'flex' : 'none';
+  if (crownBtn) crownBtn.classList.toggle('visible', isHost);
   if (mngBtn)   {
     if (isHost) {
       mngBtn.classList.add('visible');
@@ -4638,10 +4594,6 @@ function renderBuzzScreen(buzz) {
       mngBtn.style.display = 'none';
     }
   }
-
-  // Radio buttons: only host can change reset mode
-  const radioGroup = document.getElementById('buzz-radio-group');
-  if (radioGroup) radioGroup.style.pointerEvents = isHost ? 'all' : 'none';
 
   if (buzzPhase === 'complete') {
     showBuzzComplete();
@@ -4666,7 +4618,6 @@ function renderBuzzWaiting() {
   const winDisp = document.getElementById('buzz-winner-display');
   const ordList = document.getElementById('buzz-order-list');
   const hostAct = document.getElementById('buzz-host-actions');
-  const rstBtn  = document.getElementById('buzz-reset-btn');
   const tapZone = document.getElementById('buzz-tap-zone');
   const buzzBtn = document.getElementById('buzz-btn');
 
@@ -4675,7 +4626,6 @@ function renderBuzzWaiting() {
   if (winDisp) winDisp.style.display = 'none';
   if (ordList) ordList.style.display = 'none';
   if (hostAct) hostAct.classList.remove('show');
-  if (rstBtn)  rstBtn.classList.remove('show');
   if (tapZone) tapZone.style.display = 'block';
   if (buzzBtn) { buzzBtn.classList.remove('locked', 'tapped'); }
 }
@@ -4686,7 +4636,6 @@ function renderBuzzLocked() {
   const winDisp = document.getElementById('buzz-winner-display');
   const ordList = document.getElementById('buzz-order-list');
   const hostAct = document.getElementById('buzz-host-actions');
-  const rstBtn  = document.getElementById('buzz-reset-btn');
   const tapZone = document.getElementById('buzz-tap-zone');
   const buzzBtn = document.getElementById('buzz-btn');
 
@@ -4704,8 +4653,9 @@ function renderBuzzLocked() {
     const nameEl = document.getElementById('buzz-winner-name');
     const subEl  = document.getElementById('buzz-winner-sub');
     const statEl = document.getElementById('buzz-status-label');
+    const timeStr = buzzFormatTime(buzzWinner);
     if (nameEl) { nameEl.textContent = winner ? winner.name : '?'; nameEl.style.color = winner?.color || '#f43f5e'; }
-    if (subEl)  subEl.textContent = 'buzzed in first!';
+    if (subEl)  subEl.textContent = timeStr ? `buzzed in first — ${timeStr}` : 'buzzed in first!';
     if (statEl) statEl.textContent = buzzWinner === myId ? '⚡ You Were The Fastest!' : 'Fastest Finger!';
   }
 
@@ -4717,10 +4667,6 @@ function renderBuzzLocked() {
   } else {
     if (hostAct) hostAct.classList.remove('show');
   }
-
-  // Reset button: always show for host; show for winner if Player Resets mode
-  const canReset = isHost || (buzzResetMode === 'player' && buzzWinner === myId);
-  if (rstBtn) rstBtn.classList.toggle('show', canReset);
 }
 
 function renderBuzzDownTheLine() {
@@ -4729,13 +4675,11 @@ function renderBuzzDownTheLine() {
   const winDisp = document.getElementById('buzz-winner-display');
   const ordList = document.getElementById('buzz-order-list');
   const hostAct = document.getElementById('buzz-host-actions');
-  const rstBtn  = document.getElementById('buzz-reset-btn');
   const tapZone = document.getElementById('buzz-tap-zone');
 
   if (tapZone) tapZone.style.display = 'none';
   if (btnWrap) btnWrap.style.display = 'none';
   if (tapLbl)  tapLbl.style.display = 'none';
-  if (rstBtn)  rstBtn.classList.remove('show');
 
   // Show ordered list
   if (ordList) {
@@ -4743,9 +4687,10 @@ function renderBuzzDownTheLine() {
     ordList.innerHTML = '';
     buzzDtlOrder.forEach((uid, i) => {
       const p = localPlayers.find(pl => pl.id === uid);
+      const timeStr = buzzFormatTime(uid);
       const row = document.createElement('div');
       row.className = 'buzz-order-row' + (i === buzzDtlIndex ? ' active-row' : '');
-      row.innerHTML = `<span class="buzz-order-pos">#${i+1}</span><span class="buzz-order-dot" style="background:${p?.color||'#888'}"></span><span style="flex:1">${p?.name||'?'}</span>`;
+      row.innerHTML = `<span class="buzz-order-pos">#${i+1}</span><span class="buzz-order-dot" style="background:${p?.color||'#888'}"></span><span style="flex:1">${p?.name||'?'}</span><span class="buzz-order-time">${timeStr}</span>`;
       ordList.appendChild(row);
     });
   }
@@ -4757,10 +4702,11 @@ function renderBuzzDownTheLine() {
     const statEl = document.getElementById('buzz-status-label');
     const nameEl = document.getElementById('buzz-winner-name');
     const subEl  = document.getElementById('buzz-winner-sub');
+    const timeStr = buzzFormatTime(activeUid);
     if (winDisp) winDisp.style.display = 'flex';
     if (statEl) statEl.textContent = activeUid === myId ? '⚡ You Were The Fastest!' : `Player #${buzzDtlIndex+1}`;
     if (nameEl) { nameEl.textContent = activeP?.name || '?'; nameEl.style.color = activeP?.color || '#f43f5e'; }
-    if (subEl)  subEl.textContent = 'is up — did they get it right?';
+    if (subEl)  subEl.textContent = timeStr ? `is up (${timeStr}) — did they get it right?` : 'is up — did they get it right?';
   }
 
   // Host buttons
@@ -4787,6 +4733,16 @@ function renderBuzzScoreChips() {
   });
 }
 
+// Format a player's buzz-in reaction time relative to round start, e.g. "0.42s"
+function buzzFormatTime(uid) {
+  if (!buzzRoundStartTime || !uid) return '';
+  const tap = buzzTapOrder[uid];
+  if (tap === undefined || tap === null) return '';
+  const ms = tap - buzzRoundStartTime;
+  if (ms < 0) return '';
+  return (ms / 1000).toFixed(2) + 's';
+}
+
 // Player taps the buzz button / anywhere on screen
 window.playerBuzzIn = async function() {
   if (!db || !roomCode) return;
@@ -4808,12 +4764,21 @@ window.playerBuzzIn = async function() {
     if (existing.exists()) return;
     await set(myTapRef, ts);
 
-    // Check if all active players have tapped
-    const activePlayers = localPlayers.filter(p => !p.knockedOut);
-    const allTapKeys = Object.keys({...buzzTapOrder, [myId]: ts});
-    const allTapped = activePlayers.every(p => allTapKeys.includes(p.id));
+    // Re-read the authoritative tap list straight from Firebase rather than
+    // relying on the locally cached buzzTapOrder — that cache can be stale
+    // (e.g. left over from the previous round) and either miss real taps or
+    // falsely report everyone tapped, which is why later rounds could get stuck.
+    const tapOrderRef = ref(db, `rooms/${roomCode}/buzz/tapOrder`);
+    const tapSnap = await get(tapOrderRef);
+    const freshTapOrder = tapSnap.exists() ? tapSnap.val() : {};
 
-    if (allTapped && isHost) {
+    const activePlayers = localPlayers.filter(p => !p.knockedOut);
+    const allTapped = activePlayers.every(p => freshTapOrder[p.id] !== undefined);
+
+    if (allTapped) {
+      // Whichever player completes the last tap triggers the phase change —
+      // not just the host — otherwise a round never advances if a guest
+      // (rather than the host) happens to be the last one to tap.
       await update(ref(db), {
         [`rooms/${roomCode}/buzz/phase`]: 'downtheline',
         [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
@@ -4858,6 +4823,7 @@ window.buzzAwardPoint = async function() {
     [`rooms/${roomCode}/buzz/tapOrder`]: {},
     [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
     [`rooms/${roomCode}/buzz/currentRound`]: isComplete ? buzzCurrentRound : nextRound,
+    [`rooms/${roomCode}/buzz/roundStartTime`]: Date.now(),
     [`rooms/${roomCode}/lastActivity`]: Date.now()
   });
 };
@@ -4883,12 +4849,6 @@ window.buzzNoPoint = async function() {
   }
 };
 
-// Host or winner: skip round (no point, advance round number)
-window.buzzSkipRound = async function() {
-  if (!isHost || !db || !roomCode) return;
-  await buzzResetRound(true);
-};
-
 // Internal: reset to next round. advanceRound=true increments counter
 async function buzzResetRound(advanceRound) {
   const total = speedRoundsTotal;
@@ -4900,24 +4860,10 @@ async function buzzResetRound(advanceRound) {
     [`rooms/${roomCode}/buzz/tapOrder`]: {},
     [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
     [`rooms/${roomCode}/buzz/currentRound`]: isComplete ? buzzCurrentRound : nextRound,
+    [`rooms/${roomCode}/buzz/roundStartTime`]: Date.now(),
     [`rooms/${roomCode}/lastActivity`]: Date.now()
   });
 }
-
-// Reset button (shown to host always, winner if Player Resets mode)
-window.buzzReset = async function() {
-  if (!db || !roomCode) return;
-  const canReset = isHost || (buzzResetMode === 'player' && buzzWinner === myId);
-  if (!canReset) return;
-  await buzzResetRound(true);
-};
-
-// Host changes reset mode via radio button
-window.setBuzzResetMode = async function(mode) {
-  buzzResetMode = mode;
-  if (!isHost || !db || !roomCode) return;
-  await update(ref(db), { [`rooms/${roomCode}/buzz/resetMode`]: mode });
-};
 
 // Show the Speed Round complete screen
 function showBuzzComplete() {
@@ -4958,6 +4904,7 @@ window.buzzPlayAgain = async function() {
     [`rooms/${roomCode}/buzz/winner`]: null,
     [`rooms/${roomCode}/buzz/tapOrder`]: {},
     [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
+    [`rooms/${roomCode}/buzz/roundStartTime`]: Date.now(),
     [`rooms/${roomCode}/lastActivity`]: Date.now()
   });
   const screen = document.getElementById('buzz-complete');
@@ -4988,7 +4935,7 @@ let buzzTapOrder = {};          // { uid: timestamp }
 let buzzWinner = null;          // uid of current round candidate
 let buzzDtlIndex = 0;           // Down The Line: current position
 let buzzDtlOrder = [];          // ordered uids by tap time
-let buzzResetMode = 'host';     // 'host' | 'player'
+let buzzRoundStartTime = null;  // ms timestamp when the current round started (for reaction times)
 let buzzListener = null;        // Firebase realtime listener for buzz node
 
 // Timer config (read from Firebase)
@@ -7454,7 +7401,6 @@ window.createRoom = async function() {
     buzzPhase: turnMode === 'speedRound' ? 'waiting' : '',
     buzzScores: {},
     buzzTapOrder: {},
-    buzzResetMode: 'host',
     players: {
       [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
     }
@@ -7650,7 +7596,7 @@ window.startGame = async function() {
       tapOrder: {},
       winner: null,
       dtlIndex: 0,
-      resetMode: 'host'
+      roundStartTime: Date.now()
     };
   }
 
