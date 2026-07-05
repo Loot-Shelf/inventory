@@ -45,6 +45,10 @@
   body.light-mode .manage-player-item {
     background: #f0f0fb;
   }
+  body.light-mode .player-avatar,
+  body.light-mode .manage-player-avatar {
+    background: #e0e0ee;
+  }
   body.light-mode #screen-waiting {
     background: #f5f5ff;
   }
@@ -198,6 +202,16 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 0.8rem; font-weight: 700;
     flex-shrink: 0;
+  }
+  .player-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    background: #2a2a3a;
+    line-height: 1;
+    border: 2px solid var(--border);
   }
   .player-name { flex: 1; font-size: 0.95rem; }
   .player-badge {
@@ -1606,8 +1620,9 @@
     border-radius: 16px;
     padding: 1.5rem;
     width: 100%;
-    max-width: 380px;
+    max-width: 440px;
     max-height: 80vh;
+    overflow-x: hidden;
     overflow-y: auto;
   }
   .manage-card h3 { font-size: 1rem; color: #f0eeff; margin-bottom: 1rem; }
@@ -1625,7 +1640,19 @@
   .manage-player-row {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.6rem;
+  }
+  .manage-player-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    transition: border-color 0.2s;
+    background: #2a2a3a;
+    line-height: 1;
   }
   .manage-kick-row {
     display: flex;
@@ -1646,7 +1673,7 @@
     text-decoration: line-through;
     color: #6a4a4a;
   }
-  .manage-num { width: 24px; height: 24px; border-radius: 50%; background: #7c5cbf; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; }
+  .manage-num { width: 28px; height: 28px; border-radius: 50%; background: #7c5cbf; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; flex-shrink:0; }
   .manage-num.out { background: #3a1a1a; color: #6a4a4a; }
   .manage-name { flex: 1; font-size: 0.9rem; }
   .manage-actions { display: flex; gap: 12px; align-items: center; }
@@ -2549,6 +2576,31 @@
   body.theme-dracula .themes-modal    { background:linear-gradient(160deg,#282040,#1a1128) !important; border:1px solid rgba(85,85,170,0.4) !important; box-shadow:0 8px 40px rgba(189,147,249,0.15) !important; }
   body.theme-gothic .themes-modal    { background:linear-gradient(160deg,#141414,#0a0a0a) !important; border:1px solid rgba(51,51,51,0.4) !important; box-shadow:0 8px 40px rgba(192,192,192,0.15) !important; }
   .themes-modal-title { font-size:1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:0.1rem; }
+
+  /* ── AVATAR PICKER ── */
+  .avatar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9700; align-items:center; justify-content:center; padding:1rem; }
+  .avatar-overlay.show { display:flex; }
+  .avatar-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.5rem 1.25rem; width:min(360px,92vw); box-shadow:0 8px 40px rgba(0,0,0,0.7); display:flex; flex-direction:column; gap:0.6rem; }
+  body.theme-8bit .avatar-modal { background:#0d0208 !important; border:3px solid var(--accent) !important; box-shadow:6px 6px 0 #000 !important; }
+  body.theme-cyberpunk .avatar-modal { background:rgba(0,8,20,0.98) !important; border:1px solid #00ffe7 !important; box-shadow:0 0 24px rgba(0,255,231,0.2) !important; }
+  body.theme-fantasy .avatar-modal { background:linear-gradient(160deg,#1c1308,#221808) !important; border:2px solid #8b6914 !important; box-shadow:0 8px 40px rgba(0,0,0,0.7) !important; }
+  body.theme-galaxy .avatar-modal { background:linear-gradient(160deg,#0c0020,#100028) !important; border:1px solid rgba(127,0,255,0.4) !important; box-shadow:0 8px 40px rgba(127,0,255,0.15) !important; }
+  body.theme-forest .avatar-modal { background:linear-gradient(160deg,#0a1e0a,#051004) !important; border:1px solid rgba(45,90,30,0.4) !important; box-shadow:0 8px 40px rgba(61,163,77,0.15) !important; }
+  body.theme-ocean .avatar-modal { background:linear-gradient(160deg,#001a33,#000d1a) !important; border:1px solid rgba(0,68,102,0.4) !important; box-shadow:0 8px 40px rgba(0,136,204,0.15) !important; }
+  body.theme-sunset .avatar-modal { background:linear-gradient(160deg,#2a0d10,#1a0508) !important; border:1px solid rgba(204,68,34,0.4) !important; box-shadow:0 8px 40px rgba(255,102,34,0.15) !important; }
+  body.theme-steampunk .avatar-modal { background:linear-gradient(160deg,#141008,#0a0804) !important; border:1px solid rgba(139,105,20,0.4) !important; box-shadow:0 8px 40px rgba(184,134,11,0.15) !important; }
+  body.theme-vaporwave .avatar-modal { background:linear-gradient(160deg,#140028,#0a0014) !important; border:1px solid rgba(255,68,170,0.4) !important; box-shadow:0 8px 40px rgba(0,255,255,0.15) !important; }
+  body.theme-nord .avatar-modal { background:linear-gradient(160deg,#1a2332,#0f141e) !important; border:1px solid rgba(59,74,94,0.4) !important; box-shadow:0 8px 40px rgba(94,129,172,0.15) !important; }
+  body.theme-dracula .avatar-modal { background:linear-gradient(160deg,#282040,#1a1128) !important; border:1px solid rgba(85,85,170,0.4) !important; box-shadow:0 8px 40px rgba(189,147,249,0.15) !important; }
+  body.theme-gothic .avatar-modal { background:linear-gradient(160deg,#141414,#0a0a0a) !important; border:1px solid rgba(51,51,51,0.4) !important; box-shadow:0 8px 40px rgba(192,192,192,0.15) !important; }
+  .avatar-modal-title { font-size:1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:0.1rem; }
+  .avatar-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.6rem; }
+  .avatar-option { display:flex; align-items:center; justify-content:center; width:100%; aspect-ratio:1/1; border-radius:50%; border:3px solid transparent; font-size:1.8rem; cursor:pointer; transition:transform 0.15s,border-color 0.15s,background 0.15s; background:#1e1e2e; }
+  .avatar-option:hover { transform:scale(1.1); }
+  .avatar-option.selected { border-color:var(--accent-light); background:rgba(124,92,191,0.2); transform:scale(1.1); box-shadow:0 0 0 2px rgba(124,92,191,0.3); }
+  body.light-mode .avatar-option { background:#f0f0fb; }
+  body.light-mode .avatar-option.selected { background:rgba(124,92,191,0.15); border-color:var(--accent); }
+
   .theme-option { display:flex; align-items:center; gap:0.85rem; padding:0.75rem 0.9rem; background:#1e1e2e; border:1.5px solid var(--border); border-radius:12px; cursor:pointer; transition:border-color 0.15s,background 0.15s; user-select:none; }
   body.light-mode    .theme-option { background:#f0f0fb; }
   body.theme-8bit    .theme-option { background:#1a0a1e !important; border:2px solid var(--border) !important; box-shadow:3px 3px 0 #000; border-radius:0 !important; }
@@ -3185,7 +3237,7 @@
     <div class="room-code" id="wl-code">----</div>
     <div class="spinner"></div>
     <p style="color:var(--muted); font-size:0.9rem;">Waiting for host to start…</p>
-    <div class="player-list" id="wl-player-list" style="margin-top:1.5rem; max-width:320px; margin-left:auto; margin-right:auto;"></div>
+    <div class="player-list" id="wl-player-list" style="margin-top:1.5rem; max-width:360px; margin-left:auto; margin-right:auto;"></div>
     <button class="btn-secondary btn-sm" onclick="leaveRoom()" style="margin-top:1.5rem;">Leave</button>
   </div>
   </div>
@@ -3798,7 +3850,7 @@
 
     <button class="tool-list-btn" onclick="openMySavedGames()">💾 My Saved Games</button>
     <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="openThemesOverlay()">🎨 Themes</button>
-    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="alert('Avatar customization is coming soon!')">🖼️ Change Avatar</button>
+    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="openAvatarOverlay()">🖼️ Change Avatar</button>
     <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="alert('Account settings are coming soon!')">⚙️ Account Settings</button>
 
     <button class="btn-secondary btn-sm" style="margin-top:1rem; width:100%;" onclick="backToHomeFromProfile()">🏠 Back to Home</button>
@@ -3933,6 +3985,17 @@
       </div>
     </label>
     <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeThemesOverlay()">✕ Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  AVATAR PICKER OVERLAY                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="avatar-overlay" id="avatar-overlay">
+  <div class="avatar-modal">
+    <div class="avatar-modal-title">🖼️ Choose Your Avatar</div>
+    <div class="avatar-grid" id="avatar-grid"></div>
+    <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeAvatarOverlay()">✕ Close</button>
   </div>
 </div>
 
@@ -4444,18 +4507,62 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','calc-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','calc-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
   showScreen('home');
 };
 
+function getSavedAvatar() {
+  try { return localStorage.getItem('sk_avatar') || ''; } catch { return ''; }
+}
+
+function saveAvatar(emoji) {
+  try { localStorage.setItem('sk_avatar', emoji); } catch {}
+  // Optionally sync to Firebase here in the future
+}
+
+const AVATARS = [
+  '🧙', '🧝', '🧛', '🧜', '🧞',
+  '🐉', '🦄', '🐺', '🦊', '🦅',
+  '⚔️', '🛡️', '🏹', '🔮', '🗡️',
+  '👑', '💎', '🌟', '🔥', '🎲'
+];
+
+window.openAvatarOverlay = function() {
+  const grid = document.getElementById('avatar-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const current = getSavedAvatar();
+  AVATARS.forEach(emoji => {
+    const btn = document.createElement('button');
+    btn.className = 'avatar-option' + (emoji === current ? ' selected' : '');
+    btn.textContent = emoji;
+    btn.setAttribute('data-avatar', emoji);
+    btn.onclick = () => selectAvatar(emoji);
+    grid.appendChild(btn);
+  });
+  document.getElementById('avatar-overlay').classList.add('show');
+};
+
+window.closeAvatarOverlay = function() {
+  document.getElementById('avatar-overlay').classList.remove('show');
+};
+
+window.selectAvatar = function(emoji) {
+  saveAvatar(emoji);
+  document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+  const active = document.querySelector(`.avatar-option[data-avatar="${emoji}"]`);
+  if (active) active.classList.add('selected');
+  document.getElementById('profile-avatar').textContent = emoji;
+};
+
 window.openProfileScreen = function() {
   if (!currentUser) { openAccountOverlay('login'); return; }
   document.getElementById('profile-email').textContent = currentUser.email || '';
-  const initial = (currentUser.email || '?').charAt(0).toUpperCase();
-  document.getElementById('profile-avatar').textContent = initial;
+  const avatar = getSavedAvatar();
+  document.getElementById('profile-avatar').textContent = avatar || (currentUser.email || '?').charAt(0).toUpperCase();
   showScreen('profile');
 };
 
@@ -4464,8 +4571,9 @@ function updateAccountButtonUI() {
   const btn = document.getElementById('account-btn');
   if (!btn) return;
   if (currentUser) {
+    const avatar = getSavedAvatar();
     const initial = (currentUser.email || '?').charAt(0).toUpperCase();
-    btn.textContent = '👤 ' + initial;
+    btn.textContent = (avatar || '👤') + ' ' + initial;
     btn.onclick = () => openProfileScreen();
   } else {
     btn.textContent = '🔑 Login';
@@ -7263,17 +7371,21 @@ window.closeManagePanel = function() {
 function renderManageList(players, rawPlayers) {
   const el = document.getElementById('manage-player-list');
   el.innerHTML = '';
+  const myAvatar = getSavedAvatar() || '👤';
   players.forEach((p, i) => {
     const isOut = rawPlayers[p.id] && rawPlayers[p.id].knockedOut === true;
     const dotColor = (!isOut && p.color) ? p.color : null;
     const dotText  = dotColor && isLightColor(dotColor) ? '#000' : '#fff';
     const dotStyle = dotColor ? `style="background:${dotColor};color:${dotText};"` : '';
+    const avatarEmoji = p.id === myId ? myAvatar : '👤';
+    const avatarDotStyle = dotColor ? `style="border-color:${dotColor};"` : '';
     const div = document.createElement('div');
     div.className = 'manage-player-item' + (isOut ? ' knocked-out' : '');
     div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
       <div class="manage-player-row">
+        <div class="manage-player-avatar" ${avatarDotStyle}>${avatarEmoji}</div>
         <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
         <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
         <div class="manage-actions">
@@ -8256,14 +8368,18 @@ function buildOrderedPlayers(players) {
 function renderLobbyList(players) {
   const el = document.getElementById('lobby-player-list');
   el.innerHTML = '';
+  const myAvatar = getSavedAvatar() || '👤';
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
+    const avatarEmoji = p.id === myId ? myAvatar : '👤';
+    const avatarDotStyle = p.color ? `style="border-color:${p.color};"` : '';
     const div = document.createElement('div');
     div.className = 'player-item';
     div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
+      <div class="player-avatar" ${avatarDotStyle}>${avatarEmoji}</div>
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">Host (You)</span>' : '<span class="player-badge">Player</span>'}
@@ -8292,12 +8408,16 @@ function renderLobbyList(players) {
 function renderWaitingLobbyList(players) {
   const el = document.getElementById('wl-player-list');
   el.innerHTML = '';
+  const myAvatar = getSavedAvatar() || '👤';
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
+    const avatarEmoji = p.id === myId ? myAvatar : '👤';
+    const avatarDotStyle = p.color ? `style="border-color:${p.color};"` : '';
     const div = document.createElement('div');
     div.className = 'player-item';
     div.innerHTML = `
+      <div class="player-avatar" ${avatarDotStyle}>${avatarEmoji}</div>
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">You</span>' : ''}`;
