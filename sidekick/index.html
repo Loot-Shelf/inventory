@@ -2595,21 +2595,301 @@
   .theme-preview.preview-nord    { background:linear-gradient(135deg,#0f141e 50%,#5e81ac 50%); border-color:#5e81ac; font-size:1.1rem; color:#88c0d0; }
   .theme-preview.preview-dracula    { background:linear-gradient(135deg,#1a1128 50%,#bd93f9 50%); border-color:#bd93f9; font-size:1.1rem; color:#ff79c6; }
   .theme-preview.preview-gothic    { background:linear-gradient(135deg,#0a0a0a 50%,#c0c0c0 50%); border-color:#c0c0c0; font-size:1.1rem; color:#e0e0e0; }
-  /* ── ROOM EXPIRY WARNING ── */
-  .expiry-warning {
-    display: none;
-    background: rgba(251,191,36,0.12);
-    border: 1px solid rgba(251,191,36,0.4);
-    border-radius: 10px;
-    padding: 0.6rem 0.85rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.78rem;
-    color: #fbbf24;
-    line-height: 1.5;
-    text-align: center;
+  /* ══════════════════════════════════════════════
+     TURN MODE CARD (Create Room)
+  ══════════════════════════════════════════════ */
+  .turn-mode-btns {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;
+    margin-bottom: 0.5rem;
   }
-  .expiry-warning.show { display: block; }
-  .expiry-warning strong { display: block; font-size: 0.82rem; margin-bottom: 2px; }
+  .turn-mode-btn {
+    background: rgba(255,255,255,0.04);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 0.5rem;
+    font-size: 0.9rem; font-weight: 700;
+    color: var(--text); cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .turn-mode-btn .tm-icon { font-size: 1.4rem; }
+  .turn-mode-btn.selected {
+    border-color: var(--accent);
+    background: rgba(124,92,191,0.15);
+  }
+  .turn-mode-selection {
+    font-size: 0.72rem; color: var(--muted); text-align: center;
+    min-height: 1.1em; letter-spacing: 0.04em;
+  }
+  .turn-mode-selection span { color: var(--accent-light); font-weight: 600; }
+
+  /* ══════════════════════════════════════════════
+     TURN MODE OVERLAYS (direction / speed mode picker)
+  ══════════════════════════════════════════════ */
+  .turn-mode-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88); z-index: 9600;
+    align-items: center; justify-content: center; padding: 1.25rem;
+  }
+  .turn-mode-overlay.show { display: flex; }
+  .turn-mode-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 1.75rem 1.5rem;
+    width: min(360px, 94vw);
+    box-shadow: 0 16px 60px rgba(0,0,0,0.8);
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .turn-mode-modal-title {
+    font-size: 1rem; font-weight: 800; color: var(--text);
+    text-align: center; margin-bottom: 0.25rem;
+  }
+  .turn-mode-modal-sub {
+    font-size: 0.78rem; color: var(--muted);
+    text-align: center; margin-top: -0.4rem; line-height: 1.5;
+  }
+  .tm-option {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--border);
+    border-radius: 12px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .tm-option:hover { border-color: var(--accent); }
+  .tm-option.selected {
+    border-color: var(--accent);
+    background: rgba(124,92,191,0.12);
+  }
+  .tm-option input[type="radio"] { width:auto; margin:0; accent-color:var(--accent); flex-shrink:0; }
+  .tm-opt-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .tm-opt-info { flex: 1; }
+  .tm-opt-name { font-size: 0.92rem; font-weight: 700; color: var(--text); }
+  .tm-opt-desc { font-size: 0.72rem; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .tm-rounds-row {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 0.5rem 0;
+  }
+  .tm-rounds-label { font-size: 0.82rem; color: var(--muted); flex: 1; }
+  .tm-rounds-input {
+    width: 70px; text-align: center; font-size: 1rem;
+    font-weight: 700; padding: 0.35rem 0.5rem; margin: 0;
+  }
+
+  /* ══════════════════════════════════════════════
+     SCREEN-BUZZ — Speed Round game screen
+  ══════════════════════════════════════════════ */
+  #screen-buzz {
+    background: #050508;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .buzz-top-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 68px; z-index: 15;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center;
+    justify-content: center; gap: 1rem;
+    pointer-events: all; padding: 0 1rem;
+  }
+  .buzz-round-label {
+    font-size: 0.75rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.9);
+  }
+  .buzz-round-label.final { color: #fbbf24; }
+  .buzz-round-fraction {
+    font-size: 0.62rem; color: rgba(255,255,255,0.4);
+    letter-spacing: 0.08em;
+  }
+  .buzz-scores {
+    position: absolute; top: 80px; left: 0; right: 0;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.4rem; padding: 0 1rem; z-index: 10;
+    pointer-events: none;
+  }
+  .buzz-score-chip {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 99px; padding: 3px 10px 3px 6px;
+    font-size: 0.72rem; font-weight: 600;
+    color: rgba(255,255,255,0.8);
+  }
+  .buzz-score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .buzz-score-pts { font-weight: 800; color: #fff; margin-left: 2px; }
+  .buzz-center {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1rem; z-index: 10; pointer-events: none;
+    padding: 0 1.5rem; text-align: center;
+  }
+  .buzz-status-label {
+    font-size: 1.1rem; font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: -0.01em;
+    text-shadow: 0 0 24px rgba(0,0,0,0.9);
+  }
+  .buzz-winner-name {
+    font-size: 2.2rem; font-weight: 900;
+    text-shadow: 0 0 30px currentColor;
+    letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .buzz-winner-sub {
+    font-size: 0.88rem; color: rgba(255,255,255,0.5);
+    font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  /* The big BUZZ button */
+  .buzz-btn-wrap {
+    z-index: 10; pointer-events: all;
+  }
+  .buzz-btn {
+    width: 180px; height: 180px; border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.3);
+    background: radial-gradient(circle at 38% 38%, #f43f5e, #be123c);
+    box-shadow: 0 0 60px rgba(244,63,94,0.5), 0 8px 32px rgba(0,0,0,0.6),
+                inset 0 3px 0 rgba(255,255,255,0.25);
+    font-size: 2.8rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.08s, box-shadow 0.08s;
+    animation: buzz-pulse 2.5s ease-in-out infinite;
+    user-select: none;
+  }
+  .buzz-btn:active {
+    transform: scale(0.93);
+    box-shadow: 0 0 30px rgba(244,63,94,0.3), 0 4px 16px rgba(0,0,0,0.6),
+                inset 0 2px 0 rgba(255,255,255,0.15);
+  }
+  .buzz-btn.locked {
+    background: radial-gradient(circle at 38% 38%, #374151, #1f2937);
+    box-shadow: 0 0 20px rgba(0,0,0,0.4), inset 0 3px 0 rgba(255,255,255,0.08);
+    animation: none; cursor: not-allowed; opacity: 0.4;
+    border-color: rgba(255,255,255,0.1);
+  }
+  @keyframes buzz-pulse {
+    0%,100% { box-shadow: 0 0 60px rgba(244,63,94,0.5), 0 8px 32px rgba(0,0,0,0.6), inset 0 3px 0 rgba(255,255,255,0.25); }
+    50%      { box-shadow: 0 0 90px rgba(244,63,94,0.7), 0 8px 32px rgba(0,0,0,0.6), inset 0 3px 0 rgba(255,255,255,0.25); }
+  }
+  .buzz-tap-label {
+    font-size: 0.82rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.5); margin-top: -0.25rem;
+  }
+  /* Down The Line order list */
+  .buzz-order-list {
+    display: flex; flex-direction: column; gap: 0.4rem;
+    width: 100%; max-width: 280px; z-index: 10;
+    pointer-events: none;
+  }
+  .buzz-order-row {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.8);
+  }
+  .buzz-order-row.active-row {
+    background: rgba(124,92,191,0.2);
+    border-color: rgba(124,92,191,0.4);
+    color: #fff;
+  }
+  .buzz-order-pos { font-size: 0.72rem; color: rgba(255,255,255,0.35); min-width: 18px; }
+  .buzz-order-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  /* Bottom bar — reset radio + host controls */
+  .buzz-bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 68px; z-index: 20;
+    background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center;
+    justify-content: center; gap: 1.5rem;
+    padding: 0 1rem; pointer-events: all;
+  }
+  .buzz-radio-group {
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.72rem; font-weight: 600;
+    color: rgba(255,255,255,0.5); text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .buzz-radio-opt {
+    display: flex; align-items: center; gap: 4px; cursor: pointer;
+  }
+  .buzz-radio-opt input { width: auto; margin: 0; accent-color: var(--accent); }
+  /* Host action buttons (shown only on host screen after buzz) */
+  .buzz-host-actions {
+    display: none;
+    position: absolute; bottom: 76px; left: 50%; transform: translateX(-50%);
+    flex-direction: row; gap: 0.6rem; z-index: 25;
+    pointer-events: all; width: min(320px, 90vw);
+  }
+  .buzz-host-actions.show { display: flex; }
+  .buzz-award-btn {
+    flex: 1; padding: 0.75rem 0.5rem;
+    background: #16a34a; border: none; border-radius: 12px;
+    color: #fff; font-size: 0.9rem; font-weight: 800;
+    cursor: pointer; letter-spacing: 0.03em;
+    box-shadow: 0 4px 16px rgba(22,163,74,0.4);
+  }
+  .buzz-award-btn:active { opacity: 0.85; }
+  .buzz-next-btn {
+    flex: 1; padding: 0.75rem 0.5rem;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: rgba(255,255,255,0.8);
+    font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  }
+  .buzz-next-btn:active { opacity: 0.7; }
+  .buzz-skip-btn {
+    padding: 0.75rem 0.85rem;
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; color: rgba(255,255,255,0.4);
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  }
+  /* Reset button (shown to winner in Player Resets mode, always to host) */
+  .buzz-reset-btn {
+    display: none;
+    position: absolute; bottom: 76px; left: 50%; transform: translateX(-50%);
+    z-index: 25; pointer-events: all;
+    padding: 0.75rem 2rem;
+    background: rgba(124,92,191,0.25);
+    border: 1px solid rgba(124,92,191,0.5);
+    border-radius: 12px; color: var(--accent-light);
+    font-size: 0.95rem; font-weight: 800; cursor: pointer;
+    letter-spacing: 0.04em;
+  }
+  .buzz-reset-btn.show { display: block; }
+  /* Speed Round complete screen */
+  .buzz-complete {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: #050508;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; padding: 2rem;
+  }
+  .buzz-complete.show { display: flex; }
+  .buzz-complete-icon { font-size: 4rem; }
+  .buzz-complete-title { font-size: 1.6rem; font-weight: 900; color: #fff; text-align: center; }
+  .buzz-complete-sub { font-size: 0.9rem; color: var(--muted); text-align: center; }
+  .buzz-final-scores {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    width: 100%; max-width: 280px; margin: 0.5rem 0;
+  }
+  .buzz-final-row {
+    display: flex; align-items: center; gap: 0.75rem;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 0.6rem 0.85rem;
+  }
+  .buzz-final-row.winner-row {
+    background: rgba(251,191,36,0.12); border-color: rgba(251,191,36,0.3);
+  }
+  .buzz-final-pos { font-size: 0.75rem; color: rgba(255,255,255,0.3); min-width: 20px; }
+  .buzz-final-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .buzz-final-name { flex: 1; font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.85); }
+  .buzz-final-pts { font-size: 1rem; font-weight: 800; color: #fbbf24; }
 </style>
 </head>
 <body>
@@ -2765,27 +3045,21 @@
   </button>
 </div>
 
-    <!-- Card 2: Pass Direction -->
-    <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;"">
-      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem;">Pass Direction <span style="color:#e05555;">*</span></div>
-      <div class="pass-dir-group">
-        <input type="radio" name="pass-direction" id="pd-cw" value="cw" class="pass-dir-option">
-        <label class="pass-dir-label" for="pd-cw">
-          <span class="dir-icon">↻</span>
-          <br>Left
-        </label>
-        <input type="radio" name="pass-direction" id="pd-both" value="both" class="pass-dir-option">
-        <label class="pass-dir-label" for="pd-both">
-          <span class="dir-icon">↔</span>
-          Both<br> Left & Right
-        </label>
-        <input type="radio" name="pass-direction" id="pd-ccw" value="ccw" class="pass-dir-option">
-        <label class="pass-dir-label" for="pd-ccw">
-          <span class="dir-icon">↺</span>
-          <br>Right
-        </label>
+    <!-- Card 2: Turn Mode -->
+    <div class="card" style="margin-bottom:1.75rem; padding-top:1rem; padding-bottom:1rem;">
+      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.65rem;">Turn Mode <span style="color:#e05555;">*</span></div>
+      <div class="turn-mode-btns">
+        <button class="turn-mode-btn" id="tm-btn-classic" onclick="selectTurnMode('classic')">
+          <span class="tm-icon">♟️</span>
+          Classic Turns
+        </button>
+        <button class="turn-mode-btn" id="tm-btn-speed" onclick="selectTurnMode('speed')">
+          <span class="tm-icon">⚡</span>
+          Speed Round
+        </button>
       </div>
-      <div class="pass-dir-required-note" id="pass-dir-note" style="display:none;color:#e05555;">⚠ Please choose a pass direction to continue.</div>
+      <div class="turn-mode-selection" id="tm-selection-text">Choose a turn mode to continue.</div>
+      <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;margin-top:0.25rem;">⚠ Please choose a turn mode.</div>
     </div>
 
     <!-- Card 3: Game Settings / Features -->
@@ -3095,7 +3369,82 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
-<!--  AWARDS: STANDBY OVERLAY (all players)      -->
+<!--  SCREEN: BUZZ (Speed Round game screen)     -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-buzz" class="screen">
+  <!-- Top bar: round indicator + exit -->
+  <div class="buzz-top-bar">
+    <button class="exit-btn" style="position:static; transform:none; font-size:0.72rem; padding:4px 10px; height:auto; width:auto; border-radius:20px; margin:0;" onclick="confirmLeave()">⬡ Exit</button>
+    <div style="flex:1; text-align:center;">
+      <div class="buzz-round-label" id="buzz-round-label">Round 1</div>
+      <div class="buzz-round-fraction" id="buzz-round-fraction">1/10</div>
+    </div>
+    <button class="settings-gear" style="position:static; transform:none; width:32px; height:32px; font-size:0.9rem; margin:0;" onclick="openSettingsOverlay()">⚙️</button>
+  </div>
+
+  <!-- Score chips row -->
+  <div class="buzz-scores" id="buzz-scores"></div>
+
+  <!-- Main content area -->
+  <div class="buzz-center" id="buzz-center">
+    <!-- Waiting phase: big buzz button -->
+    <div class="buzz-btn-wrap" id="buzz-btn-wrap">
+      <button class="buzz-btn" id="buzz-btn" onclick="playerBuzzIn()">🔔</button>
+    </div>
+    <div class="buzz-tap-label" id="buzz-tap-label">Tap to buzz in!</div>
+  </div>
+
+  <!-- Winner display (shown after buzz, hidden during waiting) -->
+  <div class="buzz-center" id="buzz-winner-display" style="display:none;">
+    <div class="buzz-status-label" id="buzz-status-label">Fastest Finger!</div>
+    <div class="buzz-winner-name" id="buzz-winner-name">Player</div>
+    <div class="buzz-winner-sub" id="buzz-winner-sub">buzzed in first</div>
+  </div>
+
+  <!-- Down The Line tap order list -->
+  <div class="buzz-order-list" id="buzz-order-list" style="display:none;"></div>
+
+  <!-- Host action buttons (award / no point / skip) -->
+  <div class="buzz-host-actions" id="buzz-host-actions">
+    <button class="buzz-award-btn" onclick="buzzAwardPoint()">✅ Award Point</button>
+    <button class="buzz-next-btn" id="buzz-next-btn" onclick="buzzNoPoint()">↩ No Point</button>
+    <button class="buzz-skip-btn" onclick="buzzSkipRound()">⏭ Skip</button>
+  </div>
+
+  <!-- Reset button (shown to host always, winner if Player Resets) -->
+  <button class="buzz-reset-btn" id="buzz-reset-btn" onclick="buzzReset()">🔁 Reset Round</button>
+
+  <!-- Bottom bar: reset radio buttons + host crown -->
+  <div class="buzz-bottom-bar">
+    <div id="host-crown-buzz" style="display:none;">
+      <button class="host-game-menu-btn" onclick="openHostCrownMenu()" style="width:36px;height:36px;font-size:1rem;">👑</button>
+    </div>
+    <div class="buzz-radio-group" id="buzz-radio-group">
+      <label class="buzz-radio-opt">
+        <input type="radio" name="buzz-reset-who" value="host" checked onchange="setBuzzResetMode('host')">
+        Host Resets
+      </label>
+      <label class="buzz-radio-opt">
+        <input type="radio" name="buzz-reset-who" value="player" onchange="setBuzzResetMode('player')">
+        Player Resets
+      </label>
+    </div>
+    <button class="host-manage-btn" id="host-manage-btn-buzz" style="position:static;transform:none;margin:0;" onclick="openManagePanel()">👥</button>
+  </div>
+</div>
+
+<!-- Speed Round complete screen -->
+<div class="buzz-complete" id="buzz-complete">
+  <div class="buzz-complete-icon">⚡</div>
+  <div class="buzz-complete-title">Speed Round Complete!</div>
+  <div class="buzz-complete-sub">Final Scores</div>
+  <div class="buzz-final-scores" id="buzz-final-scores"></div>
+  <div id="buzz-complete-host-btns" style="display:none; flex-direction:column; gap:0.75rem; width:100%; max-width:280px; margin-top:0.5rem;">
+    <button class="btn-primary" onclick="buzzPlayAgain()">🔄 Play Again</button>
+    <button class="btn-danger btn-sm" style="width:100%;" onclick="closeRoomFinal()">🚪 Close Room</button>
+  </div>
+  <div id="buzz-complete-wait" style="display:none; color:var(--muted); font-size:0.85rem;">Waiting for host...</div>
+</div>
 <!-- ═══════════════════════════════════════════ -->
 <div class="awards-standby" id="awards-standby">
   <div class="awards-standby-icon">🏆</div>
@@ -3611,6 +3960,80 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  TURN MODE — CLASSIC DIRECTION OVERLAY      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="turn-mode-overlay" id="classic-dir-overlay">
+  <div class="turn-mode-modal">
+    <div class="turn-mode-modal-title">♟️ Classic Turns</div>
+    <div class="turn-mode-modal-sub">Choose which direction turns pass around the table.</div>
+
+    <label class="tm-option" id="tmdir-cw" onclick="selectClassicDir('cw')">
+      <input type="radio" name="tm-direction" value="cw">
+      <span class="tm-opt-icon">↻</span>
+      <div class="tm-opt-info">
+        <div class="tm-opt-name">Left</div>
+        <div class="tm-opt-desc">Turns pass to the left (clockwise)</div>
+      </div>
+    </label>
+    <label class="tm-option" id="tmdir-both" onclick="selectClassicDir('both')">
+      <input type="radio" name="tm-direction" value="both">
+      <span class="tm-opt-icon">↔</span>
+      <div class="tm-opt-info">
+        <div class="tm-opt-name">Both — Left &amp; Right</div>
+        <div class="tm-opt-desc">Active player chooses which direction to pass each turn</div>
+      </div>
+    </label>
+    <label class="tm-option" id="tmdir-ccw" onclick="selectClassicDir('ccw')">
+      <input type="radio" name="tm-direction" value="ccw">
+      <span class="tm-opt-icon">↺</span>
+      <div class="tm-opt-info">
+        <div class="tm-opt-name">Right</div>
+        <div class="tm-opt-desc">Turns pass to the right (counter-clockwise)</div>
+      </div>
+    </label>
+
+    <button class="btn-primary" onclick="confirmClassicDir()" style="margin-top:0.25rem;">Confirm →</button>
+    <button class="btn-secondary btn-sm" onclick="closeClassicDirOverlay()" style="margin-top:0;">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TURN MODE — SPEED ROUND MODE OVERLAY       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="turn-mode-overlay" id="speed-mode-overlay">
+  <div class="turn-mode-modal">
+    <div class="turn-mode-modal-title">⚡ Speed Round</div>
+    <div class="turn-mode-modal-sub">Choose how players compete each round.</div>
+
+    <label class="tm-option" id="tmspeed-first" onclick="selectSpeedMode('firstToTap')">
+      <input type="radio" name="tm-speed-mode" value="firstToTap">
+      <span class="tm-opt-icon">🥇</span>
+      <div class="tm-opt-info">
+        <div class="tm-opt-name">1st To Tap</div>
+        <div class="tm-opt-desc">First player to buzz in becomes active. Host awards the point or resets.</div>
+      </div>
+    </label>
+    <label class="tm-option" id="tmspeed-line" onclick="selectSpeedMode('downTheLine')">
+      <input type="radio" name="tm-speed-mode" value="downTheLine">
+      <span class="tm-opt-icon">📋</span>
+      <div class="tm-opt-info">
+        <div class="tm-opt-name">Down The Line</div>
+        <div class="tm-opt-desc">All players tap in order. Host works down the list awarding to whoever gets it right.</div>
+      </div>
+    </label>
+
+    <div class="tm-rounds-row">
+      <span class="tm-rounds-label">Total Rounds</span>
+      <input type="number" id="speed-rounds-total" class="tm-rounds-input" value="10" min="1" max="99">
+    </div>
+
+    <div id="speed-mode-required" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;">⚠ Choose a speed mode first.</div>
+    <button class="btn-primary" onclick="confirmSpeedMode()" style="margin-top:0.25rem;">Confirm →</button>
+    <button class="btn-secondary btn-sm" onclick="closeSpeedModeOverlay()">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  RESUME GAME OVERLAY                        -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="resume-overlay">
@@ -3922,30 +4345,15 @@ let myName = '';
 // Remembers which room/player this device was last part of, so closing
 // the app (or stepping out for food) and coming back drops you right
 // back in without rejoining as a new player.
-// Sessions expire after 24 hours to match room expiry.
 const SK_SESSION_KEY = 'sk_session';
-const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-
 function saveSession() {
   if (!roomCode || !myId) return;
   try {
-    localStorage.setItem(SK_SESSION_KEY, JSON.stringify({
-      roomCode, myId, myName, isHost,
-      savedAt: Date.now()
-    }));
+    localStorage.setItem(SK_SESSION_KEY, JSON.stringify({ roomCode, myId, myName, isHost }));
   } catch {}
 }
 function loadSession() {
-  try {
-    const data = JSON.parse(localStorage.getItem(SK_SESSION_KEY) || 'null');
-    if (!data) return null;
-    // Reject sessions older than 24 hours
-    if (data.savedAt && Date.now() - data.savedAt > SESSION_TTL_MS) {
-      localStorage.removeItem(SK_SESSION_KEY);
-      return null;
-    }
-    return data;
-  } catch { return null; }
+  try { return JSON.parse(localStorage.getItem(SK_SESSION_KEY) || 'null'); } catch { return null; }
 }
 function clearSession() {
   try { localStorage.removeItem(SK_SESSION_KEY); } catch {}
@@ -4079,6 +4487,443 @@ function updateAccountButtonUI() {
   }
 }
 
+// ── TURN MODE SELECTION ─────────────────────────
+
+let _selectedClassicDir = '';
+let _selectedSpeedMode  = '';
+
+window.selectTurnMode = function(mode) {
+  document.getElementById('tm-btn-classic').classList.toggle('selected', mode === 'classic');
+  document.getElementById('tm-btn-speed').classList.toggle('selected', mode === 'speed');
+  document.getElementById('tm-required-note').style.display = 'none';
+  if (mode === 'classic') {
+    document.getElementById('classic-dir-overlay').classList.add('show');
+  } else {
+    document.getElementById('speed-mode-overlay').classList.add('show');
+  }
+};
+
+// ── Classic Direction picker
+window.selectClassicDir = function(dir) {
+  _selectedClassicDir = dir;
+  document.querySelectorAll('#classic-dir-overlay .tm-option').forEach(el => el.classList.remove('selected'));
+  const opt = document.getElementById('tmdir-' + dir);
+  if (opt) opt.classList.add('selected');
+  const radio = opt ? opt.querySelector('input') : null;
+  if (radio) radio.checked = true;
+};
+
+window.confirmClassicDir = function() {
+  if (!_selectedClassicDir) return;
+  turnMode = 'classic';
+  passDirection = _selectedClassicDir;
+  document.getElementById('classic-dir-overlay').classList.remove('show');
+  const labels = { cw: '↻ Left', both: '↔ Both', ccw: '↺ Right' };
+  document.getElementById('tm-selection-text').innerHTML =
+    `♟️ Classic Turns — <span>${labels[passDirection] || passDirection}</span>`;
+};
+
+window.closeClassicDirOverlay = function() {
+  document.getElementById('classic-dir-overlay').classList.remove('show');
+};
+
+// ── Speed Mode picker
+window.selectSpeedMode = function(mode) {
+  _selectedSpeedMode = mode;
+  document.querySelectorAll('#speed-mode-overlay .tm-option').forEach(el => el.classList.remove('selected'));
+  const opt = document.getElementById(mode === 'firstToTap' ? 'tmspeed-first' : 'tmspeed-line');
+  if (opt) opt.classList.add('selected');
+  const radio = opt ? opt.querySelector('input') : null;
+  if (radio) radio.checked = true;
+  document.getElementById('speed-mode-required').style.display = 'none';
+};
+
+window.confirmSpeedMode = function() {
+  if (!_selectedSpeedMode) {
+    document.getElementById('speed-mode-required').style.display = 'block';
+    return;
+  }
+  const rounds = parseInt(document.getElementById('speed-rounds-total').value) || 10;
+  turnMode = 'speedRound';
+  speedMode = _selectedSpeedMode;
+  speedRoundsTotal = rounds;
+  document.getElementById('speed-mode-overlay').classList.remove('show');
+  const modeLabels = { firstToTap: '🥇 1st To Tap', downTheLine: '📋 Down The Line' };
+  document.getElementById('tm-selection-text').innerHTML =
+    `⚡ Speed Round — <span>${modeLabels[speedMode]}</span> · ${rounds} rounds`;
+};
+
+window.closeSpeedModeOverlay = function() {
+  document.getElementById('speed-mode-overlay').classList.remove('show');
+};
+
+// ══════════════════════════════════════════════
+// SPEED ROUND GAME ENGINE
+// ══════════════════════════════════════════════
+
+// Start listening to the buzz node in Firebase for this room
+function startBuzzListener() {
+  if (buzzListener) return; // already listening
+  const buzzRef = ref(db, `rooms/${roomCode}/buzz`);
+  buzzListener = onValue(buzzRef, snap => {
+    if (!snap.exists()) return;
+    renderBuzzScreen(snap.val());
+  });
+}
+
+function stopBuzzListener() {
+  if (buzzListener) { buzzListener(); buzzListener = null; }
+}
+
+// Render the buzz screen from Firebase state
+function renderBuzzScreen(buzz) {
+  if (!buzz) return;
+  buzzPhase       = buzz.phase       || 'waiting';
+  buzzCurrentRound= buzz.currentRound|| 1;
+  buzzScores      = buzz.scores      || {};
+  buzzTapOrder    = buzz.tapOrder    || {};
+  buzzResetMode   = buzz.resetMode   || 'host';
+  buzzWinner      = buzz.winner      || null;
+  buzzDtlIndex    = buzz.dtlIndex    || 0;
+
+  // Build ordered tap list for Down The Line
+  buzzDtlOrder = Object.entries(buzzTapOrder)
+    .sort((a,b) => a[1] - b[1])
+    .map(e => e[0]);
+
+  const total = buzz.totalRounds || speedRoundsTotal;
+
+  // Round label
+  const isFinal = buzzCurrentRound >= total;
+  const rl = document.getElementById('buzz-round-label');
+  const rf = document.getElementById('buzz-round-fraction');
+  if (rl) { rl.textContent = isFinal ? 'Final Round' : `Round ${buzzCurrentRound}`; rl.classList.toggle('final', isFinal); }
+  if (rf) rf.textContent = `${buzzCurrentRound}/${total}`;
+
+  // Scores row
+  renderBuzzScoreChips();
+
+  // Sync reset radio
+  document.querySelectorAll('input[name="buzz-reset-who"]').forEach(r => {
+    r.checked = r.value === buzzResetMode;
+  });
+
+  // Host crown and manage buttons
+  const crownDiv = document.getElementById('host-crown-buzz');
+  const mngBtn   = document.getElementById('host-manage-btn-buzz');
+  if (crownDiv) crownDiv.style.display = isHost ? 'block' : 'none';
+  if (mngBtn)   mngBtn.classList.toggle('visible', isHost);
+
+  if (buzzPhase === 'complete') {
+    showBuzzComplete();
+    return;
+  }
+
+  showScreen('buzz');
+
+  if (buzzPhase === 'waiting') {
+    renderBuzzWaiting();
+  } else if (buzzPhase === 'locked') {
+    renderBuzzLocked();
+  } else if (buzzPhase === 'downtheline') {
+    renderBuzzDownTheLine();
+  }
+}
+
+function renderBuzzWaiting() {
+  // Reset button hidden, host actions hidden, winner display hidden
+  const btnWrap = document.getElementById('buzz-btn-wrap');
+  const tapLbl  = document.getElementById('buzz-tap-label');
+  const winDisp = document.getElementById('buzz-winner-display');
+  const ordList = document.getElementById('buzz-order-list');
+  const hostAct = document.getElementById('buzz-host-actions');
+  const rstBtn  = document.getElementById('buzz-reset-btn');
+  if (btnWrap) { btnWrap.style.display = 'flex'; }
+  if (tapLbl)  { tapLbl.style.display = ''; tapLbl.textContent = 'Tap to buzz in!'; }
+  if (winDisp) winDisp.style.display = 'none';
+  if (ordList) ordList.style.display = 'none';
+  if (hostAct) hostAct.classList.remove('show');
+  if (rstBtn)  rstBtn.classList.remove('show');
+  const buzzBtn = document.getElementById('buzz-btn');
+  if (buzzBtn) { buzzBtn.classList.remove('locked'); }
+}
+
+function renderBuzzLocked() {
+  // 1st To Tap: show winner, host sees award/no-point buttons
+  const btnWrap = document.getElementById('buzz-btn-wrap');
+  const tapLbl  = document.getElementById('buzz-tap-label');
+  const winDisp = document.getElementById('buzz-winner-display');
+  const ordList = document.getElementById('buzz-order-list');
+  const hostAct = document.getElementById('buzz-host-actions');
+  const rstBtn  = document.getElementById('buzz-reset-btn');
+
+  if (btnWrap) btnWrap.style.display = 'none';
+  if (tapLbl)  tapLbl.style.display = 'none';
+  if (ordList) ordList.style.display = 'none';
+
+  // Winner info
+  if (winDisp && buzzWinner) {
+    winDisp.style.display = 'flex';
+    const winner = localPlayers.find(p => p.id === buzzWinner);
+    const nameEl = document.getElementById('buzz-winner-name');
+    const subEl  = document.getElementById('buzz-winner-sub');
+    const statEl = document.getElementById('buzz-status-label');
+    if (nameEl) { nameEl.textContent = winner ? winner.name : '?'; nameEl.style.color = winner?.color || '#f43f5e'; }
+    if (subEl)  subEl.textContent = 'buzzed in first!';
+    if (statEl) statEl.textContent = buzzWinner === myId ? '⚡ You Were The Fastest!' : 'Fastest Finger!';
+  }
+
+  // Host actions
+  if (isHost) {
+    if (hostAct) hostAct.classList.add('show');
+    const nextBtn = document.getElementById('buzz-next-btn');
+    if (nextBtn) nextBtn.textContent = '↩ No Point';
+  } else {
+    if (hostAct) hostAct.classList.remove('show');
+  }
+  if (rstBtn) rstBtn.classList.remove('show');
+}
+
+function renderBuzzDownTheLine() {
+  const btnWrap = document.getElementById('buzz-btn-wrap');
+  const tapLbl  = document.getElementById('buzz-tap-label');
+  const winDisp = document.getElementById('buzz-winner-display');
+  const ordList = document.getElementById('buzz-order-list');
+  const hostAct = document.getElementById('buzz-host-actions');
+  const rstBtn  = document.getElementById('buzz-reset-btn');
+
+  if (btnWrap) btnWrap.style.display = 'none';
+  if (tapLbl)  tapLbl.style.display = 'none';
+  if (winDisp) winDisp.style.display = 'none';
+  if (rstBtn)  rstBtn.classList.remove('show');
+
+  // Show ordered list
+  if (ordList) {
+    ordList.style.display = 'flex';
+    ordList.innerHTML = '';
+    buzzDtlOrder.forEach((uid, i) => {
+      const p = localPlayers.find(pl => pl.id === uid);
+      const row = document.createElement('div');
+      row.className = 'buzz-order-row' + (i === buzzDtlIndex ? ' active-row' : '');
+      row.innerHTML = `<span class="buzz-order-pos">#${i+1}</span><span class="buzz-order-dot" style="background:${p?.color||'#888'}"></span><span style="flex:1">${p?.name||'?'}</span>`;
+      ordList.appendChild(row);
+    });
+  }
+
+  // Active candidate info
+  const activeUid = buzzDtlOrder[buzzDtlIndex];
+  if (activeUid) {
+    const activeP = localPlayers.find(p => p.id === activeUid);
+    const statEl = document.getElementById('buzz-status-label');
+    const nameEl = document.getElementById('buzz-winner-name');
+    const subEl  = document.getElementById('buzz-winner-sub');
+    if (winDisp) winDisp.style.display = 'flex';
+    if (statEl) statEl.textContent = activeUid === myId ? '⚡ You Were The Fastest!' : `Player #${buzzDtlIndex+1}`;
+    if (nameEl) { nameEl.textContent = activeP?.name || '?'; nameEl.style.color = activeP?.color || '#f43f5e'; }
+    if (subEl)  subEl.textContent = 'is up — did they get it right?';
+  }
+
+  // Host buttons
+  if (isHost && hostAct) {
+    hostAct.classList.add('show');
+    const nextBtn = document.getElementById('buzz-next-btn');
+    const hasNext = buzzDtlIndex < buzzDtlOrder.length - 1;
+    if (nextBtn) nextBtn.textContent = hasNext ? '⬇ Next Player' : '↩ No Winner';
+  } else if (hostAct) {
+    hostAct.classList.remove('show');
+  }
+}
+
+function renderBuzzScoreChips() {
+  const container = document.getElementById('buzz-scores');
+  if (!container) return;
+  container.innerHTML = '';
+  localPlayers.forEach(p => {
+    const pts = buzzScores[p.id] || 0;
+    const chip = document.createElement('div');
+    chip.className = 'buzz-score-chip';
+    chip.innerHTML = `<span class="buzz-score-dot" style="background:${p.color||'#888'}"></span>${p.name}<span class="buzz-score-pts">${pts}</span>`;
+    container.appendChild(chip);
+  });
+}
+
+// Player taps the buzz button
+window.playerBuzzIn = async function() {
+  if (!db || !roomCode) return;
+  if (buzzPhase !== 'waiting') return;
+
+  const ts = Date.now();
+  const isModeDownTheLine = speedMode === 'downTheLine';
+
+  if (isModeDownTheLine) {
+    // In DTL mode, just record tap time — don't lock until everyone has tapped
+    // Use a transaction-safe write — only write if this uid not already present
+    const myTapRef = ref(db, `rooms/${roomCode}/buzz/tapOrder/${myId}`);
+    const existing = await get(myTapRef);
+    if (existing.exists()) return; // already tapped
+    await set(myTapRef, ts);
+
+    // Check if all non-knocked-out players have tapped
+    const allTapped = localPlayers
+      .filter(p => !p.knockedOut)
+      .every(p => buzzTapOrder[p.id] !== undefined || p.id === myId);
+
+    if (allTapped) {
+      // Host transitions phase to downtheline
+      if (isHost) {
+        await update(ref(db), {
+          [`rooms/${roomCode}/buzz/phase`]: 'downtheline',
+          [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
+          [`rooms/${roomCode}/lastActivity`]: Date.now()
+        });
+      }
+    } else {
+      // Disable this player's button after tapping — wait for others
+      const btn = document.getElementById('buzz-btn');
+      if (btn) { btn.classList.add('locked'); }
+      const lbl = document.getElementById('buzz-tap-label');
+      if (lbl) lbl.textContent = 'Tapped! Waiting for others...';
+    }
+  } else {
+    // 1st To Tap: first write wins — use set with condition
+    const winnerRef = ref(db, `rooms/${roomCode}/buzz/winner`);
+    const snap = await get(winnerRef);
+    if (snap.exists()) return; // someone else already won
+
+    await update(ref(db), {
+      [`rooms/${roomCode}/buzz/winner`]: myId,
+      [`rooms/${roomCode}/buzz/phase`]: 'locked',
+      [`rooms/${roomCode}/buzz/tapOrder/${myId}`]: ts,
+      [`rooms/${roomCode}/lastActivity`]: Date.now()
+    });
+  }
+};
+
+// Host: award a point to the current active candidate
+window.buzzAwardPoint = async function() {
+  if (!isHost || !db || !roomCode) return;
+  const winnerUid = speedMode === 'downTheLine' ? buzzDtlOrder[buzzDtlIndex] : buzzWinner;
+  if (!winnerUid) return;
+
+  const newScores = { ...buzzScores };
+  newScores[winnerUid] = (newScores[winnerUid] || 0) + 1;
+  const total = speedRoundsTotal;
+  const nextRound = buzzCurrentRound + 1;
+  const isComplete = nextRound > total;
+
+  await update(ref(db), {
+    [`rooms/${roomCode}/buzz/scores`]: newScores,
+    [`rooms/${roomCode}/buzz/phase`]: isComplete ? 'complete' : 'waiting',
+    [`rooms/${roomCode}/buzz/winner`]: null,
+    [`rooms/${roomCode}/buzz/tapOrder`]: {},
+    [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
+    [`rooms/${roomCode}/buzz/currentRound`]: isComplete ? buzzCurrentRound : nextRound,
+    [`rooms/${roomCode}/lastActivity`]: Date.now()
+  });
+};
+
+// Host: no point — either go to next DTL player or reset
+window.buzzNoPoint = async function() {
+  if (!isHost || !db || !roomCode) return;
+
+  if (speedMode === 'downTheLine') {
+    const hasNext = buzzDtlIndex < buzzDtlOrder.length - 1;
+    if (hasNext) {
+      await update(ref(db), {
+        [`rooms/${roomCode}/buzz/dtlIndex`]: buzzDtlIndex + 1,
+        [`rooms/${roomCode}/lastActivity`]: Date.now()
+      });
+    } else {
+      // Nobody won — reset round without incrementing round counter
+      await buzzResetRound(false);
+    }
+  } else {
+    // 1st To Tap — no point, reset
+    await buzzResetRound(false);
+  }
+};
+
+// Host or winner: skip round (no point, advance round number)
+window.buzzSkipRound = async function() {
+  if (!isHost || !db || !roomCode) return;
+  await buzzResetRound(true);
+};
+
+// Internal: reset to next round. advanceRound=true increments counter
+async function buzzResetRound(advanceRound) {
+  const total = speedRoundsTotal;
+  const nextRound = advanceRound ? buzzCurrentRound + 1 : buzzCurrentRound;
+  const isComplete = nextRound > total;
+  await update(ref(db), {
+    [`rooms/${roomCode}/buzz/phase`]: isComplete ? 'complete' : 'waiting',
+    [`rooms/${roomCode}/buzz/winner`]: null,
+    [`rooms/${roomCode}/buzz/tapOrder`]: {},
+    [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
+    [`rooms/${roomCode}/buzz/currentRound`]: isComplete ? buzzCurrentRound : nextRound,
+    [`rooms/${roomCode}/lastActivity`]: Date.now()
+  });
+}
+
+// Reset button (shown to host always, winner if Player Resets mode)
+window.buzzReset = async function() {
+  if (!db || !roomCode) return;
+  const canReset = isHost || (buzzResetMode === 'player' && buzzWinner === myId);
+  if (!canReset) return;
+  await buzzResetRound(true);
+};
+
+// Host changes reset mode via radio button
+window.setBuzzResetMode = async function(mode) {
+  buzzResetMode = mode;
+  if (!isHost || !db || !roomCode) return;
+  await update(ref(db), { [`rooms/${roomCode}/buzz/resetMode`]: mode });
+};
+
+// Show the Speed Round complete screen
+function showBuzzComplete() {
+  stopBuzzListener();
+  const screen = document.getElementById('buzz-complete');
+  if (!screen) return;
+
+  // Build final scores sorted by points desc
+  const sorted = [...localPlayers].sort((a,b) =>
+    (buzzScores[b.id]||0) - (buzzScores[a.id]||0)
+  );
+  const container = document.getElementById('buzz-final-scores');
+  if (container) {
+    container.innerHTML = '';
+    sorted.forEach((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'buzz-final-row' + (i === 0 ? ' winner-row' : '');
+      row.innerHTML = `<span class="buzz-final-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`}</span><span class="buzz-final-dot" style="background:${p.color||'#888'}"></span><span class="buzz-final-name">${p.name}</span><span class="buzz-final-pts">${buzzScores[p.id]||0} pts</span>`;
+      container.appendChild(row);
+    });
+  }
+
+  const hostBtns = document.getElementById('buzz-complete-host-btns');
+  const waitMsg  = document.getElementById('buzz-complete-wait');
+  if (hostBtns) hostBtns.style.display = isHost ? 'flex' : 'none';
+  if (waitMsg)  waitMsg.style.display  = isHost ? 'none' : 'block';
+
+  screen.classList.add('show');
+}
+
+window.buzzPlayAgain = async function() {
+  if (!isHost || !db || !roomCode) return;
+  // Reset all buzz state for a new game
+  await update(ref(db), {
+    [`rooms/${roomCode}/buzz/phase`]: 'waiting',
+    [`rooms/${roomCode}/buzz/currentRound`]: 1,
+    [`rooms/${roomCode}/buzz/scores`]: {},
+    [`rooms/${roomCode}/buzz/winner`]: null,
+    [`rooms/${roomCode}/buzz/tapOrder`]: {},
+    [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
+    [`rooms/${roomCode}/lastActivity`]: Date.now()
+  });
+  const screen = document.getElementById('buzz-complete');
+  if (screen) screen.classList.remove('show');
+};
+
 // ── FEATURE STATE ──────────────────────────────
 let featureNudgeEnabled = false;
 let featureAwardsEnabled = false;
@@ -4091,6 +4936,20 @@ let currentRound = 1;    // current round, stored in Firebase as rooms/{code}/cu
 let passDirection = '';         // 'ccw' | 'both' | 'cw' — mandatory before room creation
 let ceremonyAborted = false;    // set by host Skip Awards button
 let featureTimersEnabled = false;
+
+// ── SPEED ROUND state ─────────────────────────
+let turnMode = 'classic';       // 'classic' | 'speedRound'
+let speedMode = 'firstToTap';   // 'firstToTap' | 'downTheLine'
+let speedRoundsTotal = 10;
+let buzzCurrentRound = 1;
+let buzzPhase = 'waiting';      // 'waiting'|'locked'|'downtheline'|'complete'
+let buzzScores = {};            // { uid: points }
+let buzzTapOrder = {};          // { uid: timestamp }
+let buzzWinner = null;          // uid of current round candidate
+let buzzDtlIndex = 0;           // Down The Line: current position
+let buzzDtlOrder = [];          // ordered uids by tap time
+let buzzResetMode = 'host';     // 'host' | 'player'
+let buzzListener = null;        // Firebase realtime listener for buzz node
 
 // Timer config (read from Firebase)
 let timerCfg = {
@@ -4135,6 +4994,12 @@ function showScreen(id) {
     const dndCf = document.getElementById('dnd-confirm-overlay');
     if (dndOv) dndOv.style.display = 'none';
     if (dndCf) dndCf.style.display = 'none';
+  }
+  // Stop buzz listener when leaving game screens entirely
+  if (id !== 'buzz' && id !== 'active' && id !== 'waiting') {
+    stopBuzzListener();
+    const buzzComplete = document.getElementById('buzz-complete');
+    if (buzzComplete) buzzComplete.classList.remove('show');
   }
 }
 
@@ -4321,10 +5186,20 @@ window.showCreateRoom = function() {
   featureStatusEffectsEnabled = false;
   featureDndEnabled    = false;
   featureTimersEnabled = false;
+  featureRoundsEnabled = false;
+  // Reset turn mode
+  turnMode = '';
   passDirection = '';
-  // Uncheck pass direction radios
-  document.querySelectorAll('input[name="pass-direction"]').forEach(r => r.checked = false);
-  document.getElementById('pass-dir-note').style.display = 'none';
+  speedMode = 'firstToTap';
+  speedRoundsTotal = 10;
+  const tmClassic = document.getElementById('tm-btn-classic');
+  const tmSpeed   = document.getElementById('tm-btn-speed');
+  if (tmClassic) tmClassic.classList.remove('selected');
+  if (tmSpeed)   tmSpeed.classList.remove('selected');
+  const tmTxt = document.getElementById('tm-selection-text');
+  if (tmTxt) tmTxt.innerHTML = 'Choose a turn mode to continue.';
+  const tmNote = document.getElementById('tm-required-note');
+  if (tmNote) tmNote.style.display = 'none';
   ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle','feature-status-toggle','feature-dnd-toggle','feature-rounds-toggle'].forEach(id => {
     const el = document.getElementById(id); if (el) el.checked = false;
   });
@@ -5098,39 +5973,10 @@ function adjustBrightness(hex, factor) {
 
 // ── HOST GAME MENU ──────────────────────────────
 let hostMenuOpen = { active: false, wait: false };
-// ── ROOM EXPIRY WARNING ──────────────────────
-// Shows a warning in the crown menu when the room is within 3 hours of the
-// 24-hour expiry. Encourages the host to save before the room is cleaned up.
-const ROOM_TTL_MS    = 24 * 60 * 60 * 1000; // 24 hours
-const EXPIRY_WARN_MS =  3 * 60 * 60 * 1000; // warn at 3 hours remaining
-
-async function checkRoomExpiryWarning() {
-  const banner     = document.getElementById('expiry-warning');
-  const bannerText = document.getElementById('expiry-warning-text');
-  if (!banner || !roomCode || !db) return;
-  try {
-    const snap = await get(ref(db, `rooms/${roomCode}/lastActivity`));
-    if (!snap.exists()) return;
-    const lastActivity = snap.val();
-    const ageMs        = Date.now() - lastActivity;
-    const remainingMs  = ROOM_TTL_MS - ageMs;
-    if (remainingMs <= EXPIRY_WARN_MS && remainingMs > 0) {
-      const hrs  = Math.floor(remainingMs / (60 * 60 * 1000));
-      const mins = Math.floor((remainingMs % (60 * 60 * 1000)) / 60000);
-      const timeStr = hrs > 0 ? `${hrs}h ${mins}m` : `${mins} minutes`;
-      bannerText.textContent = `This room expires in ${timeStr}. Save your game to keep it permanently.`;
-      banner.classList.add('show');
-    } else {
-      banner.classList.remove('show');
-    }
-  } catch { /* non-critical */ }
-}
-
 window.openHostCrownMenu = function() {
   const codeEl = document.getElementById('host-crown-room-code');
   if (codeEl) codeEl.textContent = roomCode || '----';
   document.getElementById('host-crown-overlay').classList.add('show');
-  checkRoomExpiryWarning();
 };
 
 window.closeHostCrownMenu = function() {
@@ -6511,15 +7357,13 @@ window.createRoom = async function() {
   const name = document.getElementById('host-name').value.trim();
   if (!name) { status('create-status','Enter your name.','error'); return; }
 
-  // Validate pass direction — mandatory
-  const dirSelected = document.querySelector('input[name="pass-direction"]:checked');
-  if (!dirSelected) {
-    document.getElementById('pass-dir-note').style.display = 'block';
-    status('create-status','Choose a pass direction to continue.','error');
+  // Validate turn mode — mandatory
+  if (!turnMode || (turnMode === 'classic' && !passDirection)) {
+    document.getElementById('tm-required-note').style.display = 'block';
+    status('create-status','Choose a turn mode to continue.','error');
     return;
   }
-  document.getElementById('pass-dir-note').style.display = 'none';
-  passDirection = dirSelected.value;
+  document.getElementById('tm-required-note').style.display = 'none';
 
   isHost = true;
   myId = uid();
@@ -6537,7 +7381,6 @@ window.createRoom = async function() {
     host: myId,
     status: 'lobby',
     activePlayerIndex: 0,
-    createdAt: Date.now(),
     lastActivity: Date.now(),
     features: {
       passDirection,
@@ -6560,9 +7403,18 @@ window.createRoom = async function() {
       timerCountdownSecs:   (parseInt(document.getElementById('timer-countdown-min').value)||0)*60
                           + (parseInt(document.getElementById('timer-countdown-sec').value)||30),
       rounds:               featureRoundsEnabled,
-      roundsTotal:          featureRoundsEnabled ? (parseInt(document.getElementById('rounds-total').value) || 3) : 0
+      roundsTotal:          featureRoundsEnabled ? (parseInt(document.getElementById('rounds-total').value) || 3) : 0,
+      turnMode:             turnMode,
+      speedMode:            turnMode === 'speedRound' ? speedMode : '',
+      speedRoundsTotal:     turnMode === 'speedRound' ? speedRoundsTotal : 0
     },
     currentRound: featureRoundsEnabled ? 1 : 0,
+    // Speed Round initial state
+    buzzCurrentRound: turnMode === 'speedRound' ? 1 : 0,
+    buzzPhase: turnMode === 'speedRound' ? 'waiting' : '',
+    buzzScores: {},
+    buzzTapOrder: {},
+    buzzResetMode: 'host',
     players: {
       [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
     }
@@ -6729,12 +7581,16 @@ window.startGame = async function() {
   const roomRef = ref(db, `rooms/${roomCode}`);
   const snap = await get(roomRef);
   if (!snap.exists()) return;
-  const players = snap.val().players || {};
+  const roomData = snap.val();
+  const players = roomData.players || {};
   localPlayers = buildOrderedPlayers(players);
 
   const firstIdx = randomFirstPlayer
     ? Math.floor(Math.random() * localPlayers.length)
     : 0;
+
+  const roomFeatures = roomData.features || {};
+  const isBuzz = (roomFeatures.turnMode || 'classic') === 'speedRound';
 
   // Save final order
   const updates = {};
@@ -6743,6 +7599,21 @@ window.startGame = async function() {
   updates[`rooms/${roomCode}/activePlayerIndex`] = firstIdx;
   updates[`rooms/${roomCode}/previousPlayerId`] = null;
   updates[`rooms/${roomCode}/previousPlayerIndex`] = null;
+
+  // Initialize Speed Round buzz node
+  if (isBuzz) {
+    updates[`rooms/${roomCode}/buzz`] = {
+      phase: 'waiting',
+      currentRound: 1,
+      totalRounds: roomFeatures.speedRoundsTotal || 10,
+      scores: {},
+      tapOrder: {},
+      winner: null,
+      dtlIndex: 0,
+      resetMode: 'host'
+    };
+  }
+
   await update(ref(db), updates);
 };
 
@@ -6801,7 +7672,18 @@ function listenGameState() {
     roundsTotal                   = roomFeatures.roundsTotal || 3;
     currentRound                  = room.currentRound || 1;
     passDirection = roomFeatures.passDirection || 'both';
+    turnMode      = roomFeatures.turnMode      || 'classic';
+    speedMode     = roomFeatures.speedMode     || 'firstToTap';
+    speedRoundsTotal = roomFeatures.speedRoundsTotal || 10;
     renderRoundIndicator(currentRound, roundsTotal);
+
+    // Speed Round mode — hand off to buzz listener and stop classic rendering
+    if (turnMode === 'speedRound') {
+      startBuzzListener();
+      if (room.buzz) renderBuzzScreen(room.buzz);
+      return;
+    }
+    stopBuzzListener();
     if (featureTimersEnabled) {
       timerCfg = {
         turn:             !!roomFeatures.timerTurnOn,
@@ -7759,10 +8641,6 @@ window.dismissInstall = function() {
     <div style="text-align:center; padding-bottom:0.75rem; border-bottom:1px solid var(--border); margin-bottom:0.75rem;">
       <div style="font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Room Code</div>
       <div style="font-family:'Courier New',monospace; font-size:1.5rem; font-weight:800; color:var(--accent-light); letter-spacing:0.15em;" id="host-crown-room-code">----</div>
-    </div>
-    <div class="expiry-warning" id="expiry-warning">
-      <strong>⚠️ Room expires soon</strong>
-      <span id="expiry-warning-text">Save your game to keep it permanently.</span>
     </div>
     <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); openMidGameSettings()">⚙️ Room Settings</button>
     <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); openToolsOverlay()">🧰 Tools</button>
