@@ -1251,69 +1251,6 @@
   .lap-row .lap-num { color: var(--muted); }
 
   /* ── CALCULATOR TOOL OVERLAY ── */
-  .calc-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85); z-index: 9650;
-    align-items: center; justify-content: center;
-    padding: 1rem;
-  }
-  .calc-overlay.show { display: flex; }
-  .calc-modal {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 18px; padding: 1.5rem 1.25rem;
-    width: min(300px, 88vw);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
-    display: flex; flex-direction: column; gap: 0.5rem;
-  }
-  .calc-modal-title {
-    font-size: 1rem; font-weight: 800; color: var(--text);
-    text-align: center; margin-bottom: 0.1rem;
-  }
-  .calc-display {
-    font-family: 'Courier New', monospace;
-    font-size: 2.4rem; font-weight: 800; color: var(--accent-light);
-    text-align: right; background: #1e1e2e; border: 1px solid var(--border);
-    border-radius: 12px; padding: 0.7rem 0.8rem; min-height: 64px;
-    overflow-x: auto; white-space: nowrap;
-  }
-  body.light-mode .calc-display { background: #f0f0fb; }
-  .calc-sub {
-    font-family: 'Courier New', monospace;
-    font-size: 0.8rem; color: var(--muted);
-    text-align: right; min-height: 1.2em; padding: 0 0.3rem;
-  }
-  .calc-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.4rem;
-  }
-  .calc-btn {
-    padding: 0.9rem 0.3rem; font-size: 1.2rem; font-weight: 700;
-    border-radius: 12px; border: 1px solid var(--border);
-    cursor: pointer; transition: border-color 0.1s, background 0.1s, transform 0.08s;
-    text-align: center; user-select: none;
-  }
-  .calc-btn:active { transform: scale(0.94); }
-  .calc-btn-num {
-    background: #1e1e2e; color: var(--text);
-  }
-  body.light-mode .calc-btn-num { background: #f0f0fb; }
-  .calc-btn-num:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
-  .calc-btn-op {
-    background: rgba(124,92,191,0.2); color: var(--accent-light);
-  }
-  body.light-mode .calc-btn-op { background: rgba(124,92,191,0.1); }
-  .calc-btn-op:hover { border-color: var(--accent); background: rgba(124,92,191,0.3); }
-  .calc-btn-zero {
-    grid-column: span 2;
-    background: #1e1e2e; color: var(--text);
-  }
-  body.light-mode .calc-btn-zero { background: #f0f0fb; }
-  .calc-btn-zero:hover { border-color: var(--accent); background: rgba(124,92,191,0.12); }
-  .calc-btn-eq {
-    background: var(--accent); color: #fff; border-color: var(--accent);
-  }
-  .calc-btn-eq:hover { background: var(--accent-light); border-color: var(--accent-light); }
 
   .info-modal {
     background: var(--surface);
@@ -2091,7 +2028,7 @@
   @keyframes bit-glow { 0%,100%{text-shadow:3px 3px 0 #7c00aa,0 0 12px rgba(255,68,255,0.4);} 50%{text-shadow:3px 3px 0 #7c00aa,0 0 24px rgba(255,68,255,0.8);} }
   body.theme-8bit .tagline { color:#9966cc; text-transform:uppercase; letter-spacing:0.15em; font-size:0.7rem !important; }
   body.theme-8bit .room-code { color:#ff44ff; text-shadow:2px 2px 0 #7c00aa; }
-  body.theme-8bit .manage-card, body.theme-8bit .tools-modal, body.theme-8bit .info-modal, body.theme-8bit .feature-settings-modal, body.theme-8bit .color-picker-modal, body.theme-8bit .rng-modal, body.theme-8bit .picker-modal, body.theme-8bit .timer-modal, body.theme-8bit .calc-modal { background:#0d0208 !important; border:3px solid var(--accent) !important; box-shadow:6px 6px 0 #000 !important; }
+  body.theme-8bit .manage-card, body.theme-8bit .tools-modal, body.theme-8bit .info-modal, body.theme-8bit .feature-settings-modal, body.theme-8bit .color-picker-modal, body.theme-8bit .rng-modal, body.theme-8bit .picker-modal, body.theme-8bit .timer-modal { background:#0d0208 !important; border:3px solid var(--accent) !important; box-shadow:6px 6px 0 #000 !important; }
   body.theme-8bit .host-menu-item { border-bottom:1px solid var(--border) !important; color:var(--accent-light) !important; text-transform:uppercase; font-size:0.8rem !important; }
   body.theme-8bit .player-item, body.theme-8bit .manage-player-item { background:#1a0a1e !important; border:2px solid var(--border) !important; box-shadow:2px 2px 0 #000; }
   body.theme-8bit .tool-list-btn { background:#1a0a1e !important; border:2px solid var(--border) !important; box-shadow:3px 3px 0 #000; color:var(--accent-light) !important; text-transform:uppercase; }
@@ -2134,7 +2071,7 @@
   @keyframes cp-logo-pulse { 0%,100%{text-shadow:0 0 10px #00ffe7,0 0 30px rgba(0,255,231,0.4),2px 2px 0 rgba(255,0,60,0.5);} 50%{text-shadow:0 0 20px #00ffe7,0 0 60px rgba(0,255,231,0.6),2px 2px 0 rgba(255,0,60,0.7);} }
   body.theme-cyberpunk .tagline { color:#ff4d79; text-transform:uppercase; letter-spacing:0.18em; font-size:0.7rem !important; }
   body.theme-cyberpunk .room-code { color:#00ffe7; text-shadow:0 0 14px rgba(0,255,231,0.7); }
-  body.theme-cyberpunk .manage-card, body.theme-cyberpunk .tools-modal, body.theme-cyberpunk .info-modal, body.theme-cyberpunk .feature-settings-modal, body.theme-cyberpunk .color-picker-modal, body.theme-cyberpunk .rng-modal, body.theme-cyberpunk .picker-modal, body.theme-cyberpunk .timer-modal, body.theme-cyberpunk .calc-modal { background:rgba(0,8,20,0.98) !important; border:1px solid #00ffe7 !important; box-shadow:0 0 24px rgba(0,255,231,0.2) !important; }
+  body.theme-cyberpunk .manage-card, body.theme-cyberpunk .tools-modal, body.theme-cyberpunk .info-modal, body.theme-cyberpunk .feature-settings-modal, body.theme-cyberpunk .color-picker-modal, body.theme-cyberpunk .rng-modal, body.theme-cyberpunk .picker-modal, body.theme-cyberpunk .timer-modal { background:rgba(0,8,20,0.98) !important; border:1px solid #00ffe7 !important; box-shadow:0 0 24px rgba(0,255,231,0.2) !important; }
   body.theme-cyberpunk .host-menu-item { border-bottom:1px solid rgba(0,255,231,0.2) !important; color:#00ffe7 !important; text-transform:uppercase; }
   body.theme-cyberpunk .player-item, body.theme-cyberpunk .manage-player-item { background:rgba(0,8,20,0.8) !important; border:1px solid rgba(0,255,231,0.3) !important; }
   body.theme-cyberpunk .tool-list-btn { background:rgba(0,8,20,0.6) !important; border:1px solid rgba(0,255,231,0.35) !important; color:#00ffe7 !important; text-transform:uppercase; }
@@ -2180,7 +2117,7 @@
   @keyframes fantasy-glow { 0%,100%{text-shadow:0 2px 8px rgba(200,148,42,0.4),0 0 20px rgba(200,148,42,0.15);} 50%{text-shadow:0 2px 8px rgba(200,148,42,0.6),0 0 40px rgba(200,148,42,0.3);} }
   body.theme-fantasy .tagline { color:#8a7050; font-style:italic; letter-spacing:0.1em; font-size:0.85rem !important; }
   body.theme-fantasy .room-code { color:#f0c060; text-shadow:0 2px 12px rgba(200,148,42,0.5); }
-  body.theme-fantasy .manage-card, body.theme-fantasy .tools-modal, body.theme-fantasy .info-modal, body.theme-fantasy .feature-settings-modal, body.theme-fantasy .color-picker-modal, body.theme-fantasy .rng-modal, body.theme-fantasy .picker-modal, body.theme-fantasy .timer-modal, body.theme-fantasy .calc-modal { background:linear-gradient(160deg,#1c1308,#221808) !important; border:2px solid #8b6914 !important; box-shadow:0 8px 40px rgba(0,0,0,0.7),inset 0 0 20px rgba(200,148,42,0.04) !important; }
+  body.theme-fantasy .manage-card, body.theme-fantasy .tools-modal, body.theme-fantasy .info-modal, body.theme-fantasy .feature-settings-modal, body.theme-fantasy .color-picker-modal, body.theme-fantasy .rng-modal, body.theme-fantasy .picker-modal, body.theme-fantasy .timer-modal { background:linear-gradient(160deg,#1c1308,#221808) !important; border:2px solid #8b6914 !important; box-shadow:0 8px 40px rgba(0,0,0,0.7),inset 0 0 20px rgba(200,148,42,0.04) !important; }
   body.theme-fantasy .host-menu-item { border-bottom:1px solid rgba(139,105,20,0.4) !important; color:#f0c060 !important; font-style:italic; }
   body.theme-fantasy .player-item, body.theme-fantasy .manage-player-item { background:rgba(14,10,4,0.6) !important; border:1px solid rgba(139,105,20,0.5) !important; }
   body.theme-fantasy .tool-list-btn { background:rgba(14,10,4,0.5) !important; border:1px solid rgba(139,105,20,0.5) !important; color:#f0c060 !important; font-style:italic; }
@@ -2222,7 +2159,7 @@
   @keyframes galaxy-pulse { 0%,100%{text-shadow:0 0 16px rgba(127,0,255,0.5),0 0 30px rgba(127,0,255,0.2);} 50%{text-shadow:0 0 24px rgba(127,0,255,0.7),0 0 50px rgba(127,0,255,0.35);} }
   body.theme-galaxy .tagline { color:#8866aa; letter-spacing:0.05em; font-size:0.82rem !important; }
   body.theme-galaxy .room-code { color:#b366ff; text-shadow:0 0 16px rgba(127,0,255,0.5); }
-  body.theme-galaxy .manage-card, body.theme-galaxy .tools-modal, body.theme-galaxy .info-modal, body.theme-galaxy .feature-settings-modal, body.theme-galaxy .color-picker-modal, body.theme-galaxy .rng-modal, body.theme-galaxy .picker-modal, body.theme-galaxy .timer-modal, body.theme-galaxy .calc-modal { background:linear-gradient(160deg,#0c0020,#100028) !important; border:1px solid rgba(127,0,255,0.4) !important; box-shadow:0 8px 40px rgba(127,0,255,0.15) !important; }
+  body.theme-galaxy .manage-card, body.theme-galaxy .tools-modal, body.theme-galaxy .info-modal, body.theme-galaxy .feature-settings-modal, body.theme-galaxy .color-picker-modal, body.theme-galaxy .rng-modal, body.theme-galaxy .picker-modal, body.theme-galaxy .timer-modal { background:linear-gradient(160deg,#0c0020,#100028) !important; border:1px solid rgba(127,0,255,0.4) !important; box-shadow:0 8px 40px rgba(127,0,255,0.15) !important; }
   body.theme-galaxy .host-menu-item { border-bottom:1px solid rgba(127,0,255,0.3) !important; color:#b366ff !important; }
   body.theme-galaxy .player-item, body.theme-galaxy .manage-player-item { background:rgba(5,0,14,0.6) !important; border:1px solid rgba(127,0,255,0.35) !important; }
   body.theme-galaxy .tool-list-btn { background:rgba(5,0,14,0.5) !important; border:1px solid rgba(127,0,255,0.35) !important; color:#b366ff !important; }
@@ -3026,7 +2963,7 @@
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
       <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Random Team Maker</button>
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('calc')">🔢 Calculator</button>
+
     </div>
   </div>
 
@@ -4129,7 +4066,7 @@
     <button class="tool-list-btn" onclick="openTool('rng')">🎲 Random Number</button>
     <button class="tool-list-btn" onclick="openTool('picker')">🎯 Player Picker</button>
     <button class="tool-list-btn" onclick="openTool('status')">🩹 Status Effects</button>
-    <button class="tool-list-btn" onclick="openTool('calc')">🔢 Calculator</button>
+
     <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeToolsOverlay()">Close</button>
   </div>
 </div>
@@ -4267,36 +4204,7 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
-<!--  CALCULATOR TOOL OVERLAY                    -->
-<!-- ═══════════════════════════════════════════ -->
-<div class="calc-overlay" id="calc-overlay">
-  <div class="calc-modal">
-    <div class="calc-modal-title">🔢 Calculator</div>
-    <div class="calc-display" id="calc-display">0</div>
-    <div class="calc-sub" id="calc-sub"></div>
-    <div class="calc-grid">
-      <button class="calc-btn calc-btn-op" onclick="calcInput('C')">C</button>
-      <button class="calc-btn calc-btn-op" onclick="calcInput('±')">±</button>
-      <button class="calc-btn calc-btn-op" onclick="calcInput('%')">%</button>
-      <button class="calc-btn calc-btn-op" onclick="calcInput('÷')">÷</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('7')">7</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('8')">8</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('9')">9</button>
-      <button class="calc-btn calc-btn-op" onclick="calcInput('×')">×</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('4')">4</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('5')">5</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('6')">6</button>
-      <button class="calc-btn calc-btn-op" onclick="calcInput('−')">−</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('1')">1</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('2')">2</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('3')">3</button>
-      <button class="calc-btn calc-btn-op" onclick="calcInput('+')">+</button>
-      <button class="calc-btn calc-btn-zero" onclick="calcInput('0')">0</button>
-      <button class="calc-btn calc-btn-num" onclick="calcInput('.')">.</button>
-      <button class="calc-btn calc-btn-eq" onclick="calcInput('=')">=</button>
-    </div>
-    <button class="btn-secondary btn-sm" style="margin-top:0.4rem;" onclick="closeCalcOverlay()">Close</button>
-  </div>
+
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -4509,7 +4417,7 @@ window.confirmSignOut = function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','calc-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -4558,6 +4466,7 @@ window.selectAvatar = function(emoji) {
   const active = document.querySelector(`.avatar-option[data-avatar="${emoji}"]`);
   if (active) active.classList.add('selected');
   document.getElementById('profile-avatar').textContent = emoji;
+  updateAccountButtonUI();
 };
 
 window.openProfileScreen = function() {
@@ -5373,10 +5282,7 @@ window.openTool = function(toolId) {
     openStatusMenu();
     return;
   }
-  if (toolId === 'calc') {
-    openCalcOverlay();
-    return;
-  }
+
   const label = TOOL_LABELS[toolId] || toolId;
   alert(label + ' is coming soon!');
 };
@@ -5609,116 +5515,6 @@ window.closePickerOverlay = function() {
   document.getElementById('picker-overlay').classList.remove('show');
 };
 
-// ── CALCULATOR TOOL ──────────────────────────────
-let calcState = { display: '0', prev: null, op: null, newNum: false };
-
-window.openCalcOverlay = function() {
-  calcState = { display: '0', prev: null, op: null, newNum: false };
-  document.getElementById('calc-display').textContent = '0';
-  document.getElementById('calc-sub').textContent = '';
-  document.getElementById('calc-overlay').classList.add('show');
-};
-window.closeCalcOverlay = function() {
-  document.getElementById('calc-overlay').classList.remove('show');
-};
-
-function calcEval(a, op, b) {
-  switch (op) {
-    case '+': return a + b;
-    case '−': return a - b;
-    case '×': return a * b;
-    case '÷': return b !== 0 ? a / b : null;
-    case '%': return a % b;
-    default: return b;
-  }
-}
-
-window.calcInput = function(val) {
-  const s = calcState;
-  const displayEl = document.getElementById('calc-display');
-  const subEl = document.getElementById('calc-sub');
-
-  if (val === 'C') {
-    calcState = { display: '0', prev: null, op: null, newNum: false };
-    displayEl.textContent = '0';
-    subEl.textContent = '';
-    return;
-  }
-
-  if (val === '±') {
-    if (s.display !== '0') {
-      s.display = s.display.startsWith('−') ? s.display.slice(1) : '−' + s.display;
-      displayEl.textContent = s.display;
-    }
-    return;
-  }
-
-  if (val === '.' ) {
-    if (s.newNum) {
-      s.display = '0.';
-      s.newNum = false;
-      displayEl.textContent = s.display;
-      return;
-    }
-    if (!s.display.includes('.')) {
-      s.display += '.';
-      displayEl.textContent = s.display;
-    }
-    return;
-  }
-
-  if (val >= '0' && val <= '9') {
-    if (s.newNum || s.display === '0') {
-      s.display = val;
-      s.newNum = false;
-    } else {
-      s.display += val;
-    }
-    displayEl.textContent = s.display;
-    return;
-  }
-
-  if (['+','−','×','÷','%'].includes(val)) {
-    const cur = parseFloat(s.display);
-    if (s.op !== null && !s.newNum) {
-      const result = calcEval(s.prev, s.op, cur);
-      if (result === null) {
-        displayEl.textContent = 'Error';
-        subEl.textContent = '';
-        calcState = { display: '0', prev: null, op: null, newNum: true };
-        return;
-      }
-      const displayStr = Number.isInteger(result) ? result.toString() : parseFloat(result.toFixed(10)).toString();
-      s.display = displayStr;
-      displayEl.textContent = displayStr;
-    }
-    s.prev = parseFloat(s.display);
-    s.op = val;
-    s.newNum = true;
-    subEl.textContent = s.prev + ' ' + s.op;
-    return;
-  }
-
-  if (val === '=') {
-    const cur = parseFloat(s.display);
-    if (s.op === null) return;
-    const result = calcEval(s.prev, s.op, cur);
-    if (result === null) {
-      displayEl.textContent = 'Error';
-      subEl.textContent = '';
-      calcState = { display: '0', prev: null, op: null, newNum: true };
-      return;
-    }
-    const displayStr = Number.isInteger(result) ? result.toString() : parseFloat(result.toFixed(10)).toString();
-    subEl.textContent = s.prev + ' ' + s.op + ' ' + cur + ' =';
-    s.display = displayStr;
-    s.prev = null;
-    s.op = null;
-    s.newNum = true;
-    displayEl.textContent = displayStr;
-    return;
-  }
-};
 
 window.switchPickerTab = function(tab) {
   ['list','teams'].forEach(t => {
