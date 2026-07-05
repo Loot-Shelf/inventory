@@ -6946,6 +6946,19 @@ window.playAgain = async function() {
   updates[`rooms/${roomCode}/timerGame`] = 0;
   updates[`rooms/${roomCode}/ceremonyStep`] = null;
   updates[`rooms/${roomCode}/ceremonyAward`] = null;
+
+  // Reset speed round buzz state so scores don't carry over
+  const roomFeatures = room.features || {};
+  if (roomFeatures.turnMode === 'speedRound') {
+    updates[`rooms/${roomCode}/buzz/phase`] = 'waiting';
+    updates[`rooms/${roomCode}/buzz/currentRound`] = 1;
+    updates[`rooms/${roomCode}/buzz/scores`] = {};
+    updates[`rooms/${roomCode}/buzz/winner`] = null;
+    updates[`rooms/${roomCode}/buzz/tapOrder`] = {};
+    updates[`rooms/${roomCode}/buzz/dtlIndex`] = 0;
+    updates[`rooms/${roomCode}/buzz/roundStartTime`] = serverNow();
+  }
+
   await update(ref(db), updates);
 
   lastActivePlayerId = null;
