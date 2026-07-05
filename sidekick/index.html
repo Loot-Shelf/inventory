@@ -185,15 +185,15 @@
   .room-code-label { font-size: 0.75rem; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
 
   /* ── PLAYER LIST ── */
-  .player-list { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
+  .player-list { display: flex; flex-direction: column; gap: 0.4rem; margin: 1rem 0; }
   .player-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     background: #1e1e2e;
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 0.65rem 1rem;
+    padding: 0.55rem 0.75rem;
   }
   .player-num {
     width: 28px; height: 28px;
@@ -207,13 +207,14 @@
     width: 30px; height: 30px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     flex-shrink: 0;
     background: #2a2a3a;
     line-height: 1;
     border: 2px solid var(--border);
+    overflow: hidden;
   }
-  .player-name { flex: 1; font-size: 0.95rem; }
+  .player-name { flex: 1; min-width: 0; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .player-badge {
     font-size: 0.7rem; padding: 0.2rem 0.5rem;
     border-radius: 6px;
@@ -1618,10 +1619,10 @@
     background: #13131a;
     border: 1px solid #2a2a3a;
     border-radius: 16px;
-    padding: 1.5rem;
+    padding: 1.25rem;
     width: 100%;
-    max-width: 440px;
-    max-height: 80vh;
+    max-width: 480px;
+    max-height: 85vh;
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -1629,30 +1630,31 @@
   .manage-player-item {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.3rem;
     background: #1e1e2e;
     border: 1px solid #2a2a3a;
     border-radius: 10px;
-    padding: 0.6rem 0.8rem;
-    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.65rem;
+    margin-bottom: 0.4rem;
     transition: opacity 0.2s;
   }
   .manage-player-row {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
   .manage-player-avatar {
-    width: 32px; height: 32px;
+    width: 30px; height: 30px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     flex-shrink: 0;
     border: 2px solid var(--border);
     transition: border-color 0.2s;
     background: #2a2a3a;
     line-height: 1;
+    overflow: hidden;
   }
   .manage-kick-row {
     display: flex;
@@ -1675,7 +1677,7 @@
   }
   .manage-num { width: 28px; height: 28px; border-radius: 50%; background: #7c5cbf; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; flex-shrink:0; }
   .manage-num.out { background: #3a1a1a; color: #6a4a4a; }
-  .manage-name { flex: 1; font-size: 0.9rem; }
+  .manage-name { flex: 1; min-width: 0; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .manage-actions { display: flex; gap: 12px; align-items: center; }
   .manage-btn { width: 38px; height: 38px; border-radius: 8px; background: #2a2a3a; border: 1.5px solid #3a3a4a; color: #f0eeff; font-size: 0.95rem; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
   .manage-btn.ko-btn { background: #3a1515; border-color: #5a2525; color: #f87171; }
@@ -2580,7 +2582,7 @@
   /* ── AVATAR PICKER ── */
   .avatar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9700; align-items:center; justify-content:center; padding:1rem; }
   .avatar-overlay.show { display:flex; }
-  .avatar-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.5rem 1.25rem; width:min(360px,92vw); box-shadow:0 8px 40px rgba(0,0,0,0.7); display:flex; flex-direction:column; gap:0.6rem; }
+  .avatar-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.5rem 1.25rem; width:min(360px,92vw); box-shadow:0 8px 40px rgba(0,0,0,0.7); display:flex; flex-direction:column; gap:0.6rem; overflow:hidden; }
   body.theme-8bit .avatar-modal { background:#0d0208 !important; border:3px solid var(--accent) !important; box-shadow:6px 6px 0 #000 !important; }
   body.theme-cyberpunk .avatar-modal { background:rgba(0,8,20,0.98) !important; border:1px solid #00ffe7 !important; box-shadow:0 0 24px rgba(0,255,231,0.2) !important; }
   body.theme-fantasy .avatar-modal { background:linear-gradient(160deg,#1c1308,#221808) !important; border:2px solid #8b6914 !important; box-shadow:0 8px 40px rgba(0,0,0,0.7) !important; }
@@ -2595,7 +2597,7 @@
   body.theme-gothic .avatar-modal { background:linear-gradient(160deg,#141414,#0a0a0a) !important; border:1px solid rgba(51,51,51,0.4) !important; box-shadow:0 8px 40px rgba(192,192,192,0.15) !important; }
   .avatar-modal-title { font-size:1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:0.1rem; }
   .avatar-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.6rem; }
-  .avatar-option { display:flex; align-items:center; justify-content:center; width:100%; aspect-ratio:1/1; border-radius:50%; border:3px solid transparent; font-size:1.8rem; cursor:pointer; transition:transform 0.15s,border-color 0.15s,background 0.15s; background:#1e1e2e; }
+  .avatar-option { display:flex; align-items:center; justify-content:center; width:100%; aspect-ratio:1/1; border-radius:50%; border:3px solid transparent; font-size:1.8rem; cursor:pointer; transition:transform 0.15s,border-color 0.15s,background 0.15s; background:#1e1e2e; overflow:hidden; }
   .avatar-option:hover { transform:scale(1.1); }
   .avatar-option.selected { border-color:var(--accent-light); background:rgba(124,92,191,0.2); transform:scale(1.1); box-shadow:0 0 0 2px rgba(124,92,191,0.3); }
   body.light-mode .avatar-option { background:#f0f0fb; }
@@ -3237,7 +3239,7 @@
     <div class="room-code" id="wl-code">----</div>
     <div class="spinner"></div>
     <p style="color:var(--muted); font-size:0.9rem;">Waiting for host to start…</p>
-    <div class="player-list" id="wl-player-list" style="margin-top:1.5rem; max-width:360px; margin-left:auto; margin-right:auto;"></div>
+    <div class="player-list" id="wl-player-list" style="margin-top:1.5rem; max-width:380px; margin-left:auto; margin-right:auto;"></div>
     <button class="btn-secondary btn-sm" onclick="leaveRoom()" style="margin-top:1.5rem;">Leave</button>
   </div>
   </div>
