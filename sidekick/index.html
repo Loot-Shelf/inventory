@@ -2689,7 +2689,7 @@
   }
   .buzz-top-bar {
     position: absolute; top: 0; left: 0; right: 0;
-    height: 68px; z-index: 15;
+    height: 68px; z-index: 20;
     background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 100%);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     display: flex; align-items: center;
@@ -2727,6 +2727,7 @@
     align-items: center; justify-content: center;
     gap: 1rem; z-index: 10; pointer-events: none;
     padding: 0 1.5rem; text-align: center;
+    position: relative;
   }
   .buzz-status-label {
     font-size: 1.1rem; font-weight: 800;
@@ -2744,9 +2745,9 @@
     font-weight: 600; letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-  /* The big BUZZ button */
+  /* The big BUZZ button — visual only, tap zone handles the actual tap */
   .buzz-btn-wrap {
-    z-index: 10; pointer-events: all;
+    z-index: 10; pointer-events: none;
   }
   .buzz-btn {
     width: 180px; height: 180px; border-radius: 50%;
@@ -2758,17 +2759,18 @@
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.08s, box-shadow 0.08s;
     animation: buzz-pulse 2.5s ease-in-out infinite;
-    user-select: none;
+    user-select: none; pointer-events: none;
   }
-  .buzz-btn:active {
+  .buzz-btn.tapped {
     transform: scale(0.93);
     box-shadow: 0 0 30px rgba(244,63,94,0.3), 0 4px 16px rgba(0,0,0,0.6),
                 inset 0 2px 0 rgba(255,255,255,0.15);
+    animation: none;
   }
   .buzz-btn.locked {
     background: radial-gradient(circle at 38% 38%, #374151, #1f2937);
     box-shadow: 0 0 20px rgba(0,0,0,0.4), inset 0 3px 0 rgba(255,255,255,0.08);
-    animation: none; cursor: not-allowed; opacity: 0.4;
+    animation: none; opacity: 0.4;
     border-color: rgba(255,255,255,0.1);
   }
   @keyframes buzz-pulse {
@@ -2801,18 +2803,19 @@
   }
   .buzz-order-pos { font-size: 0.72rem; color: rgba(255,255,255,0.35); min-width: 18px; }
   .buzz-order-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  /* Bottom bar — reset radio + host controls */
+  /* Bottom bar — left: crown, center: radios, right: players */
   .buzz-bottom-bar {
     position: absolute; bottom: 0; left: 0; right: 0;
     height: 68px; z-index: 20;
     background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%);
     border-top: 1px solid rgba(255,255,255,0.08);
-    display: flex; align-items: center;
-    justify-content: center; gap: 1.5rem;
-    padding: 0 1rem; pointer-events: all;
+    display: grid;
+    grid-template-columns: 48px 1fr 48px;
+    align-items: center;
+    padding: 0 0.75rem; pointer-events: all;
   }
   .buzz-radio-group {
-    display: flex; align-items: center; gap: 1rem;
+    display: flex; align-items: center; justify-content: center; gap: 1rem;
     font-size: 0.72rem; font-weight: 600;
     color: rgba(255,255,255,0.5); text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -2890,6 +2893,14 @@
   .buzz-final-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .buzz-final-name { flex: 1; font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.85); }
   .buzz-final-pts { font-size: 1rem; font-weight: 800; color: #fbbf24; }
+  /* Full-screen buzz tap zone */
+  .buzz-tap-zone {
+    position: absolute;
+    top: 68px; bottom: 68px; left: 0; right: 0;
+    z-index: 6; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    background: transparent;
+  }
 </style>
 </head>
 <body>
@@ -3374,27 +3385,29 @@
 <div id="screen-buzz" class="screen">
   <!-- Top bar: round indicator + exit -->
   <div class="buzz-top-bar">
-    <button class="exit-btn" style="position:static; transform:none; font-size:0.72rem; padding:4px 10px; height:auto; width:auto; border-radius:20px; margin:0;" onclick="confirmLeave()">⬡ Exit</button>
-    <div style="flex:1; text-align:center;">
+    <button class="exit-btn" style="position:static;transform:none;font-size:0.72rem;padding:4px 10px;height:auto;width:auto;border-radius:20px;margin:0;" onclick="confirmLeave()">⬡ Exit</button>
+    <div style="flex:1;text-align:center;">
       <div class="buzz-round-label" id="buzz-round-label">Round 1</div>
       <div class="buzz-round-fraction" id="buzz-round-fraction">1/10</div>
     </div>
-    <button class="settings-gear" style="position:static; transform:none; width:32px; height:32px; font-size:0.9rem; margin:0;" onclick="openSettingsOverlay()">⚙️</button>
+    <button class="settings-gear" style="position:static;transform:none;width:36px;height:36px;font-size:0.9rem;margin:0;" onclick="openSettingsOverlay()">⚙️</button>
   </div>
 
   <!-- Score chips row -->
   <div class="buzz-scores" id="buzz-scores"></div>
 
-  <!-- Main content area -->
+  <!-- Full-screen tap zone (covers between top/bottom bars) -->
+  <div class="buzz-tap-zone" id="buzz-tap-zone" onclick="playerBuzzIn()"></div>
+
+  <!-- Main content area — button + label -->
   <div class="buzz-center" id="buzz-center">
-    <!-- Waiting phase: big buzz button -->
     <div class="buzz-btn-wrap" id="buzz-btn-wrap">
-      <button class="buzz-btn" id="buzz-btn" onclick="playerBuzzIn()">🔔</button>
+      <div class="buzz-btn" id="buzz-btn">🔔</div>
     </div>
-    <div class="buzz-tap-label" id="buzz-tap-label">Tap to buzz in!</div>
+    <div class="buzz-tap-label" id="buzz-tap-label">Tap anywhere to buzz in!</div>
   </div>
 
-  <!-- Winner display (shown after buzz, hidden during waiting) -->
+  <!-- Winner display (shown after buzz) -->
   <div class="buzz-center" id="buzz-winner-display" style="display:none;">
     <div class="buzz-status-label" id="buzz-status-label">Fastest Finger!</div>
     <div class="buzz-winner-name" id="buzz-winner-name">Player</div>
@@ -3411,14 +3424,16 @@
     <button class="buzz-skip-btn" onclick="buzzSkipRound()">⏭ Skip</button>
   </div>
 
-  <!-- Reset button (shown to host always, winner if Player Resets) -->
+  <!-- Reset button -->
   <button class="buzz-reset-btn" id="buzz-reset-btn" onclick="buzzReset()">🔁 Reset Round</button>
 
-  <!-- Bottom bar: reset radio buttons + host crown -->
+  <!-- Bottom bar: left=crown, center=radios, right=players -->
   <div class="buzz-bottom-bar">
+    <!-- Left: host crown (hidden for non-hosts) -->
     <div id="host-crown-buzz" style="display:none;">
       <button class="host-game-menu-btn" onclick="openHostCrownMenu()" style="width:36px;height:36px;font-size:1rem;">👑</button>
     </div>
+    <!-- Center: reset radio buttons -->
     <div class="buzz-radio-group" id="buzz-radio-group">
       <label class="buzz-radio-opt">
         <input type="radio" name="buzz-reset-who" value="host" checked onchange="setBuzzResetMode('host')">
@@ -3429,7 +3444,10 @@
         Player Resets
       </label>
     </div>
-    <button class="host-manage-btn" id="host-manage-btn-buzz" style="position:static;transform:none;margin:0;" onclick="openManagePanel()">👥</button>
+    <!-- Right: players button (host only) -->
+    <div>
+      <button class="host-manage-btn" id="host-manage-btn-buzz" style="position:static;transform:none;margin:0;" onclick="openManagePanel()">👥</button>
+    </div>
   </div>
 </div>
 
@@ -4611,14 +4629,26 @@ function renderBuzzScreen(buzz) {
   // Host crown and manage buttons
   const crownDiv = document.getElementById('host-crown-buzz');
   const mngBtn   = document.getElementById('host-manage-btn-buzz');
-  if (crownDiv) crownDiv.style.display = isHost ? 'block' : 'none';
-  if (mngBtn)   mngBtn.classList.toggle('visible', isHost);
+  if (crownDiv) crownDiv.style.display = isHost ? 'flex' : 'none';
+  if (mngBtn)   {
+    if (isHost) {
+      mngBtn.classList.add('visible');
+      mngBtn.style.display = '';
+    } else {
+      mngBtn.style.display = 'none';
+    }
+  }
+
+  // Radio buttons: only host can change reset mode
+  const radioGroup = document.getElementById('buzz-radio-group');
+  if (radioGroup) radioGroup.style.pointerEvents = isHost ? 'all' : 'none';
 
   if (buzzPhase === 'complete') {
     showBuzzComplete();
     return;
   }
 
+  // Route ALL players to buzz screen
   showScreen('buzz');
 
   if (buzzPhase === 'waiting') {
@@ -4631,35 +4661,41 @@ function renderBuzzScreen(buzz) {
 }
 
 function renderBuzzWaiting() {
-  // Reset button hidden, host actions hidden, winner display hidden
   const btnWrap = document.getElementById('buzz-btn-wrap');
   const tapLbl  = document.getElementById('buzz-tap-label');
   const winDisp = document.getElementById('buzz-winner-display');
   const ordList = document.getElementById('buzz-order-list');
   const hostAct = document.getElementById('buzz-host-actions');
   const rstBtn  = document.getElementById('buzz-reset-btn');
-  if (btnWrap) { btnWrap.style.display = 'flex'; }
-  if (tapLbl)  { tapLbl.style.display = ''; tapLbl.textContent = 'Tap to buzz in!'; }
+  const tapZone = document.getElementById('buzz-tap-zone');
+  const buzzBtn = document.getElementById('buzz-btn');
+
+  if (btnWrap) btnWrap.style.display = 'flex';
+  if (tapLbl)  { tapLbl.style.display = ''; tapLbl.textContent = 'Tap anywhere to buzz in!'; }
   if (winDisp) winDisp.style.display = 'none';
   if (ordList) ordList.style.display = 'none';
   if (hostAct) hostAct.classList.remove('show');
   if (rstBtn)  rstBtn.classList.remove('show');
-  const buzzBtn = document.getElementById('buzz-btn');
-  if (buzzBtn) { buzzBtn.classList.remove('locked'); }
+  if (tapZone) tapZone.style.display = 'block';
+  if (buzzBtn) { buzzBtn.classList.remove('locked', 'tapped'); }
 }
 
 function renderBuzzLocked() {
-  // 1st To Tap: show winner, host sees award/no-point buttons
   const btnWrap = document.getElementById('buzz-btn-wrap');
   const tapLbl  = document.getElementById('buzz-tap-label');
   const winDisp = document.getElementById('buzz-winner-display');
   const ordList = document.getElementById('buzz-order-list');
   const hostAct = document.getElementById('buzz-host-actions');
   const rstBtn  = document.getElementById('buzz-reset-btn');
+  const tapZone = document.getElementById('buzz-tap-zone');
+  const buzzBtn = document.getElementById('buzz-btn');
 
+  // Disable tap zone — round is locked
+  if (tapZone) tapZone.style.display = 'none';
   if (btnWrap) btnWrap.style.display = 'none';
   if (tapLbl)  tapLbl.style.display = 'none';
   if (ordList) ordList.style.display = 'none';
+  if (buzzBtn) buzzBtn.classList.add('locked');
 
   // Winner info
   if (winDisp && buzzWinner) {
@@ -4673,7 +4709,7 @@ function renderBuzzLocked() {
     if (statEl) statEl.textContent = buzzWinner === myId ? '⚡ You Were The Fastest!' : 'Fastest Finger!';
   }
 
-  // Host actions
+  // Host action buttons
   if (isHost) {
     if (hostAct) hostAct.classList.add('show');
     const nextBtn = document.getElementById('buzz-next-btn');
@@ -4681,7 +4717,10 @@ function renderBuzzLocked() {
   } else {
     if (hostAct) hostAct.classList.remove('show');
   }
-  if (rstBtn) rstBtn.classList.remove('show');
+
+  // Reset button: always show for host; show for winner if Player Resets mode
+  const canReset = isHost || (buzzResetMode === 'player' && buzzWinner === myId);
+  if (rstBtn) rstBtn.classList.toggle('show', canReset);
 }
 
 function renderBuzzDownTheLine() {
@@ -4691,10 +4730,11 @@ function renderBuzzDownTheLine() {
   const ordList = document.getElementById('buzz-order-list');
   const hostAct = document.getElementById('buzz-host-actions');
   const rstBtn  = document.getElementById('buzz-reset-btn');
+  const tapZone = document.getElementById('buzz-tap-zone');
 
+  if (tapZone) tapZone.style.display = 'none';
   if (btnWrap) btnWrap.style.display = 'none';
   if (tapLbl)  tapLbl.style.display = 'none';
-  if (winDisp) winDisp.style.display = 'none';
   if (rstBtn)  rstBtn.classList.remove('show');
 
   // Show ordered list
@@ -4747,48 +4787,48 @@ function renderBuzzScoreChips() {
   });
 }
 
-// Player taps the buzz button
+// Player taps the buzz button / anywhere on screen
 window.playerBuzzIn = async function() {
   if (!db || !roomCode) return;
   if (buzzPhase !== 'waiting') return;
+
+  // Immediate visual feedback — disable tap zone so double-tap can't happen
+  const tapZone = document.getElementById('buzz-tap-zone');
+  const buzzBtn = document.getElementById('buzz-btn');
+  if (tapZone) tapZone.style.display = 'none';
+  if (buzzBtn) buzzBtn.classList.add('tapped');
 
   const ts = Date.now();
   const isModeDownTheLine = speedMode === 'downTheLine';
 
   if (isModeDownTheLine) {
-    // In DTL mode, just record tap time — don't lock until everyone has tapped
-    // Use a transaction-safe write — only write if this uid not already present
+    // Record tap time — only write if not already tapped
     const myTapRef = ref(db, `rooms/${roomCode}/buzz/tapOrder/${myId}`);
     const existing = await get(myTapRef);
-    if (existing.exists()) return; // already tapped
+    if (existing.exists()) return;
     await set(myTapRef, ts);
 
-    // Check if all non-knocked-out players have tapped
-    const allTapped = localPlayers
-      .filter(p => !p.knockedOut)
-      .every(p => buzzTapOrder[p.id] !== undefined || p.id === myId);
+    // Check if all active players have tapped
+    const activePlayers = localPlayers.filter(p => !p.knockedOut);
+    const allTapKeys = Object.keys({...buzzTapOrder, [myId]: ts});
+    const allTapped = activePlayers.every(p => allTapKeys.includes(p.id));
 
-    if (allTapped) {
-      // Host transitions phase to downtheline
-      if (isHost) {
-        await update(ref(db), {
-          [`rooms/${roomCode}/buzz/phase`]: 'downtheline',
-          [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
-          [`rooms/${roomCode}/lastActivity`]: Date.now()
-        });
-      }
+    if (allTapped && isHost) {
+      await update(ref(db), {
+        [`rooms/${roomCode}/buzz/phase`]: 'downtheline',
+        [`rooms/${roomCode}/buzz/dtlIndex`]: 0,
+        [`rooms/${roomCode}/lastActivity`]: Date.now()
+      });
     } else {
-      // Disable this player's button after tapping — wait for others
-      const btn = document.getElementById('buzz-btn');
-      if (btn) { btn.classList.add('locked'); }
+      // Show waiting feedback to this player
       const lbl = document.getElementById('buzz-tap-label');
-      if (lbl) lbl.textContent = 'Tapped! Waiting for others...';
+      if (lbl) lbl.textContent = '✓ Tapped! Waiting for others...';
     }
   } else {
-    // 1st To Tap: first write wins — use set with condition
+    // 1st To Tap: check if someone already won before writing
     const winnerRef = ref(db, `rooms/${roomCode}/buzz/winner`);
     const snap = await get(winnerRef);
-    if (snap.exists()) return; // someone else already won
+    if (snap.exists() && snap.val()) return; // someone beat us
 
     await update(ref(db), {
       [`rooms/${roomCode}/buzz/winner`]: myId,
