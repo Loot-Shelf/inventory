@@ -244,19 +244,22 @@
 
   /* ── ROOM CODE ── */
   .room-code {
-    font-size: 3.5rem;
+    font-size: 2.8rem;
     font-weight: 700;
     letter-spacing: 0.25em;
     color: var(--accent-light);
     text-align: center;
-    padding: 1rem 0;
+    padding: 0.6rem 0;
     font-family: 'Courier New', monospace;
   }
 
   .room-code-label { font-size: 0.75rem; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
 
   /* ── PLAYER LIST ── */
-  .player-list { display: flex; flex-direction: column; gap: 0.4rem; margin: 1rem 0; }
+  .player-list { display: flex; flex-direction: column; gap: 0.4rem; margin: 1rem 0; max-height: 35vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .player-list::-webkit-scrollbar { width: 5px; }
+  .player-list::-webkit-scrollbar-track { background: transparent; }
+  .player-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   .player-item {
     display: flex;
     align-items: center;
@@ -3308,20 +3311,20 @@
   <div class="screen-content-scaler" id="scaler-lobby">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:2rem;letter-spacing:0.04em;margin-bottom:.2rem;text-align:center;">Room Code </div>
+    <div class="logo" style="font-size:2rem;letter-spacing:0.04em;margin-bottom:.1rem;text-align:center;">Room Code </div>
 
     <!-- Card 1: QR code + room code -->
-    <div class="card" style="max-width:480px;margin-bottom:0.75rem;text-align:center; padding-top: .5rem; padding-bottom: .05rem;">
-      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:.75rem;">
+    <div class="card" style="max-width:480px;margin-bottom:0.5rem;text-align:center; padding-top: .5rem; padding-bottom: .25rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:.5rem;">
       </div>
-      <div style="background:#fff;border-radius:14px;padding:1rem;display:inline-block;margin-bottom:.2rem;">
+      <div style="background:#fff;border-radius:10px;padding:0.6rem;display:inline-block;margin-bottom:.15rem;">
         <div id="qr-code-lobby"></div>
       </div>
       <div class="room-code" id="display-code">----</div>
     </div>
 
     <!-- Card 2: Player list -->
-    <div class="card" style="max-width:480px;margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+    <div class="card" style="max-width:480px;margin-bottom:1rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
         <span style="font-size:1rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
         <span id="player-count" style="font-size:0.85rem;color:var(--muted);">0 joined</span>
@@ -3331,7 +3334,7 @@
     </div>
 
     <!-- Card 3: Random first player -->
-    <div class="card" style="max-width:480px;margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+    <div class="card" style="max-width:480px;margin-bottom:1rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
       <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
         <label class="feature-toggle" style="flex-shrink:0;">
           <input type="checkbox" id="random-first-player" onchange="onRandomFirstToggle(this.checked)">
@@ -6067,8 +6070,8 @@ function generateQR() {
   const joinUrl = base + '?join=' + roomCode;
   new QRCode(box, {
     text: joinUrl,
-    width: 180,
-    height: 180,
+    width: 130,
+    height: 130,
     colorDark: '#000000',
     colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.M
@@ -6084,8 +6087,8 @@ function generateLobbyQR() {
   const joinUrl = base + '?join=' + roomCode;
   new QRCode(box, {
     text: joinUrl,
-    width: 180,
-    height: 180,
+    width: 130,
+    height: 130,
     colorDark: '#000000',
     colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.M
