@@ -3311,7 +3311,7 @@
   <div class="screen-content-scaler" id="scaler-lobby">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:2rem;letter-spacing:0.04em;margin-bottom:.1rem;text-align:center;">Room Code </div>
+    <div class="logo" style="font-size:2rem;letter-spacing:0.04em;margin-bottom:1rem;text-align:center;">Room Code </div>
 
     <!-- Card 1: QR code + room code -->
     <div class="card" style="max-width:480px;margin-bottom:0.5rem;text-align:center; padding-top: .5rem; padding-bottom: .25rem;">
@@ -4647,7 +4647,9 @@ function getSavedAvatar() {
 
 function saveAvatar(emoji) {
   try { localStorage.setItem('sk_avatar', emoji); } catch {}
-  // Optionally sync to Firebase here in the future
+  if (roomCode && myId) {
+    update(ref(db, `rooms/${roomCode}/players/${myId}/avatar`), emoji).catch(() => {});
+  }
 }
 
 function getSavedName() {
@@ -7617,7 +7619,7 @@ window.createRoom = async function() {
     buzzScores: {},
     buzzTapOrder: {},
     players: {
-      [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor }
+      [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor, avatar: getSavedAvatar() || '👤' }
     }
   });
 
@@ -7675,7 +7677,7 @@ async function joinAsNewPlayer(code, room, name) {
 
   const players = room.players || {};
   const order = Object.keys(players).length;
-  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor });
+  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor, avatar: getSavedAvatar() || '👤' });
   await update(ref(db, `rooms/${code}`), { lastActivity: Date.now() });
   saveSession();
 
@@ -7742,6 +7744,13 @@ function listenLobby() {
 
     const players = room.players || {};
     localPlayers = buildOrderedPlayers(players);
+
+    // One-time sync: push avatar to Firebase if missing
+    if (players[myId] && !players[myId].avatar) {
+      const myAvatar = getSavedAvatar() || '👤';
+      update(ref(db, `rooms/${roomCode}/players/${myId}/avatar`), myAvatar).catch(() => {});
+    }
+
     renderLobbyList(localPlayers);
     const count = localPlayers.length;
     document.getElementById('player-count').textContent = count + ' joined';
@@ -7767,6 +7776,13 @@ function listenWaitingLobby() {
 
     const players = room.players || {};
     localPlayers = buildOrderedPlayers(players);
+
+    // One-time sync: push avatar to Firebase if missing
+    if (players[myId] && !players[myId].avatar) {
+      const myAvatar = getSavedAvatar() || '👤';
+      update(ref(db, `rooms/${roomCode}/players/${myId}/avatar`), myAvatar).catch(() => {});
+    }
+
     renderWaitingLobbyList(localPlayers);
   });
   unsubscribers.push(() => unsub());
@@ -8429,7 +8445,7 @@ window.closeRoom = async function() {
 // ── HELPERS ──────────────────────────────────────
 function buildOrderedPlayers(players) {
   return Object.entries(players)
-    .map(([id, p]) => ({ id, name: p.name, order: p.order ?? 999, joinedAt: p.joinedAt ?? 0, knockedOut: p.knockedOut ?? false, color: p.color ?? null }))
+    .map(([id, p]) => ({ id, name: p.name, order: p.order ?? 999, joinedAt: p.joinedAt ?? 0, knockedOut: p.knockedOut ?? false, color: p.color ?? null, avatar: p.avatar || '👤' }))
     .sort((a, b) => a.order - b.order || a.joinedAt - b.joinedAt);
 }
 
@@ -8437,18 +8453,16 @@ function buildOrderedPlayers(players) {
 function renderLobbyList(players) {
   const el = document.getElementById('lobby-player-list');
   el.innerHTML = '';
-  const myAvatar = getSavedAvatar() || '👤';
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
-    const avatarEmoji = p.id === myId ? myAvatar : '👤';
     const avatarDotStyle = p.color ? `style="border-color:${p.color};"` : '';
     const div = document.createElement('div');
     div.className = 'player-item';
     div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
-      <div class="player-avatar" ${avatarDotStyle}>${avatarEmoji}</div>
+      <div class="player-avatar" ${avatarDotStyle}>${esc(p.avatar || '👤')}</div>
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">Host (You)</span>' : '<span class="player-badge">Player</span>'}
@@ -8477,16 +8491,14 @@ function renderLobbyList(players) {
 function renderWaitingLobbyList(players) {
   const el = document.getElementById('wl-player-list');
   el.innerHTML = '';
-  const myAvatar = getSavedAvatar() || '👤';
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
-    const avatarEmoji = p.id === myId ? myAvatar : '👤';
     const avatarDotStyle = p.color ? `style="border-color:${p.color};"` : '';
     const div = document.createElement('div');
     div.className = 'player-item';
     div.innerHTML = `
-      <div class="player-avatar" ${avatarDotStyle}>${avatarEmoji}</div>
+      <div class="player-avatar" ${avatarDotStyle}>${esc(p.avatar || '👤')}</div>
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">You</span>' : ''}`;
