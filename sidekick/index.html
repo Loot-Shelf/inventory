@@ -183,6 +183,7 @@
     color: var(--text);
     min-height: 100vh;
     overflow: hidden;
+    font-size: 17px;
   }
 
   /* ── SCREENS ── */
@@ -204,27 +205,27 @@
   }
 
   /* ── SETUP / LOBBY SCREENS ── */
-  .logo { font-size: 2.2rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
-  .tagline { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; text-shadow: none; }
+  .logo { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
+  .tagline { color: var(--muted); font-size: 1rem; margin-bottom: 1.5rem; text-shadow: none; }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 2rem;
+    padding: 1.5rem;
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
   }
 
-  .btn-group { display: flex; flex-direction: column; gap: 0.75rem; }
+  .btn-group { display: flex; flex-direction: column; gap: 0.85rem; }
 
   button {
     width: 100%;
-    padding: 0.9rem 1.5rem;
-    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
     border: none;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
@@ -237,31 +238,31 @@
   .btn-primary:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(124,92,191,0.4); }
   .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-danger { background: linear-gradient(135deg, var(--danger), #e74c3c); color: #fff; box-shadow: 0 2px 8px rgba(192,57,43,0.3); }
-  .btn-sm { width: auto; padding: 0.65rem 1.1rem; font-size: 0.88rem; border-radius: 8px; }
+  .btn-sm { width: auto; padding: 0.7rem 1.2rem; font-size: 0.92rem; border-radius: 10px; }
 
   input {
     width: 100%;
     background: #1a1a2a;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
     color: var(--text);
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+    margin-bottom: 0.85rem;
     outline: none;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   input:focus { border-color: var(--accent); box-shadow: inset 0 2px 4px rgba(0,0,0,0.25), 0 0 0 3px rgba(124,92,191,0.25); }
 
-  label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
   .divider { display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: var(--muted); font-size: 0.85rem; }
   .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   /* ── ROOM CODE ── */
   .room-code {
-    font-size: 2.8rem;
+    font-size: 3rem;
     font-weight: 700;
     letter-spacing: 0.25em;
     color: var(--accent-light);
@@ -309,9 +310,9 @@
     box-shadow: 0 0 0 1px rgba(124,92,191,0.3);
     transition: box-shadow 0.2s;
   }
-  .player-name { flex: 1; min-width: 0; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .player-name { flex: 1; min-width: 0; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .player-badge {
-    font-size: 0.7rem; padding: 0.2rem 0.5rem;
+    font-size: 0.75rem; padding: 0.2rem 0.55rem;
     border-radius: 6px;
     background: #2a2a3a; color: var(--muted);
   }
@@ -3163,11 +3164,11 @@
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-home" class="screen active" style="position:relative;">
-  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.45rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">🔑 Login</button>
+  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.5rem 1rem; font-size:0.85rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">🔑 Login</button>
   <div class="screen-content-scaler" id="scaler-home">
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
-    <span style="font-size:1.1rem;font-weight:600;letter-spacing:0.22em;text-transform;color:var(--muted);opacity:0.7;text-shadow:none;">Game Night</span>
-    <span style="font-size:3.5rem">SideKick</span>
+    <span style="font-size:1.2rem;font-weight:600;letter-spacing:0.22em;text-transform;color:var(--muted);opacity:0.7;text-shadow:none;">Game Night</span>
+    <span style="font-size:4rem">SideKick</span>
   </div>
   <div class="tagline">Pass the turn. Keep the vibe.</div>
   <div class="card">
@@ -3178,14 +3179,18 @@
   </div>
   <p id="home-status" class="status"></p>
 
-  <!-- Tools card -->
-  <div class="card" style="margin-top:1.0rem; padding:1rem;">
-    <div style="font-size:1.0rem; color:var(--accent-light); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.6rem; text-align:center;">Tools</div>
-    <div style="display:flex; flex-direction:column; gap:0.5rem;">
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('timers')">⏱️ Timers</button>
-      <button class="btn-secondary" style="width:100%; font-size:0.88rem;" onclick="openTool('picker')">🎯 Random Team Maker</button>
-
+  <!-- Tools card (collapsible) -->
+  <div class="card" style="margin-top:1.0rem; padding:0;">
+    <button onclick="toggleTools()" id="tools-toggle-btn" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:none;border:none;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;border-radius:12px;">
+      <span style="font-size:1.1rem;color:var(--accent-light);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;">Tools</span>
+      <span id="tools-arrow" style="font-size:0.9rem;color:var(--muted);transition:transform 0.3s;">▸</span>
+    </button>
+    <div id="tools-body" style="max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;opacity:0;padding:0 1.2rem;">
+      <div style="display:flex;flex-direction:column;gap:0.5rem;padding-bottom:1rem;">
+        <button class="btn-secondary" style="width:100%;font-size:0.95rem;" onclick="openTool('rng')">🎲 Random Number Generator</button>
+        <button class="btn-secondary" style="width:100%;font-size:0.95rem;" onclick="openTool('timers')">⏱️ Timers</button>
+        <button class="btn-secondary" style="width:100%;font-size:0.95rem;" onclick="openTool('picker')">🎯 Random Team Maker</button>
+      </div>
     </div>
   </div>
 
@@ -5529,6 +5534,24 @@ window.showCreateRoom = function() {
   updateFeaturesSummary();
 };
 window.showJoinRoom = () => showScreen('join');
+
+// ── TOOLS COLLAPSE TOGGLE ──
+window.toggleTools = function() {
+  const body = document.getElementById('tools-body');
+  const arrow = document.getElementById('tools-arrow');
+  if (!body || !arrow) return;
+  const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  if (isOpen) {
+    body.style.maxHeight = '0px';
+    body.style.opacity = '0';
+    arrow.style.transform = 'rotate(0deg)';
+  } else {
+    body.style.maxHeight = '300px';
+    body.style.opacity = '1';
+    arrow.style.transform = 'rotate(90deg)';
+  }
+  haptic(5);
+};
 
 // ── TOOLS ────────────────────────────────────────
 // Reachable from the home screen card and from the in-game host menu (Tools).
