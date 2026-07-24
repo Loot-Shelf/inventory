@@ -802,6 +802,7 @@
     gap: 0.65rem;
     margin-bottom: 0.75rem;
   }
+  body.user-mode .creator-only { display: none !important; }
   .feature-toggle {
     position: relative;
     width: 40px;
@@ -2497,6 +2498,49 @@
   body.theme-gothic .toggle-slider { background:#1a1a1a; border:1px solid rgba(51,51,51,0.4) !important; }
 
   /* ══════════════════════════════════════════════
+     HALLOWEEN THEME  ·  body.theme-halloween
+  ══════════════════════════════════════════════ */
+  body.theme-halloween { --bg:#0a0505; --surface:#1a0d08; --border:#cc6600; --accent:#ff6600; --accent-light:#ff9933; --text:#ffe0cc; --muted:#996633; --danger:#cc0000; font-family:'Segoe UI',system-ui,sans-serif !important; }
+  body.theme-halloween * { font-family:'Segoe UI',system-ui,sans-serif !important; }
+  body.theme-halloween::before { content:''; position:fixed; inset:0; background:radial-gradient(ellipse at 40% 30%,rgba(255,102,0,0.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(204,0,0,0.04) 0%,transparent 50%); pointer-events:none; z-index:9999; }
+  body.theme-halloween::after { content:''; position:fixed; inset:0; background-image:radial-gradient(2px 2px at 15% 28%,rgba(255,153,51,0.25) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 62% 55%,rgba(255,102,0,0.2) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 85% 15%,rgba(255,153,51,0.15) 0%,transparent 100%); pointer-events:none; z-index:9998; }
+  body.theme-halloween .card { background:linear-gradient(160deg,#1a0d08 0%,#221008 50%,#0a0505 100%); border:1px solid #cc6600; box-shadow:0 4px 24px rgba(0,0,0,0.7),inset 0 0 30px rgba(255,102,0,0.04); }
+  body.theme-halloween .btn-primary { background:linear-gradient(to bottom,#ff6600,#cc3300); border:1px solid #ff9933; color:#fff; box-shadow:0 3px 16px rgba(255,102,0,0.4),inset 0 1px 0 rgba(255,153,51,0.4); font-weight:600; }
+  body.theme-halloween .btn-primary:active { box-shadow:0 1px 6px rgba(255,102,0,0.3) !important; }
+  body.theme-halloween .btn-secondary { background:transparent !important; border:1px solid #cc6600 !important; color:#ff9933 !important; box-shadow:inset 0 0 12px rgba(255,102,0,0.06); }
+  body.theme-halloween .btn-secondary:hover { border-color:#ff9933 !important; box-shadow:0 0 12px rgba(255,102,0,0.25),inset 0 0 12px rgba(255,102,0,0.08) !important; }
+  body.theme-halloween .btn-danger { background:linear-gradient(to bottom,#cc0000,#661111); border:1px solid #ee4444; color:#ffe0e0; box-shadow:0 3px 16px rgba(204,0,0,0.4); }
+  body.theme-halloween input { background:rgba(10,5,5,0.8) !important; border:1px solid #cc6600 !important; color:#ffe0cc !important; caret-color:#ff9933; box-shadow:inset 0 2px 8px rgba(0,0,0,0.4); }
+  body.theme-halloween input:focus { border-color:#ff9933 !important; box-shadow:inset 0 2px 8px rgba(0,0,0,0.4),0 0 8px rgba(255,102,0,0.2) !important; }
+  body.theme-halloween .logo { color:#ff9933; text-shadow:0 2px 8px rgba(255,102,0,0.5),0 0 30px rgba(255,102,0,0.2); }
+  body.theme-halloween .tagline { color:#996633; letter-spacing:0.05em; font-size:0.82rem !important; }
+  body.theme-halloween .room-code { color:#ff9933; text-shadow:0 2px 12px rgba(255,102,0,0.5); }
+  body.theme-halloween .manage-card, body.theme-halloween .tools-modal, body.theme-halloween .info-modal, body.theme-halloween .feature-settings-modal, body.theme-halloween .color-picker-modal, body.theme-halloween .rng-modal, body.theme-halloween .picker-modal, body.theme-halloween .timer-modal { background:linear-gradient(160deg,#1a0d08,#221008) !important; border:1px solid #cc6600 !important; box-shadow:0 8px 40px rgba(0,0,0,0.7),inset 0 0 20px rgba(255,102,0,0.04) !important; }
+  body.theme-halloween .host-menu-item { border-bottom:1px solid rgba(204,102,0,0.4) !important; color:#ff9933 !important; }
+  body.theme-halloween .player-item, body.theme-halloween .manage-player-item { background:rgba(10,5,5,0.6) !important; border:1px solid rgba(204,102,0,0.5) !important; }
+  body.theme-halloween .tool-list-btn { background:rgba(10,5,5,0.5) !important; border:1px solid rgba(204,102,0,0.5) !important; color:#ff9933 !important; }
+  body.theme-halloween .tool-list-btn:hover { border-color:#ff9933 !important; background:rgba(255,102,0,0.08) !important; }
+  body.theme-halloween .save-row { background:rgba(10,5,5,0.5) !important; border:1px solid rgba(204,102,0,0.5) !important; }
+  body.theme-halloween .player-badge { background:rgba(255,102,0,0.15); color:#ff9933; border:1px solid rgba(255,102,0,0.3); }
+  body.theme-halloween .player-badge.host { background:rgba(255,102,0,0.2); color:#ff9933; }
+  body.theme-halloween .player-num { background:var(--accent); color:#0a0505; }
+  body.theme-halloween label { color:#996633; text-transform:uppercase; letter-spacing:0.05em; font-size:0.78rem; }
+  body.theme-halloween .exit-btn, body.theme-halloween .host-game-menu-btn, body.theme-halloween .host-manage-btn, body.theme-halloween .settings-gear { background:rgba(10,5,5,0.85) !important; border:1px solid #cc6600 !important; color:#ff9933 !important; box-shadow:0 0 8px rgba(255,102,0,0.2) !important; }
+  body.theme-halloween .nudge-btn .back { background:#4a2200; }
+  body.theme-halloween .nudge-btn .front { background:linear-gradient(0deg,rgba(204,51,0,0.6) 20%,rgba(255,102,0,1) 50%) !important; border-color:#4a2200 !important; color:#fff !important; }
+  body.theme-halloween .timer-pill { background:rgba(10,5,5,0.8) !important; border:1px solid #cc6600 !important; color:#ff9933 !important; }
+  body.theme-halloween .rng-result, body.theme-halloween .timer-display, body.theme-halloween .lap-row, body.theme-halloween .dice-btn, body.theme-halloween .picker-textarea, body.theme-halloween .picker-name-chip { background:rgba(10,5,5,0.5) !important; border:1px solid rgba(204,102,0,0.5) !important; }
+  body.theme-halloween .rng-result-value { color:#ff9933; text-shadow:0 0 10px rgba(255,102,0,0.5); }
+  body.theme-halloween .timer-display { color:#ff9933; }
+  body.theme-halloween .status-toggle-row { background:rgba(10,5,5,0.5) !important; border:1px solid rgba(204,102,0,0.5) !important; }
+  body.theme-halloween #screen-waiting { background:#0a0505 !important; }
+  body.theme-halloween .wait-active-name { text-shadow:0 0 30px var(--wait-active-glow,rgba(255,102,0,0.5)),0 2px 4px rgba(0,0,0,0.8) !important; }
+  body.theme-halloween .active-center-its { color:rgba(255,224,204,0.95) !important; text-shadow:0 2px 12px rgba(255,102,0,0.4) !important; }
+  body.theme-halloween .pass-tap-arrow { color:#ff9933 !important; text-shadow:0 0 16px rgba(255,102,0,0.5) !important; }
+  body.theme-halloween .neo-toggle-input:checked + .toggle-slider { background:var(--accent) !important; border-color:#ff9933 !important; }
+  body.theme-halloween .toggle-slider { background:#331a00; border:1px solid rgba(204,102,0,0.4) !important; }
+
+  /* ══════════════════════════════════════════════
      THEMES OVERLAY
   ══════════════════════════════════════════════ */
   .themes-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9700; align-items:center; justify-content:center; padding:1rem; }
@@ -2514,6 +2558,7 @@
   body.theme-nord .themes-modal    { background:linear-gradient(160deg,#1a2332,#0f141e) !important; border:1px solid rgba(59,74,94,0.4) !important; box-shadow:0 8px 40px rgba(94,129,172,0.15) !important; }
   body.theme-dracula .themes-modal    { background:linear-gradient(160deg,#282040,#1a1128) !important; border:1px solid rgba(85,85,170,0.4) !important; box-shadow:0 8px 40px rgba(189,147,249,0.15) !important; }
   body.theme-gothic .themes-modal    { background:linear-gradient(160deg,#141414,#0a0a0a) !important; border:1px solid rgba(51,51,51,0.4) !important; box-shadow:0 8px 40px rgba(192,192,192,0.15) !important; }
+  body.theme-halloween .themes-modal    { background:linear-gradient(160deg,#1a0d08,#0a0505) !important; border:1px solid rgba(255,102,0,0.4) !important; box-shadow:0 8px 40px rgba(255,102,0,0.15) !important; }
   .themes-modal-title { font-size:1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:0.1rem; }
 
   /* ── AVATAR PICKER ── */
@@ -2532,6 +2577,7 @@
   body.theme-nord .avatar-modal { background:linear-gradient(160deg,#1a2332,#0f141e) !important; border:1px solid rgba(59,74,94,0.4) !important; box-shadow:0 8px 40px rgba(94,129,172,0.15) !important; }
   body.theme-dracula .avatar-modal { background:linear-gradient(160deg,#282040,#1a1128) !important; border:1px solid rgba(85,85,170,0.4) !important; box-shadow:0 8px 40px rgba(189,147,249,0.15) !important; }
   body.theme-gothic .avatar-modal { background:linear-gradient(160deg,#141414,#0a0a0a) !important; border:1px solid rgba(51,51,51,0.4) !important; box-shadow:0 8px 40px rgba(192,192,192,0.15) !important; }
+  body.theme-halloween .avatar-modal { background:linear-gradient(160deg,#1a0d08,#0a0505) !important; border:1px solid rgba(255,102,0,0.4) !important; box-shadow:0 8px 40px rgba(255,102,0,0.15) !important; }
   .avatar-modal-title { font-size:1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:0.1rem; }
   .avatar-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.6rem; }
   .avatar-option { display:flex; align-items:center; justify-content:center; width:100%; aspect-ratio:1/1; border-radius:50%; border:3px solid transparent; font-size:1.6rem; cursor:pointer; transition:transform 0.15s,border-color 0.15s,background 0.15s; background:#1e1e2e; overflow:hidden; contain:paint; }
@@ -2554,6 +2600,7 @@
   body.theme-nord .theme-option    { background:rgba(15,20,30,0.5) !important; border:1px solid rgba(59,74,94,0.35) !important; }
   body.theme-dracula .theme-option    { background:rgba(26,17,40,0.5) !important; border:1px solid rgba(85,85,170,0.35) !important; }
   body.theme-gothic .theme-option    { background:rgba(10,10,10,0.5) !important; border:1px solid rgba(51,51,51,0.35) !important; }
+  body.theme-halloween .theme-option    { background:rgba(10,5,5,0.5) !important; border:1px solid rgba(204,102,0,0.35) !important; }
   .theme-option:hover { border-color:var(--accent); }
   .theme-option.selected { border-color:var(--accent); background:rgba(124,92,191,0.12); }
   body.theme-8bit    .theme-option.selected { background:rgba(204,0,255,0.12) !important; border-color:#ff44ff !important; }
@@ -2568,6 +2615,7 @@
   body.theme-nord .theme-option.selected    { background:rgba(94,129,172,0.1) !important; border-color:#88c0d0 !important; }
   body.theme-dracula .theme-option.selected    { background:rgba(189,147,249,0.1) !important; border-color:#ff79c6 !important; }
   body.theme-gothic .theme-option.selected    { background:rgba(192,192,192,0.1) !important; border-color:#e0e0e0 !important; }
+  body.theme-halloween .theme-option.selected    { background:rgba(255,102,0,0.1) !important; border-color:#ff9933 !important; }
   .theme-option input[type="radio"] { width:auto; margin:0; accent-color:var(--accent); flex-shrink:0; }
   .theme-option-info { flex:1; }
   .theme-option-name { font-size:0.92rem; font-weight:700; color:var(--text); }
@@ -2586,6 +2634,7 @@
   .theme-preview.preview-nord    { background:linear-gradient(135deg,#0f141e 50%,#5e81ac 50%); border-color:#5e81ac; font-size:1.1rem; color:#88c0d0; }
   .theme-preview.preview-dracula    { background:linear-gradient(135deg,#1a1128 50%,#bd93f9 50%); border-color:#bd93f9; font-size:1.1rem; color:#ff79c6; }
   .theme-preview.preview-gothic    { background:linear-gradient(135deg,#0a0a0a 50%,#c0c0c0 50%); border-color:#c0c0c0; font-size:1.1rem; color:#e0e0e0; }
+  .theme-preview.preview-halloween    { background:linear-gradient(135deg,#0a0505 50%,#ff6600 50%); border-color:#ff6600; font-size:1.1rem; color:#ff9933; }
   /* ══════════════════════════════════════════════
      TURN MODE CARD (Create Room)
   ══════════════════════════════════════════════ */
@@ -3494,7 +3543,7 @@
     </div>
 
     <!-- TIMERS -->
-    <div class="feature-row">
+    <div class="feature-row creator-only">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-timers-toggle" type="checkbox" onchange="onTimersToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⏱ Timers</span>
       <button class="feature-edit-btn" id="timers-edit-btn" onclick="openFeatureSettings('timers')" title="Edit settings">EDIT</button>
@@ -3502,21 +3551,21 @@
     </div>
 
     <!-- VICTORY POINTS -->
-    <div class="feature-row" style="margin-bottom:0.75rem;">
+    <div class="feature-row creator-only" style="margin-bottom:0.75rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-vp-toggle" type="checkbox" onchange="onVPToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🏅 Victory Points</span>
       <button class="feature-info-btn" onclick="showFeatureInfo('vp')" title="What is this?">?</button>
     </div>
 
     <!-- STATUS EFFECTS -->
-    <div class="feature-row" style="margin-bottom:1.25rem;">
+    <div class="feature-row creator-only" style="margin-bottom:1.25rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-status-toggle" type="checkbox" onchange="onStatusEffectsToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🩹 Status Effects</span>
       <button class="feature-info-btn" onclick="showFeatureInfo('status')" title="What is this?">?</button>
     </div>
 
     <!-- ROUNDS -->
-    <div class="feature-row" style="margin-bottom:0.75rem;">
+    <div class="feature-row creator-only" style="margin-bottom:0.75rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-rounds-toggle" type="checkbox" onchange="onRoundsToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🔢 Rounds</span>
       <button class="feature-edit-btn" id="rounds-edit-btn" onclick="openFeatureSettings('rounds')" title="Edit settings">EDIT</button>
@@ -3524,7 +3573,7 @@
     </div>
 
     <!-- D&D TURN COMPONENTS -->
-    <div class="feature-row" style="margin-bottom:1.25rem;">
+    <div class="feature-row creator-only" style="margin-bottom:1.25rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-dnd-toggle" type="checkbox" onchange="onDndToggle(this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
@@ -3657,12 +3706,13 @@
     </div>
 
     <!-- Victory Points -->
-    <div class="feature-row" style="margin-bottom:0.5rem;">
+    <div class="feature-row creator-only" style="margin-bottom:0.5rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-vp-toggle" type="checkbox" onchange="onMidGameToggle('vp',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🏅 Victory Points</span>
     </div>
 
     <!-- Timers -->
+    <div class="creator-only">
     <div class="feature-row" style="margin-bottom:0.5rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-timers-toggle" type="checkbox" onchange="onMidGameToggle('timers',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⏱ Timers</span>
@@ -3693,16 +3743,18 @@
         <span style="font-size:0.8rem;color:var(--muted);">sec</span>
       </div>
     </div>
+    </div>
 
     <p id="mg-status" style="font-size:0.78rem;color:var(--accent-light);text-align:center;min-height:1.1em;margin:0 0 0.5rem;"></p>
 
     <!-- Status Effects -->
-    <div class="feature-row" style="margin-bottom:0.75rem;">
+    <div class="feature-row creator-only" style="margin-bottom:0.75rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-status-toggle" type="checkbox" onchange="onMidGameToggle('statusEffects',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🩹 Status Effects</span>
     </div>
 
     <!-- Rounds -->
+    <div class="creator-only">
     <div class="feature-row" style="margin-bottom:0.5rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-rounds-toggle" type="checkbox" onchange="onMidGameToggle('rounds',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">🔢 Rounds</span>
@@ -3715,9 +3767,10 @@
       </div>
       <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Current round resets to 1. This will restart the round count.</div>
     </div>
+    </div>
 
     <!-- D&D Turn Components -->
-    <div class="feature-row" style="margin-bottom:0.75rem;">
+    <div class="feature-row creator-only" style="margin-bottom:0.75rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-dnd-toggle" type="checkbox" onchange="onMidGameToggle('dndTurnComponents',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
@@ -3921,6 +3974,14 @@
       <div class="theme-option-info">
         <div class="theme-option-name">Gothic</div>
         <div class="theme-option-desc">Obsidian halls, silver candelabras, velvet dusk</div>
+      </div>
+    </label>
+    <label class="theme-option" id="theme-opt-halloween" onclick="selectTheme('halloween')">
+      <input type="radio" name="sk-theme-choice" value="halloween">
+      <div class="theme-preview preview-halloween">🎃</div>
+      <div class="theme-option-info">
+        <div class="theme-option-name">Halloween</div>
+        <div class="theme-option-desc">Pumpkin orange, blood red, dark autumn night</div>
       </div>
     </label>
     <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeThemesOverlay()">✕ Close</button>
@@ -4299,6 +4360,14 @@ let isHost = false;
 let unsubscribers = [];
 let localPlayers = [];
 let myName = '';
+
+// ── CREATOR / USER ROLE ──────────────────────────
+// Add your Firebase Auth UIDs here to grant Creator access.
+// Creator accounts see all features; User accounts see a stripped-down UI.
+const CREATOR_UIDS = [
+  'VD8hwPkOLTUN2Dsn1KsIBvUD65p1',
+];
+let isCreator = false;
 
 // ── SESSION PERSISTENCE (silent auto-resume) ────
 // Remembers which room/player this device was last part of, so closing
@@ -5106,6 +5175,8 @@ function initFirebase(cfg) {
     auth = getAuth(app);
     onAuthStateChanged(auth, user => {
       currentUser = user;
+      isCreator = user ? CREATOR_UIDS.includes(user.uid) : false;
+      document.body.classList.toggle('user-mode', !!user && !isCreator);
       updateAccountButtonUI();
     });
   } catch(e) {
@@ -8406,7 +8477,7 @@ function makeDraggable(listEl, onReorder) {
 }
 
 // ── THEME SYSTEM ─────────────────────────────
-const NAMED_THEMES = ['default','8bit','cyberpunk','fantasy','galaxy','forest','ocean','sunset','steampunk','vaporwave','nord','dracula','gothic'];
+const NAMED_THEMES = ['default','8bit','cyberpunk','fantasy','galaxy','forest','ocean','sunset','steampunk','vaporwave','nord','dracula','gothic','halloween'];
 
 function applyTheme(isLight) {
   document.body.classList.toggle('light-mode', isLight);
@@ -8416,11 +8487,14 @@ function applyTheme(isLight) {
 
 function applyFullTheme(themeName, isLight) {
   NAMED_THEMES.forEach(t => document.body.classList.remove('theme-' + t));
+  const toggleBtn = document.getElementById('theme-toggle-btn');
   if (themeName && themeName !== 'default') {
     document.body.classList.add('theme-' + themeName);
     applyTheme(false);
+    if (toggleBtn) toggleBtn.style.display = 'none';
   } else {
     applyTheme(isLight);
+    if (toggleBtn) toggleBtn.style.display = '';
   }
 }
 
