@@ -218,7 +218,16 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
   }
 
-  .btn-group { display: flex; flex-direction: column; gap: 0.85rem; }
+  .btn-group { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ── CREATE ROOM WIZARD STEPS ── */
+  .create-step { display: none; }
+  .create-step.revealed { display: block; }
+  .step-progress { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 1rem; text-align: center; }
+  .step-dots { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s, transform 0.3s; }
+  .step-dot.active { background: var(--accent); transform: scale(1.3); }
+  .step-dot.done { background: var(--accent-light); }
 
   button {
     width: 100%;
@@ -3232,52 +3241,64 @@
   <div class="screen-content-scaler" id="scaler-create">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
+    <div class="logo" style="font-size:2rem;margin-bottom:0.25rem;">Room Settings</div>
+    <div class="step-dots" id="create-step-dots">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+    </div>
+    <div class="step-progress" id="create-step-label">Step 1 of 3 — Your Name</div>
 
-    <!-- Card 1: Player name & color -->
-<div class="card" style="margin-bottom: 1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
-  
-  <label style="margin-bottom: 0.25rem;">Name</label>
-  <input id="host-name" placeholder="Type Player / Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
-  
-  <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
-    <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
-    <span id="host-color-label">Choose Your Player Color</span>
-  </button>
-</div>
-
-    <!-- Card 2: Turn Mode -->
-    <div class="card" style="margin-bottom:1.75rem; padding-top:1rem; padding-bottom:1rem;">
-      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.65rem;">Turn Mode <span style="color:#e05555;">*</span></div>
-      <div class="turn-mode-btns">
-        <button class="turn-mode-btn" id="tm-btn-classic" onclick="selectTurnMode('classic')">
-          <span class="tm-icon">♟️</span>
-          Classic Turns
-        </button>
-        <button class="turn-mode-btn" id="tm-btn-speed" onclick="selectTurnMode('speed')">
-          <span class="tm-icon">⚡</span>
-          Speed Round
+    <!-- Card 1: Player name & color (Step 1) -->
+    <div class="create-step revealed" data-step="1">
+      <div class="card" style="margin-bottom: 1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+        <label style="margin-bottom: 0.25rem;">Name</label>
+        <input id="host-name" placeholder="Type Player / Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
+        <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
+          <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
+          <span id="host-color-label">Choose Your Player Color</span>
         </button>
       </div>
-      <div class="turn-mode-selection" id="tm-selection-text">Choose a turn mode to continue.</div>
-      <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;margin-top:0.25rem;">⚠ Please choose a turn mode.</div>
     </div>
 
-    <!-- Card 3: Game Settings / Features -->
-    <div class="card" style="margin-bottom:0.75rem; padding-top: 1rem; padding-bottom: 1rem;"">
-      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem;">Game Settings / Features</div>
-      <button class="btn-secondary" onclick="openFeaturesOverlay()" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; font-size:0.88rem;">
-        <span>⚙️ Configure Features</span>
-        <span style="color:var(--muted); font-size:0.78rem;">›</span>
-      </button>
-      <div id="features-summary" style="margin-top:0.5rem; font-size:0.75rem; color:var(--muted); min-height:1.1em; text-align:center;">All features off</div>
+    <!-- Card 2: Turn Mode (Step 2) -->
+    <div class="create-step" data-step="2">
+      <div class="card" style="margin-bottom:1.75rem; padding-top:1rem; padding-bottom:1rem;">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.65rem;">Turn Mode <span style="color:#e05555;">*</span></div>
+        <div class="turn-mode-btns">
+          <button class="turn-mode-btn" id="tm-btn-classic" onclick="selectTurnMode('classic')">
+            <span class="tm-icon">♟️</span>
+            Classic Turns
+          </button>
+          <button class="turn-mode-btn" id="tm-btn-speed" onclick="selectTurnMode('speed')">
+            <span class="tm-icon">⚡</span>
+            Speed Round
+          </button>
+        </div>
+        <div class="turn-mode-selection" id="tm-selection-text">Choose a turn mode to continue.</div>
+        <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;margin-top:0.25rem;">⚠ Please choose a turn mode.</div>
+      </div>
     </div>
 
-    <!-- Create Room button below cards -->
-     <br>
-    <button class="btn-primary" onclick="createRoom()" style="max-width:400px;width:100%;">Create Room</button>
-    <p id="create-status" class="status"></p>
-      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto;">← Back</button>
+    <!-- Card 3: Game Settings / Features (Step 3) -->
+    <div class="create-step" data-step="3">
+      <div class="card" style="margin-bottom:0.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem;">Game Settings / Features</div>
+        <button class="btn-secondary" onclick="openFeaturesOverlay()" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; font-size:0.88rem;">
+          <span>⚙️ Configure Features</span>
+          <span style="color:var(--muted); font-size:0.78rem;">›</span>
+        </button>
+        <div id="features-summary" style="margin-top:0.5rem; font-size:0.75rem; color:var(--muted); min-height:1.1em; text-align:center;">All features off</div>
+      </div>
+    </div>
+
+    <!-- Wizard buttons (always at bottom, after last revealed card) -->
+    <div id="create-wizard-btns" style="width:100%;max-width:420px;">
+      <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
+      <button class="btn-primary" id="create-final-btn" onclick="createRoom()" style="width:100%;display:none;">Create Room</button>
+      <p id="create-status" class="status"></p>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:1.5rem;">← Home</button>
+    </div>
 
   </div>
 </div>
@@ -3289,7 +3310,7 @@
   <div class="screen-content-scaler" id="scaler-join">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:1.75rem;margin-bottom:.2rem;">Join Room</div>
+    <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
 
     <!-- Card 1: Player name & color -->
     <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
@@ -4689,22 +4710,52 @@ window.backToHomeFromProfile = function() {
 };
 
 function getSavedAvatar() {
-  try { return localStorage.getItem('sk_avatar') || ''; } catch { return ''; }
+  try {
+    const uid = currentUser?.uid || '';
+    if (uid) {
+      const key = 'sk_avatar_' + uid;
+      const val = localStorage.getItem(key);
+      if (val) return val;
+      const legacy = localStorage.getItem('sk_avatar');
+      if (legacy) { localStorage.setItem(key, legacy); return legacy; }
+      return '';
+    }
+    return localStorage.getItem('sk_avatar') || '';
+  } catch { return ''; }
 }
 
 function saveAvatar(emoji) {
-  try { localStorage.setItem('sk_avatar', emoji); } catch {}
+  try {
+    const uid = currentUser?.uid || '';
+    if (uid) localStorage.setItem('sk_avatar_' + uid, emoji);
+    else localStorage.setItem('sk_avatar', emoji);
+  } catch {}
   if (roomCode && myId) {
     set(ref(db, `rooms/${roomCode}/players/${myId}/avatar`), emoji).catch(() => {});
   }
 }
 
 function getSavedName() {
-  try { return localStorage.getItem('sk_preferred_name') || ''; } catch { return ''; }
+  try {
+    const uid = currentUser?.uid || '';
+    if (uid) {
+      const key = 'sk_preferred_name_' + uid;
+      const val = localStorage.getItem(key);
+      if (val) return val;
+      const legacy = localStorage.getItem('sk_preferred_name');
+      if (legacy) { localStorage.setItem(key, legacy); return legacy; }
+      return '';
+    }
+    return localStorage.getItem('sk_preferred_name') || '';
+  } catch { return ''; }
 }
 
 function saveName(name) {
-  try { localStorage.setItem('sk_preferred_name', name); } catch {}
+  try {
+    const uid = currentUser?.uid || '';
+    if (uid) localStorage.setItem('sk_preferred_name_' + uid, name);
+    else localStorage.setItem('sk_preferred_name', name);
+  } catch {}
 }
 
 const AVATARS = [
@@ -5532,8 +5583,61 @@ window.showCreateRoom = function() {
     if (saved) nameEl.value = saved;
   }
   updateFeaturesSummary();
+  // Reset wizard to step 1
+  createStep = 1;
+  renderCreateStep();
 };
 window.showJoinRoom = () => showScreen('join');
+
+// ── CREATE ROOM WIZARD ──
+let createStep = 1;
+const STEP_LABELS = ['Step 1 of 3 — Your Name', 'Step 2 of 3 — Turn Mode', 'Step 3 of 3 — Game Settings'];
+
+function renderCreateStep() {
+  // Reveal all cards up to current step, hide the rest
+  document.querySelectorAll('.create-step').forEach(el => {
+    const step = parseInt(el.dataset.step);
+    el.classList.toggle('revealed', step <= createStep);
+  });
+  // Update dots
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (dot) {
+      dot.classList.toggle('active', i === createStep);
+      dot.classList.toggle('done', i < createStep);
+    }
+  }
+  // Update label
+  const label = document.getElementById('create-step-label');
+  if (label) label.textContent = STEP_LABELS[createStep - 1];
+  // Show/hide buttons
+  const nextBtn = document.getElementById('create-next-btn');
+  const finalBtn = document.getElementById('create-final-btn');
+  if (nextBtn) nextBtn.style.display = createStep < 3 ? '' : 'none';
+  if (finalBtn) finalBtn.style.display = createStep === 3 ? '' : 'none';
+}
+
+window.createNextStep = function() {
+  // Validate current step before advancing
+  if (createStep === 1) {
+    const name = document.getElementById('host-name').value.trim();
+    if (!name) { status('create-status', 'Enter your name.', 'error'); return; }
+  }
+  if (createStep === 2) {
+    if (!turnMode || (turnMode === 'classic' && !passDirection)) {
+      document.getElementById('tm-required-note').style.display = 'block';
+      status('create-status', 'Choose a turn mode to continue.', 'error');
+      return;
+    }
+    document.getElementById('tm-required-note').style.display = 'none';
+  }
+  status('create-status', '', '');
+  if (createStep < 3) {
+    createStep++;
+    renderCreateStep();
+    haptic(5);
+  }
+};
 
 // ── TOOLS COLLAPSE TOGGLE ──
 window.toggleTools = function() {
