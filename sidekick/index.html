@@ -3,14 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SideKick</title>
+<title>SideKick — Board Game Turn Tracker</title>
+<meta name="description" content="Pass the turn. Keep the vibe. SideKick is a real-time turn tracker for tabletop game nights with timers, nudge, victory points, and more.">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SideKick">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<!-- Open Graph / Social Sharing -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="SideKick — Board Game Turn Tracker">
+<meta property="og:description" content="Pass the turn. Keep the vibe. A real-time turn tracker for tabletop game nights with timers, nudge, victory points, and more.">
+<meta property="og:image" content="icon-512.png">
+<meta property="og:url" content="https://loot-shelf.github.io/inventory/sidekick/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SideKick — Board Game Turn Tracker">
+<meta name="twitter:description" content="Pass the turn. Keep the vibe. A real-time turn tracker for tabletop game nights.">
+<meta name="twitter:image" content="icon-512.png">
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -411,6 +423,42 @@
     100% { transform: scale(1, 1); }
   }
   #screen-active.nudge-squish { animation: nudgeSquish 0.35s ease-out; }
+
+  /* ── GLOBAL ERROR TOAST ── */
+  #error-toast {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    background:#c0392b; color:#fff; padding:0.75rem 1.25rem;
+    border-radius:12px; font-size:0.88rem; font-weight:600;
+    box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    z-index:99999; opacity:0; transition:opacity 0.3s;
+    pointer-events:none; max-width:90vw; text-align:center;
+  }
+  #error-toast.show { opacity:1; }
+
+  /* ── REUSABLE DIALOG MODAL ── */
+  #app-dialog-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99998;
+    display:none; align-items:center; justify-content:center;
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  }
+  #app-dialog-overlay.show { display:flex; }
+  #app-dialog-box {
+    background:var(--surface); border:1px solid var(--border); border-radius:16px;
+    padding:1.5rem 1.25rem; width:min(340px,90vw); text-align:center;
+    box-shadow:0 0 24px rgba(124,92,191,0.18), 0 10px 28px rgba(0,0,0,0.7);
+  }
+  #app-dialog-msg {
+    font-size:0.95rem; font-weight:600; color:var(--text);
+    margin-bottom:1rem; line-height:1.5; white-space:pre-line;
+  }
+  #app-dialog-input {
+    width:100%; padding:0.65rem 0.85rem; font-size:0.9rem;
+    border-radius:10px; border:1px solid var(--border);
+    background:#1e1e2e; color:var(--text); margin-bottom:1rem; box-sizing:border-box;
+  }
+  #app-dialog-input:focus { border-color:var(--accent); outline:none; }
+  #app-dialog-btns { display:flex; gap:0.5rem; }
+  #app-dialog-btns button { flex:1; }
 
   .active-divider {
     position: absolute;
@@ -3035,13 +3083,28 @@
 
     <div class="setup-step">
       <h3>Step 4 — Security Rules (recommended)</h3>
-      <p>In the Realtime Database section, click the <strong>Rules</strong> tab and replace the content with this (allows read/write for anyone with the room code, no account needed):</p>
+      <p>In the Realtime Database section, click the <strong>Rules</strong> tab and replace the content with this (validates data structure, prevents abuse):</p>
       <div class="code-block">{
   "rules": {
     "rooms": {
       "$roomId": {
         ".read": true,
-        ".write": true
+        ".write": true,
+        "players": {
+          "$playerId": {
+            ".validate": "newData.hasChildren(['name']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 20"
+          }
+        },
+        "nudges": {
+          "$playerId": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+          }
+        },
+        "nudgeSentTotals": {
+          "$senderId": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5000"
+          }
+        }
       }
     }
   }
@@ -3918,7 +3981,7 @@
     <button class="tool-list-btn" onclick="openMySavedGames()">💾 My Saved Games</button>
     <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="openThemesOverlay()">🎨 Themes</button>
     <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="openAvatarOverlay()">🖼️ Change Avatar</button>
-    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="alert('Account settings are coming soon!')">⚙️ Account Settings</button>
+    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="showAlert('Account settings are coming soon!')">⚙️ Account Settings</button>
 
     <button class="btn-secondary btn-sm" style="margin-top:1rem; width:100%;" onclick="backToHomeFromProfile()">🏠 Back to Home</button>
     <div style="height:1.5rem;"></div>
@@ -4554,12 +4617,12 @@ window.doSignOut = async function() {
     await signOut(auth);
     showScreen('home');
   } catch (err) {
-    alert('Sign out failed: ' + (err && err.message ? err.message : err));
+    showAlert('Sign out failed: ' + (err && err.message ? err.message : err));
   }
 };
 
-window.confirmSignOut = function() {
-  if (confirm('Sign out of your host account?')) {
+window.confirmSignOut = async function() {
+  if (await showConfirm('Sign out of your host account?')) {
     doSignOut();
   }
 };
@@ -4887,7 +4950,7 @@ function renderBuzzDownTheLine() {
       const timeStr = buzzFormatTime(uid);
       const row = document.createElement('div');
       row.className = 'buzz-order-row' + (i === buzzDtlIndex ? ' active-row' : '');
-      row.innerHTML = `<span class="buzz-order-pos">#${i+1}</span><span class="buzz-order-dot" style="background:${p?.color||'#888'}"></span><span style="flex:1">${p?.name||'?'}</span><span class="buzz-order-time">${timeStr}</span>`;
+      row.innerHTML = `<span class="buzz-order-pos">#${i+1}</span><span class="buzz-order-dot" style="background:${p?.color||'#888'}"></span><span style="flex:1">${esc(p?.name||'?')}</span><span class="buzz-order-time">${timeStr}</span>`;
       ordList.appendChild(row);
     });
   }
@@ -4925,7 +4988,7 @@ function renderBuzzScoreChips() {
     const pts = buzzScores[p.id] || 0;
     const chip = document.createElement('div');
     chip.className = 'buzz-score-chip';
-    chip.innerHTML = `<span class="buzz-score-dot" style="background:${p.color||'#888'}"></span>${p.name}<span class="buzz-score-pts">${pts}</span>`;
+    chip.innerHTML = `<span class="buzz-score-dot" style="background:${p.color||'#888'}"></span>${esc(p.name)}<span class="buzz-score-pts">${pts}</span>`;
     container.appendChild(chip);
   });
 }
@@ -5083,7 +5146,7 @@ function showBuzzComplete() {
     sorted.forEach((p, i) => {
       const row = document.createElement('div');
       row.className = 'buzz-final-row' + (i === 0 ? ' winner-row' : '');
-      row.innerHTML = `<span class="buzz-final-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`}</span><span class="buzz-final-dot" style="background:${p.color||'#888'}"></span><span class="buzz-final-name">${p.name}</span><span class="buzz-final-pts">${buzzScores[p.id]||0} pts</span>`;
+      row.innerHTML = `<span class="buzz-final-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`}</span><span class="buzz-final-dot" style="background:${p.color||'#888'}"></span><span class="buzz-final-name">${esc(p.name)}</span><span class="buzz-final-pts">${buzzScores[p.id]||0} pts</span>`;
       container.appendChild(row);
     });
   }
@@ -5166,6 +5229,9 @@ let nudgeCountdownTimer = null;
 let nudgeUnlocked = false;
 let nudgeUsedThisTurn = false;  // for single nudge mode
 let activeNudgeCount = 0;    // nudges received by active player this turn (shown on active screen)
+const NUDGE_CAP = 50;        // max nudges per sender per active player per turn
+let nudgeSentToActive = {};   // {senderId: count} for current active player
+let nudgeCapTargetId = null;  // active player ID the cap is tied to
 
 // ── HELPERS ──────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2,10); }
@@ -5455,7 +5521,7 @@ window.openTool = function(toolId) {
   }
 
   const label = TOOL_LABELS[toolId] || toolId;
-  alert(label + ' is coming soon!');
+  showAlert(label + ' is coming soon!');
 };
 
 // ── RANDOM NUMBER TOOL ───────────────────────────
@@ -5800,7 +5866,7 @@ let currentStatusAlertKey = null;
 
 window.openStatusMenu = function() {
   if (!featureStatusEffectsEnabled) {
-    alert('Status Effects is not enabled for this room. The host can turn it on in Room Settings.');
+    showAlert('Status Effects is not enabled for this room. The host can turn it on in Room Settings.');
     return;
   }
   refreshStatusMenuUI();
@@ -5963,8 +6029,8 @@ window.goBackToCreate = async function() {
   if (nameEl && myName) nameEl.value = myName;
 };
 
-window.confirmLeave = function() {
-  if (confirm('Leave the room?')) {
+window.confirmLeave = async function() {
+  if (await showConfirm('Leave the room?')) {
     resetOrientation();
     if (isHost) { closeRoom(); } else { leaveRoom(); }
   }
@@ -5987,8 +6053,8 @@ window.closeQROverlay = function() {
   qrVisible = false;
 };
 
-window.confirmCloseRoom = function() {
-  if (confirm('Close the room? All players will be disconnected and the room will be deleted.')) {
+window.confirmCloseRoom = async function() {
+  if (await showConfirm('Close the room? All players will be disconnected and the room will be deleted.')) {
     closeRoom();
   }
 };
@@ -6072,7 +6138,7 @@ window.closeHostCrownMenu = function() {
 // Keep toggleHostMenu as no-op for any lingering references
 window.toggleHostMenu = function() {};
 
-window.hostMenuAction = function(action) {
+window.hostMenuAction = async function(action) {
   if (action === 'open-tools') {
     openToolsOverlay();
   } else if (action === 'end-round') {
@@ -6094,16 +6160,16 @@ window.hostMenuAction = function(action) {
         await update(ref(db), updates);
       }
       if (!featureRoundsEnabled && !featureTimersEnabled) {
-        alert('No round-based features are currently enabled.');
+        showAlert('No round-based features are currently enabled.');
       }
     };
     doEndRound();
   } else if (action === 'save-game') {
-    if (confirm('Save the game? Everyone will be paused until you resume with the save code.')) {
+    if (await showConfirm('Save the game? Everyone will be paused until you resume with the save code.')) {
       saveCurrentGame();
     }
   } else if (action === 'end-game') {
-    if (confirm('End the game' + (featureAwardsEnabled ? ' and start the Achievement Awards?' : '?'))) {
+    if (await showConfirm('End the game' + (featureAwardsEnabled ? ' and start the Achievement Awards?' : '?'))) {
       triggerEndGame();
     }
   }
@@ -6406,12 +6472,6 @@ window.sendNudge = async function() {
   if (!db || !roomCode) return;
   if (nudgeMode === 'single' && nudgeUsedThisTurn) return;
 
-  nudgeUsedThisTurn = true;
-  if (nudgeMode === 'single') {
-    const btn = document.getElementById('nudge-btn');
-    if (btn) { btn.style.opacity = '0.35'; btn.disabled = true; }
-  }
-
   // Read who is currently active directly from Firebase to avoid stale localPlayers
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
@@ -6420,6 +6480,28 @@ window.sendNudge = async function() {
   const players = buildOrderedPlayers(room.players || {});
   const player = players[activeIdx];
   if (!player) return;
+
+  // Reset cap tracking if active player changed
+  if (nudgeCapTargetId !== player.id) {
+    nudgeSentToActive = {};
+    nudgeCapTargetId = player.id;
+  }
+
+  // Check per-sender cap (50 nudges per active player per turn)
+  const sent = nudgeSentToActive[myId] || 0;
+  if (sent >= NUDGE_CAP) {
+    showErrorToast('Nudge limit reached for this turn (50 max).');
+    return;
+  }
+
+  nudgeUsedThisTurn = true;
+  if (nudgeMode === 'single') {
+    const btn = document.getElementById('nudge-btn');
+    if (btn) { btn.style.opacity = '0.35'; btn.disabled = true; }
+  }
+
+  // Track locally
+  nudgeSentToActive[myId] = sent + 1;
 
   // Use separate keys per-turn keyed to the player ID to avoid cross-turn bleed
   const nudgeRef = ref(db, `rooms/${roomCode}/nudges/${player.id}`);
@@ -6474,6 +6556,8 @@ function spawnNudgeFloat(container, color) {
 function resetNudgesForNewTurn() {
   // Reset local count immediately so syncNudgeToActiveScreen doesn't fire stale diffs
   activeNudgeCount = 0;
+  nudgeSentToActive = {};
+  nudgeCapTargetId = null;
   const floatContainer = document.getElementById('nudge-float-container');
   if (floatContainer) floatContainer.innerHTML = '';
   // Host clears the entire nudges map so no stale counts bleed into the new turn
@@ -7417,14 +7501,14 @@ window.toggleKnockOut = async function(playerId, currentlyOut) {
 // the player list with the kicked player actually removed.
 window.kickPlayer = async function(playerId, playerName) {
   if (!db || !roomCode) return;
-  if (!confirm(`Remove ${playerName} from the room? They can rejoin later with the room code, but as a new player.`)) return;
+  if (!await showConfirm(`Remove ${playerName} from the room? They can rejoin later with the room code, but as a new player.`)) return;
 
   let snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   let room = snap.val();
   const allPlayersBefore = buildOrderedPlayers(room.players || {});
   if (allPlayersBefore.length <= 1) {
-    alert("Can't remove the last player in the room.");
+    showAlert("Can't remove the last player in the room.");
     return;
   }
 
@@ -8062,14 +8146,14 @@ window.saveCurrentGame = async function() {
   if (!db || !roomCode || !isHost) return;
   if (!requireHostAccount()) return;
 
-  const name = prompt('Name this save (e.g. "Friday D&D — Session 12"):', '');
+  const name = await showPrompt('Name this save (e.g. "Friday D&D — Session 12"):', '');
   if (name === null) return; // cancelled
   const saveName = name.trim() || `Saved Game — ${new Date().toLocaleDateString()}`;
 
   try {
     const roomRef = ref(db, `rooms/${roomCode}`);
     const snap = await get(roomRef);
-    if (!snap.exists()) { alert('Could not save: room not found.'); return; }
+    if (!snap.exists()) { showAlert('Could not save: room not found.'); return; }
     const room = snap.val();
 
     const hostUserId = getHostId();
@@ -8095,7 +8179,7 @@ window.saveCurrentGame = async function() {
     document.getElementById('saved-screen-player-view').style.display = 'none';
     document.getElementById('saved-screen').classList.add('show');
   } catch (err) {
-    alert('Save failed: ' + (err && err.message ? err.message : err));
+    showAlert('Save failed: ' + (err && err.message ? err.message : err));
   }
 };
 
@@ -8157,7 +8241,7 @@ window.resumeFromSaveCode = async function() {
 async function finishResume(existingPlayerId) {
   const restored = JSON.parse(JSON.stringify(pendingResumeData));
   const originalCode = restored._originalRoomCode || null;
-  if (!originalCode) { alert('This save is missing its original room code and cannot be restored.'); return; }
+  if (!originalCode) { showAlert('This save is missing its original room code and cannot be restored.'); return; }
 
   delete restored.savedAt;
   delete restored._originalRoomCode;
@@ -8171,7 +8255,7 @@ async function finishResume(existingPlayerId) {
   // 4-character code, but cheap to guard against).
   const existingSnap = await get(ref(db, `rooms/${originalCode}`));
   if (existingSnap.exists() && existingSnap.val().status !== 'saved') {
-    alert('That room code is currently in use by another game. Please try again in a moment.');
+    showAlert('That room code is currently in use by another game. Please try again in a moment.');
     return;
   }
 
@@ -8278,25 +8362,25 @@ async function resumeFromList(code, save) {
 }
 
 async function renameSave(code, save, row) {
-  const newName = prompt('Rename this save:', save.name || '');
+  const newName = await showPrompt('Rename this save:', save.name || '');
   if (newName === null || !newName.trim()) return;
   try {
     await update(ref(db, `savedGames/${getHostId()}/${code}`), { name: newName.trim() });
     row.querySelector('.save-row-name').textContent = newName.trim();
     save.name = newName.trim();
   } catch (err) {
-    alert('Rename failed: ' + (err && err.message ? err.message : err));
+    showAlert('Rename failed: ' + (err && err.message ? err.message : err));
   }
 }
 
 async function deleteSave(code, row) {
-  if (!confirm('Delete this saved game? This cannot be undone.')) return;
+  if (!await showConfirm('Delete this saved game? This cannot be undone.')) return;
   try {
     await remove(ref(db, `savedGames/${getHostId()}/${code}`));
     await remove(ref(db, `saveCodeIndex/${code}`));
     row.remove();
   } catch (err) {
-    alert('Delete failed: ' + (err && err.message ? err.message : err));
+    showAlert('Delete failed: ' + (err && err.message ? err.message : err));
   }
 }
 
@@ -8467,7 +8551,7 @@ function showVPEntryOverlay(room) {
 window.submitVP = async function() {
   if (!db || !roomCode) return;
   const val = parseInt(document.getElementById('vp-score-input').value);
-  if (isNaN(val) || val < 0) { alert('Please enter a valid score.'); return; }
+  if (isNaN(val) || val < 0) { showAlert('Please enter a valid score.'); return; }
   const updates = {};
   updates[`rooms/${roomCode}/vpScores/${myId}`]  = val;
   updates[`rooms/${roomCode}/vpReady/${myId}`]   = true;
@@ -8642,7 +8726,7 @@ window.selectTheme = function(themeName) {
 })();
 
 function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 // ── D&D TURN COMPONENTS ──────────────────────
@@ -8686,6 +8770,61 @@ window.dndConfirmYes = function() {
   if (overlay) overlay.style.display = 'none';
   if (confirm) confirm.style.display = 'none';
 };
+
+// ── GLOBAL ERROR HANDLER ─────────────────────────
+function showErrorToast(msg) {
+  const t = document.getElementById('error-toast');
+  if (!t) return;
+  t.textContent = msg || 'Something went wrong. Try refreshing.';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 5000);
+}
+window.showErrorToast = showErrorToast;
+
+window.onerror = function(msg, src, line, col, err) {
+  console.error('[SideKick Error]', msg, src, line, col, err);
+  showErrorToast('Something went wrong. Try refreshing.');
+  return false;
+};
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('[SideKick Unhandled]', e.reason);
+  showErrorToast('Connection issue. Check your network and try again.');
+});
+
+// ── REUSABLE DIALOG SYSTEM ───────────────────────
+let appDialogResolve = null;
+window.appDialogResolve = function(val) {
+  const overlay = document.getElementById('app-dialog-overlay');
+  if (overlay) overlay.classList.remove('show');
+  if (appDialogResolve) { appDialogResolve(val); appDialogResolve = null; }
+};
+
+function showDialog(type, message, defaultVal) {
+  return new Promise(resolve => {
+    appDialogResolve = resolve;
+    const overlay = document.getElementById('app-dialog-overlay');
+    const msgEl = document.getElementById('app-dialog-msg');
+    const input = document.getElementById('app-dialog-input');
+    const cancelBtn = document.getElementById('app-dialog-cancel');
+    const okBtn = document.getElementById('app-dialog-ok');
+    if (!overlay || !msgEl) { resolve(null); return; }
+    msgEl.textContent = message;
+    if (type === 'prompt') {
+      input.style.display = '';
+      input.value = defaultVal || '';
+      input.focus();
+    } else {
+      input.style.display = 'none';
+    }
+    cancelBtn.style.display = type === 'alert' ? 'none' : '';
+    okBtn.textContent = type === 'prompt' ? 'Save' : 'OK';
+    overlay.classList.add('show');
+    if (type === 'prompt') setTimeout(() => input.focus(), 100);
+  });
+}
+window.showAlert = function(msg) { return showDialog('alert', msg); };
+window.showConfirm = function(msg) { return showDialog('confirm', msg); };
+window.showPrompt = function(msg, def) { return showDialog('prompt', msg, def); };
 </script>
 
 <script>
@@ -8700,6 +8839,7 @@ let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+  try { if (localStorage.getItem('sk_install_dismissed') === '1') return; } catch {}
   document.getElementById('install-banner').style.display = 'flex';
 });
 
@@ -8714,6 +8854,7 @@ window.installPWA = function() {
 
 window.dismissInstall = function() {
   document.getElementById('install-banner').style.display = 'none';
+  try { localStorage.setItem('sk_install_dismissed', '1'); } catch {}
 };
 
 </script>
@@ -8779,6 +8920,17 @@ window.dismissInstall = function() {
     <button class="host-menu-item" style="width:100%; border-radius:10px; margin-bottom:0.4rem;" onclick="closeHostCrownMenu(); hostMenuAction('save-game')">💾 Save Game</button>
     <button class="host-menu-item danger" style="width:100%; border-radius:10px; margin-bottom:0.75rem;" onclick="closeHostCrownMenu(); hostMenuAction('end-game')">🏆 End Game</button>
     <button class="btn-secondary btn-sm" style="width:100%;" onclick="closeHostCrownMenu()">✕ Close</button>
+  </div>
+</div>
+<div id="error-toast"></div>
+<div id="app-dialog-overlay">
+  <div id="app-dialog-box">
+    <div id="app-dialog-msg"></div>
+    <input type="text" id="app-dialog-input" style="display:none;">
+    <div id="app-dialog-btns">
+      <button class="btn-secondary btn-sm" id="app-dialog-cancel" onclick="appDialogResolve(false)">Cancel</button>
+      <button class="btn-primary btn-sm" id="app-dialog-ok" onclick="appDialogResolve(true)">OK</button>
+    </div>
   </div>
 </div>
 
