@@ -239,10 +239,12 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; }
+  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1.5rem; }
   #create-cards-area.step-mode { justify-content: center; align-items: center; }
-  #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; gap:1.75rem; }
-  #create-cards-area.stack-mode { justify-content: space-evenly; align-items: center; }
+  #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
+  #create-cards-area.stack-mode { justify-content: center; align-items: center; }
+  .create-spacer { flex:0; transition: flex 0.3s ease; }
+  #create-cards-area.mid-mode .create-spacer { flex:1; }
 
   /* ── JOIN ROOM WIZARD STEPS ── */
   .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
@@ -263,10 +265,12 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; }
+  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1.5rem; }
   #join-cards-area.step-mode { justify-content: center; align-items: center; }
-  #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; gap:1.75rem; }
-  #join-cards-area.stack-mode { justify-content: space-evenly; align-items: center; }
+  #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
+  #join-cards-area.stack-mode { justify-content: center; align-items: center; }
+  .join-spacer { flex:0; transition: flex 0.3s ease; }
+  #join-cards-area.mid-mode .join-spacer { flex:1; }
 
   button {
     width: 100%;
@@ -3282,7 +3286,7 @@
   <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;height:calc(100% - 160px);overflow:hidden;" class="step-mode">
+    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;overflow:hidden;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="create-logo" style="font-size:2rem;">Room Settings</div>
@@ -3333,15 +3337,16 @@
       </div>
     </div>
 
-    </div><!-- end cards area -->
-
-    <!-- Wizard buttons -->
-    <div id="create-wizard-btns" style="position:fixed;bottom:0;left:0;right:0;width:100%;max-width:420px;margin:0 auto;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));z-index:100;">
+    <!-- Wizard buttons (inside cards area, always at bottom) -->
+    <div id="create-spacer" class="create-spacer" style="flex:0;transition:flex 0.3s ease;"></div>
+    <div id="create-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.5rem 0 env(safe-area-inset-bottom, 0.5rem);">
       <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="create-final-btn" onclick="createRoom()" style="width:100%;display:none;">Create Room</button>
       <p id="create-status" class="status"></p>
-      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:1.5rem;">← Home</button>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:0;">← Home</button>
     </div>
+
+    </div><!-- end cards area -->
 
   </div>
 </div>
@@ -3353,7 +3358,7 @@
   <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;height:calc(100% - 160px);overflow:hidden;" class="step-mode">
+    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;overflow:hidden;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="join-logo" style="font-size:2rem;">Join Room</div>
@@ -3383,15 +3388,16 @@
       </div>
     </div>
 
-    </div><!-- end cards area -->
-
-    <!-- Wizard buttons -->
-    <div id="join-wizard-btns" style="position:fixed;bottom:0;left:0;right:0;width:100%;max-width:420px;margin:0 auto;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));z-index:100;">
+    <!-- Wizard buttons (inside cards area) -->
+    <div id="join-spacer" class="join-spacer" style="flex:0;transition:flex 0.3s ease;"></div>
+    <div id="join-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.5rem 0 env(safe-area-inset-bottom, 0.5rem);">
       <button class="btn-primary" id="join-next-btn" onclick="joinNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="join-final-btn" onclick="joinRoom()" style="width:100%;display:none;">Join Room</button>
       <p id="join-status" class="status"></p>
-      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:1.5rem;">← Home</button>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:0;">← Home</button>
     </div>
+
+    </div><!-- end cards area -->
 
   </div>
 </div>
