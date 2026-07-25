@@ -3280,7 +3280,7 @@
   <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="create-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;" class="step-mode">
+    <div id="create-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;padding-bottom:120px;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="create-logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
@@ -3334,7 +3334,7 @@
     </div><!-- end cards area -->
 
     <!-- Wizard buttons -->
-    <div id="create-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;margin-top:auto;padding:0.75rem 0 env(safe-area-inset-bottom, 0.75rem);">
+    <div id="create-wizard-btns" style="position:fixed;bottom:0;left:0;right:0;width:100%;max-width:420px;margin:0 auto;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));z-index:100;">
       <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="create-final-btn" onclick="createRoom()" style="width:100%;display:none;">Create Room</button>
       <p id="create-status" class="status"></p>
@@ -3351,7 +3351,7 @@
   <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="join-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;" class="step-mode">
+    <div id="join-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;padding-bottom:120px;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="join-logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
@@ -3374,14 +3374,17 @@
       <div class="card" style="margin-bottom:1.75rem;">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 2</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Enter Room Code</div>
-        <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center;margin-bottom:0;">
+        <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center;margin-bottom:0.75rem;">
+        <button class="btn-secondary btn-sm" onclick="openQRScanner()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+          <span style="font-size:1.2rem;">📷</span> Scan QR Code
+        </button>
       </div>
     </div>
 
     </div><!-- end cards area -->
 
     <!-- Wizard buttons -->
-    <div id="join-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;margin-top:auto;padding:0.75rem 0 env(safe-area-inset-bottom, 0.75rem);">
+    <div id="join-wizard-btns" style="position:fixed;bottom:0;left:0;right:0;width:100%;max-width:420px;margin:0 auto;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));z-index:100;">
       <button class="btn-primary" id="join-next-btn" onclick="joinNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="join-final-btn" onclick="joinRoom()" style="width:100%;display:none;">Join Room</button>
       <p id="join-status" class="status"></p>
@@ -3407,6 +3410,22 @@
     <p style="font-size:0.72rem; color:var(--muted); margin-bottom:1rem;">Players scan this to join instantly</p>
     <button class="btn-secondary btn-sm" style="width:100%;" onclick="closeQROverlay()">✕ Close</button>
   </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  QR SCANNER (Camera)                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="scanner-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#000;flex-direction:column;align-items:center;justify-content:center;">
+  <div style="position:absolute;top:1rem;left:1rem;right:1rem;display:flex;justify-content:space-between;align-items:center;z-index:10;">
+    <div style="font-size:1.1rem;font-weight:700;color:#fff;">Scan QR Code</div>
+    <button onclick="closeQRScanner()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.5rem;width:40px;height:40px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>
+  </div>
+  <video id="scanner-video" autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+    <div style="width:220px;height:220px;border:3px solid rgba(255,255,255,0.7);border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,0.4);"></div>
+  </div>
+  <div id="scanner-status" style="position:absolute;bottom:3rem;left:0;right:0;text-align:center;color:#fff;font-size:0.9rem;text-shadow:0 1px 4px rgba(0,0,0,0.6);">Point camera at QR code</div>
+  <button onclick="closeQRScanner()" style="position:absolute;bottom:1rem;width:calc(100% - 2rem);max-width:380px;padding:0.85rem;border-radius:12px;border:none;background:rgba(255,255,255,0.15);color:#fff;font-size:1rem;font-weight:600;backdrop-filter:blur(8px);cursor:pointer;">Cancel</button>
 </div>
 
 <div class="tools-overlay" id="rejoin-confirm-overlay">
@@ -6329,6 +6348,84 @@ window.toggleQR = function() {
 window.closeQROverlay = function() {
   document.getElementById('qr-overlay').style.display = 'none';
   qrVisible = false;
+};
+
+// ── QR SCANNER (Camera) ──
+let scannerStream = null;
+let scannerAnimFrame = null;
+
+window.openQRScanner = async function() {
+  const overlay = document.getElementById('scanner-overlay');
+  const video = document.getElementById('scanner-video');
+  const statusEl = document.getElementById('scanner-status');
+  overlay.style.display = 'flex';
+  statusEl.textContent = 'Requesting camera access...';
+  try {
+    scannerStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    video.srcObject = scannerStream;
+    await video.play();
+    statusEl.textContent = 'Point camera at QR code';
+    startQRDetection(video, statusEl);
+  } catch (e) {
+    statusEl.textContent = 'Camera access denied. Type code instead.';
+    setTimeout(() => closeQRScanner(), 2000);
+  }
+};
+
+function startQRDetection(video, statusEl) {
+  if ('BarcodeDetector' in window) {
+    const detector = new BarcodeDetector({ formats: ['qr_code'] });
+    const detect = async () => {
+      if (!scannerStream) return;
+      try {
+        const codes = await detector.detect(video);
+        if (codes.length > 0) {
+          handleScannedQR(codes[0].rawValue);
+          return;
+        }
+      } catch (e) {}
+      scannerAnimFrame = requestAnimationFrame(detect);
+    };
+    detect();
+  } else {
+    statusEl.textContent = 'QR scanning not supported. Type code instead.';
+  }
+}
+
+function handleScannedQR(value) {
+  haptic(10);
+  let code = '';
+  const joinMatch = value.match(/[?&]join=([A-Z]{4})/i);
+  if (joinMatch) {
+    code = joinMatch[1].toUpperCase();
+  } else {
+    const clean = value.replace(/[^A-Za-z]/g, '').toUpperCase();
+    if (clean.length === 4) code = clean;
+  }
+  if (code) {
+    const joinInput = document.getElementById('join-code');
+    if (joinInput) joinInput.value = code;
+    status('join-status', 'Code scanned: ' + code, '');
+    closeQRScanner();
+  } else {
+    document.getElementById('scanner-status').textContent = 'Invalid QR code. Try again.';
+    if (scannerStream) {
+      scannerAnimFrame = requestAnimationFrame(() => startQRDetection(video, document.getElementById('scanner-status')));
+    }
+  }
+}
+
+window.closeQRScanner = function() {
+  const video = document.getElementById('scanner-video');
+  if (scannerAnimFrame) { cancelAnimationFrame(scannerAnimFrame); scannerAnimFrame = null; }
+  if (scannerStream) {
+    scannerStream.getTracks().forEach(t => t.stop());
+    scannerStream = null;
+  }
+  if (video) video.srcObject = null;
+  document.getElementById('scanner-overlay').style.display = 'none';
 };
 
 window.confirmCloseRoom = async function() {
