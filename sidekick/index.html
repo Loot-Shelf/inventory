@@ -239,10 +239,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1.5rem; }
+  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; }
+  #create-cards-area::-webkit-scrollbar { display:none; }
   #create-cards-area.step-mode { justify-content: center; align-items: center; }
   #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
-  #create-cards-area.stack-mode { justify-content: center; align-items: center; }
+  #create-cards-area.stack-mode { justify-content: safe center; align-items: center; }
   .create-spacer { flex:0; transition: flex 0.3s ease; }
   #create-cards-area.mid-mode .create-spacer { flex:1; }
 
@@ -265,10 +266,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1.5rem; }
+  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; }
+  #join-cards-area::-webkit-scrollbar { display:none; }
   #join-cards-area.step-mode { justify-content: center; align-items: center; }
   #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
-  #join-cards-area.stack-mode { justify-content: center; align-items: center; }
+  #join-cards-area.stack-mode { justify-content: safe center; align-items: center; }
   .join-spacer { flex:0; transition: flex 0.3s ease; }
   #join-cards-area.mid-mode .join-spacer { flex:1; }
 
@@ -3286,7 +3288,7 @@
   <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;overflow:hidden;" class="step-mode">
+    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="create-logo" style="font-size:2rem;">Room Settings</div>
@@ -3358,7 +3360,7 @@
   <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;overflow:hidden;" class="step-mode">
+    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="join-logo" style="font-size:2rem;">Join Room</div>
