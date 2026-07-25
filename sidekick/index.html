@@ -3277,7 +3277,7 @@
 <!--  SCREEN: CREATE ROOM                        -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-create" class="screen">
-  <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;justify-content:space-between;">
+  <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
     <div id="create-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;" class="step-mode">
@@ -3333,8 +3333,8 @@
 
     </div><!-- end cards area -->
 
-    <!-- Wizard buttons (pinned at bottom) -->
-    <div id="create-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.75rem 0;">
+    <!-- Wizard buttons -->
+    <div id="create-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;margin-top:auto;padding:0.75rem 0 env(safe-area-inset-bottom, 0.75rem);">
       <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="create-final-btn" onclick="createRoom()" style="width:100%;display:none;">Create Room</button>
       <p id="create-status" class="status"></p>
@@ -3348,7 +3348,7 @@
 <!--  SCREEN: JOIN ROOM                          -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-join" class="screen">
-  <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;justify-content:space-between;">
+  <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
     <div id="join-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;" class="step-mode">
@@ -3380,8 +3380,8 @@
 
     </div><!-- end cards area -->
 
-    <!-- Wizard buttons (pinned at bottom) -->
-    <div id="join-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.75rem 0;">
+    <!-- Wizard buttons -->
+    <div id="join-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;margin-top:auto;padding:0.75rem 0 env(safe-area-inset-bottom, 0.75rem);">
       <button class="btn-primary" id="join-next-btn" onclick="joinNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="join-final-btn" onclick="joinRoom()" style="width:100%;display:none;">Join Room</button>
       <p id="join-status" class="status"></p>
