@@ -3300,10 +3300,16 @@
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 1</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Choose Player Name & Color</div>
         <input id="host-name" placeholder="Type Player Or Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
-        <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
-          <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
-          <span id="host-color-label">Choose Your Player Color</span>
-        </button>
+        <div style="display:flex;gap:0.6rem;">
+          <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn" style="flex:1;">
+            <span id="host-color-label">Choose Color</span>
+          </button>
+          <button class="color-picker-btn" onclick="openRoomAvatarOverlay()" id="host-avatar-btn" style="flex:1;">
+            <span id="host-avatar-label">👤 Select Avatar</span>
+          </button>
+        </div>
+        <div id="color-required-note" style="display:none;color:#e05555;font-size:0.9rem;text-align:center;margin-top:0.35rem;">⚠️ Please choose a color.</div>
+        <div id="avatar-required-note" style="display:none;color:#e05555;font-size:0.9rem;text-align:center;margin-top:0.35rem;">⚠️ Please select an avatar.</div>
       </div>
     </div>
 
@@ -3322,7 +3328,7 @@
             Speed Round
           </button>
         </div>
-        <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;margin-top:0.25rem;">⚠ Please choose a turn mode.</div>
+        <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.9rem;text-align:center;margin-top:0.35rem;">⚠️ Please choose a turn mode.</div>
         <div id="tm-summary" style="margin-top:0.5rem;font-size:0.8rem;color:var(--muted);text-align:center;min-height:1.1em;">No mode selected</div>
       </div>
     </div>
@@ -3371,11 +3377,15 @@
       <div class="card">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 1</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Choose Player Name & Color</div>
-        <input id="join-name" placeholder="Type Your Name" maxlength="20">
-        <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn">
-          <span class="color-preview-swatch" id="join-color-swatch" style="background:#FF0000;"></span>
-          <span id="join-color-label">Choose Your Player Color</span>
-        </button>
+        <input id="join-name" placeholder="Type Your Name" maxlength="20" style="margin-bottom:0.75rem;">
+        <div style="display:flex;gap:0.6rem;">
+          <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn" style="flex:1;">
+            <span id="join-color-label">Choose Color</span>
+          </button>
+          <button class="color-picker-btn" onclick="openRoomAvatarOverlay()" id="join-avatar-btn" style="flex:1;">
+            <span id="join-avatar-label">👤 Select Avatar</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -4084,7 +4094,7 @@
   <div class="color-picker-modal">
     <div class="color-picker-title">Choose Your Color</div>
     <div class="color-grid" id="color-grid"></div>
-    <button class="color-picker-confirm" onclick="confirmColor()">Confirm</button>
+    <button class="btn-primary" onclick="confirmColor()">Confirm</button>
   </div>
 </div>
 
@@ -4288,6 +4298,17 @@
     <p id="avatar-status" class="status" style="margin:0 0 0.25rem;"></p>
     <div class="avatar-grid" id="avatar-grid"></div>
     <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeAvatarOverlay()">✕ Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  ROOM AVATAR PICKER (Standalone)            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="avatar-overlay" id="room-avatar-overlay">
+  <div class="avatar-modal">
+    <div class="avatar-modal-title">🖼️ Choose Your Avatar</div>
+    <div class="avatar-grid" id="room-avatar-grid"></div>
+    <button class="btn-primary" style="width:100%;margin-top:0.25rem;" onclick="confirmRoomAvatar()">Confirm</button>
   </div>
 </div>
 
@@ -4787,7 +4808,7 @@ window.confirmSignOut = async function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay','room-avatar-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -4882,7 +4903,54 @@ window.selectAvatar = function(emoji) {
   const active = document.querySelector(`.avatar-option[data-avatar="${emoji}"]`);
   if (active) active.classList.add('selected');
   document.getElementById('profile-avatar').textContent = emoji;
+  const hostAvLabel = document.getElementById('host-avatar-label');
+  if (hostAvLabel) hostAvLabel.textContent = emoji + ' Select Avatar';
   updateAccountButtonUI();
+};
+
+// ── ROOM AVATAR PICKER (Standalone, no auth required) ──
+let roomAvatarSelection = '';
+
+window.openRoomAvatarOverlay = function() {
+  const grid = document.getElementById('room-avatar-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  AVATARS.forEach(emoji => {
+    const btn = document.createElement('button');
+    btn.className = 'avatar-option' + (emoji === roomAvatarSelection ? ' selected' : '');
+    btn.textContent = emoji;
+    btn.setAttribute('data-avatar', emoji);
+    btn.onclick = () => {
+      roomAvatarSelection = emoji;
+      grid.querySelectorAll('.avatar-option').forEach(s => s.classList.remove('selected'));
+      btn.classList.add('selected');
+      haptic(5);
+    };
+    grid.appendChild(btn);
+  });
+  document.getElementById('room-avatar-overlay').classList.add('show');
+};
+
+window.confirmRoomAvatar = function() {
+  if (!roomAvatarSelection) {
+    const saved = getSavedAvatar();
+    if (saved) roomAvatarSelection = saved;
+    else return;
+  }
+  saveAvatar(roomAvatarSelection);
+  document.getElementById('profile-avatar').textContent = roomAvatarSelection;
+  const hostAvLabel = document.getElementById('host-avatar-label');
+  const joinAvLabel = document.getElementById('join-avatar-label');
+  if (hostAvLabel) hostAvLabel.textContent = roomAvatarSelection + ' Select Avatar';
+  if (joinAvLabel) joinAvLabel.textContent = roomAvatarSelection + ' Select Avatar';
+  const avatarNote = document.getElementById('avatar-required-note');
+  if (avatarNote) avatarNote.style.display = 'none';
+  closeRoomAvatarOverlay();
+  haptic(5);
+};
+
+window.closeRoomAvatarOverlay = function() {
+  document.getElementById('room-avatar-overlay').classList.remove('show');
 };
 
 window.openProfileScreen = function() {
@@ -5628,6 +5696,16 @@ tryAutoResume();
 // ── NAV ──────────────────────────────────────
 window.showCreateRoom = function() {
   if (!requireHostAccount()) return;
+  myColor = '';
+  roomAvatarSelection = '';
+  const colorLabel = document.getElementById('host-color-label');
+  if (colorLabel) colorLabel.textContent = 'Choose Color';
+  const colorNote = document.getElementById('color-required-note');
+  if (colorNote) colorNote.style.display = 'none';
+  const avatarNote = document.getElementById('avatar-required-note');
+  if (avatarNote) avatarNote.style.display = 'none';
+  const hostAvLabel = document.getElementById('host-avatar-label');
+  if (hostAvLabel) hostAvLabel.textContent = '👤 Select Avatar';
   featureNudgeEnabled  = false;
   featureAwardsEnabled = false;
   featureVPEnabled     = false;
@@ -5758,11 +5836,15 @@ window.createNextStep = function() {
   if (createStep === 1) {
     const name = document.getElementById('host-name').value.trim();
     if (!name) { status('create-status', 'Enter your name.', 'error'); return; }
+    if (!myColor) { document.getElementById('color-required-note').style.display = 'block'; return; }
+    document.getElementById('color-required-note').style.display = 'none';
+    const savedAvatar = getSavedAvatar();
+    if (!savedAvatar) { document.getElementById('avatar-required-note').style.display = 'block'; return; }
+    document.getElementById('avatar-required-note').style.display = 'none';
   }
   if (createStep === 2) {
     if (!turnMode || (turnMode === 'classic' && !passDirection)) {
       document.getElementById('tm-required-note').style.display = 'block';
-      status('create-status', 'Choose a turn mode to continue.', 'error');
       return;
     }
     document.getElementById('tm-required-note').style.display = 'none';
@@ -6318,6 +6400,46 @@ window.goHome = function() {
   document.getElementById('join-code').value = '';
   document.getElementById('create-status').textContent = '';
   document.getElementById('join-status').textContent = '';
+  // Reset all room settings selections
+  myColor = '';
+  roomAvatarSelection = '';
+  turnMode = '';
+  passDirection = '';
+  speedMode = 'firstToTap';
+  speedRoundsTotal = 10;
+  createStep = 1;
+  joinStep = 1;
+  // Reset color picker button
+  const colorLabel = document.getElementById('host-color-label');
+  if (colorLabel) colorLabel.textContent = 'Choose Color';
+  const joinColorLabel = document.getElementById('join-color-label');
+  if (joinColorLabel) joinColorLabel.textContent = 'Choose Color';
+  const colorBtn = document.getElementById('host-color-btn');
+  if (colorBtn) { colorBtn.style.background = ''; colorBtn.style.borderColor = ''; }
+  const joinColorBtn = document.getElementById('join-color-btn');
+  if (joinColorBtn) { joinColorBtn.style.background = ''; joinColorBtn.style.borderColor = ''; }
+  // Reset avatar button
+  const hostAvLabel = document.getElementById('host-avatar-label');
+  if (hostAvLabel) hostAvLabel.textContent = '👤 Select Avatar';
+  const joinAvLabel = document.getElementById('join-avatar-label');
+  if (joinAvLabel) joinAvLabel.textContent = '👤 Select Avatar';
+  // Reset required notes
+  const colorNote = document.getElementById('color-required-note');
+  if (colorNote) colorNote.style.display = 'none';
+  const avatarNote = document.getElementById('avatar-required-note');
+  if (avatarNote) avatarNote.style.display = 'none';
+  const tmNote = document.getElementById('tm-required-note');
+  if (tmNote) tmNote.style.display = 'none';
+  // Reset turn mode buttons
+  const tmClassic = document.getElementById('tm-btn-classic');
+  const tmSpeed = document.getElementById('tm-btn-speed');
+  if (tmClassic) tmClassic.classList.remove('selected');
+  if (tmSpeed) tmSpeed.classList.remove('selected');
+  const tmTxt = document.getElementById('tm-summary');
+  if (tmTxt) tmTxt.innerHTML = 'No mode selected';
+  // Reset wizard steps
+  renderCreateStep();
+  renderJoinStep();
   showScreen('home');
 };
 
@@ -7578,7 +7700,7 @@ const PLAYER_COLORS = [
   { name: 'Black',      hex: '#000000' },
 ];
 
-let myColor = '#cc0000';         // default red
+let myColor = '';         // no default — must be chosen
 let colorPickerContext = 'host';
 let tempSelectedColor = '#cc0000';
 
@@ -7607,12 +7729,15 @@ window.openColorPicker = function(context) {
 window.confirmColor = function() {
   myColor = tempSelectedColor;
   const colorName = PLAYER_COLORS.find(c => c.hex === myColor)?.name || 'Custom';
+  const isLight = ['#FFFFFF','#ffffff','#F5F5F5','#f5f5f5','#fffb05','#6effac'].includes(myColor);
   ['host','join'].forEach(ctx => {
-    const swatch = document.getElementById(ctx + '-color-swatch');
+    const btn = document.getElementById(ctx + '-color-btn');
     const label  = document.getElementById(ctx + '-color-label');
-    if (swatch) swatch.style.background = myColor;
-    if (label)  label.textContent = colorName;
+    if (btn) { btn.style.background = myColor; btn.style.borderColor = myColor; }
+    if (label)  { label.textContent = colorName; label.style.color = isLight ? '#000' : '#fff'; }
   });
+  const colorNote = document.getElementById('color-required-note');
+  if (colorNote) colorNote.style.display = 'none';
   document.getElementById('color-picker-overlay').classList.remove('show');
 };
 
