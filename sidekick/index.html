@@ -221,16 +221,41 @@
   .btn-group { display: flex; flex-direction: column; gap: 1.5rem; }
 
   /* ── CREATE ROOM WIZARD STEPS ── */
-  .create-step { display: none; }
+  .create-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
   .create-step.revealed { display: block; }
-  .create-step.completed {
-    transform: scale(0.75);
-    transform-origin: top center;
+  .create-step .card {
+    width: 100%;
+    padding: 1rem 1.25rem;
     transition: all 0.3s ease;
-    pointer-events: none;
   }
-  .create-step:not(.completed) {
+  .create-step.completed .card {
+    max-width: 75%;
+    margin: 0 auto;
+    padding: 0.6rem 0.8rem;
+  }
+  .create-step.completed .card input,
+  .create-step.completed .card .color-picker-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  /* ── JOIN ROOM WIZARD STEPS ── */
+  .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
+  .join-step.revealed { display: block; }
+  .join-step .card {
+    width: 100%;
+    padding: 1rem 1.25rem;
     transition: all 0.3s ease;
+  }
+  .join-step.completed .card {
+    max-width: 75%;
+    margin: 0 auto;
+    padding: 0.6rem 0.8rem;
+  }
+  .join-step.completed .card input,
+  .join-step.completed .card .color-picker-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.7rem;
   }
 
   button {
@@ -3315,28 +3340,35 @@
     <!-- Page header -->
     <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
 
-    <!-- Card 1: Player name & color -->
-    <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
-      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+    <!-- Step 1: Player name & color -->
+    <div class="join-step revealed" data-step="1">
+      <div class="card" style="margin-bottom:1.75rem;">
+        <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 1</div>
+        <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Choose Player Name & Color</div>
+        <input id="join-name" placeholder="Type Your Name" maxlength="20">
+        <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn">
+          <span class="color-preview-swatch" id="join-color-swatch" style="background:#FF0000;"></span>
+          <span id="join-color-label">Choose Your Player Color</span>
+        </button>
       </div>
-      <label>Your Name</label>
-      <input id="join-name" placeholder="Type Your Name" maxlength="20">
-      <button class="color-picker-btn" onclick="openColorPicker('join')" id="join-color-btn">
-        <span class="color-preview-swatch" id="join-color-swatch" style="background:#FF0000;"></span>
-        <span id="join-color-label">Choose Your Player Color</span>
-      </button>
     </div>
 
-    <!-- Card 2: Room Code -->
-    <div class="card" style="margin-bottom:2rem; padding-top: 1rem; padding-bottom: 1rem;">
-      <label style="text-align:center;display:block;">Room Code</label>
-      <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center;margin-bottom:0;">
+    <!-- Step 2: Room Code -->
+    <div class="join-step" data-step="2">
+      <div class="card" style="margin-bottom:1.75rem;">
+        <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 2</div>
+        <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Enter Room Code</div>
+        <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center;margin-bottom:0;">
+      </div>
     </div>
 
-    <!-- Join Room button below cards -->
-    <button class="btn-primary" onclick="joinRoom()" style="max-width:400px;width:100%;">Join Room</button>
-    <p id="join-status" class="status"></p>
-        <button class="btn-secondary btn-sm" onclick="goHome()" style="width:auto;">&#8592; Back</button>
+    <!-- Wizard buttons -->
+    <div id="join-wizard-btns" style="width:100%;max-width:420px;">
+      <button class="btn-primary" id="join-next-btn" onclick="joinNextStep()" style="width:100%;">Next →</button>
+      <button class="btn-primary" id="join-final-btn" onclick="joinRoom()" style="width:100%;display:none;">Join Room</button>
+      <p id="join-status" class="status"></p>
+      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:1.5rem;">← Home</button>
+    </div>
 
   </div>
 </div>
@@ -5590,7 +5622,44 @@ window.showCreateRoom = function() {
   createStep = 1;
   renderCreateStep();
 };
-window.showJoinRoom = () => showScreen('join');
+window.showJoinRoom = function() {
+  joinStep = 1;
+  renderJoinStep();
+  showScreen('join');
+  const nameEl = document.getElementById('join-name');
+  if (nameEl && !nameEl.value) {
+    const saved = getSavedName();
+    if (saved) nameEl.value = saved;
+  }
+};
+
+// ── JOIN ROOM WIZARD ──
+let joinStep = 1;
+
+function renderJoinStep() {
+  document.querySelectorAll('.join-step').forEach(el => {
+    const step = parseInt(el.dataset.step);
+    el.classList.toggle('revealed', step <= joinStep);
+    el.classList.toggle('completed', step < joinStep);
+  });
+  const nextBtn = document.getElementById('join-next-btn');
+  const finalBtn = document.getElementById('join-final-btn');
+  if (nextBtn) nextBtn.style.display = joinStep < 2 ? '' : 'none';
+  if (finalBtn) finalBtn.style.display = joinStep === 2 ? '' : 'none';
+}
+
+window.joinNextStep = function() {
+  if (joinStep === 1) {
+    const name = document.getElementById('join-name').value.trim();
+    if (!name) { status('join-status', 'Enter your name.', 'error'); return; }
+  }
+  status('join-status', '', '');
+  if (joinStep < 2) {
+    joinStep++;
+    renderJoinStep();
+    haptic(5);
+  }
+};
 
 // ── CREATE ROOM WIZARD ──
 let createStep = 1;
