@@ -226,6 +226,7 @@
   .create-step .card {
     width: 100%;
     padding: 1rem 1.25rem;
+    margin-bottom: 0;
     transition: all 0.3s ease;
   }
   .create-step.completed .card {
@@ -238,10 +239,10 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #create-cards-area { transition: justify-content 0.3s ease; }
+  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; }
   #create-cards-area.step-mode { justify-content: center; align-items: center; }
-  #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; padding-top: 0; }
-  #create-cards-area.stack-mode { justify-content: flex-start; align-items: center; }
+  #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; gap:1.75rem; }
+  #create-cards-area.stack-mode { justify-content: space-evenly; align-items: center; }
 
   /* ── JOIN ROOM WIZARD STEPS ── */
   .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
@@ -249,6 +250,7 @@
   .join-step .card {
     width: 100%;
     padding: 1rem 1.25rem;
+    margin-bottom: 0;
     transition: all 0.3s ease;
   }
   .join-step.completed .card {
@@ -261,10 +263,10 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #join-cards-area { transition: justify-content 0.3s ease; }
+  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; }
   #join-cards-area.step-mode { justify-content: center; align-items: center; }
-  #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; padding-top: 0; }
-  #join-cards-area.stack-mode { justify-content: flex-start; align-items: center; }
+  #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; gap:1.75rem; }
+  #join-cards-area.stack-mode { justify-content: space-evenly; align-items: center; }
 
   button {
     width: 100%;
@@ -3280,14 +3282,14 @@
   <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="create-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;padding-bottom:120px;" class="step-mode">
+    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;height:calc(100% - 160px);overflow:hidden;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
-    <div class="logo" id="create-logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
+    <div class="logo" id="create-logo" style="font-size:2rem;">Room Settings</div>
 
     <!-- Card 1: Enter Player Name & Color (Step 1) -->
     <div class="create-step revealed" data-step="1">
-      <div class="card" style="margin-bottom: 1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+      <div class="card" style="padding-top: 1rem; padding-bottom: 1rem;">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 1</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Choose Player Name & Color</div>
         <input id="host-name" placeholder="Type Player Or Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
@@ -3300,7 +3302,7 @@
 
     <!-- Card 2: Turn Mode (Step 2) -->
     <div class="create-step" data-step="2">
-      <div class="card" style="margin-bottom:1.75rem; padding-top:1rem; padding-bottom:1rem;">
+      <div class="card" style="padding-top:1rem; padding-bottom:1rem;">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 2</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.65rem;">Choose a turn mode to continue.</div>
         <div class="turn-mode-btns">
@@ -3320,7 +3322,7 @@
 
     <!-- Card 3: Game Settings / Features (Step 3) -->
     <div class="create-step" data-step="3">
-      <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+      <div class="card" style="padding-top: 1rem; padding-bottom: 1rem;">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 3</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Add Game Features</div>
         <button class="btn-secondary" onclick="openFeaturesOverlay()" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; font-size:0.88rem;">
@@ -3351,14 +3353,14 @@
   <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="join-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;padding-bottom:120px;" class="step-mode">
+    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;height:calc(100% - 160px);overflow:hidden;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
-    <div class="logo" id="join-logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
+    <div class="logo" id="join-logo" style="font-size:2rem;">Join Room</div>
 
     <!-- Step 1: Player name & color -->
     <div class="join-step revealed" data-step="1">
-      <div class="card" style="margin-bottom:1.75rem;">
+      <div class="card">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 1</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Choose Player Name & Color</div>
         <input id="join-name" placeholder="Type Your Name" maxlength="20">
@@ -3371,7 +3373,7 @@
 
     <!-- Step 2: Room Code -->
     <div class="join-step" data-step="2">
-      <div class="card" style="margin-bottom:1.75rem;">
+      <div class="card">
         <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 2</div>
         <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Enter Room Code</div>
         <input id="join-code" placeholder="Type Room Code" maxlength="4" style="text-transform:uppercase;font-family:monospace;font-size:1.4rem;letter-spacing:0.2em;text-align:center;margin-bottom:0.75rem;">
