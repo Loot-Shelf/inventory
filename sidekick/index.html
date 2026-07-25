@@ -223,22 +223,13 @@
   /* ── CREATE ROOM WIZARD STEPS ── */
   .create-step { display: none; }
   .create-step.revealed { display: block; }
-  .create-step.completed .card {
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem !important;
-    opacity: 0.6;
-    transform: scale(0.97);
+  .create-step.completed {
+    transform: scale(0.75);
+    transform-origin: top center;
     transition: all 0.3s ease;
+    pointer-events: none;
   }
-  .create-step.completed .card > div:first-child {
-    font-size: 1rem !important;
-    margin-bottom: 0.15rem !important;
-  }
-  .create-step.completed .card > div:nth-child(2) {
-    font-size: 0.75rem !important;
-    margin-bottom: 0.3rem !important;
-  }
-  .create-step:not(.completed) .card {
+  .create-step:not(.completed) {
     transition: all 0.3s ease;
   }
 
@@ -3287,6 +3278,7 @@
           </button>
         </div>
         <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;margin-top:0.25rem;">⚠ Please choose a turn mode.</div>
+        <div id="tm-summary" style="margin-top:0.5rem;font-size:0.8rem;color:var(--muted);text-align:center;min-height:1.1em;">No mode selected</div>
       </div>
     </div>
 
@@ -4867,7 +4859,7 @@ window.confirmClassicDir = function() {
   passDirection = _selectedClassicDir;
   document.getElementById('classic-dir-overlay').classList.remove('show');
   const labels = { cw: '↻ Left', both: '↔ Both', ccw: '↺ Right' };
-  const selTxt = document.getElementById('tm-selection-text');
+  const selTxt = document.getElementById('tm-summary');
   if (selTxt) selTxt.innerHTML = `♟️ Classic Turns — <span>${labels[passDirection] || passDirection}</span>`;
 };
 
@@ -4895,7 +4887,7 @@ window.confirmSpeedMode = function() {
   speedRoundsTotal = rounds;
   document.getElementById('speed-mode-overlay').classList.remove('show');
   const modeLabels = { firstToTap: '🥇 1st To Tap', downTheLine: '📋 Down The Line' };
-  const selTxt2 = document.getElementById('tm-selection-text');
+  const selTxt2 = document.getElementById('tm-summary');
   if (selTxt2) selTxt2.innerHTML = `⚡ Speed Round — <span>${modeLabels[speedMode]}</span> · ${rounds} rounds`;
 };
 
@@ -5570,8 +5562,8 @@ window.showCreateRoom = function() {
   const tmSpeed   = document.getElementById('tm-btn-speed');
   if (tmClassic) tmClassic.classList.remove('selected');
   if (tmSpeed)   tmSpeed.classList.remove('selected');
-  const tmTxt = document.getElementById('tm-selection-text');
-  if (tmTxt) tmTxt.innerHTML = 'Choose a turn mode to continue.';
+  const tmTxt = document.getElementById('tm-summary');
+  if (tmTxt) tmTxt.innerHTML = 'No mode selected';
   const tmNote = document.getElementById('tm-required-note');
   if (tmNote) tmNote.style.display = 'none';
   ['feature-nudge-toggle','feature-awards-toggle','feature-timers-toggle','feature-vp-toggle','feature-status-toggle','feature-dnd-toggle','feature-rounds-toggle'].forEach(id => {
