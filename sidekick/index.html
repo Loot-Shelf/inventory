@@ -223,6 +223,24 @@
   /* ── CREATE ROOM WIZARD STEPS ── */
   .create-step { display: none; }
   .create-step.revealed { display: block; }
+  .create-step.completed .card {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem !important;
+    opacity: 0.6;
+    transform: scale(0.97);
+    transition: all 0.3s ease;
+  }
+  .create-step.completed .card > div:first-child {
+    font-size: 1rem !important;
+    margin-bottom: 0.15rem !important;
+  }
+  .create-step.completed .card > div:nth-child(2) {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+  .create-step:not(.completed) .card {
+    transition: all 0.3s ease;
+  }
 
   button {
     width: 100%;
@@ -5586,10 +5604,11 @@ window.showJoinRoom = () => showScreen('join');
 let createStep = 1;
 
 function renderCreateStep() {
-  // Reveal all cards up to current step, hide the rest
+  // Reveal all cards up to current step, mark past ones as completed
   document.querySelectorAll('.create-step').forEach(el => {
     const step = parseInt(el.dataset.step);
     el.classList.toggle('revealed', step <= createStep);
+    el.classList.toggle('completed', step < createStep);
   });
   // Show/hide buttons
   const nextBtn = document.getElementById('create-next-btn');
