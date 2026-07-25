@@ -177,17 +177,25 @@
   body.light-mode .ctrl-label { color: rgba(0,0,0,0.4); }
   body.light-mode .neo-status-text { color: var(--muted); }
 
+  html, body {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  html { width: 100vw; height: 100vh; }
+
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    overflow: hidden;
     font-size: 17px;
   }
 
   /* ── SCREENS ── */
-  .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; overflow: hidden; }
+  .screen { display: none; width: 100%; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; overflow: hidden; }
   .screen.active { display: flex; animation: screenFadeIn 0.2s ease-out; }
   @keyframes screenFadeIn { from { opacity: 0; } to { opacity: 1; } }
   /* Setup/menu screens (Home, Create, Join, Lobby, Waiting Lobby, Profile)
@@ -239,13 +247,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; }
+  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:hidden; }
   #create-cards-area::-webkit-scrollbar { display:none; }
   #create-cards-area.step-mode { justify-content: center; align-items: center; }
   #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
   #create-cards-area.stack-mode { justify-content: safe center; align-items: center; }
-  .create-spacer { flex:0; transition: flex 0.3s ease; }
-  #create-cards-area.mid-mode .create-spacer { flex:1; }
 
   /* ── JOIN ROOM WIZARD STEPS ── */
   .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
@@ -266,13 +272,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; }
+  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:hidden; }
   #join-cards-area::-webkit-scrollbar { display:none; }
   #join-cards-area.step-mode { justify-content: center; align-items: center; }
   #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
   #join-cards-area.stack-mode { justify-content: safe center; align-items: center; }
-  .join-spacer { flex:0; transition: flex 0.3s ease; }
-  #join-cards-area.mid-mode .join-spacer { flex:1; }
 
   button {
     width: 100%;
@@ -1247,6 +1251,66 @@
     font-size: 1rem; font-weight: 800; color: var(--text);
     text-align: center; margin-bottom: 0.4rem;
   }
+
+  /* ── TUTORIAL OVERLAY ── */
+  .tutorial-container {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem 1.25rem 1rem;
+    width: min(380px, 92vw); position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .tutorial-close {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.85rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2; transition: color 0.15s, border-color 0.15s;
+  }
+  .tutorial-close:hover { color: var(--text); border-color: var(--muted); }
+  .tutorial-viewport {
+    display: flex; overflow: hidden; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; touch-action: pan-x;
+    border-radius: 12px; margin-bottom: 0.75rem;
+  }
+  .tutorial-slide {
+    min-width: 100%; scroll-snap-align: start;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 1.5rem 0.5rem;
+    user-select: none;
+  }
+  .tutorial-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+  .tutorial-title {
+    font-size: 1.15rem; font-weight: 800; color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .tutorial-desc {
+    font-size: 0.88rem; color: var(--muted); line-height: 1.55;
+    max-width: 320px;
+  }
+  .tutorial-desc strong { color: var(--text); }
+  .tutorial-visual {
+    margin-top: 0.75rem; padding: 0.4rem 0.8rem;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; font-size: 0.78rem; color: var(--accent-light);
+    font-weight: 600; letter-spacing: 0.05em;
+  }
+  .tutorial-dots {
+    display: flex; justify-content: center; gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+  .tutorial-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--border); transition: background 0.25s, transform 0.25s;
+  }
+  .tutorial-dot.active {
+    background: var(--accent); transform: scale(1.3);
+  }
+  .tutorial-nav {
+    display: flex; gap: 0.5rem;
+  }
+  .tutorial-nav button { flex: 1; }
   .tool-list-btn {
     width: 100%; padding: 0.75rem 1rem;
     background: #1e1e2e; border: 1px solid var(--border);
@@ -3264,11 +3328,8 @@
         padding:4px; box-shadow:0 2px 8px rgba(0,0,0,0.25);
         transition:background 0.3s, border-color 0.3s;
       ">
-        <!-- Sun icon -->
         <span style="position:absolute;left:9px;font-size:1.1rem;line-height:1;transition:opacity 0.3s;" id="theme-sun">☀️</span>
-        <!-- Moon icon -->
         <span style="position:absolute;right:9px;font-size:1.1rem;line-height:1;transition:opacity 0.3s;" id="theme-moon">🌙</span>
-        <!-- Sliding knob -->
         <div id="theme-knob" style="
           width:30px; height:30px; border-radius:50%;
           background:var(--accent); position:absolute;
@@ -3279,7 +3340,9 @@
       </div>
     </button>
   </div>
-  </div>
+  </div><!-- end scaler-home -->
+  <!-- What Is SideKick? button (outside scaler, fixed at bottom) -->
+  <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;">❓ What Is SideKick?</button>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -3289,7 +3352,7 @@
   <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
+    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:380px;margin:0 auto;padding:0 1rem;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="create-logo" style="font-size:2rem;">Room Settings</div>
@@ -3346,16 +3409,15 @@
       </div>
     </div>
 
-    <!-- Wizard buttons (inside cards area, always at bottom) -->
-    <div id="create-spacer" class="create-spacer" style="flex:0;transition:flex 0.3s ease;"></div>
-    <div id="create-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.5rem 0 env(safe-area-inset-bottom, 0.5rem);">
-      <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
-      <button class="btn-primary" id="create-final-btn" onclick="createRoom()" style="width:100%;display:none;">Create Room</button>
-      <p id="create-status" class="status"></p>
-      <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:0;">← Home</button>
-    </div>
-
     </div><!-- end cards area -->
+
+    <!-- Wizard buttons (outside cards area, pinned to bottom) -->
+    <div id="create-wizard-btns" style="width:100%;max-width:380px;margin:0 auto;padding:0.5rem 1rem env(safe-area-inset-bottom, 0.5rem);flex-shrink:0;">
+      <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
+      <button class="btn-primary" id="create-final-btn" onclick="onCreateFinalBtn()" style="width:100%;display:none;">Create Room</button>
+      <p id="create-status" class="status"></p>
+      <button class="btn-secondary btn-sm" id="create-home-btn" onclick="goHome()" style="width:100%;">← Home</button>
+    </div>
 
   </div>
 </div>
@@ -3367,7 +3429,7 @@
   <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
+    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:380px;margin:0 auto;padding:0 1rem;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="join-logo" style="font-size:2rem;">Join Room</div>
@@ -3401,16 +3463,15 @@
       </div>
     </div>
 
-    <!-- Wizard buttons (inside cards area) -->
-    <div id="join-spacer" class="join-spacer" style="flex:0;transition:flex 0.3s ease;"></div>
-    <div id="join-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.5rem 0 env(safe-area-inset-bottom, 0.5rem);">
+    </div><!-- end cards area -->
+
+    <!-- Wizard buttons (outside cards area, pinned to bottom) -->
+    <div id="join-wizard-btns" style="width:100%;max-width:380px;margin:0 auto;padding:0.5rem 1rem env(safe-area-inset-bottom, 0.5rem);flex-shrink:0;">
       <button class="btn-primary" id="join-next-btn" onclick="joinNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="join-final-btn" onclick="joinRoom()" style="width:100%;display:none;">Join Room</button>
       <p id="join-status" class="status"></p>
       <button class="btn-secondary btn-sm" onclick="goHome()" style="width:100%;margin-top:0;">← Home</button>
     </div>
-
-    </div><!-- end cards area -->
 
   </div>
 </div>
@@ -3502,7 +3563,7 @@
     <!-- Start Game button below cards -->
     <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="max-width:480px;width:100%;">&#9654; Start Game</button>
     <br>
-    <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">&#8592; Back</button>
+    <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:auto;">&#8592; Back To Room Settings</button>
 
   </div>
 </div>
@@ -4313,6 +4374,59 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
+<!--  TUTORIAL OVERLAY                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tools-overlay" id="tutorial-overlay" style="z-index:9650;">
+  <div class="tutorial-container">
+    <button class="tutorial-close" onclick="closeTutorial()">✕</button>
+    <div class="tutorial-viewport" id="tutorial-viewport">
+      <!-- Slide 1 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">🎲</div>
+        <div class="tutorial-title">Welcome to SideKick</div>
+        <div class="tutorial-desc">A simple turn-taking app for board games, card games, and table-top game nights. No more arguing about whose turn it is — SideKick keeps track for you.</div>
+      </div>
+      <!-- Slide 2 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">🏠</div>
+        <div class="tutorial-title">Create a Room</div>
+        <div class="tutorial-desc">Tap <strong>Create a Room</strong> and set up your name, color, and avatar. Pick a turn mode — <em>Classic Turns</em> passes left, right, or both ways. <em>Speed Round</em> lets players race to tap in.</div>
+        <div class="tutorial-visual">Step 1 → Step 2 → Step 3</div>
+      </div>
+      <!-- Slide 3 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">📱</div>
+        <div class="tutorial-title">Share the Room Code</div>
+        <div class="tutorial-desc">A 4-letter code is generated. Share it — or let players <strong>scan the QR code</strong> — so they can join from their own phone. Everyone picks their own name, color, and avatar.</div>
+      </div>
+      <!-- Slide 4 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">⏭️</div>
+        <div class="tutorial-title">Take Turns</div>
+        <div class="tutorial-desc">The host taps <strong>Start Game</strong>. Each player sees their own screen with a big <strong>Pass Turn</strong> button. Tap it when you're done — the next player's screen lights up. The active player's name glows so everyone knows whose turn it is.</div>
+      </div>
+      <!-- Slide 5 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">⚙️</div>
+        <div class="tutorial-title">Extra Features</div>
+        <div class="tutorial-desc">Turn on <strong>Nudge</strong> to poke slow players. Add <strong>Timers</strong> for turns, rounds, or the whole game. Enable <strong>Awards</strong> for fun achievements. Try different <strong>Themes</strong> from the settings icon. Everything is optional — use what you like.</div>
+      </div>
+      <!-- Slide 6 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">🎉</div>
+        <div class="tutorial-title">Ready to Play?</div>
+        <div class="tutorial-desc">That's it! Create a room or join one to get started. SideKick keeps the game flowing so you can focus on the fun.</div>
+      </div>
+    </div>
+    <div class="tutorial-dots" id="tutorial-dots"></div>
+    <div class="tutorial-nav">
+      <button class="btn-secondary btn-sm" id="tutorial-prev" onclick="tutorialPrev()" style="flex:1;">← Prev</button>
+      <button class="btn-primary btn-sm" id="tutorial-next" onclick="tutorialNext()" style="flex:1;">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
 <!--  TURN MODE — CLASSIC DIRECTION OVERLAY      -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="turn-mode-overlay" id="classic-dir-overlay">
@@ -4808,7 +4922,7 @@ window.confirmSignOut = async function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay','room-avatar-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay','room-avatar-overlay','tutorial-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -4937,8 +5051,7 @@ window.confirmRoomAvatar = function() {
     if (saved) roomAvatarSelection = saved;
     else return;
   }
-  saveAvatar(roomAvatarSelection);
-  document.getElementById('profile-avatar').textContent = roomAvatarSelection;
+  // Only update the room wizard labels — do NOT touch the profile avatar
   const hostAvLabel = document.getElementById('host-avatar-label');
   const joinAvLabel = document.getElementById('join-avatar-label');
   if (hostAvLabel) hostAvLabel.textContent = roomAvatarSelection + ' Select Avatar';
@@ -5696,8 +5809,11 @@ tryAutoResume();
 // ── NAV ──────────────────────────────────────
 window.showCreateRoom = function() {
   if (!requireHostAccount()) return;
+  editingRoom = false;
   myColor = '';
-  roomAvatarSelection = '';
+  // Auto-fill avatar from profile (host is always logged in)
+  const profileAv = getSavedAvatar();
+  roomAvatarSelection = profileAv || '';
   const colorLabel = document.getElementById('host-color-label');
   if (colorLabel) colorLabel.textContent = 'Choose Color';
   const colorNote = document.getElementById('color-required-note');
@@ -5705,7 +5821,7 @@ window.showCreateRoom = function() {
   const avatarNote = document.getElementById('avatar-required-note');
   if (avatarNote) avatarNote.style.display = 'none';
   const hostAvLabel = document.getElementById('host-avatar-label');
-  if (hostAvLabel) hostAvLabel.textContent = '👤 Select Avatar';
+  if (hostAvLabel) hostAvLabel.textContent = profileAv ? (profileAv + ' Select Avatar') : '👤 Select Avatar';
   featureNudgeEnabled  = false;
   featureAwardsEnabled = false;
   featureVPEnabled     = false;
@@ -5749,6 +5865,7 @@ window.showCreateRoom = function() {
   // Reset wizard to step 1
   createStep = 1;
   renderCreateStep();
+  renderEditRoomButtons();
 };
 window.showJoinRoom = function() {
   joinStep = 1;
@@ -5756,9 +5873,14 @@ window.showJoinRoom = function() {
   showScreen('join');
   const nameEl = document.getElementById('join-name');
   if (nameEl && !nameEl.value) {
-    const saved = getSavedName();
+    const saved = currentUser ? getSavedName() : '';
     if (saved) nameEl.value = saved;
   }
+  // Auto-fill avatar from profile only if logged in
+  const profileAv = currentUser ? getSavedAvatar() : '';
+  roomAvatarSelection = profileAv || '';
+  const joinAvLabel = document.getElementById('join-avatar-label');
+  if (joinAvLabel) joinAvLabel.textContent = profileAv ? (profileAv + ' Select Avatar') : '👤 Select Avatar';
 };
 
 // ── JOIN ROOM WIZARD ──
@@ -5791,6 +5913,9 @@ window.joinNextStep = function() {
   if (joinStep === 1) {
     const name = document.getElementById('join-name').value.trim();
     if (!name) { status('join-status', 'Enter your name.', 'error'); return; }
+    // Guests (not logged in) must select an avatar
+    if (!currentUser && !roomAvatarSelection) { document.getElementById('avatar-required-note').style.display = 'block'; return; }
+    document.getElementById('avatar-required-note').style.display = 'none';
   }
   status('join-status', '', '');
   if (joinStep < 2) {
@@ -5802,6 +5927,7 @@ window.joinNextStep = function() {
 
 // ── CREATE ROOM WIZARD ──
 let createStep = 1;
+let editingRoom = false;
 
 function renderCreateStep() {
   const area = document.getElementById('create-cards-area');
@@ -5829,6 +5955,7 @@ function renderCreateStep() {
   const finalBtn = document.getElementById('create-final-btn');
   if (nextBtn) nextBtn.style.display = createStep < 3 ? '' : 'none';
   if (finalBtn) finalBtn.style.display = createStep === 3 ? '' : 'none';
+  renderEditRoomButtons();
 }
 
 window.createNextStep = function() {
@@ -5838,7 +5965,7 @@ window.createNextStep = function() {
     if (!name) { status('create-status', 'Enter your name.', 'error'); return; }
     if (!myColor) { document.getElementById('color-required-note').style.display = 'block'; return; }
     document.getElementById('color-required-note').style.display = 'none';
-    const savedAvatar = getSavedAvatar();
+    const savedAvatar = roomAvatarSelection || getSavedAvatar();
     if (!savedAvatar) { document.getElementById('avatar-required-note').style.display = 'block'; return; }
     document.getElementById('avatar-required-note').style.display = 'none';
   }
@@ -5890,6 +6017,81 @@ window.openToolsOverlay = function() {
 };
 window.closeToolsOverlay = function() {
   document.getElementById('tools-overlay').classList.remove('show');
+};
+
+// ── TUTORIAL OVERLAY ──
+let tutorialSlide = 0;
+let tutorialSwipeX = 0;
+let tutorialSwiping = false;
+
+function tutorialUpdateDots() {
+  const dots = document.querySelectorAll('#tutorial-dots .tutorial-dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === tutorialSlide));
+  const prev = document.getElementById('tutorial-prev');
+  const next = document.getElementById('tutorial-next');
+  if (prev) prev.style.visibility = tutorialSlide === 0 ? 'hidden' : 'visible';
+  if (next) next.textContent = tutorialSlide === dots.length - 1 ? 'Done ✓' : 'Next →';
+}
+
+function tutorialGoTo(idx) {
+  const vp = document.getElementById('tutorial-viewport');
+  const slides = vp.querySelectorAll('.tutorial-slide');
+  tutorialSlide = Math.max(0, Math.min(idx, slides.length - 1));
+  vp.scrollTo({ left: tutorialSlide * vp.clientWidth, behavior: 'smooth' });
+  tutorialUpdateDots();
+}
+
+window.openTutorial = function() {
+  tutorialSlide = 0;
+  const overlay = document.getElementById('tutorial-overlay');
+  overlay.classList.add('show');
+  // Build dots
+  const vp = document.getElementById('tutorial-viewport');
+  const count = vp.querySelectorAll('.tutorial-slide').length;
+  const dotsEl = document.getElementById('tutorial-dots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'tutorial-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => tutorialGoTo(i);
+    dotsEl.appendChild(dot);
+  }
+  vp.scrollTo({ left: 0, behavior: 'instant' });
+  tutorialUpdateDots();
+  // Touch/swipe handling
+  vp.ontouchstart = (e) => {
+    tutorialSwipeX = e.touches[0].clientX;
+    tutorialSwiping = true;
+  };
+  vp.ontouchend = (e) => {
+    if (!tutorialSwiping) return;
+    tutorialSwiping = false;
+    const dx = e.changedTouches[0].clientX - tutorialSwipeX;
+    if (Math.abs(dx) > 40) {
+      if (dx < 0) tutorialGoTo(tutorialSlide + 1);
+      else tutorialGoTo(tutorialSlide - 1);
+    }
+  };
+  // Also update dots on manual scroll (for desktop mouse drag)
+  vp.onscroll = () => {
+    if (tutorialSwiping) return;
+    const idx = Math.round(vp.scrollLeft / vp.clientWidth);
+    if (idx !== tutorialSlide) { tutorialSlide = idx; tutorialUpdateDots(); }
+  };
+};
+
+window.closeTutorial = function() {
+  document.getElementById('tutorial-overlay').classList.remove('show');
+};
+
+window.tutorialNext = function() {
+  const count = document.querySelectorAll('#tutorial-dots .tutorial-dot').length;
+  if (tutorialSlide >= count - 1) { closeTutorial(); return; }
+  tutorialGoTo(tutorialSlide + 1);
+};
+
+window.tutorialPrev = function() {
+  tutorialGoTo(tutorialSlide - 1);
 };
 
 window.openTool = function(toolId) {
@@ -6391,6 +6593,16 @@ window.leaveSavedScreen = function() {
 };
 
 window.goHome = function() {
+  // If there's an active room, close it and clear the session
+  if (roomCode) {
+    cleanupListeners();
+    if (isHost && db) {
+      remove(ref(db, `rooms/${roomCode}`)).catch(() => {});
+    }
+    roomCode = null; myId = null; isHost = false;
+    clearSession();
+  }
+  editingRoom = false;
   // Reset QR (inline lobby card)
   const qrBox = document.getElementById('qr-code-lobby');
   if (qrBox) qrBox.innerHTML = '';
@@ -6444,21 +6656,141 @@ window.goHome = function() {
 };
 
 window.goBackToCreate = async function() {
-  // Close the Firebase room so it doesn't linger, then return to create screen
-  if (db && roomCode) {
-    cleanupListeners();
-    await remove(ref(db, `rooms/${roomCode}`));
-  }
-  roomCode = null; myId = null; isHost = false;
-  clearSession();
-  // Clear inline QR
-  const qrBox = document.getElementById('qr-code-lobby');
-  if (qrBox) qrBox.innerHTML = '';
-  // Re-populate create screen with what the host had typed
-  showScreen('create');
-  // Restore host name field
+  if (!roomCode) return;
+  // Navigate back to create wizard in edit mode — room stays alive
+  cleanupListeners();
+  editingRoom = true;
   const nameEl = document.getElementById('host-name');
   if (nameEl && myName) nameEl.value = myName;
+  // Color button
+  if (myColor) {
+    const colorBtn = document.getElementById('host-color-btn');
+    const colorLabel = document.getElementById('host-color-label');
+    if (colorBtn) { colorBtn.style.background = myColor; colorBtn.style.borderColor = myColor; }
+    const colorName = PLAYER_COLORS.find(c => c.hex === myColor)?.name || myColor;
+    if (colorLabel) colorLabel.textContent = colorName;
+  }
+  // Avatar button
+  const savedAv = roomAvatarSelection || getSavedAvatar();
+  if (savedAv) {
+    const avLabel = document.getElementById('host-avatar-label');
+    if (avLabel) avLabel.textContent = savedAv + ' Select Avatar';
+  }
+  // Turn mode
+  if (turnMode) {
+    const tmClassic = document.getElementById('tm-btn-classic');
+    const tmSpeed = document.getElementById('tm-btn-speed');
+    if (turnMode === 'classic') {
+      if (tmClassic) tmClassic.classList.add('selected');
+      if (tmSpeed) tmSpeed.classList.remove('selected');
+    } else {
+      if (tmSpeed) tmSpeed.classList.add('selected');
+      if (tmClassic) tmClassic.classList.remove('selected');
+    }
+    const selTxt = document.getElementById('tm-summary');
+    const dirLabels = { cw: '↻ Left', both: '↔ Both', ccw: '↺ Right' };
+    if (selTxt) {
+      if (turnMode === 'classic') {
+        selTxt.innerHTML = `♟️ Classic Turns — <span>${dirLabels[passDirection] || passDirection}</span>`;
+      } else {
+        selTxt.innerHTML = `⚡ Speed Round — <span>${speedMode === 'firstToTap' ? 'First to Tap' : 'Down the Line'}</span>`;
+      }
+    }
+    document.getElementById('tm-required-note').style.display = 'none';
+  }
+  // Sync feature toggle checkboxes with the JS variables
+  const toggleMap = {
+    'feature-nudge-toggle': featureNudgeEnabled,
+    'feature-awards-toggle': featureAwardsEnabled,
+    'feature-vp-toggle': featureVPEnabled,
+    'feature-status-toggle': featureStatusEffectsEnabled,
+    'feature-dnd-toggle': featureDndEnabled,
+    'feature-rounds-toggle': featureRoundsEnabled,
+    'feature-timers-toggle': featureTimersEnabled
+  };
+  Object.entries(toggleMap).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = val;
+  });
+  // Sync edit buttons visibility
+  const nudgeEditBtn = document.getElementById('nudge-edit-btn');
+  if (nudgeEditBtn) nudgeEditBtn.classList.toggle('visible', featureNudgeEnabled);
+  const timersEditBtn = document.getElementById('timers-edit-btn');
+  if (timersEditBtn) timersEditBtn.classList.toggle('visible', featureTimersEnabled);
+  const roundsEditBtn = document.getElementById('rounds-edit-btn');
+  if (roundsEditBtn) roundsEditBtn.classList.toggle('visible', featureRoundsEnabled);
+  updateFeaturesSummary();
+  createStep = 3;
+  renderCreateStep();
+  renderEditRoomButtons();
+  showScreen('create');
+};
+
+window.onCreateFinalBtn = function() {
+  if (editingRoom) { returnToLobby(); } else { createRoom(); }
+};
+
+function renderEditRoomButtons() {
+  const finalBtn = document.getElementById('create-final-btn');
+  if (finalBtn) {
+    if (editingRoom) { finalBtn.textContent = 'Back to Lobby →'; } else { finalBtn.textContent = 'Create Room'; }
+  }
+}
+
+window.saveRoomChanges = async function() {
+  if (!db || !roomCode) return;
+  const name = document.getElementById('host-name').value.trim();
+  if (!name) { status('create-status', 'Enter your name.', 'error'); return; }
+  if (!turnMode || (turnMode === 'classic' && !passDirection)) {
+    document.getElementById('tm-required-note').style.display = 'block';
+    status('create-status', 'Choose a turn mode to continue.', 'error');
+    return;
+  }
+  document.getElementById('tm-required-note').style.display = 'none';
+  myName = name;
+  const av = roomAvatarSelection || '👤';
+  const updates = {};
+  updates[`rooms/${roomCode}/players/${myId}/name`] = name;
+  updates[`rooms/${roomCode}/players/${myId}/color`] = myColor;
+  updates[`rooms/${roomCode}/players/${myId}/avatar`] = av;
+  updates[`rooms/${roomCode}/features/passDirection`] = passDirection;
+  updates[`rooms/${roomCode}/features/turnMode`] = turnMode;
+  updates[`rooms/${roomCode}/features/speedMode`] = turnMode === 'speedRound' ? speedMode : '';
+  updates[`rooms/${roomCode}/features/speedRoundsTotal`] = turnMode === 'speedRound' ? speedRoundsTotal : 0;
+  updates[`rooms/${roomCode}/features/nudge`] = featureNudgeEnabled;
+  updates[`rooms/${roomCode}/features/nudgeDelay`] = featureNudgeEnabled ? (parseInt(document.getElementById('nudge-delay').value) || 30) : 0;
+  updates[`rooms/${roomCode}/features/nudgeMode`] = featureNudgeEnabled ? (document.querySelector('input[name="nudge-mode"]:checked')?.value || 'multi') : 'multi';
+  updates[`rooms/${roomCode}/features/awards`] = featureAwardsEnabled;
+  updates[`rooms/${roomCode}/features/victoryPoints`] = featureVPEnabled;
+  updates[`rooms/${roomCode}/features/statusEffects`] = featureStatusEffectsEnabled;
+  updates[`rooms/${roomCode}/features/dndTurnComponents`] = featureDndEnabled;
+  updates[`rooms/${roomCode}/features/timers`] = featureTimersEnabled;
+  updates[`rooms/${roomCode}/features/timerTurnOn`] = featureTimersEnabled && document.getElementById('timer-turn-on').checked;
+  updates[`rooms/${roomCode}/features/timerTurnVisible`] = document.getElementById('timer-turn-visible').checked;
+  updates[`rooms/${roomCode}/features/timerRoundOn`] = featureTimersEnabled && document.getElementById('timer-round-on').checked;
+  updates[`rooms/${roomCode}/features/timerRoundVisible`] = document.getElementById('timer-round-visible').checked;
+  updates[`rooms/${roomCode}/features/timerGameOn`] = featureTimersEnabled && document.getElementById('timer-game-on').checked;
+  updates[`rooms/${roomCode}/features/timerGameVisible`] = document.getElementById('timer-game-visible').checked;
+  updates[`rooms/${roomCode}/features/timerCountdownOn`] = featureTimersEnabled && document.getElementById('timer-countdown-on').checked;
+  updates[`rooms/${roomCode}/features/timerCountdownVisible`] = document.getElementById('timer-countdown-visible').checked;
+  updates[`rooms/${roomCode}/features/timerCountdownSecs`] = (parseInt(document.getElementById('timer-countdown-min').value)||0)*60 + (parseInt(document.getElementById('timer-countdown-sec').value)||30);
+  updates[`rooms/${roomCode}/features/rounds`] = featureRoundsEnabled;
+  updates[`rooms/${roomCode}/features/roundsTotal`] = featureRoundsEnabled ? (parseInt(document.getElementById('rounds-total').value) || 3) : 0;
+  await update(ref(db), updates);
+  haptic(20);
+  editingRoom = false;
+  document.getElementById('display-code').textContent = roomCode;
+  showScreen('lobby');
+  generateLobbyQR();
+  listenLobby();
+};
+
+window.returnToLobby = function() {
+  editingRoom = false;
+  document.getElementById('display-code').textContent = roomCode;
+  showScreen('lobby');
+  generateLobbyQR();
+  listenLobby();
 };
 
 window.confirmLeave = async function() {
@@ -8126,7 +8458,7 @@ window.createRoom = async function() {
     buzzScores: {},
     buzzTapOrder: {},
     players: {
-      [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor, avatar: getSavedAvatar() || '👤' }
+      [myId]: { name, order: 0, joinedAt: Date.now(), color: myColor, avatar: roomAvatarSelection || '👤' }
     }
   });
   haptic(20);
@@ -8185,7 +8517,7 @@ async function joinAsNewPlayer(code, room, name) {
 
   const players = room.players || {};
   const order = Object.keys(players).length;
-  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor, avatar: getSavedAvatar() || '👤' });
+  await update(ref(db, `rooms/${code}/players/${myId}`), { name, order, joinedAt: Date.now(), knockedOut: false, color: myColor, avatar: roomAvatarSelection || '👤' });
   await update(ref(db, `rooms/${code}`), { lastActivity: Date.now() });
   haptic(15);
   saveSession();
@@ -8256,7 +8588,7 @@ function listenLobby() {
 
     // One-time sync: push avatar to Firebase if missing
     if (players[myId] && !players[myId].avatar) {
-      const myAvatar = getSavedAvatar() || '👤';
+      const myAvatar = roomAvatarSelection || getSavedAvatar() || '👤';
       set(ref(db, `rooms/${roomCode}/players/${myId}/avatar`), myAvatar).catch(() => {});
     }
 
@@ -8288,7 +8620,7 @@ function listenWaitingLobby() {
 
     // One-time sync: push avatar to Firebase if missing
     if (players[myId] && !players[myId].avatar) {
-      const myAvatar = getSavedAvatar() || '👤';
+      const myAvatar = roomAvatarSelection || getSavedAvatar() || '👤';
       set(ref(db, `rooms/${roomCode}/players/${myId}/avatar`), myAvatar).catch(() => {});
     }
 
