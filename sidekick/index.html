@@ -223,11 +223,6 @@
   /* ── CREATE ROOM WIZARD STEPS ── */
   .create-step { display: none; }
   .create-step.revealed { display: block; }
-  .step-progress { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 1rem; text-align: center; }
-  .step-dots { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s, transform 0.3s; }
-  .step-dot.active { background: var(--accent); transform: scale(1.3); }
-  .step-dot.done { background: var(--accent-light); }
 
   button {
     width: 100%;
@@ -261,6 +256,7 @@
     outline: none;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
     transition: border-color 0.2s, box-shadow 0.2s;
+    text-align: center;
   }
   input:focus { border-color: var(--accent); box-shadow: inset 0 2px 4px rgba(0,0,0,0.25), 0 0 0 3px rgba(124,92,191,0.25); }
 
@@ -529,6 +525,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
     transition: border-color 0.2s;
@@ -3189,7 +3186,7 @@
   <p id="home-status" class="status"></p>
 
   <!-- Tools card (collapsible) -->
-  <div class="card" style="margin-top:1.0rem; padding:0;">
+  <div class="card" style="margin-top:2.0rem; padding:0;">
     <button onclick="toggleTools()" id="tools-toggle-btn" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:none;border:none;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;border-radius:12px;">
       <span style="font-size:1.1rem;color:var(--accent-light);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;">Tools</span>
       <span id="tools-arrow" style="font-size:0.9rem;color:var(--muted);transition:transform 0.3s;">▸</span>
@@ -3241,19 +3238,14 @@
   <div class="screen-content-scaler" id="scaler-create">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:2rem;margin-bottom:0.25rem;">Room Settings</div>
-    <div class="step-dots" id="create-step-dots">
-      <div class="step-dot active" id="dot-1"></div>
-      <div class="step-dot" id="dot-2"></div>
-      <div class="step-dot" id="dot-3"></div>
-    </div>
-    <div class="step-progress" id="create-step-label">Step 1 of 3 — Your Name</div>
+    <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
 
-    <!-- Card 1: Player name & color (Step 1) -->
+    <!-- Card 1: Enter Player Name & Color (Step 1) -->
     <div class="create-step revealed" data-step="1">
       <div class="card" style="margin-bottom: 1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
-        <label style="margin-bottom: 0.25rem;">Name</label>
-        <input id="host-name" placeholder="Type Player / Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
+        <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 1</div>
+        <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Choose Player Name & Color</div>
+        <input id="host-name" placeholder="Type Player Or Team Name" maxlength="20" style="margin-bottom: 0.75rem;">
         <button class="color-picker-btn" onclick="openColorPicker('host')" id="host-color-btn">
           <span class="color-preview-swatch" id="host-color-swatch" style="background:#FF0000;"></span>
           <span id="host-color-label">Choose Your Player Color</span>
@@ -3264,7 +3256,8 @@
     <!-- Card 2: Turn Mode (Step 2) -->
     <div class="create-step" data-step="2">
       <div class="card" style="margin-bottom:1.75rem; padding-top:1rem; padding-bottom:1rem;">
-        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.65rem;">Turn Mode <span style="color:#e05555;">*</span></div>
+        <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 2</div>
+        <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.65rem;">Choose a turn mode to continue.</div>
         <div class="turn-mode-btns">
           <button class="turn-mode-btn" id="tm-btn-classic" onclick="selectTurnMode('classic')">
             <span class="tm-icon">♟️</span>
@@ -3275,15 +3268,15 @@
             Speed Round
           </button>
         </div>
-        <div class="turn-mode-selection" id="tm-selection-text">Choose a turn mode to continue.</div>
         <div id="tm-required-note" style="display:none;color:#e05555;font-size:0.75rem;text-align:center;margin-top:0.25rem;">⚠ Please choose a turn mode.</div>
       </div>
     </div>
 
     <!-- Card 3: Game Settings / Features (Step 3) -->
     <div class="create-step" data-step="3">
-      <div class="card" style="margin-bottom:0.75rem; padding-top: 1rem; padding-bottom: 1rem;">
-        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem;">Game Settings / Features</div>
+      <div class="card" style="margin-bottom:1.75rem; padding-top: 1rem; padding-bottom: 1rem;">
+        <div style="font-size:1.4rem;font-weight:800;color:var(--accent-light);text-align:center;margin-bottom:0.15rem;">Step 3</div>
+        <div style="font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:0.75rem;">Add Game Features</div>
         <button class="btn-secondary" onclick="openFeaturesOverlay()" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; font-size:0.88rem;">
           <span>⚙️ Configure Features</span>
           <span style="color:var(--muted); font-size:0.78rem;">›</span>
@@ -4856,8 +4849,8 @@ window.confirmClassicDir = function() {
   passDirection = _selectedClassicDir;
   document.getElementById('classic-dir-overlay').classList.remove('show');
   const labels = { cw: '↻ Left', both: '↔ Both', ccw: '↺ Right' };
-  document.getElementById('tm-selection-text').innerHTML =
-    `♟️ Classic Turns — <span>${labels[passDirection] || passDirection}</span>`;
+  const selTxt = document.getElementById('tm-selection-text');
+  if (selTxt) selTxt.innerHTML = `♟️ Classic Turns — <span>${labels[passDirection] || passDirection}</span>`;
 };
 
 window.closeClassicDirOverlay = function() {
@@ -4884,8 +4877,8 @@ window.confirmSpeedMode = function() {
   speedRoundsTotal = rounds;
   document.getElementById('speed-mode-overlay').classList.remove('show');
   const modeLabels = { firstToTap: '🥇 1st To Tap', downTheLine: '📋 Down The Line' };
-  document.getElementById('tm-selection-text').innerHTML =
-    `⚡ Speed Round — <span>${modeLabels[speedMode]}</span> · ${rounds} rounds`;
+  const selTxt2 = document.getElementById('tm-selection-text');
+  if (selTxt2) selTxt2.innerHTML = `⚡ Speed Round — <span>${modeLabels[speedMode]}</span> · ${rounds} rounds`;
 };
 
 window.closeSpeedModeOverlay = function() {
@@ -5591,7 +5584,6 @@ window.showJoinRoom = () => showScreen('join');
 
 // ── CREATE ROOM WIZARD ──
 let createStep = 1;
-const STEP_LABELS = ['Step 1 of 3 — Your Name', 'Step 2 of 3 — Turn Mode', 'Step 3 of 3 — Game Settings'];
 
 function renderCreateStep() {
   // Reveal all cards up to current step, hide the rest
@@ -5599,17 +5591,6 @@ function renderCreateStep() {
     const step = parseInt(el.dataset.step);
     el.classList.toggle('revealed', step <= createStep);
   });
-  // Update dots
-  for (let i = 1; i <= 3; i++) {
-    const dot = document.getElementById('dot-' + i);
-    if (dot) {
-      dot.classList.toggle('active', i === createStep);
-      dot.classList.toggle('done', i < createStep);
-    }
-  }
-  // Update label
-  const label = document.getElementById('create-step-label');
-  if (label) label.textContent = STEP_LABELS[createStep - 1];
   // Show/hide buttons
   const nextBtn = document.getElementById('create-next-btn');
   const finalBtn = document.getElementById('create-final-btn');
