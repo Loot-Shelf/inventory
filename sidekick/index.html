@@ -238,6 +238,10 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
+  #create-cards-area { transition: justify-content 0.3s ease; }
+  #create-cards-area.step-mode { justify-content: center; align-items: center; }
+  #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; padding-top: 0; }
+  #create-cards-area.stack-mode { justify-content: flex-start; align-items: center; }
 
   /* ── JOIN ROOM WIZARD STEPS ── */
   .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
@@ -257,6 +261,10 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
+  #join-cards-area { transition: justify-content 0.3s ease; }
+  #join-cards-area.step-mode { justify-content: center; align-items: center; }
+  #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; padding-top: 0; }
+  #join-cards-area.stack-mode { justify-content: flex-start; align-items: center; }
 
   button {
     width: 100%;
@@ -3269,10 +3277,13 @@
 <!--  SCREEN: CREATE ROOM                        -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-create" class="screen">
-  <div class="screen-content-scaler" id="scaler-create">
+  <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;justify-content:space-between;">
 
-    <!-- Page header -->
-    <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
+    <!-- Cards area -->
+    <div id="create-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;" class="step-mode">
+
+    <!-- Page header (moves to top on step 2+) -->
+    <div class="logo" id="create-logo" style="font-size:2rem;margin-bottom:1rem;">Room Settings</div>
 
     <!-- Card 1: Enter Player Name & Color (Step 1) -->
     <div class="create-step revealed" data-step="1">
@@ -3320,8 +3331,10 @@
       </div>
     </div>
 
-    <!-- Wizard buttons (always at bottom, after last revealed card) -->
-    <div id="create-wizard-btns" style="width:100%;max-width:420px;">
+    </div><!-- end cards area -->
+
+    <!-- Wizard buttons (pinned at bottom) -->
+    <div id="create-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.75rem 0;">
       <button class="btn-primary" id="create-next-btn" onclick="createNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="create-final-btn" onclick="createRoom()" style="width:100%;display:none;">Create Room</button>
       <p id="create-status" class="status"></p>
@@ -3335,10 +3348,13 @@
 <!--  SCREEN: JOIN ROOM                          -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-join" class="screen">
-  <div class="screen-content-scaler" id="scaler-join">
+  <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;justify-content:space-between;">
 
-    <!-- Page header -->
-    <div class="logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
+    <!-- Cards area -->
+    <div id="join-cards-area" style="flex:1;display:flex;flex-direction:column;width:100%;max-width:420px;margin:0 auto;justify-content:center;align-items:center;" class="step-mode">
+
+    <!-- Page header (moves to top on step 2+) -->
+    <div class="logo" id="join-logo" style="font-size:2rem;margin-bottom:1rem;">Join Room</div>
 
     <!-- Step 1: Player name & color -->
     <div class="join-step revealed" data-step="1">
@@ -3362,8 +3378,10 @@
       </div>
     </div>
 
-    <!-- Wizard buttons -->
-    <div id="join-wizard-btns" style="width:100%;max-width:420px;">
+    </div><!-- end cards area -->
+
+    <!-- Wizard buttons (pinned at bottom) -->
+    <div id="join-wizard-btns" style="width:100%;max-width:420px;margin:0 auto;padding:0.75rem 0;">
       <button class="btn-primary" id="join-next-btn" onclick="joinNextStep()" style="width:100%;">Next →</button>
       <button class="btn-primary" id="join-final-btn" onclick="joinRoom()" style="width:100%;display:none;">Join Room</button>
       <p id="join-status" class="status"></p>
@@ -5637,11 +5655,22 @@ window.showJoinRoom = function() {
 let joinStep = 1;
 
 function renderJoinStep() {
+  const area = document.getElementById('join-cards-area');
   document.querySelectorAll('.join-step').forEach(el => {
     const step = parseInt(el.dataset.step);
-    el.classList.toggle('revealed', step <= joinStep);
-    el.classList.toggle('completed', step < joinStep);
+    el.classList.remove('completed');
+    if (joinStep === 1) {
+      el.classList.toggle('revealed', step === 1);
+    } else {
+      el.classList.toggle('revealed', step <= 2);
+      el.classList.toggle('completed', step < 2);
+    }
   });
+  if (joinStep === 1) {
+    area.className = 'step-mode';
+  } else {
+    area.className = 'stack-mode';
+  }
   const nextBtn = document.getElementById('join-next-btn');
   const finalBtn = document.getElementById('join-final-btn');
   if (nextBtn) nextBtn.style.display = joinStep < 2 ? '' : 'none';
@@ -5665,13 +5694,27 @@ window.joinNextStep = function() {
 let createStep = 1;
 
 function renderCreateStep() {
-  // Reveal all cards up to current step, mark past ones as completed
+  const area = document.getElementById('create-cards-area');
   document.querySelectorAll('.create-step').forEach(el => {
     const step = parseInt(el.dataset.step);
-    el.classList.toggle('revealed', step <= createStep);
-    el.classList.toggle('completed', step < createStep);
+    el.classList.remove('completed');
+    if (createStep === 1) {
+      el.classList.toggle('revealed', step === 1);
+    } else if (createStep === 2) {
+      el.classList.toggle('revealed', step <= 2);
+      el.classList.toggle('completed', step < 2);
+    } else {
+      el.classList.toggle('revealed', step <= 3);
+      el.classList.toggle('completed', step < 3);
+    }
   });
-  // Show/hide buttons
+  if (createStep === 1) {
+    area.className = 'step-mode';
+  } else if (createStep === 2) {
+    area.className = 'mid-mode';
+  } else {
+    area.className = 'stack-mode';
+  }
   const nextBtn = document.getElementById('create-next-btn');
   const finalBtn = document.getElementById('create-final-btn');
   if (nextBtn) nextBtn.style.display = createStep < 3 ? '' : 'none';
