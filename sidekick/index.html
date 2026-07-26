@@ -61,23 +61,6 @@
   }
 
   /* ── DEFAULT THEME 3D ELEMENTS ── */
-  body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .card {
-    position: relative;
-    overflow: visible;
-  }
-  body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .card::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    right: -8px;
-    bottom: -8px;
-    border-radius: 16px;
-    background: linear-gradient(140deg, transparent 0%, transparent 40%, rgba(124,92,191,0.4) 100%);
-    filter: blur(8px);
-    z-index: -1;
-    pointer-events: none;
-  }
   body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .btn-primary {
     text-shadow:
       0 1px 0 rgba(0,0,0,0.4),
@@ -224,6 +207,21 @@
     width: 100%;
     max-width: 420px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    position: relative;
+    overflow: visible;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 16px;
+    background: linear-gradient(140deg, transparent 0%, transparent 40%, rgba(124,92,191,0.4) 100%);
+    filter: blur(8px);
+    z-index: -1;
+    pointer-events: none;
   }
 
   .btn-group { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -235,7 +233,17 @@
     width: 100%;
     padding: 1rem 1.25rem;
     margin-bottom: 0;
-    transition: all 0.3s ease;
+    transform: scale(1);
+  }
+  .create-step .card.step-enter {
+    transform: scale(0.85);
+  }
+  .create-step.completed .card {
+    max-width: 75%;
+    margin: 0 auto;
+    padding: 0.6rem 0.8rem;
+    transform: scale(0.85);
+    transition: none !important;
   }
   .create-step.completed .card {
     max-width: 75%;
@@ -247,11 +255,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:hidden; }
+  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:visible; align-items:center; }
   #create-cards-area::-webkit-scrollbar { display:none; }
-  #create-cards-area.step-mode { justify-content: center; align-items: center; }
-  #create-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
-  #create-cards-area.stack-mode { justify-content: safe center; align-items: center; }
+  #create-cards-area.step-mode { justify-content: center; }
+  #create-cards-area.mid-mode { justify-content: center; }
+  #create-cards-area.stack-mode { justify-content: center; }
 
   /* ── JOIN ROOM WIZARD STEPS ── */
   .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
@@ -260,23 +268,28 @@
     width: 100%;
     padding: 1rem 1.25rem;
     margin-bottom: 0;
-    transition: all 0.3s ease;
+    transform: scale(1);
+  }
+  .join-step .card.step-enter {
+    transform: scale(0.85);
   }
   .join-step.completed .card {
     max-width: 75%;
     margin: 0 auto;
     padding: 0.6rem 0.8rem;
+    transform: scale(0.85);
+    transition: none !important;
   }
   .join-step.completed .card input,
   .join-step.completed .card .color-picker-btn {
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:hidden; }
+  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:visible; align-items:center; }
   #join-cards-area::-webkit-scrollbar { display:none; }
-  #join-cards-area.step-mode { justify-content: center; align-items: center; }
-  #join-cards-area.mid-mode { justify-content: flex-start; align-items: center; }
-  #join-cards-area.stack-mode { justify-content: safe center; align-items: center; }
+  #join-cards-area.step-mode { justify-content: center; }
+  #join-cards-area.mid-mode { justify-content: center; }
+  #join-cards-area.stack-mode { justify-content: center; }
 
   button {
     width: 100%;
@@ -286,7 +299,7 @@
     font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    transition: transform 0.15s cubic-bezier(0.4,0,0.2,1), background 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s cubic-bezier(0.4,0,0.2,1), color 0.2s cubic-bezier(0.4,0,0.2,1), border-color 0.2s cubic-bezier(0.4,0,0.2,1);
   }
   button:hover:not(:disabled) { transform: scale(1.03); }
   button:active { transform: scale(0.97); }
@@ -3342,7 +3355,7 @@
   </div>
   </div><!-- end scaler-home -->
   <!-- What Is SideKick? button (outside scaler, fixed at bottom) -->
-  <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;">❓ What Is SideKick?</button>
+    <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;">What Is SideKick?</button>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -3352,7 +3365,7 @@
   <div class="screen-content-scaler" id="scaler-create" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:380px;margin:0 auto;padding:0 1rem;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
+    <div id="create-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:380px;margin:0 auto;padding:0 1rem;justify-content:center;align-items:center;flex:1;min-height:0;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="create-logo" style="font-size:2rem;">Room Settings</div>
@@ -3429,7 +3442,7 @@
   <div class="screen-content-scaler" id="scaler-join" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Cards area -->
-    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:380px;margin:0 auto;padding:0 1rem;justify-content:center;align-items:center;flex:1;min-height:0;overflow-y:auto;" class="step-mode">
+    <div id="join-cards-area" style="display:flex;flex-direction:column;width:100%;max-width:380px;margin:0 auto;padding:0 1rem;justify-content:center;align-items:center;flex:1;min-height:0;" class="step-mode">
 
     <!-- Page header (moves to top on step 2+) -->
     <div class="logo" id="join-logo" style="font-size:2rem;">Join Room</div>
@@ -5611,7 +5624,7 @@ function genCode() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
-  requestAnimationFrame(rescaleCurrentScreen);
+  if (id !== 'create' && id !== 'join') requestAnimationFrame(rescaleCurrentScreen);
   // Hide D&D overlay whenever leaving the active turn screen
   if (id !== 'active') {
     const dndOv = document.getElementById('dnd-overlay');
@@ -5869,8 +5882,8 @@ window.showCreateRoom = function() {
 };
 window.showJoinRoom = function() {
   joinStep = 1;
-  renderJoinStep();
   showScreen('join');
+  renderJoinStep();
   const nameEl = document.getElementById('join-name');
   if (nameEl && !nameEl.value) {
     const saved = currentUser ? getSavedName() : '';
@@ -5890,6 +5903,11 @@ function renderJoinStep() {
   const area = document.getElementById('join-cards-area');
   document.querySelectorAll('.join-step').forEach(el => {
     const step = parseInt(el.dataset.step);
+    const card = el.querySelector('.card');
+    if (card) {
+      card.classList.remove('step-enter');
+      card.style.transition = 'none';
+    }
     el.classList.remove('completed');
     if (joinStep === 1) {
       el.classList.toggle('revealed', step === 1);
@@ -5897,7 +5915,17 @@ function renderJoinStep() {
       el.classList.toggle('revealed', step <= 2);
       el.classList.toggle('completed', step < 2);
     }
+    if (card) void card.offsetWidth;
+    if (card) card.style.transition = '';
   });
+  const currentCard = document.querySelector(`.join-step[data-step="${joinStep}"] .card`);
+  if (currentCard) {
+    currentCard.style.transition = 'none';
+    currentCard.style.transform = 'scale(0.85)';
+    void currentCard.offsetWidth;
+    currentCard.style.transition = 'transform 1s cubic-bezier(0.22,1,0.36,1)';
+    currentCard.style.transform = '';
+  }
   if (joinStep === 1) {
     area.className = 'step-mode';
   } else {
@@ -5933,6 +5961,11 @@ function renderCreateStep() {
   const area = document.getElementById('create-cards-area');
   document.querySelectorAll('.create-step').forEach(el => {
     const step = parseInt(el.dataset.step);
+    const card = el.querySelector('.card');
+    if (card) {
+      card.classList.remove('step-enter');
+      card.style.transition = 'none';
+    }
     el.classList.remove('completed');
     if (createStep === 1) {
       el.classList.toggle('revealed', step === 1);
@@ -5943,7 +5976,18 @@ function renderCreateStep() {
       el.classList.toggle('revealed', step <= 3);
       el.classList.toggle('completed', step < 3);
     }
+    if (card) void card.offsetWidth;
+    if (card) card.style.transition = '';
   });
+  // Trigger enter animation on the current step's card
+  const currentCard = document.querySelector(`.create-step[data-step="${createStep}"] .card`);
+  if (currentCard) {
+    currentCard.style.transition = 'none';
+    currentCard.style.transform = 'scale(0.85)';
+    void currentCard.offsetWidth;
+    currentCard.style.transition = 'transform 1s cubic-bezier(0.22,1,0.36,1)';
+    currentCard.style.transform = '';
+  }
   if (createStep === 1) {
     area.className = 'step-mode';
   } else if (createStep === 2) {
