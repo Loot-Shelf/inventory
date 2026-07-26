@@ -1278,11 +1278,12 @@
   }
   .tutorial-close {
     position: absolute; top: 0.75rem; right: 0.75rem;
-    width: 28px; height: 28px; border-radius: 50%;
+    width: 30px; height: 30px; border-radius: 50%;
     background: var(--bg); border: 1px solid var(--border);
-    color: var(--muted); font-size: 0.85rem; cursor: pointer;
+    color: var(--muted); font-size: 1rem; line-height: 1; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     z-index: 2; transition: color 0.15s, border-color 0.15s;
+    padding: 0; box-sizing: border-box; -webkit-appearance: none; appearance: none;
   }
   .tutorial-close:hover { color: var(--text); border-color: var(--muted); }
   .tutorial-viewport {
@@ -3549,10 +3550,10 @@
     <div class="card" style="max-width:480px;margin-bottom:0.5rem;text-align:center; padding-top: .5rem; padding-bottom: .25rem;">
       <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:.5rem;">
       </div>
-      <div style="background:#fff;border-radius:10px;padding:0.6rem;display:inline-block;margin-bottom:.15rem;">
+      <div style="background:#fff;border-radius:8px;padding:0.4rem;display:inline-block;margin-bottom:0;">
         <div id="qr-code-lobby"></div>
       </div>
-      <div class="room-code" id="display-code">----</div>
+      <div class="room-code" id="display-code" style="margin-top:0;">----</div>
     </div>
 
     <!-- Card 2: Player list -->
@@ -4394,7 +4395,7 @@
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="tutorial-overlay" style="z-index:9650;">
   <div class="tutorial-container">
-    <button class="tutorial-close" onclick="closeTutorial()">✕</button>
+    <button class="tutorial-close" onclick="closeTutorial()">×</button>
     <div class="tutorial-viewport" id="tutorial-viewport">
       <!-- Slide 1 -->
       <div class="tutorial-slide">
@@ -4428,6 +4429,18 @@
         <div class="tutorial-desc">Turn on <strong>Nudge</strong> to poke slow players. Add <strong>Timers</strong> for turns, rounds, or the whole game. Enable <strong>Awards</strong> for fun achievements. Try different <strong>Themes</strong> from the settings icon. Everything is optional — use what you like.</div>
       </div>
       <!-- Slide 6 -->
+      <div class="tutorial-slide">
+        <div class="tutorial-icon">📲</div>
+        <div class="tutorial-title">Add to Your Home Screen</div>
+        <div class="tutorial-desc">Install SideKick like a real app for the best experience. It loads faster, looks better, and gets its own icon.</div>
+        <div class="tutorial-visual">
+          <div style="text-align:left;margin-top:0.25rem;">
+            <div style="margin-bottom:0.5rem;"><strong>iPhone / iPad (Safari):</strong><br>Tap the <strong>Share</strong> button <span style="font-size:1.1rem;">⬆</span> at the bottom, then scroll down and tap <strong>"Add to Home Screen"</strong>.</div>
+            <div><strong>Android (Chrome):</strong><br>Tap the <strong>⋮ menu</strong> in the top-right, then tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.</div>
+          </div>
+        </div>
+      </div>
+      <!-- Slide 7 -->
       <div class="tutorial-slide">
         <div class="tutorial-icon">🎉</div>
         <div class="tutorial-title">Ready to Play?</div>
@@ -6973,8 +6986,8 @@ function generateLobbyQR() {
   const joinUrl = base + '?join=' + roomCode;
   new QRCode(box, {
     text: joinUrl,
-    width: 130,
-    height: 130,
+    width: 100,
+    height: 100,
     colorDark: '#000000',
     colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.M
