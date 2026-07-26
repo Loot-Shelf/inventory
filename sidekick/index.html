@@ -1561,12 +1561,21 @@
 
   /* ── NUDGE BUTTON (waiting screen) ── */
   .nudge-area {
-    margin-top: 2rem;
+    position: absolute;
+    bottom: 80px;
+    left: 0; right: 0;
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    z-index: 10;
+    height: 180px;
+    pointer-events: none;
   }
+  .nudge-area > * { pointer-events: auto; }
+  .nudge-area .nudge-label-text { position: absolute; top: 100px; width: 100%; text-align: center; font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.75); letter-spacing: 0.08em; text-transform: uppercase; }
+  .nudge-area .nudge-subtitle-text { position: absolute; top: 122px; width: 100%; text-align: center; }
+  #nudge-limit-msg { position: absolute !important; top: 148px !important; width: 100%; text-align: center; }
+  .nudge-area .nudge-locked-label { position: absolute; top: 148px; width: 100%; text-align: center; }
   .nudge-area.visible { display: flex; }
   /* ── 3D Nudge Button ── */
   .nudge-btn {
@@ -1577,8 +1586,11 @@
     border: none;
     outline: 5px solid rgba(255, 205, 69, 0.5);
     border-radius: 100%;
-    position: relative;
-    transition: .05s;
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: none;
     cursor: pointer;
     user-select: none;
     touch-action: manipulation;
@@ -1610,6 +1622,12 @@
     transition: .05s;
     color: #fff;
     text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .nudge-btn:hover:not(:disabled) {
+    transform: translateX(-50%) !important;
+  }
+  .nudge-btn:active {
+    transform: translateX(-50%) !important;
   }
   .nudge-btn:active .front {
     transform: translateY(0%);
@@ -3756,9 +3774,9 @@
         <span class="back"></span>
         <span class="front">👉</span>
       </button>
-      <span style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.25rem;">Nudge</span>
-      <span>You Know You Want To...</span>
-      <span id="nudge-limit-msg" style="display:none;color:#e05555;font-size:0.82rem;font-weight:600;margin-top:0.15rem;">Nudge limit reached for this turn (50 max).</span>
+      <span class="nudge-label-text">Nudge</span>
+      <span class="nudge-subtitle-text">You Know You Want To...</span>
+      <span id="nudge-limit-msg" style="display:none;color:#e05555;font-size:0.82rem;font-weight:600;">Nudge limit reached for this turn (50 max).</span>
       <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
     </div>
   </div>
