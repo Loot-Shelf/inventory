@@ -1565,7 +1565,7 @@
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
   .nudge-area.visible { display: flex; }
   /* ── 3D Nudge Button ── */
@@ -1608,7 +1608,8 @@
     font-family: inherit;
     transform: translateY(-15%);
     transition: .05s;
-    color: rgb(var(--secondary));
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
   .nudge-btn:active .front {
     transform: translateY(0%);
@@ -2091,25 +2092,20 @@
   }
   .touch-guard-top {
     top: 0; height: 68px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, transparent 100%);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     align-items: flex-end;
     padding-bottom: 4px;
   }
   .touch-guard-bottom {
     bottom: 0; height: 68px;
-    background: linear-gradient(to top, rgba(0,0,0,0.28) 0%, transparent 100%);
-    border-top: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+    border-top: 1px solid rgba(255,255,255,0.2);
     align-items: flex-start;
     padding-top: 4px;
   }
-  /* Subtle "menu zone" label — centered, very faint */
   .touch-guard::after {
-    content: '';
-    display: block;
-    width: 32px; height: 2px;
-    border-radius: 2px;
-    background: rgba(255,255,255,0.12);
+    display: none;
   }
 
   /* ── SPINNER ── */
@@ -3725,7 +3721,7 @@
   <div class="touch-guard touch-guard-bottom"></div>
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
-  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()" title="Undo Turn">↩ Undo Turn</button>
+  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()" title="Undo Pass">↩ Undo Pass</button>
   <button class="status-effects-btn" id="status-btn-wait" onclick="openStatusMenu()" title="Status Effects">🩹</button>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
@@ -3760,8 +3756,9 @@
         <span class="back"></span>
         <span class="front">👉</span>
       </button>
-      <span style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.08em;text-transform:uppercase;">Nudge</span>
+      <span style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.25rem;">Nudge</span>
       <span>You Know You Want To...</span>
+      <span id="nudge-limit-msg" style="display:none;color:#e05555;font-size:0.82rem;font-weight:600;margin-top:0.15rem;">Nudge limit reached for this turn (50 max).</span>
       <span class="nudge-locked-label" id="nudge-locked-label">Unlocks in <span id="nudge-countdown">--</span>s</span>
     </div>
   </div>
@@ -7395,7 +7392,8 @@ window.sendNudge = async function() {
   // Check per-sender cap (50 nudges per active player per turn)
   const sent = nudgeSentToActive[myId] || 0;
   if (sent >= NUDGE_CAP) {
-    showErrorToast('Nudge limit reached for this turn (50 max).');
+    const limitMsg = document.getElementById('nudge-limit-msg');
+    if (limitMsg) { limitMsg.style.display = ''; }
     return;
   }
 
@@ -7464,6 +7462,8 @@ function resetNudgesForNewTurn() {
   activeNudgeCount = 0;
   nudgeSentToActive = {};
   nudgeCapTargetId = null;
+  const limitMsg = document.getElementById('nudge-limit-msg');
+  if (limitMsg) limitMsg.style.display = 'none';
   const floatContainer = document.getElementById('nudge-float-container');
   if (floatContainer) floatContainer.innerHTML = '';
   // Host clears the entire nudges map so no stale counts bleed into the new turn
@@ -9045,16 +9045,16 @@ window.undoTurn = async function() {
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   const room = snap.val();
-  if (!room.previousPlayerId || room.previousPlayerId !== myId) return; // not eligible — button shouldn't even be visible
+  if (!room.previousPlayerId || room.previousPlayerId !== myId) return;
 
   const allPlayers = buildOrderedPlayers(room.players || {});
   const restoredIdx = allPlayers.findIndex(p => p.id === room.previousPlayerId);
-  if (restoredIdx === -1) return; // previous player no longer exists (e.g. kicked) — nothing to restore to
+  if (restoredIdx === -1) return;
 
   await update(ref(db, `rooms/${roomCode}`), {
-    activePlayerIndex: nextIdx,
-    previousPlayerId: outgoingPlayer ? outgoingPlayer.id : null,
-    previousPlayerIndex: current
+    activePlayerIndex: room.previousPlayerIndex ?? restoredIdx,
+    previousPlayerId: null,
+    previousPlayerIndex: null
   });
   haptic(15);
 };
