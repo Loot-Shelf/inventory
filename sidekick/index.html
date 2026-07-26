@@ -197,7 +197,7 @@
 
   /* ── SETUP / LOBBY SCREENS ── */
   .logo { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
-  .tagline { color: var(--muted); font-size: 1rem; margin-bottom: 1.5rem; text-shadow: none; }
+  .tagline { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; text-shadow: none; }
 
   .card {
     background: var(--surface);
@@ -258,11 +258,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:visible; align-items:center; }
+  #create-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:0.75rem; scrollbar-width:none; overflow:hidden; align-items:center; }
   #create-cards-area::-webkit-scrollbar { display:none; }
   #create-cards-area.step-mode { justify-content: center; }
-  #create-cards-area.mid-mode { justify-content: flex-start; padding-top: 1rem; }
-  #create-cards-area.stack-mode { justify-content: flex-start; padding-top: 0.5rem; }
+  #create-cards-area.mid-mode { justify-content: center; }
+  #create-cards-area.stack-mode { justify-content: center; }
 
   /* ── JOIN ROOM WIZARD STEPS ── */
   .join-step { display: none; width: 100%; max-width: 420px; margin: 0 auto; }
@@ -288,11 +288,11 @@
     font-size: 0.85rem;
     padding: 0.5rem 0.7rem;
   }
-  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:1rem; scrollbar-width:none; overflow:visible; align-items:center; }
+  #join-cards-area { transition: justify-content 0.3s ease; display:flex; flex-direction:column; gap:0.75rem; scrollbar-width:none; overflow:hidden; align-items:center; }
   #join-cards-area::-webkit-scrollbar { display:none; }
   #join-cards-area.step-mode { justify-content: center; }
-  #join-cards-area.mid-mode { justify-content: flex-start; padding-top: 1rem; }
-  #join-cards-area.stack-mode { justify-content: flex-start; padding-top: 0.5rem; }
+  #join-cards-area.mid-mode { justify-content: center; }
+  #join-cards-area.stack-mode { justify-content: center; }
 
   button {
     width: 100%;
@@ -496,7 +496,7 @@
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: rgba(255,255,255,0.4);
-    margin-bottom: 0.4rem;
+    margin-bottom: 1.25rem;
   }
   .wait-active-name {
     font-size: 3.2rem;
@@ -508,9 +508,10 @@
   }
   .wait-active-row {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 1rem;
     margin-bottom: 2.5rem;
   }
   .wait-active-avatar {
@@ -2057,24 +2058,26 @@
   .undo-turn-btn {
     display: none;
     position: absolute;
-    bottom: 14px;
-    right: 14px;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    border-radius: 20px;
     background: rgba(124,92,191,0.7);
     border: 1.5px solid rgba(255,255,255,0.22);
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 21;
-    padding: 0;
+    padding: 0.5rem 1rem;
     line-height: 1;
+    gap: 0.35rem;
   }
   .undo-turn-btn.visible { display: flex; }
-  .undo-turn-btn.stacked { bottom: 58px; }
+  .undo-turn-btn.stacked { bottom: 16px; }
 
   /* ── TOUCH GUARDS: block accidental pass-turn taps in button zones ── */
   .touch-guard {
@@ -3311,8 +3314,8 @@
   <div class="tagline">Pass the turn. Keep the vibe.</div>
   <div class="card">
     <div class="btn-group">
-      <button class="btn-primary" onclick="showCreateRoom()">Create a Room</button>
-      <button class="btn-secondary" onclick="showJoinRoom()">Join a Room</button>
+      <button class="btn-primary" onclick="showCreateRoom()" style="font-size:1.3rem;padding:1.1rem 1.5rem;">Host Room</button>
+      <button class="btn-secondary" onclick="showJoinRoom()" style="font-size:1.3rem;padding:1.1rem 1.5rem;">Join Room</button>
     </div>
   </div>
   <p id="home-status" class="status"></p>
@@ -3722,7 +3725,7 @@
   <div class="touch-guard touch-guard-bottom"></div>
   <button class="exit-btn" onclick="confirmLeave()">⬡ Exit Room</button>
   <button class="host-manage-btn" id="host-manage-btn-wait" onclick="openManagePanel()">👥 Players</button>
-  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()" title="Undo Turn">↩</button>
+  <button class="undo-turn-btn" id="undo-turn-btn" onclick="undoTurn()" title="Undo Turn">↩ Undo Turn</button>
   <button class="status-effects-btn" id="status-btn-wait" onclick="openStatusMenu()" title="Status Effects">🩹</button>
   <!-- Host game menu (bottom-left) -->
   <div class="host-game-menu" id="host-game-menu-wait">
@@ -3747,8 +3750,8 @@
     <div class="wait-heading">Waiting For Your Turn</div>
     <div class="wait-active-label">Active Player:</div>
     <div class="wait-active-row">
-      <div class="wait-active-avatar" id="waiting-active-avatar"></div>
       <div class="wait-active-name" id="waiting-active-name"></div>
+      <div class="wait-active-avatar" id="waiting-active-avatar"></div>
     </div>
 
     <!-- NUDGE AREA -->
