@@ -3869,11 +3869,11 @@
     </div>
 
     <!-- Card 2: Player list -->
-    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column;">
+    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden;">
       <div style="text-align:center;margin-bottom:.4rem;">
         <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
       </div>
-      <div class="player-list" id="lobby-player-list" style="flex:1; min-height:0; overflow-y:auto;"></div>
+      <div class="player-list" id="lobby-player-list" style="flex:1; min-height:0;"></div>
       <div id="player-count" style="text-align:center;font-size:0.75rem;color:var(--muted);padding-top:0.3rem;">0 joined</div>
     </div>
 
@@ -9943,12 +9943,13 @@ window.beginAwardsAfterVP = async function() {
 function makeDraggable(listEl, onReorder) {
   let dragSrc = null;
   let touchDragSrc = null;
+  let touchHoldTimer = null;
+  let touchStartY = 0;
 
   listEl.querySelectorAll('[data-drag-id]').forEach(item => {
     const handle = item.querySelector('.drag-handle, .manage-drag-handle') || item;
 
     // ── HTML5 drag (desktop/mouse) ──
-    // Only start drag when the handle is grabbed
     handle.addEventListener('mousedown', () => { item.setAttribute('draggable', 'true'); });
     document.addEventListener('mouseup', () => {
       listEl.querySelectorAll('[data-drag-id]').forEach(i => i.setAttribute('draggable', 'false'));
@@ -9984,15 +9985,27 @@ function makeDraggable(listEl, onReorder) {
       }
     });
 
-    // ── Touch drag ──
+    // ── Touch drag (requires 200ms hold) ──
     handle.addEventListener('touchstart', e => {
-      touchDragSrc = item;
-      item.classList.add('dragging');
+      touchStartY = e.touches[0].clientY;
+      touchHoldTimer = setTimeout(() => {
+        touchDragSrc = item;
+        item.classList.add('dragging');
+      }, 200);
     }, { passive: true });
 
     handle.addEventListener('touchmove', e => {
+      // Cancel drag if finger moves more than 10px (user is scrolling)
+      if (touchHoldTimer && !touchDragSrc) {
+        const dy = Math.abs(e.touches[0].clientY - touchStartY);
+        if (dy > 10) {
+          clearTimeout(touchHoldTimer);
+          touchHoldTimer = null;
+          return;
+        }
+      }
       if (!touchDragSrc) return;
-      e.preventDefault(); // prevent page scroll while dragging
+      e.preventDefault();
       const touch = e.touches[0];
       const el = document.elementFromPoint(touch.clientX, touch.clientY);
       const target = el && el.closest('[data-drag-id]');
@@ -10003,6 +10016,8 @@ function makeDraggable(listEl, onReorder) {
     }, { passive: false });
 
     handle.addEventListener('touchend', e => {
+      clearTimeout(touchHoldTimer);
+      touchHoldTimer = null;
       if (!touchDragSrc) return;
       const touch = e.changedTouches[0];
       const el = document.elementFromPoint(touch.clientX, touch.clientY);
