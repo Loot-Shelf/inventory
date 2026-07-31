@@ -297,7 +297,7 @@
   button {
     width: 100%;
     padding: 1rem 1.5rem;
-    border-radius: 12px;
+    border-radius: 999px;
     border: none;
     font-size: 1.05rem;
     font-weight: 600;
@@ -312,7 +312,7 @@
   .btn-primary:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(124,92,191,0.4); }
   .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-danger { background: linear-gradient(135deg, var(--danger), #e74c3c); color: #fff; box-shadow: 0 2px 8px rgba(192,57,43,0.3); }
-  .btn-sm { width: auto; padding: 0.7rem 1.2rem; font-size: 0.92rem; border-radius: 10px; }
+  .btn-sm { width: auto; padding: 0.7rem 1.2rem; font-size: 0.92rem; border-radius: 999px; }
 
   input {
     width: 100%;
@@ -647,7 +647,7 @@
   .color-picker-btn {
     width: 100%;
     padding: 0.65rem 1rem;
-    border-radius: 10px;
+    border-radius: 999px;
     border: 2px solid var(--border);
     background: var(--surface);
     color: var(--text);
@@ -2157,6 +2157,8 @@
   }
   .undo-turn-btn.visible { display: flex; }
   .undo-turn-btn.stacked { bottom: 16px; }
+  .undo-turn-btn:hover { transform: translateX(-50%) scale(1.03) !important; }
+  .undo-turn-btn:active { transform: translateX(-50%) scale(0.97) !important; }
 
   /* ── TOUCH GUARDS: block accidental pass-turn taps in button zones ── */
   .touch-guard {
@@ -3526,7 +3528,7 @@
   .auth-submit-btn {
     width: 100%; padding: 0.85rem;
     background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    border: none; border-radius: 12px;
+    border: none; border-radius: 999px;
     color: #fff; font-size: 1rem; font-weight: 700;
     cursor: pointer; margin-top: 0.35rem;
     box-shadow: 0 4px 16px rgba(124,92,191,0.35);
@@ -4312,6 +4314,13 @@
       <span class="feature-name">⚔️ D&amp;D Turn Components</span>
     </div>
 
+    <!-- UNDO PASS -->
+    <div class="feature-row" style="margin-bottom:1.25rem;">
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="feature-undo-toggle" type="checkbox" onchange="onUndoToggle(this.checked)"><span class="toggle-slider"></span></label>
+      <span class="feature-name">↩️ Undo Pass</span>
+      <button class="feature-info-btn" onclick="showFeatureInfo('undo')" title="What is this?">?</button>
+    </div>
+
     <button class="info-modal-close" onclick="closeFeaturesOverlay()" style="width:100%;">✓ Done</button>
   </div>
 </div>
@@ -4507,6 +4516,12 @@
     <div class="feature-row creator-only" style="margin-bottom:0.75rem;">
       <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-dnd-toggle" type="checkbox" onchange="onMidGameToggle('dndTurnComponents',this.checked)"><span class="toggle-slider"></span></label>
       <span class="feature-name">⚔️ D&amp;D Turn Components</span>
+    </div>
+
+    <!-- Undo Pass -->
+    <div class="feature-row" style="margin-bottom:0.75rem;">
+      <label class="feature-toggle" style="flex-shrink:0;"><input class="neo-toggle-input" id="mg-undo-toggle" type="checkbox" onchange="onMidGameToggle('undo',this.checked)"><span class="toggle-slider"></span></label>
+      <span class="feature-name">↩️ Undo Pass</span>
     </div>
 
     <button class="info-modal-close" onclick="saveMidGameSettings()">✓ Apply Changes</button>
@@ -6060,6 +6075,7 @@ let featureVPEnabled = false;
 let featureStatusEffectsEnabled = false;
 let featureDndEnabled = false;
 let featureRoundsEnabled = false;
+let featureUndoEnabled = false;
 let roundsTotal = 3;     // total rounds configured by host
 let currentRound = 1;    // current round, stored in Firebase as rooms/{code}/currentRound
 let passDirection = '';         // 'ccw' | 'both' | 'cw' — mandatory before room creation
@@ -6337,6 +6353,7 @@ window.showCreateRoom = function() {
   featureDndEnabled    = false;
   featureTimersEnabled = false;
   featureRoundsEnabled = false;
+  featureUndoEnabled   = false;
   // Reset turn mode
   turnMode = '';
   passDirection = '';
@@ -7569,6 +7586,7 @@ window.openMidGameSettings = function() {
   document.getElementById('mg-status-toggle').checked = featureStatusEffectsEnabled;
   document.getElementById('mg-dnd-toggle').checked    = featureDndEnabled;
   document.getElementById('mg-rounds-toggle').checked = featureRoundsEnabled;
+  document.getElementById('mg-undo-toggle').checked   = featureUndoEnabled;
   document.getElementById('mg-rounds-total').value    = roundsTotal || 3;
   document.getElementById('mg-nudge-settings').style.display  = featureNudgeEnabled  ? 'flex' : 'none';
   document.getElementById('mg-timers-settings').style.display = featureTimersEnabled ? 'flex' : 'none';
@@ -7630,6 +7648,7 @@ window.saveMidGameSettings = async function() {
   const statusOn      = document.getElementById('mg-status-toggle').checked;
   const dndOn         = document.getElementById('mg-dnd-toggle').checked;
   const roundsOn      = document.getElementById('mg-rounds-toggle').checked;
+  const undoOn        = document.getElementById('mg-undo-toggle').checked;
   const roundsTotalMg = roundsOn ? (parseInt(document.getElementById('mg-rounds-total').value) || 3) : 0;
   const countdownOn   = timersOn && document.getElementById('mg-timer-countdown-on').checked;
   const countdownNewlyEnabled = countdownOn && !mgCountdownWasActive;
@@ -7646,6 +7665,7 @@ window.saveMidGameSettings = async function() {
     rounds:                roundsOn,
     roundsTotal:           roundsTotalMg,
     timers:                timersOn,
+    undo:                  undoOn,
     timerTurnOn:           timersOn && document.getElementById('mg-timer-turn-on').checked,
     timerTurnVisible:      document.getElementById('mg-timer-turn-visible').checked,
     timerRoundOn:          timersOn && document.getElementById('mg-timer-round-on').checked,
@@ -7711,6 +7731,11 @@ window.onRoundsToggle = function(checked) {
   updateFeaturesSummary();
 };
 
+window.onUndoToggle = function(checked) {
+  featureUndoEnabled = checked;
+  updateFeaturesSummary();
+};
+
 window.openFeaturesOverlay = function() {
   document.getElementById('features-config-overlay').classList.add('show');
 };
@@ -7731,6 +7756,7 @@ function updateFeaturesSummary() {
   if (featureStatusEffectsEnabled) active.push('🩹 Status');
   if (featureDndEnabled)           active.push('⚔️ D&D');
   if (featureRoundsEnabled)        active.push('🔢 Rounds');
+  if (featureUndoEnabled)          active.push('↩️ Undo');
   el.textContent = active.length ? active.join(' · ') : 'All features off';
 }
 
@@ -7799,6 +7825,11 @@ const FEATURE_INFO = {
     icon: '🔢',
     title: 'Rounds',
     body: `Track the current round of your game.\n\nSet how many total rounds you'll play before the game starts. The current round is shown at the top-center of the screen for all players.\n\nThe host advances the round by opening the 👑 crown menu and tapping End Round. The final round is highlighted in gold so everyone knows it's the last one.`
+  },
+  undo: {
+    icon: '↩️',
+    title: 'Undo Pass',
+    body: `Allow players to undo their last turn pass.\n\nAfter a player passes their turn, an "Undo Pass" button appears on their screen. They can tap it to take their turn back and become the active player again.\n\nThe button disappears once the next player ends their turn. Great for accidental taps!`
   }
 };
 
@@ -7922,7 +7953,6 @@ function syncNudgeToActiveScreen(room) {
       screen.classList.remove('nudge-squish');
       void screen.offsetWidth;
       screen.classList.add('nudge-squish');
-      setTimeout(() => screen.classList.remove('nudge-squish'), 400);
     }
   }
 }
@@ -8668,20 +8698,19 @@ window.setOrientation = function(mode) {
 };
 
 function applyOrientation(mode) {
-  // Remove old meta viewport orientation hints
   document.body.classList.remove('force-portrait','force-landscape');
+  if (mode === 'auto') {
+    try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch(e) {}
+    return;
+  }
+  // For portrait/landscape: try the Screen Orientation API (requires fullscreen on most browsers)
   try {
     if (mode === 'portrait') {
-      screen.orientation.lock('portrait-primary').catch(()=>{});
-      document.body.classList.add('force-portrait');
+      screen.orientation.lock('portrait-primary').catch(()=>{ document.body.classList.add('force-portrait'); });
     } else if (mode === 'landscape') {
-      screen.orientation.lock('landscape-primary').catch(()=>{});
-      document.body.classList.add('force-landscape');
-    } else {
-      if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+      screen.orientation.lock('landscape-primary').catch(()=>{ document.body.classList.add('force-landscape'); });
     }
   } catch(e) {
-    // Fallback for iOS which doesn't support orientation.lock in browser
     if (mode === 'portrait') document.body.classList.add('force-portrait');
     else if (mode === 'landscape') document.body.classList.add('force-landscape');
   }
@@ -9006,7 +9035,8 @@ window.createRoom = async function() {
       roundsTotal:          featureRoundsEnabled ? (parseInt(document.getElementById('rounds-total').value) || 3) : 0,
       turnMode:             turnMode,
       speedMode:            turnMode === 'speedRound' ? speedMode : '',
-      speedRoundsTotal:     turnMode === 'speedRound' ? speedRoundsTotal : 0
+      speedRoundsTotal:     turnMode === 'speedRound' ? speedRoundsTotal : 0,
+      undo:                 featureUndoEnabled
     },
     currentRound: featureRoundsEnabled ? 1 : 0,
     // Speed Round initial state
@@ -9290,6 +9320,7 @@ function listenGameState() {
     featureTimersEnabled          = !!roomFeatures.timers;
     featureRoundsEnabled          = !!roomFeatures.rounds;
     roundsTotal                   = roomFeatures.roundsTotal || 3;
+    featureUndoEnabled            = !!roomFeatures.undo;
     currentRound                  = room.currentRound || 1;
     passDirection = roomFeatures.passDirection || 'both';
     turnMode      = roomFeatures.turnMode      || 'classic';
@@ -9455,7 +9486,7 @@ function listenGameState() {
       // too, since previousPlayerId moves on at that point.
       const undoBtn = document.getElementById('undo-turn-btn');
       if (undoBtn) {
-        const canUndo = room.previousPlayerId === myId;
+        const canUndo = featureUndoEnabled && room.previousPlayerId === myId;
         undoBtn.classList.toggle('visible', canUndo);
         const hostBtnVisible = isHost && document.getElementById('host-manage-btn-wait')?.classList.contains('visible');
         undoBtn.classList.toggle('stacked', canUndo && hostBtnVisible);
@@ -9533,7 +9564,7 @@ window.passTurn = async function(direction) {
 // (CW/CCW/Both), since it restores by player ID rather than replaying
 // any direction-specific math.
 window.undoTurn = async function() {
-  if (!db || !roomCode) return;
+  if (!db || !roomCode || !featureUndoEnabled) return;
   const snap = await get(ref(db, `rooms/${roomCode}`));
   if (!snap.exists()) return;
   const room = snap.val();
