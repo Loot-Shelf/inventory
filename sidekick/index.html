@@ -349,7 +349,7 @@
   .room-code-label { font-size: 0.75rem; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
 
   /* ── PLAYER LIST ── */
-  .player-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin: 0.5rem 0; }
+  .player-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3rem; margin: 0.35rem 0; }
   .player-list::-webkit-scrollbar { width: 5px; }
   .player-list::-webkit-scrollbar-track { background: transparent; }
   .player-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -361,7 +361,7 @@
     background: #1e1e2e;
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 0.4rem 0.25rem 0.3rem;
+    padding: 0.3rem 0.2rem 0.25rem;
     transition: background 0.2s, border-color 0.2s;
     position: relative;
     cursor: grab;
@@ -369,7 +369,7 @@
   }
   .player-item:hover { background: #262640; border-color: var(--accent); }
   .player-num {
-    width: 22px; height: 22px;
+    width: 30px; height: 30px;
     border-radius: 50%;
     background: var(--accent);
     display: flex; align-items: center; justify-content: center;
@@ -384,19 +384,29 @@
     flex-shrink: 0;
     background: #2a2a3a;
     line-height: 1;
-    overflow: hidden;
     border: 2px solid var(--accent);
     box-shadow: 0 0 0 1px rgba(124,92,191,0.3);
     transition: box-shadow 0.2s;
+    position: relative;
   }
+  .player-avatar-wrap { position: relative; flex-shrink: 0; }
   .player-tile-top { display: flex; align-items: center; gap: 0.25rem; }
-  .player-name { font-size: 0.72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); }
+  .player-name { font-size: 0.72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); line-height: 1.1; }
   .player-badge {
     font-size: 0.55rem; padding: 0.1rem 0.35rem;
     border-radius: 4px;
     background: #2a2a3a; color: var(--muted);
+    display: none;
   }
-  .player-badge.host { background: #2a1a3a; color: var(--accent-light); }
+  .player-badge.host {
+    position: absolute;
+    bottom: -4px; left: 50%; transform: translateX(-50%);
+    background: #2a1a3a; color: var(--accent-light);
+    font-size: 0.45rem; padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 1;
+  }
   .player-badge.active-turn { background: #1a3a1a; color: #4ade80; }
 
   .drag-handle {
@@ -3841,47 +3851,44 @@
 <!-- ═══════════════════════════════════════════ -->
 <!--  SCREEN: HOST LOBBY                         -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-lobby" class="screen">
+<div id="screen-lobby" class="screen" style="padding:1rem 2rem;">
   <div class="screen-content-scaler" id="scaler-lobby" style="display:flex;flex-direction:column;height:100%;">
 
     <!-- Page header -->
-    <div class="logo" style="font-size:2rem;letter-spacing:0.04em;margin-bottom:1rem;text-align:center;">Room Code </div>
+    <div class="logo" style="font-size:1.5rem;letter-spacing:0.04em;margin-bottom:0.4rem;text-align:center;">Room Code</div>
 
     <!-- Card 1: QR code + room code -->
-    <div class="card" style="max-width:480px;margin-bottom:0.5rem;text-align:center; padding-top: .5rem; padding-bottom: .25rem;">
-      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:.5rem;">
-      </div>
-      <div style="background:#fff;border-radius:8px;padding:0.4rem;display:inline-block;margin-bottom:0;">
+    <div class="card" style="max-width:480px;margin-bottom:0.35rem;text-align:center; padding: 0.4rem 0.5rem 0.2rem;">
+      <div style="background:#fff;border-radius:8px;padding:0.25rem;display:inline-block;margin-bottom:0;">
         <div id="qr-code-lobby"></div>
       </div>
-      <div class="room-code" id="display-code" style="margin-top:0;">----</div>
+      <div class="room-code" id="display-code" style="margin-top:0;font-size:2.4rem;">----</div>
     </div>
 
     <!-- Card 2: Player list -->
-    <div class="card" style="max-width:480px;margin-bottom:1rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
-        <span style="font-size:1rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
-        <span id="player-count" style="font-size:0.85rem;color:var(--muted);">0 joined</span>
+    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+        <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
+        <span id="player-count" style="font-size:0.75rem;color:var(--muted);">0 joined</span>
       </div>
       <div class="player-list" id="lobby-player-list"></div>
       <p id="lobby-status" class="status"></p>
     </div>
 
     <!-- Card 3: Random first player -->
-    <div class="card" style="max-width:480px;margin-bottom:1rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem;">
       <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
         <label class="feature-toggle" style="flex-shrink:0;">
           <input type="checkbox" id="random-first-player" onchange="onRandomFirstToggle(this.checked)">
           <span class="toggle-slider"></span>
         </label>
-        <span style="font-size:0.95rem;font-weight:600;color:var(--text);">&#127922; Pick a Random first player</span>
+        <span style="font-size:0.9rem;font-weight:600;color:var(--text);">&#127922; Pick a Random first player</span>
       </div>
     </div>
 
     <!-- Start Game button below cards -->
-    <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="max-width:480px;width:100%;">&#9654; Start Game</button>
-    <br>
-    <div style="width:100%;max-width:380px;margin:0 auto;padding:0.5rem 1rem env(safe-area-inset-bottom, 0.5rem);flex-shrink:0;margin-top:auto;">
+    <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="max-width:480px;width:100%;margin-bottom:0.3rem;">&#9654; Start Game</button>
+    <div style="width:100%;max-width:380px;margin:0 auto;padding:0.3rem 1rem env(safe-area-inset-bottom, 0.3rem);flex-shrink:0;margin-top:auto;">
       <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:100%;">&#8592; Back To Room Settings</button>
     </div>
 
@@ -9809,10 +9816,12 @@ function renderLobbyList(players) {
     div.innerHTML = `
       <div class="player-tile-top">
         <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
-        <div class="player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 24)}</div>
+        <div class="player-avatar-wrap">
+          <div class="player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 24)}</div>
+          ${p.id === myId ? '<span class="player-badge host">Host</span>' : ''}
+        </div>
       </div>
-      <div class="player-name">${esc(p.name)}</div>
-      ${p.id === myId ? '<span class="player-badge host">Host</span>' : ''}`;
+      <div class="player-name">${esc(p.name)}</div>`;
     el.appendChild(div);
   });
   makeDraggable(el, async (srcId, destId) => {
