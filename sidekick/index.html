@@ -417,8 +417,23 @@
     touch-action: none; user-select: none;
   }
   .drag-handle:active { cursor: grabbing; background: rgba(124,92,191,0.15); color: var(--accent-light); }
+  .player-item.dragging {
+    opacity: 0.9;
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px var(--accent);
+    z-index: 10;
+    transition: none;
+  }
   .player-item.drag-over { border-color: var(--accent); background: rgba(124,92,191,0.12); }
-  .player-item.dragging  { opacity: 0.4; }
+
+  /* Lobby card scrollbar + sticky count */
+  #lobby-player-list { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+  #lobby-player-list::-webkit-scrollbar { width: 6px; }
+  #lobby-player-list::-webkit-scrollbar-track { background: transparent; }
+  #lobby-player-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  #lobby-player-list.no-scroll { overflow-y: visible !important; scrollbar-width: none; }
+  #lobby-player-list.no-scroll::-webkit-scrollbar { display: none; }
+  .lobby-count { text-align:center; font-size:0.75rem; color:var(--muted); padding-top:0.3rem; flex-shrink:0; }
 
   /* ── STATUS BAR ── */
   .status { font-size: 0.85rem; color: var(--muted); text-align: center; margin: 0.5rem 0; }
@@ -3869,12 +3884,12 @@
     </div>
 
     <!-- Card 2: Player list -->
-    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden;">
+    <div id="lobby-player-card" class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;">
       <div style="text-align:center;margin-bottom:.4rem;">
         <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
       </div>
-      <div class="player-list" id="lobby-player-list" style="flex:1; min-height:0;"></div>
-      <div id="player-count" style="text-align:center;font-size:0.75rem;color:var(--muted);padding-top:0.3rem;">0 joined</div>
+      <div class="player-list no-scroll" id="lobby-player-list" style="flex:1; min-height:0;"></div>
+      <div id="player-count" class="lobby-count">0 joined</div>
     </div>
 
     <!-- Fixed bottom bar -->
@@ -9802,6 +9817,8 @@ function buildOrderedPlayers(players) {
 function renderLobbyList(players) {
   const el = document.getElementById('lobby-player-list');
   el.innerHTML = '';
+  // Toggle scroll: only allow scrolling when 11+ players
+  el.classList.toggle('no-scroll', players.length < 11);
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
@@ -9943,8 +9960,6 @@ window.beginAwardsAfterVP = async function() {
 function makeDraggable(listEl, onReorder) {
   let dragSrc = null;
   let touchDragSrc = null;
-  let touchHoldTimer = null;
-  let touchStartY = 0;
 
   listEl.querySelectorAll('[data-drag-id]').forEach(item => {
     const handle = item.querySelector('.drag-handle, .manage-drag-handle') || item;
@@ -9985,25 +10000,13 @@ function makeDraggable(listEl, onReorder) {
       }
     });
 
-    // ── Touch drag (requires 200ms hold) ──
+    // ── Touch drag (immediate) ──
     handle.addEventListener('touchstart', e => {
-      touchStartY = e.touches[0].clientY;
-      touchHoldTimer = setTimeout(() => {
-        touchDragSrc = item;
-        item.classList.add('dragging');
-      }, 200);
+      touchDragSrc = item;
+      item.classList.add('dragging');
     }, { passive: true });
 
     handle.addEventListener('touchmove', e => {
-      // Cancel drag if finger moves more than 10px (user is scrolling)
-      if (touchHoldTimer && !touchDragSrc) {
-        const dy = Math.abs(e.touches[0].clientY - touchStartY);
-        if (dy > 10) {
-          clearTimeout(touchHoldTimer);
-          touchHoldTimer = null;
-          return;
-        }
-      }
       if (!touchDragSrc) return;
       e.preventDefault();
       const touch = e.touches[0];
@@ -10016,8 +10019,6 @@ function makeDraggable(listEl, onReorder) {
     }, { passive: false });
 
     handle.addEventListener('touchend', e => {
-      clearTimeout(touchHoldTimer);
-      touchHoldTimer = null;
       if (!touchDragSrc) return;
       const touch = e.changedTouches[0];
       const el = document.elementFromPoint(touch.clientX, touch.clientY);
