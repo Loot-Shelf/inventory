@@ -369,18 +369,18 @@
   }
   .player-item:hover { background: #262640; border-color: var(--accent); }
   .player-num {
-    width: 36px; height: 36px;
+    width: 44px; height: 44px;
     border-radius: 50%;
     background: var(--accent);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem; font-weight: 700;
+    font-size: 0.9rem; font-weight: 700;
     flex-shrink: 0;
   }
   .player-avatar {
-    width: 36px; height: 36px;
+    width: 44px; height: 44px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     flex-shrink: 0;
     background: #2a2a3a;
     line-height: 1;
@@ -391,7 +391,7 @@
   }
   .player-avatar-wrap { position: relative; flex-shrink: 0; }
   .player-tile-top { display: flex; align-items: center; gap: 0.3rem; }
-  .player-name { font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); line-height: 1.1; }
+  .player-name { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); line-height: 1.15; }
   .player-badge {
     font-size: 0.55rem; padding: 0.1rem 0.35rem;
     border-radius: 4px;
@@ -9828,12 +9828,9 @@ function renderLobbyList(players) {
     const destIdx = ps.findIndex(p => p.id === destId);
     if (srcIdx < 0 || destIdx < 0) return;
     const updates = {};
-    // Shift orders between src and dest
-    const step = srcIdx < destIdx ? 1 : -1;
-    for (let i = srcIdx; i !== destIdx; i += step) {
-      updates[`rooms/${roomCode}/players/${ps[i + step].id}/order`] = i;
-    }
+    // Simple swap: exchange orders of just these two players
     updates[`rooms/${roomCode}/players/${ps[srcIdx].id}/order`] = destIdx;
+    updates[`rooms/${roomCode}/players/${ps[destIdx].id}/order`] = srcIdx;
     await update(ref(db), updates);
   });
   requestAnimationFrame(rescaleCurrentScreen);
