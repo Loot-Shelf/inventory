@@ -427,10 +427,28 @@
   .player-item.drag-over { border-color: var(--accent); background: rgba(124,92,191,0.12); }
 
   /* Lobby scrollbar — sits on right edge of player list */
-  #lobby-player-list { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
-  #lobby-player-list::-webkit-scrollbar { width: 6px; }
-  #lobby-player-list::-webkit-scrollbar-track { background: transparent; }
-  #lobby-player-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  #lobby-player-list { scrollbar-width: none; }
+  #lobby-player-list::-webkit-scrollbar { display: none; }
+  /* Custom side scrollbars */
+  .custom-scroll-track {
+    width: 10px;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    margin: 0 4px;
+  }
+  .custom-scroll-thumb {
+    position: absolute;
+    width: 100%;
+    min-height: 30px;
+    background: var(--accent);
+    border-radius: 5px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    cursor: grab;
+    touch-action: none;
+  }
+  .custom-scroll-track:hover .custom-scroll-thumb { opacity: 1; }
   .drag-ghost {
     position: fixed;
     pointer-events: none;
@@ -3890,15 +3908,24 @@
       </div>
     </div>
 
-    <!-- Card 2: Player list -->
+    <!-- Card 2: Player list with custom side scrollbars -->
     <div id="lobby-player-card" class="card" style="max-width:480px;margin-bottom:0; padding: 0.5rem 0.6rem 0.3rem; border-radius:10px 10px 0 0;">
       <div style="text-align:center;">
         <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
       </div>
     </div>
-    <div style="max-width:480px;width:100%;flex:1;min-height:0;margin:0 auto;padding:0 0.6rem 0 0;display:flex;">
+    <div id="lobby-scroll-wrapper" style="max-width:480px;width:100%;flex:1;min-height:0;margin:0 auto;display:flex;align-items:stretch;">
+      <!-- Left custom scrollbar -->
+      <div id="scroll-track-left" class="custom-scroll-track" style="display:none;">
+        <div class="custom-scroll-thumb" id="scroll-thumb-left"></div>
+      </div>
+      <!-- Player grid -->
       <div style="flex:1;min-height:0;overflow:hidden;border-radius:0 0 10px 10px;border:1px solid var(--border);border-top:none;background:#1e1e2e;">
-        <div class="player-list" id="lobby-player-list" style="height:100%;overflow-y:auto;"></div>
+        <div class="player-list" id="lobby-player-list" style="height:100%;overflow-y:auto;scrollbar-width:none;"></div>
+      </div>
+      <!-- Right custom scrollbar -->
+      <div id="scroll-track-right" class="custom-scroll-track" style="display:none;">
+        <div class="custom-scroll-thumb" id="scroll-thumb-right"></div>
       </div>
     </div>
 
@@ -9859,6 +9886,111 @@ function renderLobbyList(players) {
     await update(ref(db), updates);
   });
   requestAnimationFrame(rescaleCurrentScreen);
+  // Sync custom side scrollbars
+  requestAnimationFrame(() => initCustomScrollbars());
+}
+
+// ── CUSTOM SIDE SCROLLBARS ──────────────────────
+let _scrollInited = false;
+function initCustomScrollbars() {
+  const list = document.getElementById('lobby-player-list');
+  const trackL = document.getElementById('scroll-track-left');
+  const trackR = document.getElementById('scroll-track-right');
+  const thumbL = document.getElementById('scroll-thumb-left');
+  const thumbR = document.getElementById('scroll-thumb-right');
+  if (!list || !trackL || !trackR) return;
+
+  function updateVisibility() {
+    const needsScroll = list.scrollHeight > list.clientHeight + 2;
+    trackL.style.display = needsScroll ? '' : 'none';
+    trackR.style.display = needsScroll ? '' : 'none';
+    if (!needsScroll) return;
+    const trackH = list.clientHeight;
+    const ratio = list.clientHeight / list.scrollHeight;
+    const thumbH = Math.max(30, trackH * ratio);
+    [thumbL, thumbR].forEach(t => { t.style.height = thumbH + 'px'; });
+    positionThumbs();
+  }
+
+  function positionThumbs() {
+    const trackH = list.clientHeight;
+    const scrollH = list.scrollHeight - list.clientHeight;
+    if (scrollH <= 0) return;
+    const ratio = list.scrollTop / scrollH;
+    const trackAvail = trackH - thumbL.offsetHeight;
+    const top = ratio * trackAvail;
+    thumbL.style.top = top + 'px';
+    thumbR.style.top = top + 'px';
+  }
+
+  list.addEventListener('scroll', positionThumbs);
+  window.addEventListener('resize', updateVisibility);
+
+  // Drag thumb to scroll
+  [thumbL, thumbR].forEach(thumb => {
+    let startY = 0, startScroll = 0;
+    thumb.addEventListener('touchstart', e => {
+      e.preventDefault();
+      startY = e.touches[0].clientY;
+      startScroll = list.scrollTop;
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('touchend', onEnd);
+      function onMove(ev) {
+        ev.preventDefault();
+        const dy = ev.touches[0].clientY - startY;
+        const trackH = list.clientHeight;
+        const scrollH = list.scrollHeight - list.clientHeight;
+        const trackAvail = trackH - thumb.offsetHeight;
+        if (trackAvail <= 0) return;
+        const scrollDelta = (dy / trackAvail) * scrollH;
+        list.scrollTop = startScroll + scrollDelta;
+      }
+      function onEnd() {
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onEnd);
+      }
+    });
+    // Mouse drag for desktop
+    thumb.addEventListener('mousedown', e => {
+      e.preventDefault();
+      startY = e.clientY;
+      startScroll = list.scrollTop;
+      document.addEventListener('mousemove', onMMove);
+      document.addEventListener('mouseup', onMEnd);
+      function onMMove(ev) {
+        const dy = ev.clientY - startY;
+        const trackH = list.clientHeight;
+        const scrollH = list.scrollHeight - list.clientHeight;
+        const trackAvail = trackH - thumb.offsetHeight;
+        if (trackAvail <= 0) return;
+        const scrollDelta = (dy / trackAvail) * scrollH;
+        list.scrollTop = startScroll + scrollDelta;
+      }
+      function onMEnd() {
+        document.removeEventListener('mousemove', onMMove);
+        document.removeEventListener('mouseup', onMEnd);
+      }
+    });
+  });
+
+  // Click track to page scroll
+  [trackL, trackR].forEach(track => {
+    track.addEventListener('click', e => {
+      if (e.target === track) {
+        const rect = track.getBoundingClientRect();
+        const clickY = e.clientY - rect.top;
+        const thumbRect = thumbR.getBoundingClientRect();
+        const thumbMid = thumbRect.top + thumbRect.height / 2 - rect.top;
+        const dir = clickY > thumbMid ? 1 : -1;
+        list.scrollTop += dir * list.clientHeight * 0.8;
+      }
+    });
+  });
+
+  updateVisibility();
+  if (!_scrollInited) {
+    _scrollInited = true;
+  }
 }
 
 function renderWaitingLobbyList(players) {
