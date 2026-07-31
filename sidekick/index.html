@@ -389,6 +389,7 @@
     box-shadow: 0 0 0 1px rgba(124,92,191,0.3);
     transition: box-shadow 0.2s;
   }
+  .player-tile-top { display: flex; align-items: center; gap: 0.25rem; }
   .player-name { font-size: 0.72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); }
   .player-badge {
     font-size: 0.55rem; padding: 0.1rem 0.35rem;
@@ -397,14 +398,6 @@
   }
   .player-badge.host { background: #2a1a3a; color: var(--accent-light); }
   .player-badge.active-turn { background: #1a3a1a; color: #4ade80; }
-  .player-tile-handle {
-    position: absolute; top: 2px; right: 2px;
-    font-size: 0.6rem; color: var(--muted); cursor: grab;
-    touch-action: none; user-select: none;
-    width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
-    border-radius: 4px;
-  }
-  .player-tile-handle:active { color: var(--accent-light); background: rgba(124,92,191,0.2); }
 
   .drag-handle {
     width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
@@ -9814,9 +9807,10 @@ function renderLobbyList(players) {
     div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
-      <div class="player-tile-handle" title="Hold to drag">☰</div>
-      <div class="player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 24)}</div>
-      <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
+      <div class="player-tile-top">
+        <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
+        <div class="player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 24)}</div>
+      </div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">Host</span>' : ''}`;
     el.appendChild(div);
@@ -9948,8 +9942,7 @@ function makeDraggable(listEl, onReorder) {
   let touchDragSrc = null;
 
   listEl.querySelectorAll('[data-drag-id]').forEach(item => {
-    const handle = item.querySelector('.drag-handle, .manage-drag-handle, .player-tile-handle');
-    if (!handle) return;
+    const handle = item.querySelector('.drag-handle, .manage-drag-handle') || item;
 
     // ── HTML5 drag (desktop/mouse) ──
     // Only start drag when the handle is grabbed
