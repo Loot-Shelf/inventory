@@ -418,22 +418,30 @@
   }
   .drag-handle:active { cursor: grabbing; background: rgba(124,92,191,0.15); color: var(--accent-light); }
   .player-item.dragging {
-    opacity: 0.9;
-    transform: scale(1.08);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px var(--accent);
-    z-index: 10;
-    transition: none;
+    opacity: 0.3;
+    transition: opacity 0.15s;
   }
   .player-item.drag-over { border-color: var(--accent); background: rgba(124,92,191,0.12); }
 
-  /* Lobby card scrollbar + sticky count */
-  #lobby-player-list { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
-  #lobby-player-list::-webkit-scrollbar { width: 6px; }
-  #lobby-player-list::-webkit-scrollbar-track { background: transparent; }
-  #lobby-player-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
-  #lobby-player-list.no-scroll { overflow-y: visible !important; scrollbar-width: none; }
-  #lobby-player-list.no-scroll::-webkit-scrollbar { display: none; }
-  .lobby-count { text-align:center; font-size:0.75rem; color:var(--muted); padding-top:0.3rem; flex-shrink:0; }
+  /* Lobby card scrollbar */
+  .player-list.scrollable {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+  }
+  .player-list.scrollable::-webkit-scrollbar { width: 6px; }
+  .player-list.scrollable::-webkit-scrollbar-track { background: transparent; }
+  .player-list.scrollable::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  .drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.9;
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px var(--accent);
+    border-radius: 10px;
+    transition: none;
+  }
 
   /* ── STATUS BAR ── */
   .status { font-size: 0.85rem; color: var(--muted); text-align: center; margin: 0.5rem 0; }
@@ -3884,12 +3892,11 @@
     </div>
 
     <!-- Card 2: Player list -->
-    <div id="lobby-player-card" class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;">
+    <div id="lobby-player-card" class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column; overflow:visible;">
       <div style="text-align:center;margin-bottom:.4rem;">
         <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
       </div>
-      <div class="player-list no-scroll" id="lobby-player-list" style="flex:1; min-height:0;"></div>
-      <div id="player-count" class="lobby-count">0 joined</div>
+      <div class="player-list" id="lobby-player-list" style="flex:1; min-height:0;"></div>
     </div>
 
     <!-- Fixed bottom bar -->
@@ -9114,7 +9121,6 @@ function listenLobby() {
 
     renderLobbyList(localPlayers);
     const count = localPlayers.length;
-    document.getElementById('player-count').textContent = count + ' joined';
     document.getElementById('start-btn').disabled = count < 2;
   });
   unsubscribers.push(() => unsub());
@@ -9818,7 +9824,7 @@ function renderLobbyList(players) {
   const el = document.getElementById('lobby-player-list');
   el.innerHTML = '';
   // Toggle scroll: only allow scrolling when 11+ players
-  el.classList.toggle('no-scroll', players.length < 11);
+  el.classList.toggle('scrollable', players.length >= 11);
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
@@ -9960,6 +9966,28 @@ window.beginAwardsAfterVP = async function() {
 function makeDraggable(listEl, onReorder) {
   let dragSrc = null;
   let touchDragSrc = null;
+  let ghostEl = null;
+
+  function createGhost(item, x, y) {
+    const rect = item.getBoundingClientRect();
+    ghostEl = item.cloneNode(true);
+    ghostEl.classList.add('drag-ghost');
+    ghostEl.style.width = rect.width + 'px';
+    ghostEl.style.left = (x - rect.width / 2) + 'px';
+    ghostEl.style.top = (y - rect.height / 2) + 'px';
+    document.body.appendChild(ghostEl);
+  }
+
+  function moveGhost(x, y) {
+    if (!ghostEl) return;
+    const rect = ghostEl.getBoundingClientRect();
+    ghostEl.style.left = (x - rect.width / 2) + 'px';
+    ghostEl.style.top = (y - rect.height / 2) + 'px';
+  }
+
+  function removeGhost() {
+    if (ghostEl) { ghostEl.remove(); ghostEl = null; }
+  }
 
   listEl.querySelectorAll('[data-drag-id]').forEach(item => {
     const handle = item.querySelector('.drag-handle, .manage-drag-handle') || item;
@@ -10000,16 +10028,19 @@ function makeDraggable(listEl, onReorder) {
       }
     });
 
-    // ── Touch drag (immediate) ──
+    // ── Touch drag (immediate, with ghost) ──
     handle.addEventListener('touchstart', e => {
       touchDragSrc = item;
       item.classList.add('dragging');
+      const t = e.touches[0];
+      createGhost(item, t.clientX, t.clientY);
     }, { passive: true });
 
     handle.addEventListener('touchmove', e => {
       if (!touchDragSrc) return;
       e.preventDefault();
       const touch = e.touches[0];
+      moveGhost(touch.clientX, touch.clientY);
       const el = document.elementFromPoint(touch.clientX, touch.clientY);
       const target = el && el.closest('[data-drag-id]');
       listEl.querySelectorAll('[data-drag-id]').forEach(i => i.classList.remove('drag-over'));
@@ -10019,6 +10050,7 @@ function makeDraggable(listEl, onReorder) {
     }, { passive: false });
 
     handle.addEventListener('touchend', e => {
+      removeGhost();
       if (!touchDragSrc) return;
       const touch = e.changedTouches[0];
       const el = document.elementFromPoint(touch.clientX, touch.clientY);
