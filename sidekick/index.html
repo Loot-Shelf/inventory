@@ -367,6 +367,9 @@
     position: relative;
     cursor: grab;
     touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
   .player-item:hover { background: #262640; border-color: var(--accent); }
   .player-num {
@@ -423,15 +426,11 @@
   }
   .player-item.drag-over { border-color: var(--accent); background: rgba(124,92,191,0.12); }
 
-  /* Lobby card scrollbar */
-  .player-list.scrollable {
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent) transparent;
-  }
-  .player-list.scrollable::-webkit-scrollbar { width: 6px; }
-  .player-list.scrollable::-webkit-scrollbar-track { background: transparent; }
-  .player-list.scrollable::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  /* Lobby scrollbar — sits on right edge of player list */
+  #lobby-player-list { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+  #lobby-player-list::-webkit-scrollbar { width: 6px; }
+  #lobby-player-list::-webkit-scrollbar-track { background: transparent; }
+  #lobby-player-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
   .drag-ghost {
     position: fixed;
     pointer-events: none;
@@ -3892,11 +3891,15 @@
     </div>
 
     <!-- Card 2: Player list -->
-    <div id="lobby-player-card" class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; display:flex; flex-direction:column; overflow:visible;">
-      <div style="text-align:center;margin-bottom:.4rem;">
+    <div id="lobby-player-card" class="card" style="max-width:480px;margin-bottom:0; padding: 0.5rem 0.6rem 0.3rem; border-radius:10px 10px 0 0;">
+      <div style="text-align:center;">
         <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
       </div>
-      <div class="player-list" id="lobby-player-list" style="flex:1; min-height:0;"></div>
+    </div>
+    <div style="max-width:480px;width:100%;flex:1;min-height:0;margin:0 auto;padding:0 0.6rem 0 0;display:flex;">
+      <div style="flex:1;min-height:0;overflow:hidden;border-radius:0 0 10px 10px;border:1px solid var(--border);border-top:none;background:#1e1e2e;">
+        <div class="player-list" id="lobby-player-list" style="height:100%;overflow-y:auto;"></div>
+      </div>
     </div>
 
     <!-- Fixed bottom bar -->
@@ -9823,8 +9826,6 @@ function buildOrderedPlayers(players) {
 function renderLobbyList(players) {
   const el = document.getElementById('lobby-player-list');
   el.innerHTML = '';
-  // Toggle scroll: only allow scrolling when 11+ players
-  el.classList.toggle('scrollable', players.length >= 11);
   players.forEach((p, i) => {
     const dotColor = p.color || 'var(--accent)';
     const dotText  = p.color && isLightColor(p.color) ? '#000' : '#fff';
@@ -10030,6 +10031,7 @@ function makeDraggable(listEl, onReorder) {
 
     // ── Touch drag (immediate, with ghost) ──
     handle.addEventListener('touchstart', e => {
+      if (touchDragSrc) return; // already dragging another tile
       touchDragSrc = item;
       item.classList.add('dragging');
       const t = e.touches[0];
@@ -10068,6 +10070,15 @@ function makeDraggable(listEl, onReorder) {
         touchDragSrc = null;
       }
     }, { passive: true });
+
+    handle.addEventListener('touchcancel', () => {
+      removeGhost();
+      touchDragSrc = null;
+      listEl.querySelectorAll('[data-drag-id]').forEach(i => {
+        i.classList.remove('drag-over');
+        i.classList.remove('dragging');
+      });
+    });
   });
 }
 
