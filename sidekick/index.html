@@ -41,6 +41,21 @@
     --danger: #c0392b;
   }
 
+  @font-face {
+    font-family: 'sourcesanspro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(https://design.penpot.app/fonts/sourcesanspro-regular.woff) format('woff');
+  }
+  @font-face {
+    font-family: 'Solway';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(https://design.penpot.app/internal/gfonts/font/solway/v19/AMOQz46Cs2uTAOCmhXo8.woff2) format('woff2');
+  }
+
   /* ── DEFAULT THEME 3D TEXT ── */
   body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .logo,
   body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .turn-mode-modal-title,
@@ -197,7 +212,7 @@
 
   /* ── SETUP / LOBBY SCREENS ── */
   .logo { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
-  .tagline { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; text-shadow: none; }
+  .tagline { color: #736f7b; font-size: 1.0625rem; margin-bottom: 2.5rem; text-shadow: none; font-family: 'Solway', serif; }
 
   .card {
     background: var(--surface);
@@ -212,7 +227,18 @@
     margin-left: auto;
     margin-right: auto;
   }
-  #screen-home .card { margin-left: 10px; margin-right: 10px; }
+  #screen-home .card { margin-left: 10px; margin-right: 10px; background: #202020; border: 2px solid #585870; border-radius: 5px; box-shadow: none; }
+  #screen-home .card::after { display: none; }
+  #screen-home .btn-primary {
+    background: #532ba5; border-radius: 999px; font-family: 'sourcesanspro', sans-serif; font-size: 1.25rem;
+    box-shadow: inset 0 0 10px #000, 1px 4px 4px #000;
+  }
+  #screen-home .btn-primary:hover:not(:disabled) { box-shadow: inset 0 0 10px #000, 1px 4px 4px #000, 0 4px 16px rgba(83,43,165,0.4); }
+  #screen-home .btn-secondary {
+    background: #202020; border-radius: 999px; border: none; font-family: 'sourcesanspro', sans-serif; font-size: 1.25rem;
+    box-shadow: inset 0 0 10px #000, 1px 4px 4px #000;
+  }
+  #screen-home .btn-secondary:hover:not(:disabled) { box-shadow: inset 0 0 10px #000, 1px 4px 4px #000, 0 4px 16px rgba(0,0,0,0.3); }
   .card::after {
     content: '';
     position: absolute;
@@ -380,6 +406,7 @@
     flex-shrink: 0;
     background: #2a2a3a;
     line-height: 1;
+    overflow: hidden;
     border: 2px solid var(--accent);
     overflow: hidden;
     box-shadow: 0 0 0 1px rgba(124,92,191,0.3);
@@ -517,6 +544,9 @@
   .wait-active-avatar {
     font-size: 3.2rem;
     line-height: 1;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
     filter: drop-shadow(0 0 12px var(--wait-active-glow, rgba(74,222,128,0.4)));
   }
   }
@@ -1891,6 +1921,7 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 1rem;
     flex-shrink: 0;
+    overflow: hidden;
     border: 2px solid var(--accent);
     transition: border-color 0.2s, box-shadow 0.2s;
     background: #2a2a3a;
@@ -2846,7 +2877,22 @@
   ══════════════════════════════════════════════ */
   .themes-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9700; align-items:center; justify-content:center; padding:1rem; }
   .themes-overlay.show { display:flex; }
-  .themes-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.5rem 1.25rem; width:min(360px,92vw); max-height:88vh; overflow-y:auto; box-shadow:0 8px 40px rgba(0,0,0,0.7); display:flex; flex-direction:column; gap:0.6rem; }
+  .themes-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.25rem 1rem; width:min(360px,92vw); box-shadow:0 8px 40px rgba(0,0,0,0.7); display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
+
+  /* Awards overlay */
+  .awards-history-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9700; align-items:center; justify-content:center; padding:1rem; }
+  .awards-history-overlay.show { display:flex; }
+  .awards-history-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.5rem 1.25rem; width:min(360px,92vw); max-height:80vh; overflow-y:auto; box-shadow:0 8px 40px rgba(0,0,0,0.7); display:flex; flex-direction:column; gap:0.5rem; }
+  .awards-history-title { font-size:1.1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:0.25rem; }
+  .awards-history-empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:1.5rem 0; }
+  .awards-history-list { display:flex; flex-direction:column; gap:0.4rem; }
+  .awards-history-item { display:flex; align-items:center; gap:0.75rem; padding:0.65rem 0.8rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; transition:border-color 0.15s; }
+  .awards-history-item:hover { border-color:var(--accent); }
+  .awards-history-trophy { font-size:1.5rem; flex-shrink:0; width:36px; text-align:center; }
+  .awards-history-info { flex:1; min-width:0; }
+  .awards-history-category { font-size:0.85rem; font-weight:700; color:var(--text); }
+  .awards-history-stat { font-size:0.72rem; color:var(--muted); margin-top:1px; }
+  .awards-history-date { font-size:0.65rem; color:var(--muted); opacity:0.6; flex-shrink:0; }
   body.theme-8bit .themes-modal    { background:#0d0208 !important; border:3px solid var(--accent) !important; box-shadow:6px 6px 0 #000 !important; }
   body.theme-cyberpunk .themes-modal { background:rgba(0,8,20,0.98) !important; border:1px solid #00ffe7 !important; box-shadow:0 0 24px rgba(0,255,231,0.2) !important; }
   body.theme-fantasy .themes-modal   { background:linear-gradient(160deg,#1c1308,#221808) !important; border:2px solid #8b6914 !important; box-shadow:0 8px 40px rgba(0,0,0,0.7) !important; }
@@ -2887,7 +2933,21 @@
   body.light-mode .avatar-option { background:#f0f0fb; }
   body.light-mode .avatar-option.selected { background:rgba(124,92,191,0.15); border-color:var(--accent); }
 
-  .theme-option { display:flex; align-items:center; gap:0.85rem; padding:0.75rem 0.9rem; background:#1e1e2e; border:1.5px solid var(--border); border-radius:12px; cursor:pointer; transition:border-color 0.15s,background 0.15s; user-select:none; }
+  /* Profile + Auth light-mode overrides */
+  body.light-mode .profile-hero { background:linear-gradient(145deg, rgba(124,92,191,0.08) 0%, rgba(124,92,191,0.02) 100%); border-color:rgba(124,92,191,0.1); }
+  body.light-mode .profile-stat-card { background:#f0f0fb; border-color:#ddd; }
+  body.light-mode .profile-stat-card:hover { border-color:var(--accent); }
+  body.light-mode .profile-menu-item { background:#f0f0fb; border-color:#ddd; }
+  body.light-mode .profile-menu-item:hover { border-color:var(--accent); background:rgba(124,92,191,0.05); }
+  body.light-mode .auth-modal { background:#fff; border-color:#ddd; }
+  body.light-mode .auth-input-group input { background:#f0f0fb; border-color:#ddd; color:#333; }
+  body.light-mode .auth-input-group input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,92,191,0.15); }
+  body.light-mode .auth-signedin-email { background:rgba(124,92,191,0.06); border-color:rgba(124,92,191,0.15); }
+  body.light-mode .awards-history-item { background:rgba(0,0,0,0.03); border-color:#ddd; }
+  body.light-mode .awards-history-item:hover { border-color:var(--accent); }
+
+  .themes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; width:100%; }
+  .theme-option { display:flex; flex-direction:column; align-items:center; gap:0.4rem; padding:0.6rem 0.3rem; background:#1e1e2e; border:2px solid var(--border); border-radius:12px; cursor:pointer; transition:border-color 0.15s,background 0.15s,transform 0.15s; user-select:none; text-align:center; }
   body.light-mode    .theme-option { background:#f0f0fb; }
   body.theme-8bit    .theme-option { background:#1a0a1e !important; border:2px solid var(--border) !important; box-shadow:3px 3px 0 #000; border-radius:0 !important; }
   body.theme-cyberpunk .theme-option { background:rgba(0,8,20,0.6) !important; border:1px solid rgba(0,255,231,0.3) !important; border-radius:8px !important; }
@@ -2902,8 +2962,9 @@
   body.theme-dracula .theme-option    { background:rgba(26,17,40,0.5) !important; border:1px solid rgba(85,85,170,0.35) !important; }
   body.theme-gothic .theme-option    { background:rgba(10,10,10,0.5) !important; border:1px solid rgba(51,51,51,0.35) !important; }
   body.theme-halloween .theme-option    { background:rgba(10,5,5,0.5) !important; border:1px solid rgba(204,102,0,0.35) !important; }
-  .theme-option:hover { border-color:var(--accent); }
-  .theme-option.selected { border-color:var(--accent); background:rgba(124,92,191,0.12); }
+  .theme-option:hover { border-color:var(--accent); transform:scale(1.04); }
+  .theme-option:active { transform:scale(0.97); }
+  .theme-option.selected { border-color:var(--accent); background:rgba(124,92,191,0.15); box-shadow:0 0 12px rgba(124,92,191,0.25); }
   body.theme-8bit    .theme-option.selected { background:rgba(204,0,255,0.12) !important; border-color:#ff44ff !important; }
   body.theme-cyberpunk .theme-option.selected { background:rgba(0,255,231,0.06) !important; border-color:#00ffe7 !important; }
   body.theme-fantasy .theme-option.selected   { background:rgba(200,148,42,0.1) !important; border-color:#f0c060 !important; }
@@ -2917,11 +2978,9 @@
   body.theme-dracula .theme-option.selected    { background:rgba(189,147,249,0.1) !important; border-color:#ff79c6 !important; }
   body.theme-gothic .theme-option.selected    { background:rgba(192,192,192,0.1) !important; border-color:#e0e0e0 !important; }
   body.theme-halloween .theme-option.selected    { background:rgba(255,102,0,0.1) !important; border-color:#ff9933 !important; }
-  .theme-option input[type="radio"] { width:auto; margin:0; accent-color:var(--accent); flex-shrink:0; }
-  .theme-option-info { flex:1; }
-  .theme-option-name { font-size:0.92rem; font-weight:700; color:var(--text); }
-  .theme-option-desc { font-size:0.73rem; color:var(--muted); margin-top:2px; line-height:1.4; }
-  .theme-preview { width:46px; height:46px; flex-shrink:0; border-radius:10px; border:2px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:1.3rem; }
+  .theme-option input[type="radio"] { display:none; }
+  .theme-option-name { font-size:0.72rem; font-weight:700; color:var(--text); line-height:1.2; }
+  .theme-preview { width:40px; height:40px; flex-shrink:0; border-radius:10px; border:2px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:1.1rem; }
   .theme-preview.preview-default   { background:linear-gradient(135deg,#0a0a0f 50%,#7c5cbf 50%); }
   .theme-preview.preview-8bit      { background:linear-gradient(135deg,#0d0208 50%,#cc00ff 50%); border-radius:0 !important; border:2px solid #7c3fbf; box-shadow:2px 2px 0 #000; font-family:'Courier New',monospace; font-size:1rem; color:#ff44ff; font-weight:900; }
   .theme-preview.preview-cyberpunk  { background:linear-gradient(135deg,#03000d 50%,#00ffe7 50%); border-color:#00ffe7; font-size:0.7rem; color:#ff003c; font-weight:900; font-family:'Courier New',monospace; }
@@ -3227,6 +3286,253 @@
     -webkit-tap-highlight-color: transparent;
     background: transparent;
   }
+
+  /* ── PROFILE SCREEN ── */
+  .profile-hero {
+    position: relative;
+    width: 100%;
+    padding: 2rem 1.5rem 1.5rem;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(124,92,191,0.25) 0%, rgba(124,92,191,0.08) 100%);
+    border: 1px solid rgba(124,92,191,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+  .profile-hero::before {
+    content: '';
+    position: absolute;
+    top: -40%; left: -20%; width: 140%; height: 100%;
+    background: radial-gradient(ellipse, rgba(124,92,191,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .profile-avatar-ring {
+    position: relative;
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    padding: 3px;
+    box-shadow: 0 0 24px rgba(124,92,191,0.35), 0 0 48px rgba(124,92,191,0.12);
+    flex-shrink: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .profile-avatar-ring:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 30px rgba(124,92,191,0.5), 0 0 60px rgba(124,92,191,0.2);
+  }
+  .profile-avatar-ring:active { transform: scale(0.97); }
+  .profile-avatar-ring::after {
+    content: '';
+    position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(124,92,191,0.2);
+    animation: profileRingPulse 3s ease-in-out infinite;
+  }
+  @keyframes profileRingPulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.03); }
+  }
+  .profile-avatar-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem; font-weight: 800; color: #fff;
+    border: 2px solid var(--surface);
+  }
+  .profile-display-name {
+    font-size: 1.35rem; font-weight: 800; color: var(--text);
+    letter-spacing: -0.02em; line-height: 1.2;
+    text-align: center;
+    transition: color 0.2s;
+  }
+  .profile-display-name:hover { color: var(--accent-light); }
+  .profile-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.25rem 0.7rem;
+    background: rgba(124,92,191,0.18); border: 1px solid rgba(124,92,191,0.3);
+    border-radius: 20px;
+    font-size: 0.68rem; font-weight: 700; color: var(--accent-light);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .profile-badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent-light);
+    box-shadow: 0 0 6px var(--accent-light);
+  }
+
+  /* Profile Stats Row */
+  .profile-stats-row {
+    display: flex; gap: 0.5rem;
+    width: 100%; margin-bottom: 0.75rem;
+  }
+  .profile-stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.7rem 0.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .profile-stat-card:hover { border-color: var(--accent); transform: scale(1.03); }
+  .profile-stat-card:active { transform: scale(0.97); }
+  .profile-stat-icon { font-size: 1.2rem; line-height: 1; }
+  .profile-stat-value {
+    font-size: 1.15rem; font-weight: 800; color: var(--text);
+    line-height: 1.2;
+  }
+  .profile-stat-label {
+    font-size: 0.62rem; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* Profile Menu Items (iOS Settings-style) */
+  .profile-menu {
+    width: 100%;
+    display: flex; flex-direction: column; gap: 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+  .profile-menu-item {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.8rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .profile-menu-item:hover { border-color: var(--accent); background: rgba(124,92,191,0.08); }
+  .profile-menu-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .profile-menu-icon.icon-saves { background: rgba(74,222,128,0.12); }
+  .profile-menu-icon.icon-themes { background: rgba(251,191,36,0.12); }
+  .profile-menu-icon.icon-avatar { background: rgba(96,165,250,0.12); }
+  .profile-menu-icon.icon-settings { background: rgba(167,139,250,0.12); }
+  .profile-menu-text { flex: 1; min-width: 0; }
+  .profile-menu-title {
+    font-size: 0.92rem; font-weight: 600; color: var(--text);
+    line-height: 1.3;
+  }
+  .profile-menu-desc {
+    font-size: 0.72rem; color: var(--muted); line-height: 1.3;
+    margin-top: 0.1rem;
+  }
+  .profile-menu-chevron {
+    font-size: 1rem; color: var(--muted); flex-shrink: 0;
+    opacity: 0.5; transition: opacity 0.18s, color 0.18s;
+  }
+  .profile-menu-item:hover .profile-menu-chevron { opacity: 1; color: var(--accent-light); }
+
+  /* Profile Footer */
+  .profile-footer {
+    width: 100%;
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    margin-top: 0.25rem;
+  }
+  .profile-signout-link {
+    background: none; border: none;
+    font-size: 0.82rem; font-weight: 600; color: var(--danger);
+    cursor: pointer; padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    transition: background 0.18s;
+  }
+  .profile-signout-link:hover { background: rgba(192,57,43,0.1); }
+
+  /* ── ACCOUNT OVERLAY REDESIGN ── */
+  .auth-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 1.75rem 1.5rem 1.25rem;
+    width: min(360px, 92vw);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 24px rgba(124,92,191,0.12);
+    display: flex; flex-direction: column; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .auth-modal::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+  }
+  .auth-logo {
+    font-size: 2.2rem; margin-bottom: 0.15rem;
+    filter: drop-shadow(0 2px 8px rgba(124,92,191,0.3));
+  }
+  .auth-title {
+    font-size: 1.15rem; font-weight: 800; color: var(--text);
+    margin-bottom: 0.15rem; text-align: center;
+  }
+  .auth-subtitle {
+    font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem;
+    text-align: center;
+  }
+  .auth-input-group {
+    width: 100%; position: relative; margin-bottom: 0.65rem;
+  }
+  .auth-input-icon {
+    position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%);
+    font-size: 0.9rem; pointer-events: none; opacity: 0.5;
+  }
+  .auth-input-group input {
+    width: 100%; padding: 0.8rem 1rem 0.8rem 2.4rem;
+    background: #1a1a2a; border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text); font-size: 0.95rem;
+    outline: none; box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .auth-input-group input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,92,191,0.2);
+  }
+  .auth-submit-btn {
+    width: 100%; padding: 0.85rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    border: none; border-radius: 12px;
+    color: #fff; font-size: 1rem; font-weight: 700;
+    cursor: pointer; margin-top: 0.35rem;
+    box-shadow: 0 4px 16px rgba(124,92,191,0.35);
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+  .auth-submit-btn:hover { box-shadow: 0 6px 24px rgba(124,92,191,0.45); }
+  .auth-submit-btn:active { transform: scale(0.97); }
+  .auth-toggle-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.4rem; margin-top: 0.85rem;
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .auth-toggle-link {
+    background: none; border: none; padding: 0;
+    font-size: 0.82rem; font-weight: 700; color: var(--accent-light);
+    cursor: pointer; text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .auth-forgot-link {
+    background: none; border: none; padding: 0;
+    font-size: 0.78rem; color: var(--accent); cursor: pointer;
+    text-decoration: underline; text-underline-offset: 2px;
+    margin-top: 0.15rem; text-align: right; width: 100%;
+  }
+  .auth-signedin-card {
+    text-align: center; display: flex; flex-direction: column;
+    align-items: center; gap: 0.75rem; width: 100%;
+  }
+  .auth-signedin-email {
+    font-size: 0.88rem; font-weight: 600; color: var(--text);
+    padding: 0.6rem 1rem;
+    background: rgba(124,92,191,0.1); border: 1px solid rgba(124,92,191,0.2);
+    border-radius: 10px; width: 100%;
+    word-break: break-all;
+  }
 </style>
 </head>
 <body>
@@ -3319,17 +3625,17 @@
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-home" class="screen active" style="position:relative;">
-  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.5rem 1rem; font-size:0.85rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">🔑 Login</button>
+  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.5rem 1rem; font-size:0.85rem; background:#202020; border:1px solid #585870; border-radius:999px; z-index:20; font-family:'sourcesanspro',sans-serif;" onclick="openAccountOverlay()">🔑 Login</button>
   <div class="screen-content-scaler" id="scaler-home">
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
-    <span style="font-size:1.2rem;font-weight:600;letter-spacing:0.22em;text-transform;color:var(--muted);opacity:0.7;text-shadow:none;">Game Night</span>
-    <span style="font-size:4rem">SideKick</span>
+    <span style="font-size:1.5rem;font-weight:600;letter-spacing:0.22em;color:#585870;opacity:1;text-shadow:none;font-family:'Solway',serif;">Game Night</span>
+    <span style="font-size:3.625rem">SideKick</span>
   </div>
   <div class="tagline">Pass the turn. Keep the vibe.</div>
   <div class="card">
     <div class="btn-group">
-      <button class="btn-primary" onclick="showCreateRoom()" style="font-size:1.3rem;padding:1.1rem 1.5rem;">Host Room</button>
-      <button class="btn-secondary" onclick="showJoinRoom()" style="font-size:1.3rem;padding:1.1rem 1.5rem;">Join Room</button>
+      <button class="btn-primary" onclick="showCreateRoom()" style="font-size:1.25rem;padding:1rem 2rem;">Host Room</button>
+      <button class="btn-secondary" onclick="showJoinRoom()" style="font-size:1.25rem;padding:1rem 2rem;">Join Room</button>
     </div>
   </div>
   <p id="home-status" class="status"></p>
@@ -3337,7 +3643,7 @@
   <!-- Tools card (collapsible) -->
   <div class="card" style="margin-top:2.0rem; padding:0;">
     <button onclick="toggleTools()" id="tools-toggle-btn" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:none;border:none;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;border-radius:12px;">
-      <span style="font-size:1.1rem;color:var(--accent-light);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;">Tools</span>
+      <span style="font-size:1.1rem;color:#a07ee0;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;font-family:'sourcesanspro',sans-serif;">Tools</span>
       <span id="tools-arrow" style="font-size:0.9rem;color:var(--muted);transition:transform 0.3s;">▸</span>
     </button>
     <div id="tools-body" style="max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;opacity:0;padding:0 1.2rem;">
@@ -3376,7 +3682,7 @@
   </div>
   </div><!-- end scaler-home -->
   <!-- What Is SideKick? button (outside scaler, fixed at bottom) -->
-    <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;">What Is SideKick?</button>
+    <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid #585870;border-radius:999px;background:#202020;color:#736f7b;font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;font-family:'sourcesanspro',sans-serif;">What Is SideKick?</button>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -4198,27 +4504,36 @@
 <!--  ACCOUNT (login / signup)                   -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="account-overlay">
-  <div class="tools-modal">
-    <div class="tools-modal-title" id="account-modal-title">👤 Host Login</div>
+  <div class="auth-modal">
+    <div class="auth-logo">🎮</div>
+    <div class="auth-title" id="account-modal-title">Welcome Back</div>
+    <div class="auth-subtitle" id="account-modal-subtitle">Sign in to access your host account</div>
 
-    <div id="account-form-step">
-      <input type="email" id="account-email" placeholder="Email" autocomplete="email">
-      <input type="password" id="account-password" placeholder="Password" autocomplete="current-password" style="margin-top:0.5rem;">
-      <div id="forgot-password-row" style="text-align:right;margin-top:0.35rem;">
-        <button type="button" class="btn-link" onclick="resetPassword()" style="font-size:0.78rem;color:var(--accent);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;">Forgot password?</button>
+    <div id="account-form-step" style="width:100%;">
+      <div class="auth-input-group">
+        <span class="auth-input-icon">✉️</span>
+        <input type="email" id="account-email" placeholder="Email address" autocomplete="email">
       </div>
-      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.6rem;" id="account-submit-btn" onclick="submitAccountForm()">Log In</button>
-      <p id="account-status" class="status"></p>
-      <button class="btn-secondary btn-sm" style="margin-top:0.3rem; width:100%; text-align:center;" onclick="toggleAccountMode()" id="account-toggle-btn">Need an account? Sign up free</button>
+      <div class="auth-input-group">
+        <span class="auth-input-icon">🔒</span>
+        <input type="password" id="account-password" placeholder="Password" autocomplete="current-password">
+      </div>
+      <button type="button" class="auth-forgot-link" onclick="resetPassword()">Forgot password?</button>
+      <button class="auth-submit-btn" id="account-submit-btn" onclick="submitAccountForm()">Log In</button>
+      <p id="account-status" class="status" style="text-align:center; margin-top:0.5rem;"></p>
+      <div class="auth-toggle-row">
+        <span id="account-toggle-text">Don't have an account?</span>
+        <button type="button" class="auth-toggle-link" onclick="toggleAccountMode()" id="account-toggle-btn">Sign up free</button>
+      </div>
     </div>
 
-    <div id="account-signedin-step" style="display:none; text-align:center;">
-      <div class="saved-screen-sub" id="account-signedin-email" style="font-weight:700; color:var(--text);">—</div>
-      <button class="btn-primary btn-sm" style="width:100%; margin-top:0.8rem;" onclick="closeAccountOverlay(); openProfileScreen();">👤 Go to Profile</button>
-      <button class="btn-secondary btn-sm" style="width:100%; margin-top:0.4rem;" onclick="doSignOut()">Sign Out</button>
+    <div id="account-signedin-step" style="display:none; width:100%;" class="auth-signedin-card">
+      <div class="auth-signedin-email" id="account-signedin-email">—</div>
+      <button class="auth-submit-btn" style="width:100%;" onclick="closeAccountOverlay(); openProfileScreen();">👤 Go to Profile</button>
+      <button type="button" class="profile-signout-link" onclick="doSignOut()" style="width:100%; text-align:center;">Sign Out</button>
     </div>
 
-    <button class="btn-secondary btn-sm" style="margin-top:0.6rem;" onclick="closeAccountOverlay()">Close</button>
+    <button type="button" style="position:absolute; top:12px; right:14px; background:none; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer; line-height:1; padding:4px;" onclick="closeAccountOverlay()">×</button>
   </div>
 </div>
 
@@ -4227,23 +4542,72 @@
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-profile" class="screen">
   <div class="screen-content-scaler" id="scaler-profile">
-  <div class="card" style="width:min(380px,92vw);">
-    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-bottom:1rem;">
-      <div id="profile-avatar" style="width:64px; height:64px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:800; color:#fff;">?</div>
-      <div id="profile-name" style="font-weight:800; color:var(--accent); font-size:1.05rem;"></div>
-      <div id="profile-email" style="font-weight:700; color:var(--text);">—</div>
-      <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Host Account</div>
+
+    <!-- Hero Section -->
+    <div class="profile-hero" style="width:min(380px,92vw); margin-bottom:0.75rem;">
+      <div class="profile-avatar-ring" onclick="openAvatarOverlay()" style="cursor:pointer;" title="Tap to change avatar">
+        <div class="profile-avatar-inner" id="profile-avatar">👤</div>
+      </div>
+      <div class="profile-display-name" id="profile-name" onclick="openNameOverlay()" style="cursor:pointer;" title="Tap to change name">Guest</div>
+      <div class="profile-badge" id="profile-role-badge" style="display:none;">
+        <span class="profile-badge-dot"></span>
+        <span id="profile-role-text">Host Account</span>
+      </div>
     </div>
 
-    <button class="tool-list-btn" onclick="openMySavedGames()">💾 My Saved Games</button>
-    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="openThemesOverlay()">🎨 Themes</button>
-    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="openAvatarOverlay()">🖼️ Change Avatar</button>
-    <button class="tool-list-btn" style="margin-top:0.5rem;" onclick="showAlert('Account settings are coming soon!')">⚙️ Account Settings</button>
+    <!-- Stats Row -->
+    <div class="profile-stats-row" style="width:min(380px,92vw); margin-bottom:0.75rem;">
+      <div class="profile-stat-card">
+        <div class="profile-stat-icon">🏠</div>
+        <div class="profile-stat-value" id="profile-games-hosted">0</div>
+        <div class="profile-stat-label">Hosted</div>
+      </div>
+      <div class="profile-stat-card" onclick="openMyAwards()" style="cursor:pointer;">
+        <div class="profile-stat-icon">🏆</div>
+        <div class="profile-stat-value" id="profile-awards-count">0</div>
+        <div class="profile-stat-label">Awards</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-icon">⏱️</div>
+        <div class="profile-stat-value" id="profile-rooms-created">0</div>
+        <div class="profile-stat-label">Rooms</div>
+      </div>
+    </div>
 
-    <button class="btn-secondary btn-sm" style="margin-top:1rem; width:100%;" onclick="backToHomeFromProfile()">🏠 Back to Home</button>
-    <div style="height:1.5rem;"></div>
-    <button class="btn-secondary btn-sm" style="width:100%; color:#ff5c5c; border-color:#ff5c5c;" onclick="confirmSignOut()">Sign Out</button>
-  </div>
+    <!-- Menu Items -->
+    <div class="profile-menu" style="width:min(380px,92vw); margin-bottom:0.75rem;">
+      <div class="profile-menu-item" onclick="openMySavedGames()">
+        <div class="profile-menu-icon icon-saves">💾</div>
+        <div class="profile-menu-text">
+          <div class="profile-menu-title">My Saved Games</div>
+          <div class="profile-menu-desc">View and resume your saved sessions</div>
+        </div>
+        <div class="profile-menu-chevron">›</div>
+      </div>
+      <div class="profile-menu-item" onclick="openThemesOverlay()">
+        <div class="profile-menu-icon icon-themes">🎨</div>
+        <div class="profile-menu-text">
+          <div class="profile-menu-title">Themes</div>
+          <div class="profile-menu-desc">Customize your visual experience</div>
+        </div>
+        <div class="profile-menu-chevron">›</div>
+      </div>
+      <div class="profile-menu-item" onclick="showAlert('Account settings are coming soon!')">
+        <div class="profile-menu-icon icon-settings">⚙️</div>
+        <div class="profile-menu-text">
+          <div class="profile-menu-title">Account Settings</div>
+          <div class="profile-menu-desc" id="profile-email">Manage your account details</div>
+        </div>
+        <div class="profile-menu-chevron">›</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="profile-footer" style="width:min(380px,92vw);">
+      <button class="btn-secondary btn-sm" style="width:100%;" onclick="backToHomeFromProfile()">🏠 Back to Home</button>
+      <button class="profile-signout-link" onclick="confirmSignOut()">Sign Out</button>
+    </div>
+
   </div>
 </div>
 
@@ -4267,119 +4631,90 @@
 <div class="themes-overlay" id="themes-overlay">
   <div class="themes-modal">
     <div class="themes-modal-title">🎨 Themes</div>
-    <label class="theme-option selected" id="theme-opt-default" onclick="selectTheme('default')">
-      <input type="radio" name="sk-theme-choice" value="default" checked>
-      <div class="theme-preview preview-default"></div>
-      <div class="theme-option-info">
+    <div class="themes-grid">
+      <label class="theme-option selected" id="theme-opt-default" onclick="selectTheme('default')">
+        <input type="radio" name="sk-theme-choice" value="default" checked style="display:none;">
+        <div class="theme-preview preview-default"></div>
         <div class="theme-option-name">Default</div>
-        <div class="theme-option-desc">Dark purple — the classic SideKick look</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-8bit" onclick="selectTheme('8bit')">
-      <input type="radio" name="sk-theme-choice" value="8bit">
-      <div class="theme-preview preview-8bit">8</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-8bit" onclick="selectTheme('8bit')">
+        <input type="radio" name="sk-theme-choice" value="8bit" style="display:none;">
+        <div class="theme-preview preview-8bit">8</div>
         <div class="theme-option-name">8-Bit</div>
-        <div class="theme-option-desc">Retro pixel aesthetic — monospace fonts, hard pixel borders, scanlines</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-cyberpunk" onclick="selectTheme('cyberpunk')">
-      <input type="radio" name="sk-theme-choice" value="cyberpunk">
-      <div class="theme-preview preview-cyberpunk">◈</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-cyberpunk" onclick="selectTheme('cyberpunk')">
+        <input type="radio" name="sk-theme-choice" value="cyberpunk" style="display:none;">
+        <div class="theme-preview preview-cyberpunk">◈</div>
         <div class="theme-option-name">Cyberpunk</div>
-        <div class="theme-option-desc">Neon cyan &amp; red, terminal fonts, glitch flicker, electric glow</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-fantasy" onclick="selectTheme('fantasy')">
-      <input type="radio" name="sk-theme-choice" value="fantasy">
-      <div class="theme-preview preview-fantasy">⚔</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-fantasy" onclick="selectTheme('fantasy')">
+        <input type="radio" name="sk-theme-choice" value="fantasy" style="display:none;">
+        <div class="theme-preview preview-fantasy">⚔</div>
         <div class="theme-option-name">Fantasy</div>
-        <div class="theme-option-desc">Aged parchment, gold filigree, serif script — a tavern ledger come to life</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-galaxy" onclick="selectTheme('galaxy')">
-      <input type="radio" name="sk-theme-choice" value="galaxy">
-      <div class="theme-preview preview-galaxy">✦</div>
-      <div class="theme-option-info">
-        <div class="theme-option-name">Sci-Fi Galaxy</div>
-        <div class="theme-option-desc">Deep space nebula, neon pulsars, starfield — the cosmos at your fingertips</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-forest" onclick="selectTheme('forest')">
-      <input type="radio" name="sk-theme-choice" value="forest">
-      <div class="theme-preview preview-forest">🌿</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-galaxy" onclick="selectTheme('galaxy')">
+        <input type="radio" name="sk-theme-choice" value="galaxy" style="display:none;">
+        <div class="theme-preview preview-galaxy">✦</div>
+        <div class="theme-option-name">Galaxy</div>
+      </label>
+      <label class="theme-option" id="theme-opt-forest" onclick="selectTheme('forest')">
+        <input type="radio" name="sk-theme-choice" value="forest" style="display:none;">
+        <div class="theme-preview preview-forest">🌿</div>
         <div class="theme-option-name">Forest</div>
-        <div class="theme-option-desc">Mossy greens, earthy browns, soft glades</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-ocean" onclick="selectTheme('ocean')">
-      <input type="radio" name="sk-theme-choice" value="ocean">
-      <div class="theme-preview preview-ocean">🌊</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-ocean" onclick="selectTheme('ocean')">
+        <input type="radio" name="sk-theme-choice" value="ocean" style="display:none;">
+        <div class="theme-preview preview-ocean">🌊</div>
         <div class="theme-option-name">Ocean</div>
-        <div class="theme-option-desc">Deep tides, cyan reefs, abyssal calm</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-sunset" onclick="selectTheme('sunset')">
-      <input type="radio" name="sk-theme-choice" value="sunset">
-      <div class="theme-preview preview-sunset">🌅</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-sunset" onclick="selectTheme('sunset')">
+        <input type="radio" name="sk-theme-choice" value="sunset" style="display:none;">
+        <div class="theme-preview preview-sunset">🌅</div>
         <div class="theme-option-name">Sunset</div>
-        <div class="theme-option-desc">Blazing horizons, coral skies, ember warmth</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-steampunk" onclick="selectTheme('steampunk')">
-      <input type="radio" name="sk-theme-choice" value="steampunk">
-      <div class="theme-preview preview-steampunk">⚙</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-steampunk" onclick="selectTheme('steampunk')">
+        <input type="radio" name="sk-theme-choice" value="steampunk" style="display:none;">
+        <div class="theme-preview preview-steampunk">⚙</div>
         <div class="theme-option-name">Steampunk</div>
-        <div class="theme-option-desc">Brass gears, copper pipes, leather bindings</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-vaporwave" onclick="selectTheme('vaporwave')">
-      <input type="radio" name="sk-theme-choice" value="vaporwave">
-      <div class="theme-preview preview-vaporwave">🌴</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-vaporwave" onclick="selectTheme('vaporwave')">
+        <input type="radio" name="sk-theme-choice" value="vaporwave" style="display:none;">
+        <div class="theme-preview preview-vaporwave">🌴</div>
         <div class="theme-option-name">Vaporwave</div>
-        <div class="theme-option-desc">Neon dreams, retro wave, chroma excess</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-nord" onclick="selectTheme('nord')">
-      <input type="radio" name="sk-theme-choice" value="nord">
-      <div class="theme-preview preview-nord">❄</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-nord" onclick="selectTheme('nord')">
+        <input type="radio" name="sk-theme-choice" value="nord" style="display:none;">
+        <div class="theme-preview preview-nord">❄</div>
         <div class="theme-option-name">Nord</div>
-        <div class="theme-option-desc">Arctic frost, granite peaks, aurora glow</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-dracula" onclick="selectTheme('dracula')">
-      <input type="radio" name="sk-theme-choice" value="dracula">
-      <div class="theme-preview preview-dracula">🧛</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-dracula" onclick="selectTheme('dracula')">
+        <input type="radio" name="sk-theme-choice" value="dracula" style="display:none;">
+        <div class="theme-preview preview-dracula">🧛</div>
         <div class="theme-option-name">Dracula</div>
-        <div class="theme-option-desc">Violet arcana, sanguine accents, gothic glamour</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-gothic" onclick="selectTheme('gothic')">
-      <input type="radio" name="sk-theme-choice" value="gothic">
-      <div class="theme-preview preview-gothic">🕸</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-gothic" onclick="selectTheme('gothic')">
+        <input type="radio" name="sk-theme-choice" value="gothic" style="display:none;">
+        <div class="theme-preview preview-gothic">🕸</div>
         <div class="theme-option-name">Gothic</div>
-        <div class="theme-option-desc">Obsidian halls, silver candelabras, velvet dusk</div>
-      </div>
-    </label>
-    <label class="theme-option" id="theme-opt-halloween" onclick="selectTheme('halloween')">
-      <input type="radio" name="sk-theme-choice" value="halloween">
-      <div class="theme-preview preview-halloween">🎃</div>
-      <div class="theme-option-info">
+      </label>
+      <label class="theme-option" id="theme-opt-halloween" onclick="selectTheme('halloween')">
+        <input type="radio" name="sk-theme-choice" value="halloween" style="display:none;">
+        <div class="theme-preview preview-halloween">🎃</div>
         <div class="theme-option-name">Halloween</div>
-        <div class="theme-option-desc">Pumpkin orange, blood red, dark autumn night</div>
-      </div>
-    </label>
-    <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeThemesOverlay()">✕ Close</button>
+      </label>
+    </div>
+    <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeThemesOverlay()">Done</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  MY AWARDS OVERLAY                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="awards-history-overlay" id="my-awards-overlay">
+  <div class="awards-history-modal">
+    <div class="awards-history-title">🏆 My Awards</div>
+    <div class="awards-history-list" id="awards-history-list"></div>
+    <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeMyAwards()">Done</button>
   </div>
 </div>
 
@@ -4389,11 +4724,19 @@
 <div class="avatar-overlay" id="avatar-overlay">
   <div class="avatar-modal">
     <div class="avatar-modal-title">🖼️ Choose Your Avatar</div>
-    <input type="text" id="preferred-name-input" placeholder="Preferred Name" maxlength="20" style="width:100%;padding:0.5rem 0.75rem;font-size:0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);margin-bottom:0.25rem;box-sizing:border-box;">
-    <button class="btn-primary btn-sm" style="width:100%;margin-bottom:0.5rem;" id="save-name-btn">✓ Save Name</button>
-    <p id="avatar-status" class="status" style="margin:0 0 0.25rem;"></p>
     <div class="avatar-grid" id="avatar-grid"></div>
-    <button class="btn-secondary btn-sm" style="margin-top:0.25rem;width:100%;" onclick="closeAvatarOverlay()">✕ Close</button>
+    <button class="btn-primary" style="width:100%;margin-top:0.25rem;" onclick="closeAvatarOverlay()">Save Avatar</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  PREFERRED NAME OVERLAY                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="avatar-overlay" id="name-overlay">
+  <div class="avatar-modal">
+    <div class="avatar-modal-title">✏️ Preferred Name</div>
+    <input type="text" id="preferred-name-input" placeholder="Your name" maxlength="20" style="width:100%;padding:0.6rem 0.75rem;font-size:0.95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);margin-bottom:0.5rem;box-sizing:border-box;">
+    <button class="btn-primary btn-sm" style="width:100%;" id="save-name-btn">Save Name</button>
   </div>
 </div>
 
@@ -4895,10 +5238,13 @@ window.closeAccountOverlay = function() {
 
 function renderAccountMode() {
   const isLogin = accountMode === 'login';
-  document.getElementById('account-modal-title').textContent = isLogin ? '👤 Host Login' : '👤 Create Host Account';
+  document.getElementById('account-modal-title').textContent = isLogin ? 'Welcome Back' : 'Create Account';
+  document.getElementById('account-modal-subtitle').textContent = isLogin ? 'Sign in to access your host account' : 'Set up a host account to create rooms';
   document.getElementById('account-submit-btn').textContent = isLogin ? 'Log In' : 'Sign Up Free';
-  document.getElementById('account-toggle-btn').textContent = isLogin ? 'Need an account? Sign up free' : 'Already have an account? Log in';
-  document.getElementById('forgot-password-row').style.display = isLogin ? '' : 'none';
+  document.getElementById('account-toggle-text').textContent = isLogin ? "Don't have an account?" : 'Already have an account?';
+  document.getElementById('account-toggle-btn').textContent = isLogin ? 'Sign up free' : 'Log in';
+  const forgotRow = document.querySelector('.auth-forgot-link');
+  if (forgotRow) forgotRow.style.display = isLogin ? '' : 'none';
 }
 window.toggleAccountMode = function() {
   accountMode = accountMode === 'login' ? 'signup' : 'login';
@@ -4969,7 +5315,7 @@ window.confirmSignOut = async function() {
 // Saved Games or Account was left open) before switching screens, so the
 // button always visibly takes you home.
 window.backToHomeFromProfile = function() {
-  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay','room-avatar-overlay','tutorial-overlay'].forEach(id => {
+  ['my-saves-overlay','account-overlay','resume-overlay','tools-overlay','rng-overlay','timer-overlay','picker-overlay','status-menu-overlay','status-alert-overlay','features-config-overlay','settings-overlay','themes-overlay','avatar-overlay','name-overlay','room-avatar-overlay','tutorial-overlay','my-awards-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
@@ -5026,11 +5372,40 @@ function saveName(name) {
 }
 
 const AVATARS = [
+  'img/barbarian.png',
   '🧙', '🧝', '🧛', '🧜', '🧞',
   '🐉', '🦄', '🐺', '🦊', '🦅',
   '⚔️', '🛡️', '🏹', '🔮', '🗡️',
   '👑', '💎', '🌟', '🔥', '🎲'
 ];
+
+function isImageAvatar(val) {
+  return val && (val.endsWith('.png') || val.endsWith('.jpg') || val.endsWith('.jpeg') || val.endsWith('.webp') || val.endsWith('.gif') || val.startsWith('img/'));
+}
+
+function avatarHTML(val, size) {
+  if (!val) val = '👤';
+  size = size || 28;
+  if (isImageAvatar(val)) {
+    return '<img src="' + val + '" alt="avatar" style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;object-fit:cover;display:inline-block;vertical-align:middle;">';
+  }
+  return val;
+}
+
+function setAvatarEl(el, val, size) {
+  if (!el) return;
+  if (!val) val = '👤';
+  size = size || parseInt(el.style.fontSize) || 28;
+  if (isImageAvatar(val)) {
+    el.innerHTML = '';
+    var img = document.createElement('img');
+    img.src = val; img.alt = 'avatar';
+    img.style.cssText = 'width:' + size + 'px;height:' + size + 'px;border-radius:50%;object-fit:cover;display:inline-block;';
+    el.appendChild(img);
+  } else {
+    el.textContent = val;
+  }
+}
 
 window.openAvatarOverlay = function() {
   const grid = document.getElementById('avatar-grid');
@@ -5040,17 +5415,18 @@ window.openAvatarOverlay = function() {
   AVATARS.forEach(emoji => {
     const btn = document.createElement('button');
     btn.className = 'avatar-option' + (emoji === current ? ' selected' : '');
-    btn.textContent = emoji;
+    if (isImageAvatar(emoji)) {
+      var img = document.createElement('img');
+      img.src = emoji; img.alt = 'avatar';
+      img.style.cssText = 'width:70%;height:70%;border-radius:50%;object-fit:cover;';
+      btn.appendChild(img);
+    } else {
+      btn.textContent = emoji;
+    }
     btn.setAttribute('data-avatar', emoji);
     btn.onclick = () => selectAvatar(emoji);
     grid.appendChild(btn);
   });
-  document.getElementById('preferred-name-input').value = getSavedName();
-  document.getElementById('save-name-btn').onclick = function() {
-    var val = document.getElementById('preferred-name-input').value.trim();
-    saveName(val);
-    updateAccountButtonUI();
-  };
   document.getElementById('avatar-overlay').classList.add('show');
 };
 
@@ -5058,14 +5434,30 @@ window.closeAvatarOverlay = function() {
   document.getElementById('avatar-overlay').classList.remove('show');
 };
 
+window.openNameOverlay = function() {
+  document.getElementById('preferred-name-input').value = getSavedName();
+  document.getElementById('save-name-btn').onclick = function() {
+    var val = document.getElementById('preferred-name-input').value.trim();
+    saveName(val);
+    updateAccountButtonUI();
+    document.getElementById('name-overlay').classList.remove('show');
+  };
+  document.getElementById('name-overlay').classList.add('show');
+  setTimeout(function() { document.getElementById('preferred-name-input').focus(); }, 100);
+};
+
+window.closeNameOverlay = function() {
+  document.getElementById('name-overlay').classList.remove('show');
+};
+
 window.selectAvatar = function(emoji) {
   saveAvatar(emoji);
   document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
   const active = document.querySelector(`.avatar-option[data-avatar="${emoji}"]`);
   if (active) active.classList.add('selected');
-  document.getElementById('profile-avatar').textContent = emoji;
+  setAvatarEl(document.getElementById('profile-avatar'), emoji, 52);
   const hostAvLabel = document.getElementById('host-avatar-label');
-  if (hostAvLabel) hostAvLabel.textContent = emoji + ' Select Avatar';
+  if (hostAvLabel) hostAvLabel.textContent = (isImageAvatar(emoji) ? '🖼️' : emoji) + ' Select Avatar';
   updateAccountButtonUI();
 };
 
@@ -5079,7 +5471,14 @@ window.openRoomAvatarOverlay = function() {
   AVATARS.forEach(emoji => {
     const btn = document.createElement('button');
     btn.className = 'avatar-option' + (emoji === roomAvatarSelection ? ' selected' : '');
-    btn.textContent = emoji;
+    if (isImageAvatar(emoji)) {
+      var img = document.createElement('img');
+      img.src = emoji; img.alt = 'avatar';
+      img.style.cssText = 'width:70%;height:70%;border-radius:50%;object-fit:cover;';
+      btn.appendChild(img);
+    } else {
+      btn.textContent = emoji;
+    }
     btn.setAttribute('data-avatar', emoji);
     btn.onclick = () => {
       roomAvatarSelection = emoji;
@@ -5115,12 +5514,37 @@ window.closeRoomAvatarOverlay = function() {
 
 window.openProfileScreen = function() {
   if (!currentUser) { openAccountOverlay('login'); return; }
-  document.getElementById('profile-email').textContent = currentUser.email || '';
+  const email = currentUser.email || '';
+  document.getElementById('profile-email').textContent = email ? 'Signed in as ' + email : 'Manage your account details';
+
   const avatar = getSavedAvatar();
-  document.getElementById('profile-avatar').textContent = avatar || (currentUser.email || '?').charAt(0).toUpperCase();
+  const avatarEl = document.getElementById('profile-avatar');
+  setAvatarEl(avatarEl, avatar || email.charAt(0).toUpperCase(), 52);
+
   const name = getSavedName();
   const nameEl = document.getElementById('profile-name');
-  if (nameEl) nameEl.textContent = name ? 'Welcome ' + name + '!' : '';
+  nameEl.textContent = name || email.split('@')[0] || 'User';
+
+  const isHost = CREATOR_UIDS.includes(currentUser.uid);
+  const badge = document.getElementById('profile-role-badge');
+  const roleText = document.getElementById('profile-role-text');
+  if (badge && roleText) {
+    badge.style.display = isHost ? 'inline-flex' : 'none';
+    roleText.textContent = isHost ? 'Host Account' : 'Player Account';
+  }
+
+  const themeKey = 'sk_theme';
+
+  const hostedEl = document.getElementById('profile-games-hosted');
+  const awardsEl = document.getElementById('profile-awards-count');
+  const roomsEl = document.getElementById('profile-rooms-created');
+  const hostedCount = localStorage.getItem('sk_hosted_count') || '0';
+  const roomsCount = localStorage.getItem('sk_rooms_count') || '0';
+  const awardsList = currentUser ? JSON.parse(localStorage.getItem('sk_awards_' + currentUser.uid) || '[]') : [];
+  if (hostedEl) hostedEl.textContent = hostedCount;
+  if (awardsEl) awardsEl.textContent = String(awardsList.length);
+  if (roomsEl) roomsEl.textContent = roomsCount;
+
   showScreen('profile');
 };
 
@@ -7851,6 +8275,15 @@ function hideAllAwardOverlays() {
 }
 
 function showWinnerReveal(award) {
+  try {
+    const uid = currentUser?.uid || '';
+    if (uid) {
+      const key = 'sk_awards_' + uid;
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      list.push({ key: award.key, category: award.category, trophy: award.trophy, stat: award.stat, date: Date.now() });
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+  } catch {}
   const reveal = document.getElementById('awards-reveal');
   document.getElementById('awards-category-label').textContent = award.category;
   document.getElementById('awards-trophy').textContent = award.trophy;
@@ -7963,6 +8396,12 @@ window.closeRoomFinal = async function() {
 
 // Non-host taps home from gameover screen
 window.endGameFinal = async function() {
+  try {
+    const prevHosted = parseInt(localStorage.getItem('sk_hosted_count') || '0', 10);
+    localStorage.setItem('sk_hosted_count', String(prevHosted + 1));
+    const prevRooms = parseInt(localStorage.getItem('sk_rooms_count') || '0', 10);
+    localStorage.setItem('sk_rooms_count', String(prevRooms + 1));
+  } catch {}
   hideAllAwardOverlays();
   stopFireworks();
   window.speechSynthesis && window.speechSynthesis.cancel();
@@ -8376,7 +8815,7 @@ function renderManageList(players, rawPlayers) {
     div.dataset.dragId = p.id;
     div.innerHTML = `
       <div class="manage-player-row">
-        <div class="manage-player-avatar" ${avatarDotStyle}>${esc(p.avatar || '👤')}</div>
+        <div class="manage-player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 28)}</div>
         <div class="manage-num ${isOut ? 'out' : ''}" ${dotStyle}>${i+1}</div>
         <div class="manage-name">${esc(p.name)}${p.id === myId ? ' (you)' : ''}</div>
         <div class="manage-actions">
@@ -8955,7 +9394,7 @@ function listenGameState() {
       const waitNameEl = document.getElementById('waiting-active-name');
       const waitAvatarEl = document.getElementById('waiting-active-avatar');
       waitNameEl.textContent = activePlayer.name;
-      waitAvatarEl.textContent = activePlayer.avatar || '👤';
+      setAvatarEl(waitAvatarEl, activePlayer.avatar || '👤', 28);
       // Color the active player's name with their chosen color
       const apColor = activePlayer.color || '#4ade80';
       // If the player chose black, their name would be invisible on the dark bg — use white instead
@@ -9388,7 +9827,7 @@ function renderLobbyList(players) {
     div.setAttribute('draggable', 'false');
     div.dataset.dragId = p.id;
     div.innerHTML = `
-      <div class="player-avatar" ${avatarDotStyle}>${esc(p.avatar || '👤')}</div>
+      <div class="player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 28)}</div>
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">Host (You)</span>' : '<span class="player-badge">Player</span>'}
@@ -9424,7 +9863,7 @@ function renderWaitingLobbyList(players) {
     const div = document.createElement('div');
     div.className = 'player-item';
     div.innerHTML = `
-      <div class="player-avatar" ${avatarDotStyle}>${esc(p.avatar || '👤')}</div>
+      <div class="player-avatar" ${avatarDotStyle}>${avatarHTML(p.avatar || '👤', 28)}</div>
       <div class="player-num" style="background:${dotColor};color:${dotText};">${i+1}</div>
       <div class="player-name">${esc(p.name)}</div>
       ${p.id === myId ? '<span class="player-badge host">You</span>' : ''}`;
@@ -9644,6 +10083,34 @@ window.openThemesOverlay = function() {
 
 window.closeThemesOverlay = function() {
   document.getElementById('themes-overlay').classList.remove('show');
+};
+
+window.openMyAwards = function() {
+  const list = document.getElementById('awards-history-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const uid = currentUser?.uid || '';
+  const awards = uid ? JSON.parse(localStorage.getItem('sk_awards_' + uid) || '[]') : [];
+  if (awards.length === 0) {
+    list.innerHTML = '<div class="awards-history-empty">No awards yet — play a game with Achievement Awards enabled to earn some!</div>';
+  } else {
+    awards.slice().reverse().forEach(a => {
+      const dateStr = a.date ? new Date(a.date).toLocaleDateString() : '';
+      list.innerHTML += '<div class="awards-history-item">' +
+        '<div class="awards-history-trophy">' + (a.trophy || '🏆') + '</div>' +
+        '<div class="awards-history-info">' +
+          '<div class="awards-history-category">' + esc(a.category || 'Award') + '</div>' +
+          '<div class="awards-history-stat">' + esc(a.stat || '') + '</div>' +
+        '</div>' +
+        '<div class="awards-history-date">' + dateStr + '</div>' +
+      '</div>';
+    });
+  }
+  document.getElementById('my-awards-overlay').classList.add('show');
+};
+
+window.closeMyAwards = function() {
+  document.getElementById('my-awards-overlay').classList.remove('show');
 };
 
 window.selectTheme = function(themeName) {
