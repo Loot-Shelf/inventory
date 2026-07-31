@@ -41,21 +41,6 @@
     --danger: #c0392b;
   }
 
-  @font-face {
-    font-family: 'sourcesanspro';
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-    src: url(https://design.penpot.app/fonts/sourcesanspro-regular.woff) format('woff');
-  }
-  @font-face {
-    font-family: 'Solway';
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-    src: url(https://design.penpot.app/internal/gfonts/font/solway/v19/AMOQz46Cs2uTAOCmhXo8.woff2) format('woff2');
-  }
-
   /* ── DEFAULT THEME 3D TEXT ── */
   body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .logo,
   body:not(.theme-8bit):not(.theme-cyberpunk):not(.theme-fantasy):not(.theme-galaxy):not(.theme-forest):not(.theme-ocean):not(.theme-sunset):not(.theme-steampunk):not(.theme-vaporwave):not(.theme-nord):not(.theme-dracula):not(.theme-gothic):not(.theme-halloween) .turn-mode-modal-title,
@@ -212,7 +197,7 @@
 
   /* ── SETUP / LOBBY SCREENS ── */
   .logo { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; color: var(--accent-light); margin-bottom: 0.3rem; }
-  .tagline { color: #736f7b; font-size: 1.0625rem; margin-bottom: 2.5rem; text-shadow: none; font-family: 'Solway', serif; }
+  .tagline { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; text-shadow: none; }
 
   .card {
     background: var(--surface);
@@ -227,18 +212,7 @@
     margin-left: auto;
     margin-right: auto;
   }
-  #screen-home .card { margin-left: 10px; margin-right: 10px; background: #202020; border: 2px solid #585870; border-radius: 5px; box-shadow: none; }
-  #screen-home .card::after { display: none; }
-  #screen-home .btn-primary {
-    background: #532ba5; border-radius: 999px; font-family: 'sourcesanspro', sans-serif; font-size: 1.25rem;
-    box-shadow: inset 0 0 10px #000, 1px 4px 4px #000;
-  }
-  #screen-home .btn-primary:hover:not(:disabled) { box-shadow: inset 0 0 10px #000, 1px 4px 4px #000, 0 4px 16px rgba(83,43,165,0.4); }
-  #screen-home .btn-secondary {
-    background: #202020; border-radius: 999px; border: none; font-family: 'sourcesanspro', sans-serif; font-size: 1.25rem;
-    box-shadow: inset 0 0 10px #000, 1px 4px 4px #000;
-  }
-  #screen-home .btn-secondary:hover:not(:disabled) { box-shadow: inset 0 0 10px #000, 1px 4px 4px #000, 0 4px 16px rgba(0,0,0,0.3); }
+  #screen-home .card { margin-left: 10px; margin-right: 10px; }
   .card::after {
     content: '';
     position: absolute;
@@ -3625,17 +3599,17 @@
 <!--  SCREEN: HOME                               -->
 <!-- ═══════════════════════════════════════════ -->
 <div id="screen-home" class="screen active" style="position:relative;">
-  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.5rem 1rem; font-size:0.85rem; background:#202020; border:1px solid #585870; border-radius:999px; z-index:20; font-family:'sourcesanspro',sans-serif;" onclick="openAccountOverlay()">🔑 Login</button>
+  <button class="btn-secondary btn-sm" id="account-btn" style="position:fixed; top:14px; right:14px; width:auto; padding:0.5rem 1rem; font-size:0.85rem; background:transparent; border:1px solid var(--border); z-index:20;" onclick="openAccountOverlay()">🔑 Login</button>
   <div class="screen-content-scaler" id="scaler-home">
   <div class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0.1rem;line-height:1.1;">
-    <span style="font-size:1.5rem;font-weight:600;letter-spacing:0.22em;color:#585870;opacity:1;text-shadow:none;font-family:'Solway',serif;">Game Night</span>
-    <span style="font-size:3.625rem">SideKick</span>
+    <span style="font-size:1.2rem;font-weight:600;letter-spacing:0.22em;text-transform;color:var(--muted);opacity:0.7;text-shadow:none;">Game Night</span>
+    <span style="font-size:4rem">SideKick</span>
   </div>
   <div class="tagline">Pass the turn. Keep the vibe.</div>
   <div class="card">
     <div class="btn-group">
-      <button class="btn-primary" onclick="showCreateRoom()" style="font-size:1.25rem;padding:1rem 2rem;">Host Room</button>
-      <button class="btn-secondary" onclick="showJoinRoom()" style="font-size:1.25rem;padding:1rem 2rem;">Join Room</button>
+      <button class="btn-primary" onclick="showCreateRoom()" style="font-size:1.3rem;padding:1.1rem 1.5rem;border-radius:999px;">Host Room</button>
+      <button class="btn-secondary" onclick="showJoinRoom()" style="font-size:1.3rem;padding:1.1rem 1.5rem;border-radius:999px;">Join Room</button>
     </div>
   </div>
   <p id="home-status" class="status"></p>
@@ -3643,7 +3617,7 @@
   <!-- Tools card (collapsible) -->
   <div class="card" style="margin-top:2.0rem; padding:0;">
     <button onclick="toggleTools()" id="tools-toggle-btn" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;background:none;border:none;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;border-radius:12px;">
-      <span style="font-size:1.1rem;color:#a07ee0;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;font-family:'sourcesanspro',sans-serif;">Tools</span>
+      <span style="font-size:1.1rem;color:var(--accent-light);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;">Tools</span>
       <span id="tools-arrow" style="font-size:0.9rem;color:var(--muted);transition:transform 0.3s;">▸</span>
     </button>
     <div id="tools-body" style="max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;opacity:0;padding:0 1.2rem;">
@@ -3682,7 +3656,7 @@
   </div>
   </div><!-- end scaler-home -->
   <!-- What Is SideKick? button (outside scaler, fixed at bottom) -->
-    <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid #585870;border-radius:999px;background:#202020;color:#736f7b;font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;font-family:'sourcesanspro',sans-serif;">What Is SideKick?</button>
+    <button onclick="openTutorial()" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);width:auto;padding:0.5rem 1rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-size:0.82rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;z-index:5;">What Is SideKick?</button>
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
