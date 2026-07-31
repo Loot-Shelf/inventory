@@ -369,18 +369,18 @@
   }
   .player-item:hover { background: #262640; border-color: var(--accent); }
   .player-num {
-    width: 30px; height: 30px;
+    width: 36px; height: 36px;
     border-radius: 50%;
     background: var(--accent);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.7rem; font-weight: 700;
+    font-size: 0.8rem; font-weight: 700;
     flex-shrink: 0;
   }
   .player-avatar {
-    width: 30px; height: 30px;
+    width: 36px; height: 36px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
     background: #2a2a3a;
     line-height: 1;
@@ -390,8 +390,8 @@
     position: relative;
   }
   .player-avatar-wrap { position: relative; flex-shrink: 0; }
-  .player-tile-top { display: flex; align-items: center; gap: 0.25rem; }
-  .player-name { font-size: 0.72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); line-height: 1.1; }
+  .player-tile-top { display: flex; align-items: center; gap: 0.3rem; }
+  .player-name { font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center; color: var(--text); line-height: 1.1; }
   .player-badge {
     font-size: 0.55rem; padding: 0.1rem 0.35rem;
     border-radius: 4px;
@@ -3866,7 +3866,7 @@
     </div>
 
     <!-- Card 2: Player list -->
-    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem;">
+    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem; flex:1; min-height:0; overflow-y:auto;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
         <span style="font-size:0.85rem;font-weight:700;color:var(--text);">Player List (Drag to Reorder)</span>
         <span id="player-count" style="font-size:0.75rem;color:var(--muted);">0 joined</span>
@@ -3875,20 +3875,16 @@
       <p id="lobby-status" class="status"></p>
     </div>
 
-    <!-- Card 3: Random first player -->
-    <div class="card" style="max-width:480px;margin-bottom:0.5rem; padding: 0.5rem 0.6rem;">
-      <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
+    <!-- Fixed bottom bar -->
+    <div style="width:100%;max-width:480px;margin:0 auto;padding:0.3rem 0.5rem env(safe-area-inset-bottom, 0.3rem);flex-shrink:0;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.4rem;">
         <label class="feature-toggle" style="flex-shrink:0;">
           <input type="checkbox" id="random-first-player" onchange="onRandomFirstToggle(this.checked)">
           <span class="toggle-slider"></span>
         </label>
-        <span style="font-size:0.9rem;font-weight:600;color:var(--text);">&#127922; Pick a Random first player</span>
+        <span style="font-size:0.85rem;font-weight:600;color:var(--text);">&#127922; Pick a Random first player</span>
       </div>
-    </div>
-
-    <!-- Start Game button below cards -->
-    <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="max-width:480px;width:100%;margin-bottom:0.3rem;">&#9654; Start Game</button>
-    <div style="width:100%;max-width:380px;margin:0 auto;padding:0.3rem 1rem env(safe-area-inset-bottom, 0.3rem);flex-shrink:0;margin-top:auto;">
+      <button class="btn-primary" id="start-btn" onclick="startGame()" disabled style="width:100%;margin-bottom:0.3rem;">&#9654; Start Game</button>
       <button class="btn-secondary btn-sm" onclick="goBackToCreate()" style="width:100%;">&#8592; Back To Room Settings</button>
     </div>
 
