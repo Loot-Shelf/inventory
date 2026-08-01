@@ -1898,6 +1898,25 @@
 
   /* ── ORIENTATION CONTROL ── */
 
+  /* ── LANDSCAPE LAYOUT FIXES ── */
+  @media (orientation: landscape) {
+    .pass-tap-its { font-size: 1.3rem; margin-bottom: 0.3rem; }
+    .pass-tap-arrow { font-size: 5.5rem; }
+    .pass-tap-label { font-size: 0.95rem; }
+    .pass-tap-player { font-size: 0.8rem; }
+    .active-center { top: 50%; transform: translate(-50%, -50%); }
+    .active-center-its { font-size: 1.15rem; }
+    .active-center-name { font-size: 0.85rem; }
+    .btn-arrow { font-size: 4.5rem; }
+    .btn-label { font-size: 0.95rem; }
+    .btn-player-name { font-size: 0.85rem; }
+    .exit-btn { top: 10px; right: 10px; }
+    .settings-panel { top: 10px; left: 10px; }
+    .settings-gear { width: 34px; height: 34px; font-size: 1rem; }
+    .host-manage-btn { bottom: 10px; right: 10px; }
+    .host-game-menu { bottom: 10px; left: 10px; }
+    #screen-active .pass-tap-btn { padding: 36px 10px; }
+  }
 
   /* ── MANAGE PLAYERS PANEL ── */
   .manage-overlay {
@@ -8693,15 +8712,21 @@ window.setOrientation = function(mode) {
   applyOrientation(mode);
 };
 
-function applyOrientation(mode) {
+async function applyOrientation(mode) {
   if (mode === 'auto') {
     try { screen.orientation.unlock(); } catch(e) {}
     return;
   }
   try {
-    if (mode === 'portrait') screen.orientation.lock('portrait-primary').catch(()=>{});
-    else if (mode === 'landscape') screen.orientation.lock('landscape-primary').catch(()=>{});
-  } catch(e) {}
+    const type = mode === 'portrait' ? 'portrait-primary' : 'landscape-primary';
+    const result = await screen.orientation.lock(type);
+  } catch(e) {
+    try {
+      if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+      const type = mode === 'portrait' ? 'portrait-primary' : 'landscape-primary';
+      await screen.orientation.lock(type);
+    } catch(e2) {}
+  }
 }
 
 function resetOrientation() {
