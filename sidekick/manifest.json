@@ -4,7 +4,6 @@
   "description": "Pass the turn. Keep the vibe. A real-time turn tracker for tabletop game nights.",
   "start_url": "/sidekick/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#0a0a0f",
   "theme_color": "#0a0a0f",
   "scope": "/sidekick/",
