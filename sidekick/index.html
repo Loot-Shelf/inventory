@@ -8696,12 +8696,17 @@ window.setOrientation = function(mode) {
 function applyOrientation(mode) {
   if (mode === 'auto') {
     try { screen.orientation.unlock(); } catch(e) {}
+    if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
     return;
   }
-  try {
-    if (mode === 'portrait') screen.orientation.lock('portrait-primary').catch(()=>{});
-    else if (mode === 'landscape') screen.orientation.lock('landscape-primary').catch(()=>{});
-  } catch(e) {}
+  const lockIt = () => {
+    try {
+      if (mode === 'portrait') screen.orientation.lock('portrait-primary').catch(()=>{});
+      else if (mode === 'landscape') screen.orientation.lock('landscape-primary').catch(()=>{});
+    } catch(e) {}
+  };
+  if (document.fullscreenElement) { lockIt(); }
+  else { document.documentElement.requestFullscreen().then(lockIt).catch(lockIt); }
 }
 
 function resetOrientation() {
