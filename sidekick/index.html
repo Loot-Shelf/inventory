@@ -178,7 +178,7 @@
   }
 
   /* ── SCREENS ── */
-  .screen { display: none; width: 100%; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; overflow: hidden; }
+  .screen { display: none; width: 100%; height: 100vh; height: 100dvh; flex-direction: column; align-items: center; justify-content: center; padding: calc(2rem + env(safe-area-inset-top, 0px)) 2rem calc(2rem + env(safe-area-inset-bottom, 0px)) 2rem; overflow: hidden; }
   .screen.active { display: flex; animation: screenFadeIn 0.2s ease-out; }
   @keyframes screenFadeIn { from { opacity: 0; } to { opacity: 1; } }
   /* Setup/menu screens (Home, Create, Join, Lobby, Waiting Lobby, Profile)
@@ -6183,8 +6183,9 @@ function rescaleCurrentScreen() {
   // previously-applied scale compounding on itself.
   scaler.style.transform = 'none';
 
-  const screenPaddingY = 64; // approx 2rem top + 2rem bottom from .screen's padding
-  const available = window.innerHeight - screenPaddingY;
+  const screenPaddingY = 64;
+  const safeTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat') || '0') || (window.visualViewport ? Math.max(0, window.visualViewport.offsetTop) : 0);
+  const available = (window.visualViewport || window).height - screenPaddingY - safeTop;
   const natural = scaler.scrollHeight;
 
   if (natural > available && natural > 0) {
@@ -7424,6 +7425,27 @@ function startQRDetection(video, statusEl) {
           return;
         }
       } catch (e) {}
+      scannerAnimFrame = requestAnimationFrame(detect);
+    };
+    detect();
+  } else if (typeof jsQR === 'function') {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const detect = () => {
+      if (!scannerStream) return;
+      if (video.readyState >= video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        try {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code && code.data) {
+            handleScannedQR(code.data);
+            return;
+          }
+        } catch (e) {}
+      }
       scannerAnimFrame = requestAnimationFrame(detect);
     };
     detect();
@@ -10574,5 +10596,6 @@ window.dismissInstall = function() {
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" defer></script>
 </body>
 </html>
