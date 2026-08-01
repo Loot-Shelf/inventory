@@ -8715,11 +8715,14 @@ window.setOrientation = function(mode) {
 async function applyOrientation(mode) {
   if (mode === 'auto') {
     try { screen.orientation.unlock(); } catch(e) {}
+    if (document.fullscreenElement) {
+      try { await document.exitFullscreen(); } catch(e) {}
+    }
     return;
   }
   try {
     const type = mode === 'portrait' ? 'portrait-primary' : 'landscape-primary';
-    const result = await screen.orientation.lock(type);
+    await screen.orientation.lock(type);
   } catch(e) {
     try {
       if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
