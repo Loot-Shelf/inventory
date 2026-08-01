@@ -1896,31 +1896,7 @@
   .ctrl-btn.active-ctrl { background: rgba(124,92,191,0.6); color: #fff; border-color: rgba(160,126,224,0.5); }
   .ctrl-sep { height: 1px; background: rgba(255,255,255,0.08); margin: 2px 0; }
 
-  /* ── FORCE ORIENTATION via CSS ── */
-  /* When force-portrait is active and device is physically landscape, rotate the page back to portrait */
-  @media screen and (orientation: landscape) {
-    body.force-portrait {
-      transform: rotate(-90deg);
-      transform-origin: top left;
-      width: 100vh;
-      height: 100vw;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
-  }
-  /* When force-landscape is active and device is physically portrait, rotate the page to landscape */
-  @media screen and (orientation: portrait) {
-    body.force-landscape {
-      transform: rotate(90deg);
-      transform-origin: top left;
-      width: 100vh;
-      height: 100vw;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
-  }
+  /* ── ORIENTATION CONTROL ── */
 
 
   /* ── MANAGE PLAYERS PANEL ── */
@@ -8718,28 +8694,19 @@ window.setOrientation = function(mode) {
 };
 
 function applyOrientation(mode) {
-  document.body.classList.remove('force-portrait','force-landscape');
   if (mode === 'auto') {
-    try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch(e) {}
+    try { screen.orientation.unlock(); } catch(e) {}
     return;
   }
-  // Add CSS class immediately so the CSS media query rotation takes effect
-  if (mode === 'portrait') document.body.classList.add('force-portrait');
-  else if (mode === 'landscape') document.body.classList.add('force-landscape');
-  // Also try the Screen Orientation API (works in fullscreen on some browsers)
   try {
-    if (mode === 'portrait') {
-      screen.orientation.lock('portrait-primary').catch(()=>{});
-    } else if (mode === 'landscape') {
-      screen.orientation.lock('landscape-primary').catch(()=>{});
-    }
+    if (mode === 'portrait') screen.orientation.lock('portrait-primary').catch(()=>{});
+    else if (mode === 'landscape') screen.orientation.lock('landscape-primary').catch(()=>{});
   } catch(e) {}
 }
 
 function resetOrientation() {
   currentOrientation = 'auto';
-  document.body.classList.remove('force-portrait','force-landscape');
-  try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch(e) {}
+  try { screen.orientation.unlock(); } catch(e) {}
 }
 
 // ── WAKE LOCK (keep screen on during game) ──────────────
