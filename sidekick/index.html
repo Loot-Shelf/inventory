@@ -8695,7 +8695,7 @@ window.setOrientation = function(mode) {
 
 function applyOrientation(mode) {
   if (mode === 'auto') {
-    try { screen.orientation.unlock(); } catch(e) {}
+    try { screen.orientation.lock('any').catch(()=>{}); } catch(e) {}
     return;
   }
   try {
@@ -8706,7 +8706,7 @@ function applyOrientation(mode) {
 
 function resetOrientation() {
   currentOrientation = 'auto';
-  try { screen.orientation.unlock(); } catch(e) {}
+  try { screen.orientation.lock('any').catch(()=>{}); } catch(e) {}
 }
 
 // ── WAKE LOCK (keep screen on during game) ──────────────
