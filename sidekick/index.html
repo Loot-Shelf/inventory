@@ -6150,7 +6150,7 @@ function genCode() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
-  if (id !== 'create' && id !== 'join') requestAnimationFrame(rescaleCurrentScreen);
+  if (id !== 'join') requestAnimationFrame(rescaleCurrentScreen);
   // Hide D&D overlay whenever leaving the active turn screen
   if (id !== 'active') {
     const dndOv = document.getElementById('dnd-overlay');
@@ -6177,19 +6177,16 @@ function rescaleCurrentScreen() {
   const activeScreen = document.querySelector('.screen.active');
   if (!activeScreen) return;
   const scaler = activeScreen.querySelector(':scope > .screen-content-scaler');
-  if (!scaler) return; // Active Turn / Waiting screens have no scaler — nothing to do
+  if (!scaler) return;
 
-  // Reset to natural size first so we measure true content height, not a
-  // previously-applied scale compounding on itself.
   scaler.style.transform = 'none';
-
-  const screenPaddingY = 64;
-  const safeTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat') || '0') || (window.visualViewport ? Math.max(0, window.visualViewport.offsetTop) : 0);
-  const available = (window.visualViewport || window).height - screenPaddingY - safeTop;
+  scaler.style.height = 'auto';
   const natural = scaler.scrollHeight;
+  scaler.style.height = '100%';
+  const available = scaler.clientHeight;
 
   if (natural > available && natural > 0) {
-    const factor = Math.max(0.55, available / natural); // never shrink below 55% — stays legible
+    const factor = Math.max(0.55, available / natural);
     scaler.style.transform = `scale(${factor})`;
   }
 }
@@ -6528,6 +6525,7 @@ function renderCreateStep() {
   if (nextBtn) nextBtn.style.display = createStep < 3 ? '' : 'none';
   if (finalBtn) finalBtn.style.display = createStep === 3 ? '' : 'none';
   renderEditRoomButtons();
+  requestAnimationFrame(rescaleCurrentScreen);
 }
 
 window.createNextStep = function() {
