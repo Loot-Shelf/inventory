@@ -3506,17 +3506,16 @@
     position: relative; overflow: hidden;
   }
   .auth-modal::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+    display: none;
   }
   .auth-logo {
     font-size: 2.2rem; margin-bottom: 0.15rem;
     filter: drop-shadow(0 2px 8px rgba(124,92,191,0.3));
+    display: none;
   }
   .auth-title {
     font-size: 1.15rem; font-weight: 800; color: var(--text);
-    margin-bottom: 0.15rem; text-align: center;
+    margin-bottom: 0.15rem; text-align: center; margin-top: 0.5rem;
   }
   .auth-subtitle {
     font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem;
@@ -3552,22 +3551,52 @@
   .auth-submit-btn:hover { box-shadow: 0 6px 24px rgba(124,92,191,0.45); }
   .auth-submit-btn:active { transform: scale(0.97); }
   .auth-toggle-row {
-    display: flex; align-items: center; justify-content: center;
-    gap: 0.4rem; margin-top: 0.85rem;
-    font-size: 0.82rem; color: var(--muted);
+    display: none;
   }
   .auth-toggle-link {
-    background: none; border: none; padding: 0;
-    font-size: 0.82rem; font-weight: 700; color: var(--accent-light);
-    cursor: pointer; text-decoration: underline;
-    text-underline-offset: 2px;
+    display: none;
+  }
+  .auth-tab-row {
+    display: flex; width: 100%; gap: 0;
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-bottom: 1rem;
+    position: relative;
+  }
+  .auth-tab {
+    flex: 1; padding: 0.6rem; background: transparent;
+    border: none; font-size: 0.88rem; font-weight: 700;
+    color: var(--muted); cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    position: relative; z-index: 1;
+  }
+  .auth-tab.active {
+    background: var(--accent); color: #fff;
+  }
+  .auth-tab-row::after {
+    content: '';
+    position: absolute; top: 15%; bottom: 15%; left: 50%;
+    width: 1px; background: var(--border); z-index: 0;
   }
   .auth-forgot-link {
     background: none; border: none; padding: 0;
     font-size: 0.78rem; color: var(--accent); cursor: pointer;
     text-decoration: underline; text-underline-offset: 2px;
-    margin-top: 0.15rem; text-align: right; width: 100%;
+    margin: 0.25rem 0 0.75rem; text-align: center; width: 100%;
   }
+  .auth-close-x {
+    position: absolute; top: 8px; right: 12px;
+    background: none; border: none; color: var(--muted);
+    font-size: 1.8rem; cursor: pointer; line-height: 1;
+    padding: 4px 8px; z-index: 10;
+  }
+  .auth-close-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 999px; color: var(--muted);
+    font-size: 0.85rem; font-weight: 600; padding: 0.6rem 1.2rem;
+    cursor: pointer; width: 100%; margin-top: 0.5rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .auth-close-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
   .auth-signedin-card {
     text-align: center; display: flex; flex-direction: column;
     align-items: center; gap: 0.75rem; width: 100%;
@@ -4572,9 +4601,14 @@
 <!-- ═══════════════════════════════════════════ -->
 <div class="tools-overlay" id="account-overlay">
   <div class="auth-modal">
-    <div class="auth-logo">🎮</div>
+    <div class="auth-close-x" onclick="closeAccountOverlay()">×</div>
     <div class="auth-title" id="account-modal-title">Welcome Back</div>
     <div class="auth-subtitle" id="account-modal-subtitle">Sign in to access your host account</div>
+
+    <div class="auth-tab-row">
+      <button class="auth-tab active" id="auth-tab-login" onclick="setAccountTab('login')">Log In</button>
+      <button class="auth-tab" id="auth-tab-signup" onclick="setAccountTab('signup')">Sign Up</button>
+    </div>
 
     <div id="account-form-step" style="width:100%;">
       <div class="auth-input-group">
@@ -4585,13 +4619,10 @@
         <span class="auth-input-icon">🔒</span>
         <input type="password" id="account-password" placeholder="Password" autocomplete="current-password">
       </div>
-      <button type="button" class="auth-forgot-link" onclick="resetPassword()">Forgot password?</button>
+      <button type="button" class="auth-forgot-link" id="auth-forgot-link" onclick="resetPassword()">Forgot password?</button>
       <button class="auth-submit-btn" id="account-submit-btn" onclick="submitAccountForm()">Log In</button>
       <p id="account-status" class="status" style="text-align:center; margin-top:0.5rem;"></p>
-      <div class="auth-toggle-row">
-        <span id="account-toggle-text">Don't have an account?</span>
-        <button type="button" class="auth-toggle-link" onclick="toggleAccountMode()" id="account-toggle-btn">Sign up free</button>
-      </div>
+      <button type="button" class="auth-close-btn" onclick="closeAccountOverlay()">Close</button>
     </div>
 
     <div id="account-signedin-step" style="display:none; width:100%;" class="auth-signedin-card">
@@ -4599,8 +4630,6 @@
       <button class="auth-submit-btn" style="width:100%;" onclick="closeAccountOverlay(); openProfileScreen();">👤 Go to Profile</button>
       <button type="button" class="profile-signout-link" onclick="doSignOut()" style="width:100%; text-align:center;">Sign Out</button>
     </div>
-
-    <button type="button" style="position:absolute; top:12px; right:14px; background:none; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer; line-height:1; padding:4px;" onclick="closeAccountOverlay()">×</button>
   </div>
 </div>
 
@@ -5308,13 +5337,13 @@ function renderAccountMode() {
   document.getElementById('account-modal-title').textContent = isLogin ? 'Welcome Back' : 'Create Account';
   document.getElementById('account-modal-subtitle').textContent = isLogin ? 'Sign in to access your host account' : 'Set up a host account to create rooms';
   document.getElementById('account-submit-btn').textContent = isLogin ? 'Log In' : 'Sign Up Free';
-  document.getElementById('account-toggle-text').textContent = isLogin ? "Don't have an account?" : 'Already have an account?';
-  document.getElementById('account-toggle-btn').textContent = isLogin ? 'Sign up free' : 'Log in';
-  const forgotRow = document.querySelector('.auth-forgot-link');
+  const forgotRow = document.getElementById('auth-forgot-link');
   if (forgotRow) forgotRow.style.display = isLogin ? '' : 'none';
+  document.getElementById('auth-tab-login').classList.toggle('active', isLogin);
+  document.getElementById('auth-tab-signup').classList.toggle('active', !isLogin);
 }
-window.toggleAccountMode = function() {
-  accountMode = accountMode === 'login' ? 'signup' : 'login';
+window.setAccountTab = function(tab) {
+  accountMode = tab;
   status('account-status', '');
   renderAccountMode();
 };
@@ -6179,10 +6208,11 @@ function rescaleCurrentScreen() {
   const scaler = activeScreen.querySelector(':scope > .screen-content-scaler');
   if (!scaler) return;
 
+  const origHeight = scaler.style.height;
   scaler.style.transform = 'none';
   scaler.style.height = 'auto';
   const natural = scaler.scrollHeight;
-  scaler.style.height = '100%';
+  scaler.style.height = origHeight || '';
   const available = scaler.clientHeight;
 
   if (natural > available && natural > 0) {
