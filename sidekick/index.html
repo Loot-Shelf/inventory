@@ -4829,7 +4829,7 @@
 <!--  PREFERRED NAME OVERLAY                     -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="avatar-overlay" id="name-overlay">
-  <div class="avatar-modal">
+  <div class="avatar-modal" id="name-modal">
     <div class="avatar-modal-title">✏️ Preferred Name</div>
     <input type="text" id="preferred-name-input" placeholder="Your name" maxlength="20" style="width:100%;padding:0.6rem 0.75rem;font-size:0.95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);margin-bottom:0.5rem;box-sizing:border-box;">
     <button class="btn-primary btn-sm" style="width:100%;" id="save-name-btn">Save Name</button>
@@ -5530,6 +5530,12 @@ window.closeAvatarOverlay = function() {
   document.getElementById('avatar-overlay').classList.remove('show');
 };
 
+let nameOverlayVHListener = null;
+function cleanupNameOverlayPosition() {
+  if (nameOverlayVHListener) { window.visualViewport.removeEventListener('resize', nameOverlayVHListener); nameOverlayVHListener = null; }
+  const m = document.getElementById('name-modal');
+  if (m) { m.style.position = ''; m.style.top = ''; m.style.left = ''; m.style.transform = ''; }
+}
 window.openNameOverlay = function() {
   document.getElementById('preferred-name-input').value = getSavedName();
   document.getElementById('save-name-btn').onclick = function() {
@@ -5537,13 +5543,32 @@ window.openNameOverlay = function() {
     saveName(val);
     updateAccountButtonUI();
     document.getElementById('name-overlay').classList.remove('show');
+    cleanupNameOverlayPosition();
   };
   document.getElementById('name-overlay').classList.add('show');
   setTimeout(function() { document.getElementById('preferred-name-input').focus(); }, 100);
+  const nameModal = document.getElementById('name-modal');
+  nameOverlayVHListener = function() {
+    const vh = window.visualViewport.height;
+    if (vh < window.innerHeight * 0.75) {
+      nameModal.style.position = 'fixed';
+      nameModal.style.top = Math.max(16, vh * 0.12) + 'px';
+      nameModal.style.left = '50%';
+      nameModal.style.transform = 'translateX(-50%)';
+    } else {
+      nameModal.style.position = '';
+      nameModal.style.top = '';
+      nameModal.style.left = '';
+      nameModal.style.transform = '';
+    }
+  };
+  window.visualViewport.addEventListener('resize', nameOverlayVHListener);
+  nameOverlayVHListener();
 };
 
 window.closeNameOverlay = function() {
   document.getElementById('name-overlay').classList.remove('show');
+  cleanupNameOverlayPosition();
 };
 
 window.selectAvatar = function(emoji) {
